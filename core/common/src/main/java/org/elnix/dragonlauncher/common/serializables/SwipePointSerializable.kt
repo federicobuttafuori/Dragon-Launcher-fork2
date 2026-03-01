@@ -102,7 +102,7 @@ data class SwipePointSerializable(
     val borderShapeSelected: IconShape? = IconShape.Circle
 ) {
     override fun toString(): String {
-        return "$action | $nestId | $angleDeg | $circleNumber"
+        return "action: $action | nestId: $nestId | angle: $angleDeg | circleNumber: $circleNumber"
     }
 }
 
