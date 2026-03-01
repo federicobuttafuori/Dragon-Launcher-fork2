@@ -64,6 +64,7 @@ fun WelcomePageIntro(onImport: () -> Unit) {
         Text(
             stringResource(R.string.fast_minimal_powerful_gestures_infinite_custom),
             color = MaterialTheme.colorScheme.secondary,
+            textAlign = TextAlign.Center,
             fontSize = 18.sp
         )
 
