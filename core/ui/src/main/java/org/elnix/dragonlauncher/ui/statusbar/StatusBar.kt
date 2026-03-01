@@ -354,10 +354,7 @@ fun EditStatusBar() {
                     Box(
                         modifier = Modifier
                             .scale(scale.value)
-                            .then(
-                                if (selected) Modifier.detectReorderAfterLongPress(reorderState)
-                                else Modifier
-                            )
+                            .detectReorderAfterLongPress(reorderState)
                             .sizeIn(minWidth = 50.dp, minHeight = 50.dp)
                             .border(1.dp, borderColor.value, DragonShape)
                             .clip(DragonShape)
