@@ -154,7 +154,8 @@ The reason is likely that dragon asks for _sensitive permissions_ - normal, that
     <img src="https://raw.githubusercontent.com/Elnix90/Dragon-Launcher/main/assets/user-screenshots/m0n0lith.webp" width="22%" alt="m0n0lith Screenshot"/>
     <img src="https://raw.githubusercontent.com/Elnix90/Dragon-Launcher/main/assets/user-screenshots/prizewhisper.webp" width="22%" alt="prizewhisper Screenshot"/>
 
-    <details><summary>More</summary>
+    <details>
+        <summary>More</summary>
         <img src="https://raw.githubusercontent.com/Elnix90/Dragon-Launcher/main/assets/user-screenshots/sandsalamand.webp" width="22%" alt="sandsalamand Screenshot"/>
         <img src="https://raw.githubusercontent.com/Elnix90/Dragon-Launcher/main/assets/user-screenshots/buck_fpv.jpg" width="22%" alt="buck_fpv Screenshot"/>
         <img src="https://raw.githubusercontent.com/Elnix90/Dragon-Launcher/main/assets/user-screenshots/drBrigth.jpg" width="22%" alt="drBrigth Screenshot"/>
