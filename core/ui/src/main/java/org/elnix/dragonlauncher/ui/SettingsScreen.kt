@@ -481,19 +481,24 @@ fun SettingsScreen(
             angle
         }
 
-        if (point.angleDeg != finalAngle) {
-            haveToApplyToStack = true
-        }
 
         // 3. Find nearest circle based on radius
         val distFromCenter = hypot(dx, dy)
-        val closest = circles.minByOrNull { c -> abs(c.radius - distFromCenter) }
+        val closestCircle = circles.minByOrNull { c -> abs(c.radius - distFromCenter) }
             ?: return
 
 
+        // Only apply to the undo stack if the point coordinates have changed
+        if (
+            (point.angleDeg != finalAngle) ||
+            (point.circleNumber != closestCircle.id)
+        ) {
+            haveToApplyToStack = true
+        }
+
         if (haveToApplyToStack) applyChange {
             point.angleDeg = finalAngle
-            point.circleNumber = closest.id
+            point.circleNumber = closestCircle.id
         }
     }
 
