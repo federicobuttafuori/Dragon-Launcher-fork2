@@ -986,7 +986,16 @@ fun SettingsScreen(
                                             }
                                         }
 
+                                        scope.launch {
+                                            // Stop dragging, don't animate point as it was merged
+                                            isDragging = false
+                                            selectedPoint = null
+                                            closestHoveredPoint = null
+                                        }
+
                                     } else {
+                                        // No merging, just normal dragging
+
                                         updatePointPosition(
                                             p,
                                             circles,
@@ -1001,25 +1010,25 @@ fun SettingsScreen(
                                             circles.find { it.id == p.circleNumber },
                                             p
                                         )
-                                    }
 
-                                    // Compute final snapped position
-                                    val finalOffset = computePointPosition(
-                                        p,
-                                        circles,
-                                        center
-                                    )
-
-                                    scope.launch {
-                                        selectedPointTempOffset.animateTo(
-                                            finalOffset,
-                                            animationSpec = tween(300, easing = FastOutSlowInEasing)
+                                        // Compute final snapped position
+                                        val finalOffset = computePointPosition(
+                                            p,
+                                            circles,
+                                            center
                                         )
 
-                                        // Stop dragging
-                                        isDragging = false
-                                        selectedPoint = null
-                                        closestHoveredPoint = null
+                                        scope.launch {
+                                            selectedPointTempOffset.animateTo(
+                                                finalOffset,
+                                                animationSpec = tween(300, easing = FastOutSlowInEasing)
+                                            )
+
+                                            // Stop dragging
+                                            isDragging = false
+                                            selectedPoint = null
+                                            closestHoveredPoint = null
+                                        }
                                     }
                                 }
                             }
