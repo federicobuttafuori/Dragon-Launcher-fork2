@@ -78,6 +78,23 @@ class BaseSettingObject <T, R> (
         return raw?.let { decode(it) } ?: default
     }
 
+    /**
+     * Get the value one shot for logic, no flow
+     * Returns null if the value is not defined (default)
+     *
+     * @param ctx
+     * @return decoded nullable value of settings type [T?]
+     */
+    suspend fun getNull(ctx: Context): T? {
+
+        val raw = ctx.applicationContext
+            .resolveDataStore(dataStoreName)
+            .data
+            .first()[preferenceKey]
+
+        return raw?.let { decode(it) }
+    }
+
 
     /**
      * Get the value one shot for logic, no flow
