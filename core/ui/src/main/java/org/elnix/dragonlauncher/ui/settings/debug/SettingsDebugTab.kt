@@ -116,7 +116,8 @@ fun SettingsDebugTab(
                             softWrap = false,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .horizontalScroll(rememberScrollState())
+                                .horizontalScroll(rememberScrollState()),
+                            fontFamily = FontFamily.Monospace
                         )
                     }
                 }
