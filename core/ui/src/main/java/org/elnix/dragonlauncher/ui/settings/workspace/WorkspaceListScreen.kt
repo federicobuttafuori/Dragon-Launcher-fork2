@@ -106,7 +106,7 @@ fun WorkspaceListScreen(
 
     val reorderState = rememberReorderableLazyListState(
         onMove = { from, to ->
-            if (from.index in uiList.indices && to.index in 0..uiList.size) {
+            if (from.index in uiList.indices && to.index in uiList.indices) {
                 val tmp = uiList.toMutableList()
                 val item = tmp.removeAt(from.index)
                 tmp.add(to.index, item)

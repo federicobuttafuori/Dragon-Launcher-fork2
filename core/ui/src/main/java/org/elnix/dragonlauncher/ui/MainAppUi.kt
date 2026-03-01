@@ -597,9 +597,10 @@ fun MainAppUi(
     val elementsJson by StatusBarJsonSettingsStore.jsonSetting.asState()
 
     val elements by remember(elementsJson) {
-        ctx.logW(STATUS_BAR_TAG, "Element: $elementsJson, decoded: ${StatusBarJson.decodeStatusBarElements(elementsJson)}")
+        val decoded = StatusBarJson.decodeStatusBarElements(elementsJson)
+        ctx.logW(STATUS_BAR_TAG, "Element: $elementsJson, decoded: $decoded")
 
-        derivedStateOf { StatusBarJson.decodeStatusBarElements(elementsJson) }
+        derivedStateOf { decoded }
     }
 
     // Used internally by the app view model

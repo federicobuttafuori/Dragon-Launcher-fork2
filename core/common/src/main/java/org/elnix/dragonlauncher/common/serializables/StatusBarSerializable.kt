@@ -223,14 +223,14 @@ object StatusBarJson {
         gson.toJson(elements, type)
 
 
-    fun decodeStatusBarElements(json: String): List<StatusBarSerializable> {
-        if (json.isBlankJson) return emptyList()
+    fun decodeStatusBarElements(json: String?): List<StatusBarSerializable> {
+        if (json == null || json.isBlankJson) return emptyList()
 
         logD(STATUS_BAR_TAG, json)
         return try {
-            gson.fromJson(json, type)
-        } catch (e: Exception) {
-            logE(STATUS_BAR_TAG, "Decode failed: ${e.message}", e)
+            gson.fromJson(json, type) ?: emptyList()
+        } catch (e: Throwable) { // Catch Throwable to be safe against everything
+            logE(STATUS_BAR_TAG, "Decode failed for JSON: $json", e)
             emptyList()
         }
     }

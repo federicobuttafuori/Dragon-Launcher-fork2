@@ -180,6 +180,13 @@ private data class StatusBarElement(
     val item: StatusBarSerializable
 )
 
+fun <T> SnapshotStateList<T>.move(from: Int, to: Int) {
+    if (from == to) return
+    if (from in 0 until size && to in 0 until size) {
+        add(to, removeAt(from))
+    }
+}
+
 @Composable
 fun EditStatusBar() {
     val ctx = LocalContext.current
@@ -280,15 +287,17 @@ fun EditStatusBar() {
     val reorderState = rememberReorderableLazyListState(
         onMove = { from, to ->
             try {
+                if (from.key == to.key) return@rememberReorderableLazyListState
+
                 val fromIdx = elements.indexOfFirst { it.id == from.key }
                 val toIdx = elements.indexOfFirst { it.id == to.key }
 
                 if (fromIdx != -1 && toIdx != -1 && fromIdx != toIdx) {
-                    val item = elements.removeAt(fromIdx)
-                    elements.add(toIdx, item)
+                    android.util.Log.d("StatusBarDebug", "Moving element from $fromIdx to $toIdx (IDs: ${from.key} -> ${to.key})")
+                    elements.add(toIdx, elements.removeAt(fromIdx))
                 }
             } catch (e: Exception) {
-                // Ignore concurrent modification during rapid drag
+                android.util.Log.e("StatusBarDebug", "Crash avoided during reorder: ${e.message}")
             }
         },
         onDragEnd = { _, _ ->
@@ -359,7 +368,10 @@ fun EditStatusBar() {
                     Box(
                         modifier = Modifier
                             .scale(scale.value)
-                            .detectReorderAfterLongPress(reorderState)
+                            .then(
+                                if (selected) Modifier.detectReorderAfterLongPress(reorderState)
+                                else Modifier
+                            )
                             .sizeIn(minWidth = 50.dp, minHeight = 50.dp)
                             .border(1.dp, borderColor.value, DragonShape)
                             .clip(DragonShape)
