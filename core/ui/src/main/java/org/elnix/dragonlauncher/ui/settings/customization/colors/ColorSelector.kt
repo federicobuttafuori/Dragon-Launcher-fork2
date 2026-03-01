@@ -414,6 +414,10 @@ fun ColorSelectorTab(
     var showRandomColorsValidation by remember { mutableStateOf(false) }
     var showAllColorsValidation by remember { mutableStateOf(false) }
 
+    val colorTestMode by ColorModesSettingsStore.colorTestMode.asState()
+
+    var showExitTestValidation by remember { mutableStateOf(false) }
+
     SettingsLazyHeader(
         title = stringResource(R.string.color_selector),
         onBack = onBack,
@@ -526,6 +530,34 @@ fun ColorSelectorTab(
 
 
         item { HorizontalDivider(color = MaterialTheme.colorScheme.outline) }
+
+        if (defaultTheme == CUSTOM) {
+            item {
+                if (colorTestMode) {
+                    Button(
+                        onClick = { showExitTestValidation = true },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = AppObjectsColors.buttonColors()
+                    ) {
+                        Text(stringResource(R.string.exit_test_mode))
+                    }
+                } else {
+                    Button(
+                        onClick = {
+                            scope.launch {
+                                ColorSettingsStore.backupColors(ctx)
+                                ColorModesSettingsStore.colorTestMode.set(ctx, true)
+                                onBack() // Go back to main screen
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = AppObjectsColors.buttonColors()
+                    ) {
+                        Text(stringResource(R.string.test_colors))
+                    }
+                }
+            }
+        }
 
         if (defaultTheme == CUSTOM) {
 
@@ -885,6 +917,26 @@ fun ColorSelectorTab(
             message = stringResource(R.string.help_wanted_on_colors),
             onDismiss = {},
             onValidate = { showRequestHelpDialog = false }
+        )
+    }
+
+    if (showExitTestValidation) {
+        UserValidation(
+            title = stringResource(R.string.exit_test_mode),
+            message = stringResource(R.string.exit_test_mode_message),
+            onDismiss = {
+                scope.launch {
+                    ColorModesSettingsStore.colorTestMode.set(ctx, false)
+                    showExitTestValidation = false
+                }
+            },
+            onValidate = {
+                scope.launch {
+                    ColorSettingsStore.restoreColors(ctx)
+                    ColorModesSettingsStore.colorTestMode.set(ctx, false)
+                    showExitTestValidation = false
+                }
+            }
         )
     }
 }

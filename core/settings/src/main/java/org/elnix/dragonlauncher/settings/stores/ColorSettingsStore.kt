@@ -470,4 +470,21 @@ object ColorSettingsStore : MapSettingsStore() {
     suspend fun setAllColors(ctx: Context, color: () -> Color) {
         ALL.forEach { it.set(ctx, color()) }
     }
+
+    // For test mode backup
+    private val backupColorsMap = mutableMapOf<String, Color>()
+
+    suspend fun backupColors(ctx: Context) {
+        backupColorsMap.clear()
+        ALL.forEach { setting ->
+            backupColorsMap[setting.key] = setting.get(ctx)
+        }
+    }
+
+    suspend fun restoreColors(ctx: Context) {
+        backupColorsMap.forEach { (key, color) ->
+            ALL.find { it.key == key }?.set(ctx, color)
+        }
+        backupColorsMap.clear()
+    }
 }

@@ -73,6 +73,12 @@
     <string name="reload_color">리로드 앱 컬러</string>
     <string name="reset_to_default_colors_explanation">이렇게 하면 모든 색상이 원래 기본값으로 복원됩니다</string>
     <string name="make_every_colors_random_explanation">모든 테마 요소에 대해 완전히 무작위 색상을 생성하세요</string>
+    <string name="test_colors">색상 테스트</string>
+    <string name="exit_test_mode">테스트 모드 종료</string>
+    <string name="exit_test_mode_message">색상 변경 사항을 저장하시겠습니까, 아니면 폐기하시겠습니까?</string>
+    <string name="save_changes">변경 사항 저장</string>
+    <string name="discard_changes">변경 사항 폐기</string>
+    <string name="back_to_colors_settings">색상 설정으로 돌아가기</string>
     <string name="text_color">텍스트 색상</string>
     <string name="light_theme">라이트 테마</string>
     <string name="dark_theme">다크 테마</string>

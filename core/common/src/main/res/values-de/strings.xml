@@ -60,6 +60,12 @@
     <string name="reload_color">Apps Farbe neu laden</string>
     <string name="reset_to_default_colors_explanation">Dadurch werden alle Farben auf ihre ursprünglichen Standardwerte zurückgesetzt</string>
     <string name="make_every_colors_random_explanation">Generiere komplett zufällige Farben für alle Themenelemente</string>
+    <string name="test_colors">Farben testen</string>
+    <string name="exit_test_mode">Testmodus beenden</string>
+    <string name="exit_test_mode_message">Möchten Sie Ihre Farbänderungen speichern oder verwerfen?</string>
+    <string name="save_changes">Änderungen speichern</string>
+    <string name="discard_changes">Änderungen verwerfen</string>
+    <string name="back_to_colors_settings">Zurück zu Farbeinstellungen</string>
     <string name="text_color">Textfarbe</string>
     <string name="light_theme">Lichtthema</string>
     <string name="dark_theme">Dunkles Thema</string>

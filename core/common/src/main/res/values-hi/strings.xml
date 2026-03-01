@@ -73,6 +73,12 @@
     <string name="reload_color">ऐप्स रंग पुनः लोड करें</string>
     <string name="reset_to_default_colors_explanation">यह सभी रंगों को उनके मूल डिफ़ॉल्ट मानों पर पुनर्स्थापित करेगा</string>
     <string name="make_every_colors_random_explanation">सभी थीम तत्वों के लिए पूरी तरह से यादृच्छिक रंग उत्पन्न करें</string>
+    <string name="test_colors">रंग परीक्षण करें</string>
+    <string name="exit_test_mode">टेस्ट मोड से बाहर निकलें</string>
+    <string name="exit_test_mode_message">क्या आप अपनी रंग परिवर्तन सहेजना चाहते हैं या उन्हें त्यागना चाहते हैं?</string>
+    <string name="save_changes">परिवर्तन सहेजें</string>
+    <string name="discard_changes">परिवर्तन त्यागें</string>
+    <string name="back_to_colors_settings">रंग सेटिंग्स पर वापस जाएं</string>
     <string name="text_color">पाठ का रंग</string>
     <string name="light_theme">लाइट थीम</string>
     <string name="dark_theme">डार्क थीम</string>

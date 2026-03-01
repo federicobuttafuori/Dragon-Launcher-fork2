@@ -28,7 +28,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import org.elnix.dragonlauncher.common.serializables.StatusBarSerializable
-import org.elnix.dragonlauncher.settings.stores.StatusBarSettingsStore
 
 @Composable
 fun StatusBarConnectivity(
@@ -37,19 +36,12 @@ fun StatusBarConnectivity(
 ) {
     val ctx = LocalContext.current
     var connectivityState by remember { mutableStateOf(ConnectivityState()) }
-    val updateFrequency by StatusBarSettingsStore.connectivityUpdateFrequency.asState()
-    val showAirplaneMode by StatusBarSettingsStore.showAirplaneMode.asState()
-    val showWifi by StatusBarSettingsStore.showWifi.asState()
-    val showBluetooth by StatusBarSettingsStore.showBluetooth.asState()
-    val showVpn by StatusBarSettingsStore.showVpn.asState()
-    val showMobileData by StatusBarSettingsStore.showMobileData.asState()
-    val showHotspot by StatusBarSettingsStore.showHotspot.asState()
 
     // Periodic updates
-    LaunchedEffect(updateFrequency) {
+    LaunchedEffect(element.updateFrequency) {
         while (true) {
             connectivityState = readConnectivityState(ctx)
-            delay(updateFrequency * 1000L)
+            delay(element.updateFrequency * 1000L)
         }
     }
 
@@ -67,14 +59,14 @@ fun StatusBarConnectivity(
 //            )
 //        }
 
-        if (connectivityState.isAirplaneMode && showAirplaneMode) {
+        if (connectivityState.isAirplaneMode && element.showAirplaneMode) {
             Icon(
                 imageVector = Icons.Filled.AirplanemodeActive,
                 contentDescription = "Airplane",
                 modifier = Modifier.size(14.dp)
             )
         } else {
-            if (connectivityState.isWifiEnabled && showWifi) {
+            if (connectivityState.isWifiEnabled && element.showWifi) {
                 Icon(
                     imageVector = Icons.Filled.Wifi,
                     contentDescription = "WiFi on",
@@ -82,7 +74,7 @@ fun StatusBarConnectivity(
                 )
             }
 
-            if (connectivityState.isBluetoothEnabled && showBluetooth) {
+            if (connectivityState.isBluetoothEnabled && element.showBluetooth) {
                 Icon(
                     imageVector = Icons.Filled.Bluetooth,
                     contentDescription = "Bluetooth",
@@ -90,7 +82,7 @@ fun StatusBarConnectivity(
                 )
             }
 
-            if (connectivityState.isVpnEnabled && showVpn) {
+            if (connectivityState.isVpnEnabled && element.showVpn) {
                 Icon(
                     imageVector = Icons.Filled.VpnKey,
                     contentDescription = "VPN",
@@ -98,7 +90,7 @@ fun StatusBarConnectivity(
                 )
             }
 
-            if (connectivityState.mobileDataStatus.isNotEmpty() && showMobileData) {
+            if (connectivityState.mobileDataStatus.isNotEmpty() && element.showMobileData) {
                 Icon(
                     imageVector = Icons.Filled.SignalCellularAlt,
                     contentDescription = connectivityState.mobileDataStatus,
@@ -106,7 +98,7 @@ fun StatusBarConnectivity(
                 )
             }
 
-            if (connectivityState.isHotspotEnabled && showHotspot) {
+            if (connectivityState.isHotspotEnabled && element.showHotspot) {
                 Icon(
                     imageVector = Icons.Filled.WifiTethering,
                     contentDescription = "Hotspot",

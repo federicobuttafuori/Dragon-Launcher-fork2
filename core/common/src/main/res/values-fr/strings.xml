@@ -60,6 +60,12 @@
     <string name="reload_color">Recharger la couleur des applications</string>
     <string name="reset_to_default_colors_explanation">Cela restaurera toutes les couleurs à leurs valeurs par défaut d’origine</string>
     <string name="make_every_colors_random_explanation">Générez des couleurs complètement aléatoires pour tous les éléments du thème</string>
+    <string name="test_colors">Tester les couleurs</string>
+    <string name="exit_test_mode">Quitter le mode test</string>
+    <string name="exit_test_mode_message">Voulez-vous enregistrer vos modifications de couleur ou les annuler ?</string>
+    <string name="save_changes">Enregistrer les modifications</string>
+    <string name="discard_changes">Annuler les modifications</string>
+    <string name="back_to_colors_settings">Retour aux paramètres de couleurs</string>
     <string name="text_color">Couleur du texte</string>
     <string name="light_theme">Thème clair</string>
     <string name="dark_theme">Thème sombre</string>

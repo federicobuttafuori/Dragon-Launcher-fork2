@@ -30,13 +30,23 @@ sealed class StatusBarSerializable {
         val action: SwipeActionSerializable? = null
     ) : StatusBarSerializable()
 
-    data object Bandwidth : StatusBarSerializable()
+    data class Bandwidth(
+        val merge: Boolean = false
+    ) : StatusBarSerializable()
 
     data class Notifications(
         val maxIcons: Int = 8
     ) : StatusBarSerializable()
 
-    data object Connectivity : StatusBarSerializable()
+    data class Connectivity(
+        val showAirplaneMode: Boolean = true,
+        val showWifi: Boolean = true,
+        val showBluetooth: Boolean = true,
+        val showVpn: Boolean = true,
+        val showMobileData: Boolean = true,
+        val showHotspot: Boolean = true,
+        val updateFrequency: Int = 5
+    ) : StatusBarSerializable()
 
     data class Spacer(
         val width: Int = -1
@@ -56,9 +66,9 @@ sealed class StatusBarSerializable {
 val allStatusBarSerializable = listOf(
     StatusBarSerializable.Time(),
     StatusBarSerializable.Date(),
-    StatusBarSerializable.Bandwidth,
+    StatusBarSerializable.Bandwidth(),
     StatusBarSerializable.Notifications(),
-    StatusBarSerializable.Connectivity,
+    StatusBarSerializable.Connectivity(),
     StatusBarSerializable.Battery(),
     StatusBarSerializable.NextAlarm(),
     StatusBarSerializable.Spacer()
@@ -95,6 +105,7 @@ class StatusBarAdapter : JsonSerializer<StatusBarSerializable>, JsonDeserializer
 
             is StatusBarSerializable.Bandwidth -> {
                 obj.addProperty("type", "Bandwidth")
+                obj.addProperty("merge", src.merge)
             }
 
             is StatusBarSerializable.Notifications -> {
@@ -104,6 +115,13 @@ class StatusBarAdapter : JsonSerializer<StatusBarSerializable>, JsonDeserializer
 
             is StatusBarSerializable.Connectivity -> {
                 obj.addProperty("type", "Connectivity")
+                obj.addProperty("showAirplaneMode", src.showAirplaneMode)
+                obj.addProperty("showWifi", src.showWifi)
+                obj.addProperty("showBluetooth", src.showBluetooth)
+                obj.addProperty("showVpn", src.showVpn)
+                obj.addProperty("showMobileData", src.showMobileData)
+                obj.addProperty("showHotspot", src.showHotspot)
+                obj.addProperty("updateFrequency", src.updateFrequency)
             }
 
             is StatusBarSerializable.Spacer -> {
@@ -148,14 +166,24 @@ class StatusBarAdapter : JsonSerializer<StatusBarSerializable>, JsonDeserializer
                     } else null
                 )
 
-                "Bandwidth" -> StatusBarSerializable.Bandwidth
+                "Bandwidth" -> StatusBarSerializable.Bandwidth(
+                    merge = if (obj.has("merge")) obj.get("merge").asBoolean else false
+                )
 
 
                 "Notifications" -> StatusBarSerializable.Notifications(
                     maxIcons = if (obj.has("maxIcons")) obj.get("maxIcons").asInt else 8
                 )
 
-                "Connectivity" -> StatusBarSerializable.Connectivity
+                "Connectivity" -> StatusBarSerializable.Connectivity(
+                    showAirplaneMode = if (obj.has("showAirplaneMode")) obj.get("showAirplaneMode").asBoolean else true,
+                    showWifi = if (obj.has("showWifi")) obj.get("showWifi").asBoolean else true,
+                    showBluetooth = if (obj.has("showBluetooth")) obj.get("showBluetooth").asBoolean else true,
+                    showVpn = if (obj.has("showVpn")) obj.get("showVpn").asBoolean else true,
+                    showMobileData = if (obj.has("showMobileData")) obj.get("showMobileData").asBoolean else true,
+                    showHotspot = if (obj.has("showHotspot")) obj.get("showHotspot").asBoolean else true,
+                    updateFrequency = if (obj.has("updateFrequency")) obj.get("updateFrequency").asInt else 5,
+                )
 
                 "Spacer" -> StatusBarSerializable.Spacer(
                     width = if (obj.has("width")) obj.get("width").asInt else -1

@@ -60,6 +60,12 @@
     <string name="reload_color">Reload Apps Color</string>
     <string name="reset_to_default_colors_explanation">This will restore all colors to their original default values</string>
     <string name="make_every_colors_random_explanation">Generate completely random colors for all theme elements</string>
+    <string name="test_colors">Test Colors</string>
+    <string name="exit_test_mode">Exit Test Mode</string>
+    <string name="exit_test_mode_message">Do you want to save your color changes or discard them?</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="discard_changes">Discard Changes</string>
+    <string name="back_to_colors_settings">Back to Colors Settings</string>
     <string name="text_color">Text Color</string>
     <string name="light_theme">Light Theme</string>
     <string name="dark_theme">Dark Theme</string>

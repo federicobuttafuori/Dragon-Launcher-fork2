@@ -201,9 +201,9 @@ fun EditStatusBar() {
         val copiedItem = when (val item = element.item) {
             is StatusBarSerializable.Time -> item.copy()
             is StatusBarSerializable.Date -> item.copy()
-            StatusBarSerializable.Bandwidth -> item
+            is StatusBarSerializable.Bandwidth -> item.copy()
             is StatusBarSerializable.Notifications -> item.copy()
-            StatusBarSerializable.Connectivity -> item
+            is StatusBarSerializable.Connectivity -> item.copy()
             is StatusBarSerializable.Spacer -> item.copy()
             is StatusBarSerializable.Battery -> item.copy()
             is StatusBarSerializable.NextAlarm -> item.copy()
@@ -337,8 +337,71 @@ fun EditStatusBar() {
                 ) {
 
                     when (val item = element.item) {
-                        /* no-op */
-                        is StatusBarSerializable.Bandwidth, is StatusBarSerializable.Connectivity -> {}
+
+                        is StatusBarSerializable.Bandwidth -> {
+                            SwitchRow(
+                                text = stringResource(R.string.merge_bandwidth),
+                                subText = "",
+                                state = item.merge,
+                            ) {
+                                updateElement(item.copy(merge = it))
+                            }
+                        }
+
+                        is StatusBarSerializable.Connectivity -> {
+                            Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                                SwitchRow(
+                                    text = stringResource(R.string.show_airplane_mode),
+                                    subText = "",
+                                    state = item.showAirplaneMode,
+                                ) {
+                                    updateElement(item.copy(showAirplaneMode = it))
+                                }
+                                SwitchRow(
+                                    text = stringResource(R.string.show_wifi),
+                                    subText = "",
+                                    state = item.showWifi,
+                                ) {
+                                    updateElement(item.copy(showWifi = it))
+                                }
+                                SwitchRow(
+                                    text = stringResource(R.string.show_bluetooth),
+                                    subText = "",
+                                    state = item.showBluetooth,
+                                ) {
+                                    updateElement(item.copy(showBluetooth = it))
+                                }
+                                SwitchRow(
+                                    text = stringResource(R.string.show_vpn),
+                                    subText = "",
+                                    state = item.showVpn,
+                                ) {
+                                    updateElement(item.copy(showVpn = it))
+                                }
+                                SwitchRow(
+                                    text = stringResource(R.string.show_mobile_data),
+                                    subText = "",
+                                    state = item.showMobileData,
+                                ) {
+                                    updateElement(item.copy(showMobileData = it))
+                                }
+                                SwitchRow(
+                                    text = stringResource(R.string.show_hotspot),
+                                    subText = "",
+                                    state = item.showHotspot,
+                                ) {
+                                    updateElement(item.copy(showHotspot = it))
+                                }
+                                SliderWithLabel(
+                                    label = stringResource(R.string.connectivity_update_frequency),
+                                    value = item.updateFrequency,
+                                    valueRange = 1..60,
+                                    onReset = { updateElement(item.copy(updateFrequency = 5)) }
+                                ) {
+                                    updateElement(item.copy(updateFrequency = it))
+                                }
+                            }
+                        }
 
                         is StatusBarSerializable.Date -> {
 

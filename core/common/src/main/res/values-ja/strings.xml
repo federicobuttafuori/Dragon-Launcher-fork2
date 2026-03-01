@@ -73,6 +73,12 @@
     <string name="reload_color">リロードアプリ カラー</string>
     <string name="reset_to_default_colors_explanation">これによりすべての色が元のデフォルト値に戻ります</string>
     <string name="make_every_colors_random_explanation">すべてのテーマ要素に対して完全にランダムな色を生成する</string>
+    <string name="test_colors">色をテスト</string>
+    <string name="exit_test_mode">テストモードを終了</string>
+    <string name="exit_test_mode_message">色の変更を保存しますか、それとも破棄しますか？</string>
+    <string name="save_changes">変更を保存</string>
+    <string name="discard_changes">変更を破棄</string>
+    <string name="back_to_colors_settings">色設定に戻る</string>
     <string name="text_color">テキストカラー</string>
     <string name="light_theme">ライトテーマ</string>
     <string name="dark_theme">ダークテーマ</string>

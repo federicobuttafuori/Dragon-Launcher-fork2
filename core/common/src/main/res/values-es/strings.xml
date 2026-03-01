@@ -60,6 +60,12 @@
     <string name="reload_color">Recargar Apps Color</string>
     <string name="reset_to_default_colors_explanation">Esto restaurará todos los colores a sus valores predeterminados originales</string>
     <string name="make_every_colors_random_explanation">Genera colores completamente aleatorios para todos los elementos del tema</string>
+    <string name="test_colors">Probar Colores</string>
+    <string name="exit_test_mode">Salir del Modo de Prueba</string>
+    <string name="exit_test_mode_message">¿Quieres guardar tus cambios de color o descartarlos?</string>
+    <string name="save_changes">Guardar Cambios</string>
+    <string name="discard_changes">Descartar Cambios</string>
+    <string name="back_to_colors_settings">Volver a Configuración de Colores</string>
     <string name="text_color">Color del texto</string>
     <string name="light_theme">Tema de Luz</string>
     <string name="dark_theme">Tema oscuro</string>

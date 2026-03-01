@@ -17,9 +17,6 @@ import org.elnix.dragonlauncher.common.serializables.StatusBarSerializable
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.common.utils.openAlarmApp
 import org.elnix.dragonlauncher.common.utils.openCalendar
-import org.elnix.dragonlauncher.settings.stores.DateFormat
-import org.elnix.dragonlauncher.settings.stores.StatusBarSettingsStore
-import org.elnix.dragonlauncher.settings.stores.TimeFormat
 import org.elnix.dragonlauncher.ui.modifiers.conditional
 import java.time.LocalDate
 import java.time.LocalTime
@@ -33,10 +30,7 @@ fun StatusBarDate(
     val ctx = LocalContext.current
 
     val action = element.action
-    val dateFormatSetting by StatusBarSettingsStore.dateFormat.asState()
-    val customDateFormat by StatusBarSettingsStore.customDateFormat.asState()
-
-    val formatter = if (dateFormatSetting == DateFormat.CUSTOM) customDateFormat else dateFormatSetting.pattern
+    val formatter = element.formatter
 
     val dateFormat = remember(formatter) {
         try {
@@ -85,10 +79,7 @@ fun StatusBarTime(
     val ctx = LocalContext.current
 
     val action = element.action
-    val timeFormatSetting by StatusBarSettingsStore.timeFormat.asState()
-    val customTimeFormat by StatusBarSettingsStore.customTimeFormat.asState()
-
-    val formatter = if (timeFormatSetting == TimeFormat.CUSTOM) customTimeFormat else timeFormatSetting.pattern
+    val formatter = element.formatter
 
     val timeFormat = remember(formatter) {
         try {
