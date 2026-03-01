@@ -40,11 +40,6 @@ data class CircleNest(
      */
     @SerializedName("minAngleActivation") val minAngleActivation: Map<Int, Int> = emptyMap(),
 
-
-    /**
-     * Haptic feedback, as default for the points in  the circle, separated from the point system
-     */
-    @SerializedName("subNestsDisplaySize") val subNestsDisplaySize: Int = 100
 ) {
     override fun toString(): String {
         return "Nest N°$id | contains ${dragDistances.size} circles: \n${dragDistances.map { "\n${it.key} to ${it.value}" }}"

@@ -19,5 +19,5 @@ data class SwipeDrawParams(
     val showCircle: Boolean,
     val maxDepth: Int,
     val iconShape: IconShape,
-    val subNestDefaultRadius: Int,
+    val subNestDefaultRadius: Float,
 )

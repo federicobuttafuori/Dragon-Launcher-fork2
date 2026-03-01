@@ -71,6 +71,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
+import org.elnix.dragonlauncher.base.ktx.px
 import org.elnix.dragonlauncher.base.ktx.toDp
 import org.elnix.dragonlauncher.base.ktx.toPixels
 import org.elnix.dragonlauncher.common.R
@@ -315,8 +316,8 @@ fun AppDrawerScreen(
 
     val haptic = LocalHapticFeedback.current
 
-    val thresholdPx = Constants.Drawer.DRAWER_DRAG_DOWN_THRESHOLD.dp.toPixels()
-    val maxDragDownOffset = Constants.Drawer.DRAWER_MAX_DRAG_DOWN.dp.toPixels()
+    val thresholdPx = Constants.Drawer.DRAWER_DRAG_DOWN_THRESHOLD.dp.px
+    val maxDragDownOffset = Constants.Drawer.DRAWER_MAX_DRAG_DOWN.dp.px
 
     var pullOffset by remember { mutableFloatStateOf(0f) }
 

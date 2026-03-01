@@ -5,6 +5,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import org.elnix.dragonlauncher.base.ktx.px
 import org.elnix.dragonlauncher.base.theme.LocalExtraColors
 import org.elnix.dragonlauncher.common.points.SwipeDrawParams
 import org.elnix.dragonlauncher.common.serializables.CircleNest
@@ -58,6 +60,6 @@ fun swipeDefaultParams(
         showCircle = showCircle,
         maxDepth = maxNestsDepth,
         iconShape = iconShape,
-        subNestDefaultRadius = subNestDefaultRadius,
+        subNestDefaultRadius = subNestDefaultRadius.dp.px,
     )
 }

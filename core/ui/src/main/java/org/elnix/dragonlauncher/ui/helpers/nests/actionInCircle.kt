@@ -42,6 +42,7 @@ fun DrawScope.actionsInCircle(
     val surfaceColorDraw = drawParams.surfaceColorDraw
     val extraColors = drawParams.extraColors
     val maxDepth = drawParams.maxDepth
+    val subNestDefaultRadius = drawParams.subNestDefaultRadius
 
     val action = point.action
 
@@ -192,7 +193,7 @@ fun DrawScope.actionsInCircle(
                 val newCircles = mutableListOf<UiCircle>()
 
                 nest.dragDistances.filter { it.key != -1 }.forEach { (index, _) ->
-                    val radius = (100f / depth) * circlesWidthIncrement * (index + 1)
+                    val radius = (subNestDefaultRadius / depth) * circlesWidthIncrement * (index + 1)
                     newCircles.add(
                         UiCircle(index, radius)
                     )

@@ -19,7 +19,7 @@ object SwipeMapSettingsStore : MapSettingsStore() {
     val subNestDefaultRadius = Settings.int(
         key = "subNestDefaultRadius",
         dataStoreName = dataStoreName,
-        default = 100,
-        allowedRange = 0..200
+        default = 35,
+        allowedRange = 0..50
     )
 }
