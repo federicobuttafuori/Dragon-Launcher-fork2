@@ -476,7 +476,7 @@ private fun DraggableFloatingApp(
 
     var widgetCenter by remember { mutableStateOf(Offset.Zero) }
     var handleCoordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
-    var widgetAngle by remember { mutableFloatStateOf(app.angle) }
+    var widgetAngle by remember(app.angle) { mutableFloatStateOf(app.angle) }
 
     Box(
         modifier = Modifier
@@ -533,7 +533,7 @@ private fun DraggableFloatingApp(
                         onDragStart = { onSelect() },
                         onDrag = { change, dragAmount ->
 
-                            val angleRad = Math.toRadians(app.angle.toDouble())
+                            val angleRad = Math.toRadians(widgetAngle.toDouble())
 
                             val cos = kotlin.math.cos(angleRad)
                             val sin = kotlin.math.sin(angleRad)
