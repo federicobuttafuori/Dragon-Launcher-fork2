@@ -1,0 +1,131 @@
+package org.elnix.dragonlauncher.ui.widgets
+
+import android.appwidget.AppWidgetHost
+import android.appwidget.AppWidgetHostView
+import android.appwidget.AppWidgetManager
+import android.appwidget.AppWidgetProviderInfo
+import android.content.Context
+import android.os.Bundle
+import android.util.Log
+import android.util.SparseArray
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ProcessLifecycleOwner
+import java.lang.ref.WeakReference
+
+/**
+ * A robust wrapper for AppWidgetHost, inspired by Lawnchair's LauncherWidgetHolder.
+ * Provides better lifecycle management and view recycling.
+ */
+class LauncherWidgetHolder(private val context: Context) : DefaultLifecycleObserver {
+
+    companion object {
+        private const val TAG = "LauncherWidgetHolder"
+        private const val HOST_ID = 1024
+
+        @Volatile
+        private var instance: LauncherWidgetHolder? = null
+
+        fun getInstance(context: Context): LauncherWidgetHolder {
+            return instance ?: synchronized(this) {
+                instance ?: LauncherWidgetHolder(context.applicationContext).also { instance = it }
+            }
+        }
+    }
+
+    private val appWidgetManager = AppWidgetManager.getInstance(context)
+    private val appWidgetHost = object : AppWidgetHost(context, HOST_ID) {
+        override fun onCreateView(
+            context: Context,
+            appWidgetId: Int,
+            appWidget: AppWidgetProviderInfo?
+        ): AppWidgetHostView {
+            return DragonAppWidgetHostView(context)
+        }
+    }
+
+    private val views = SparseArray<WeakReference<AppWidgetHostView>>()
+    private var isListening = false
+
+    init {
+        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+    }
+
+    override fun onStart(owner: LifecycleOwner) {
+        startListening()
+    }
+
+    override fun onStop(owner: LifecycleOwner) {
+        stopListening()
+    }
+
+    fun startListening() {
+        if (!isListening) {
+            try {
+                appWidgetHost.startListening()
+                isListening = true
+                Log.d(TAG, "AppWidgetHost started listening")
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to start listening", e)
+            }
+        }
+    }
+
+    fun stopListening() {
+        if (isListening) {
+            try {
+                appWidgetHost.stopListening()
+                isListening = false
+                Log.d(TAG, "AppWidgetHost stopped listening")
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to stop listening", e)
+            }
+        }
+    }
+
+    fun allocateAppWidgetId(): Int {
+        val id = appWidgetHost.allocateAppWidgetId()
+        android.util.Log.d("DRAGON", "DRAGON_WIDGET: Allocated new ID: $id")
+        return id
+    }
+
+    fun bindWidget(appWidgetId: Int, provider: android.content.ComponentName, options: android.os.Bundle? = null): Boolean {
+        android.util.Log.d("DRAGON", "DRAGON_WIDGET: Starting bind for ID $appWidgetId with provider $provider")
+        val result = appWidgetManager.bindAppWidgetIdIfAllowed(appWidgetId, provider, options)
+        android.util.Log.d("DRAGON", "DRAGON_WIDGET: bindAppWidgetIdIfAllowed result for ID $appWidgetId: $result")
+        return result
+    }
+
+    fun deleteAppWidgetId(appWidgetId: Int) {
+        android.util.Log.d("DRAGON", "DRAGON_WIDGET: Deleting ID $appWidgetId")
+        appWidgetHost.deleteAppWidgetId(appWidgetId)
+        views.remove(appWidgetId)
+    }
+
+    fun createView(appWidgetId: Int, info: AppWidgetProviderInfo): AppWidgetHostView {
+        android.util.Log.d("DRAGON", "DRAGON_WIDGET: Creating view for ID $appWidgetId (Provider: ${info.provider})")
+        val view = appWidgetHost.createView(context, appWidgetId, info)
+        views.put(appWidgetId, WeakReference(view))
+        return view
+    }
+
+    fun getAppWidgetInfo(appWidgetId: Int): AppWidgetProviderInfo? {
+        val info = appWidgetManager.getAppWidgetInfo(appWidgetId)
+        android.util.Log.d("DRAGON", "DRAGON_WIDGET: getAppWidgetInfo for ID $appWidgetId: ${info?.provider ?: "NULL"}")
+        return info
+    }
+
+    fun updateAppWidgetOptions(appWidgetId: Int, options: Bundle) {
+        appWidgetManager.updateAppWidgetOptions(appWidgetId, options)
+    }
+
+    /**
+     * Custom AppWidgetHostView that handles common launcher requirements.
+     */
+    class DragonAppWidgetHostView(context: Context) : AppWidgetHostView(context) {
+        override fun getErrorView(): android.view.View {
+            // Can be customized to show a "Lawnchair-style" error layout
+            return super.getErrorView()
+        }
+    }
+}

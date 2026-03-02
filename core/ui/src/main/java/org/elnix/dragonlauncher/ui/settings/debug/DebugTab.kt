@@ -307,6 +307,14 @@ fun DebugTab(
 
         item {
             SettingsSwitchRow(
+                setting = DebugSettingsStore.forceAppWidgetsBinding,
+                title = "Force App Widget Binding Consent",
+                description = "Forces the system bind dialog to appear every time you add a widget (Useful for debugging/MIUI fixes)"
+            )
+        }
+
+        item {
+            SettingsSwitchRow(
                 setting = DebugSettingsStore.useAccessibilityInsteadOfContextToExpandActionPanel,
                 title = stringResource(R.string.use_accessibility_instead_of_context),
                 description = stringResource(R.string.use_accessibility_instead_of_context_desc)

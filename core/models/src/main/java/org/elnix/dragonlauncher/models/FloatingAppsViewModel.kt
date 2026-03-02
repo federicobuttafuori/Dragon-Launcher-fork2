@@ -35,8 +35,10 @@ class FloatingAppsViewModel(
     fun addFloatingApp(action: SwipeActionSerializable, info: AppWidgetProviderInfo? = null, nestId: Int) {
 
         viewModelScope.launch {
+            val appWidgetId = if (action is SwipeActionSerializable.OpenWidget) action.widgetId else null
             val app = FloatingAppObject(
                 id = Random.nextInt(),
+                appWidgetId = appWidgetId,
                 nestId = nestId,
                 action = action
             )

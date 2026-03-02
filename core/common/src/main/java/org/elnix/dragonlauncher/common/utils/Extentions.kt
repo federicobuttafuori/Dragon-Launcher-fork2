@@ -10,6 +10,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.provider.AlarmClock
 import android.provider.CalendarContract
 import android.provider.Settings
@@ -26,12 +28,6 @@ import java.util.Date
 import java.util.Locale
 
 /**
- * Some functions from https://github.com/mlm-games/CCLauncher
- * (https://github.com/mlm-games/CCLauncher/blob/compose/app/src/main/java/app/cclauncher/helper/Extensions.kt)
- */
-
-
-/**
  * Show a toast message with flexible input types
  * @param message Can be a String, StringRes Int, or null
  * @param duration Toast duration (LENGTH_SHORT or LENGTH_LONG)
@@ -40,24 +36,28 @@ fun Context.showToast(
     message: Any?,
     duration: Int = Toast.LENGTH_SHORT
 ) {
-    try {
-        when (message) {
-            is String -> {
-                if (message.isNotBlank()) {
-                    Toast.makeText(this, message, duration).show()
+    val context = this
+    val handler = Handler(Looper.getMainLooper())
+    handler.post {
+        try {
+            when (message) {
+                is String -> {
+                    if (message.isNotBlank()) {
+                        Toast.makeText(context, message, duration).show()
+                    }
+                }
+
+                is Int -> {
+                    Toast.makeText(context, message, duration).show()
+                }
+
+                else -> {
+                    // Null or unsupported type, do nothing
                 }
             }
-
-            is Int -> {
-                Toast.makeText(this, message, duration).show()
-            }
-
-            else -> {
-                // Null or unsupported type, do nothing
-            }
+        } catch (e: Exception) {
+            logE(TAG, "Error while showing toast", e)
         }
-    } catch (e: Exception) {
-        logE(TAG, "Error while show ing toast", e)
     }
 }
 

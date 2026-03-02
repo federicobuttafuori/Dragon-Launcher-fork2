@@ -50,6 +50,8 @@ import androidx.core.content.res.ResourcesCompat
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.utils.UiConstants.DragonShape
 
+import org.elnix.dragonlauncher.ui.widgets.LauncherWidgetHolder
+
 @Composable
 fun WidgetPickerDialog(
     onBindCustomWidget: (Int, ComponentName) -> Unit,
@@ -57,7 +59,7 @@ fun WidgetPickerDialog(
 ) {
     val ctx = LocalContext.current
     val appWidgetManager = remember { AppWidgetManager.getInstance(ctx) }
-    val appWidgetHost = remember { AppWidgetHost(ctx, R.id.appwidget_host_id) }
+    val launcherWidgetHolder = remember(ctx) { LauncherWidgetHolder.getInstance(ctx) }
 
     var widgets by remember { mutableStateOf<List<AppWidgetProviderInfo>>(emptyList()) }
 
@@ -86,7 +88,7 @@ fun WidgetPickerDialog(
                     items(widgets) { provider ->
                         WidgetItem(
                             provider = provider,
-                            appWidgetHost = appWidgetHost,
+                            launcherWidgetHolder = launcherWidgetHolder,
                             onBindCustomWidget = onBindCustomWidget,
                             onDismiss = onDismiss
                         )
@@ -100,7 +102,7 @@ fun WidgetPickerDialog(
 @Composable
 private fun WidgetItem(
     provider: AppWidgetProviderInfo,
-    appWidgetHost: AppWidgetHost,
+    launcherWidgetHolder: LauncherWidgetHolder,
     onBindCustomWidget: (Int, ComponentName) -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -112,7 +114,7 @@ private fun WidgetItem(
             .fillMaxWidth()
             .padding(vertical = 4.dp)
             .clickable {
-                val widgetId = appWidgetHost.allocateAppWidgetId()
+                val widgetId = launcherWidgetHolder.allocateAppWidgetId()
 
                 onBindCustomWidget(widgetId, provider.provider)
                 onDismiss()
@@ -187,30 +189,35 @@ fun loadWidgetPreview(
     provider: AppWidgetProviderInfo,
     context: Context
 ): Bitmap? {
-    return try {
+    try {
         val widgetPackage = provider.provider.packageName
+        
+        // CRITICAL: Block any system resources that might crash on certain ROMs (MIUI/HyperOS)
+        // The log showscom.android.systemui:drawable/android15_patch_adaptive specifically failing.
+        if (widgetPackage == "com.android.systemui" || 
+            widgetPackage == "com.android.settings" ||
+            widgetPackage == "android"
+        ) {
+             return null
+        }
+
+        if (provider.previewImage == 0) return null
+
         val widgetContext = context.createPackageContext(widgetPackage, 0)
         val widgetResources = widgetContext.resources
 
-        // Try multiple loading methods
-        listOf(
-            // Method 1: ResourcesCompat
-            { ResourcesCompat.getDrawable(widgetResources, provider.previewImage, null) },
-            // Method 2: Direct resource lookup
-            { widgetResources.getDrawable(provider.previewImage, null) }
-        ).firstNotNullOfOrNull { loader ->
-            try {
-                val drawable = loader()
-                if (drawable is BitmapDrawable) drawable.bitmap else null
-            } catch (_: Exception) { null }
-        } ?: run {
-            // Method 3: Raw resource stream
-            widgetResources.openRawResource(provider.previewImage).use {
-                BitmapFactory.decodeStream(it)
-            }
+        // Try to load via direct access first (fastest)
+        try {
+            val drawable = widgetResources.getDrawable(provider.previewImage, null)
+            if (drawable is BitmapDrawable) return drawable.bitmap
+        } catch (_: Exception) { }
+
+        // Fallback: Open stream directly if possible
+        return widgetResources.openRawResource(provider.previewImage).use {
+            BitmapFactory.decodeStream(it)
         }
     } catch (_: Exception) {
-        null
+        return null
     }
 }
 

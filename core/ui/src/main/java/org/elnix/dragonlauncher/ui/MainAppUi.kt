@@ -420,8 +420,7 @@ fun MainAppUi(
 
 
     fun launchWidgetsPicker(nestId: Int) {
-        if (!forceAppWidgetsSelector) onLaunchSystemWidgetPicker(nestId)
-        else showWidgetPicker = nestId
+        showWidgetPicker = nestId
     }
 
 
