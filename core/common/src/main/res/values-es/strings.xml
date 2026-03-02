@@ -233,7 +233,6 @@
     <string name="add_widget">Añadir widget</string>
     <string name="widgets">Widgets</string>
     <string name="widgets_floating_apps">Widgets / Aplicaciones flotantes</string>
-    <string name="floating_apps_tab_help">Gestiona los widgets de tu espacio de trabajo y las aplicaciones flotantes: añádelas, reordenas, redimensionas y colocalas.</string>
     <string name="delete_widget">Eliminar widget</string>
     <string name="add_point">Punto de Añadir</string>
     <string name="remove_point">Punto de eliminación</string>

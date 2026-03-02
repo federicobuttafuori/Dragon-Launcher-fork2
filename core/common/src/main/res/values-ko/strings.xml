@@ -246,7 +246,6 @@
     <string name="add_widget">위젯 추가</string>
     <string name="widgets">위젯</string>
     <string name="widgets_floating_apps">위젯 / 플로팅 앱</string>
-    <string name="floating_apps_tab_help">작업 공간 위젯과 플로팅 앱을 관리하세요: 추가, 재정렬, 크기 조정, 위치 조정.</string>
     <string name="delete_widget">삭제 위젯</string>
     <string name="add_point">추가 점수</string>
     <string name="remove_point">제거 지점</string>

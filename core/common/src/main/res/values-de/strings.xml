@@ -233,7 +233,6 @@
     <string name="add_widget">Widget hinzufügen</string>
     <string name="widgets">Widgets</string>
     <string name="widgets_floating_apps">Widgets / Schwimmende Apps</string>
-    <string name="floating_apps_tab_help">Verwalten Sie Ihre Arbeitsbereich-Widgets und schwebenden Apps: Fügen Sie sie hinzu, ordnen Sie sie neu, ändern Sie die Größe und positionieren Sie sie.</string>
     <string name="delete_widget">Widget löschen</string>
     <string name="add_point">Add Point</string>
     <string name="remove_point">Punkt entfernen</string>
