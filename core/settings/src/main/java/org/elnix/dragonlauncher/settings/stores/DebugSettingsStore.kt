@@ -50,11 +50,11 @@ object DebugSettingsStore : MapSettingsStore() {
         dataStoreName = dataStoreName,
         default = false
     )
-    val forceAppWidgetsBinding = Settings.boolean(
-        key = "forceAppWidgetsBinding",
-        dataStoreName = dataStoreName,
-        default = false
-    )
+//    val forceAppWidgetsBinding = Settings.boolean(
+//        key = "forceAppWidgetsBinding",
+//        dataStoreName = dataStoreName,
+//        default = false
+//    )
     val autoRaiseDragonOnSystemLauncher = Settings.boolean(
         key = "autoRaiseDragonOnSystemLauncher",
         dataStoreName = dataStoreName,
@@ -95,7 +95,7 @@ object DebugSettingsStore : MapSettingsStore() {
             workspacesDebugInfo,
             forceAppLanguageSelector,
             forceAppWidgetsSelector,
-            forceAppWidgetsBinding,
+//            forceAppWidgetsBinding,
             autoRaiseDragonOnSystemLauncher,
             systemLauncherPackageName,
             useAccessibilityInsteadOfContextToExpandActionPanel,

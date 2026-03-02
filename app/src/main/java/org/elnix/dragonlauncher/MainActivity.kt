@@ -42,6 +42,7 @@ import kotlinx.coroutines.yield
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.logging.DragonLogManager
 import org.elnix.dragonlauncher.common.logging.logD
+import org.elnix.dragonlauncher.common.logging.logE
 import org.elnix.dragonlauncher.common.logging.logI
 import org.elnix.dragonlauncher.common.logging.logW
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
@@ -59,7 +60,6 @@ import org.elnix.dragonlauncher.models.BackupViewModel
 import org.elnix.dragonlauncher.models.FloatingAppsViewModel
 import org.elnix.dragonlauncher.settings.SettingsBackupManager
 import org.elnix.dragonlauncher.settings.stores.BehaviorSettingsStore
-import org.elnix.dragonlauncher.settings.stores.DebugSettingsStore
 import org.elnix.dragonlauncher.settings.stores.PrivateSettingsStore
 import org.elnix.dragonlauncher.settings.stores.SwipeSettingsStore
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
@@ -159,34 +159,36 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
         widgetId: Int,
         provider: ComponentName
     ) {
-        android.util.Log.d("DRAGON", "DRAGON_FLOW: Starting bind process from picker for ID $widgetId")
+        logD(WIDGET_TAG, "DRAGON_FLOW: Starting bind process from picker for ID $widgetId")
         lifecycleScope.launch {
-            val forceBinding = DebugSettingsStore.forceAppWidgetsBinding.get(this@MainActivity)
-            android.util.Log.d("DRAGON", "DRAGON_FLOW: Force binding setting=$forceBinding")
+//            val forceBinding = DebugSettingsStore.forceAppWidgetsBinding.get(this@MainActivity)
+//            logD(WIDGET_TAG, "DRAGON_FLOW: Force binding setting=$forceBinding")
 
             // First try to bind the widget to the ID
-            val bound =
-                if (forceBinding) {
-                    android.util.Log.d("DRAGON", "DRAGON_FLOW: Skipping direct bind due to forceBinding=true")
-                    false
-                } else {
-                    widgetHolder.bindWidget(widgetId, provider)
-                }
+//            val bound =
+//                if (forceBinding) {
+//                    logD(WIDGET_TAG, "DRAGON_FLOW: Skipping direct bind due to forceBinding=true")
+//                    false
+//                } else {
+//                    widgetHolder.bindWidget(widgetId, provider)
+//                }
 
-            if (bound) {
-                // Retrieve full info only AFTER successful bind
-                val info = widgetHolder.getAppWidgetInfo(widgetId)
+            // Testing feature, since GH widget work only with this feature enabled it may require it so I'll keep it as default
 
-                if (info != null) {
-                    android.util.Log.d("DRAGON", "DRAGON_FLOW: Widget $widgetId bound successfully. Proceeding...")
-                    proceedAfterBind(widgetId, info)
-                } else {
-                    android.util.Log.w("DRAGON", "DRAGON_FLOW: Bound OK but info is NULL for ID $widgetId, deleting")
-                    widgetHolder.deleteAppWidgetId(widgetId)
-                }
-            } else {
+//            if (bound) {
+//                // Retrieve full info only AFTER successful bind
+//                val info = widgetHolder.getAppWidgetInfo(widgetId)
+//
+//                if (info != null) {
+//                    logD(WIDGET_TAG, "DRAGON_FLOW: Widget $widgetId bound successfully. Proceeding...")
+//                    proceedAfterBind(widgetId, info)
+//                } else {
+//                   logW(WIDGET_TAG, "DRAGON_FLOW: Bound OK but info is NULL for ID $widgetId, deleting")
+//                    widgetHolder.deleteAppWidgetId(widgetId)
+//                }
+//            } else {
                 // Need user consent to bind
-                android.util.Log.d("DRAGON", "DRAGON_FLOW: Binding REJECTED (Wait for consent). Launching ACTION_APPWIDGET_BIND for $widgetId")
+//                logD(WIDGET_TAG, "DRAGON_FLOW: Binding REJECTED (Wait for consent). Launching ACTION_APPWIDGET_BIND for $widgetId")
                 pendingBindWidgetId = widgetId
                 pendingBindProvider = provider
                 val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_BIND).apply {
@@ -194,7 +196,7 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
                     putExtra(AppWidgetManager.EXTRA_APPWIDGET_PROVIDER, provider)
                 }
                 widgetBindLauncher.launch(intent)
-            }
+//            }
         }
     }
 
@@ -204,10 +206,10 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
             val widgetId = pendingBindWidgetId
             val provider = pendingBindProvider
 
-            android.util.Log.d("DRAGON", "DRAGON_FLOW: ActionBind finished with resultCode=${result.resultCode} for ID $widgetId")
+            logD(WIDGET_TAG, "DRAGON_FLOW: ActionBind finished with resultCode=${result.resultCode} for ID $widgetId")
 
             if (widgetId == null || provider == null) {
-                android.util.Log.w("DRAGON", "DRAGON_FLOW: Pending data lost during activity transition!")
+               logW(WIDGET_TAG, "DRAGON_FLOW: Pending data lost during activity transition!")
                 return@registerForActivityResult
             }
 
@@ -215,22 +217,22 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
             pendingBindProvider = null
 
             lifecycleScope.launch {
-                android.util.Log.d("DRAGON", "DRAGON_FLOW: Waiting for OS to sync bind state...")
+                logD(WIDGET_TAG, "DRAGON_FLOW: Waiting for OS to sync bind state...")
                 // Wait a short time for system to finish binding
                 var bound = false
                 repeat(5) { attempt ->
                     val info = try {
                         widgetHolder.getAppWidgetInfo(widgetId)
                     } catch (e: SecurityException) {
-                        android.util.Log.w(
-                            "DRAGON",
+                       logW(
+                            WIDGET_TAG,
                             "DRAGON_FLOW: SecurityException on attempt $attempt for ID $widgetId: ${e.message}"
                         )
                         null
                     }
 
                     if (info != null) {
-                        android.util.Log.d("DRAGON", "DRAGON_FLOW: Sync successful on attempt $attempt! Info found.")
+                        logD(WIDGET_TAG, "DRAGON_FLOW: Sync successful on attempt $attempt! Info found.")
                         bound = true
                         return@repeat
                     }
@@ -239,15 +241,15 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
                 }
 
                 if (bound) {
-                    android.util.Log.d("DRAGON", "DRAGON_FLOW: Widget bound after consent. Proceeding...")
+                    logD(WIDGET_TAG, "DRAGON_FLOW: Widget bound after consent. Proceeding...")
                     widgetHolder.getAppWidgetInfo(widgetId)?.let { info ->
                         proceedAfterBind(widgetId, info)
                     } ?: run {
-                        android.util.Log.w("DRAGON", "DRAGON_FLOW: Critical - Info missing for bound ID $widgetId")
+                       logW(WIDGET_TAG, "DRAGON_FLOW: Critical - Info missing for bound ID $widgetId")
                         widgetHolder.deleteAppWidgetId(widgetId)
                     }
                 } else {
-                    android.util.Log.w("DRAGON", "DRAGON_FLOW: Bind FAILED after consent. ID $widgetId was not blessed by system.")
+                   logW(WIDGET_TAG, "DRAGON_FLOW: Bind FAILED after consent. ID $widgetId was not blessed by system.")
                     showToast("Binding failed. Check Xiaomi 'Add Shortcut' permission.")
                     widgetHolder.deleteAppWidgetId(widgetId)
                 }
@@ -259,10 +261,10 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
      * I struggled so much to achieve to something that works in most cases I don't want to change that
      */
     private fun proceedAfterBind(widgetId: Int, info: AppWidgetProviderInfo) {
-        android.util.Log.d("DRAGON", "DRAGON_FLOW: proceedAfterBind for ID $widgetId, provider=${info.provider}")
+        logD(WIDGET_TAG, "DRAGON_FLOW: proceedAfterBind for ID $widgetId, provider=${info.provider}")
 
         if (info.configure != null) {
-            android.util.Log.d("DRAGON", "DRAGON_FLOW: Provider requires configuration. Launching via Host Proxy...")
+            logD(WIDGET_TAG, "DRAGON_FLOW: Provider requires configuration. Launching via Host Proxy...")
             pendingConfigWidgetId = widgetId
             try {
                 // Use the official AppWidgetHost proxy to launch configuration.
@@ -275,7 +277,7 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
                     null
                 )
             } catch (e: Exception) {
-                android.util.Log.e("DRAGON", "DRAGON_FLOW: Proxy launch failed: ${e.message}")
+                logE(WIDGET_TAG, "DRAGON_FLOW: Proxy launch failed: ${e.message}")
                 showToast("Failed to launch configuration")
                 // Add it anyway if config fails to launch
                 floatingAppsViewModel.addFloatingApp(
@@ -285,7 +287,7 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
                 )
             }
         } else {
-            android.util.Log.d("DRAGON", "DRAGON_FLOW: No configuration needed, adding widget")
+            logD(WIDGET_TAG, "DRAGON_FLOW: No configuration needed, adding widget")
             floatingAppsViewModel.addFloatingApp(
                 SwipeActionSerializable.OpenWidget(widgetId, info.provider),
                 info,
@@ -298,8 +300,8 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_WIDGET_CONFIG) {
             val widgetId = data?.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, pendingConfigWidgetId) ?: pendingConfigWidgetId
-            android.util.Log.d("DRAGON", "DRAGON_FLOW: Proxy config finished for ID $widgetId, result=$resultCode")
-            
+            logD(WIDGET_TAG, "DRAGON_FLOW: Proxy config finished for ID $widgetId, result=$resultCode")
+
             if (resultCode == RESULT_OK && widgetId != -1) {
                 val info = widgetHolder.getAppWidgetInfo(widgetId)
                 if (info != null) {
@@ -310,7 +312,7 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
                     )
                 }
             } else if (widgetId != -1) {
-                // User cancelled or config failed, clean up the ID
+                // User canceled or config failed, clean up the ID
                 widgetHolder.deleteAppWidgetId(widgetId)
             }
             pendingConfigWidgetId = -1

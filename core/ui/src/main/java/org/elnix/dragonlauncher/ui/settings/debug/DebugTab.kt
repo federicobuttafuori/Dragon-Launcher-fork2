@@ -305,13 +305,13 @@ fun DebugTab(
             )
         }
 
-        item {
-            SettingsSwitchRow(
-                setting = DebugSettingsStore.forceAppWidgetsBinding,
-                title = "Force App Widget Binding Consent",
-                description = "Forces the system bind dialog to appear every time you add a widget (Useful for debugging/MIUI fixes)"
-            )
-        }
+//        item {
+//            SettingsSwitchRow(
+//                setting = DebugSettingsStore.forceAppWidgetsBinding,
+//                title = "Force App Widget Binding Consent",
+//                description = "Forces the system bind dialog to appear every time you add a widget (Useful for debugging/MIUI fixes)"
+//            )
+//        }
 
         item {
             SettingsSwitchRow(
