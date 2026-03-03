@@ -325,12 +325,6 @@ fun MainScreen(
             .then(hold.pointerModifier)
     ) {
 
-        if (showStatusBar && isRealFullscreen) {
-            StatusBar(
-                launchAction = { launchAction(dummySwipePoint(it)) },
-            )
-        }
-
         filteredFloatingAppObjects.forEach { floatingAppObject ->
             key(floatingAppObject.id, nestId) {
                 FloatingAppsHostView(
@@ -364,6 +358,11 @@ fun MainScreen(
             }
         }
 
+        if (showStatusBar && isRealFullscreen) {
+            StatusBar(
+                launchAction = { launchAction(dummySwipePoint(it)) },
+            )
+        }
 
         MainScreenOverlay(
             start = start,
