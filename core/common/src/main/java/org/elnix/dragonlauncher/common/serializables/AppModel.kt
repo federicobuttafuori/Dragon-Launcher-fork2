@@ -2,6 +2,8 @@ package org.elnix.dragonlauncher.common.serializables
 
 import android.content.pm.ApplicationInfo
 import com.google.gson.annotations.SerializedName
+import org.elnix.dragonlauncher.common.logging.logE
+import org.elnix.dragonlauncher.common.utils.Constants
 
 data class AppModel(
     @SerializedName("a") val name: String,
@@ -45,9 +47,18 @@ data class AppModel(
 
 
 fun CacheKey.splitCacheKey(): Pair<String, Int> {
-        val split = cacheKey.split("#", limit = 2)
-        return Pair(split.first(), split.last().toInt())
+
+    try{
+        if ("#" in cacheKey) {
+            val split = cacheKey.split("#", limit = 2)
+            return Pair(split.first(), split.last().toInt())
+        }
+    } catch (e: Throwable) {
+        logE(Constants.Logging.WORKSPACES_TAG, "Error splitting cacheKey", e)
     }
+    // Fallback if user has still the old storage way, with no cacheKey
+    return Pair(cacheKey, 0)
+}
 
 data class CacheKey (
     @SerializedName("cacheKey") val cacheKey: String
