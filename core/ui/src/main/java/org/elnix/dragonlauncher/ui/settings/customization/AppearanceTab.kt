@@ -271,6 +271,12 @@ fun AppearanceTab(
                     title = stringResource(R.string.show_tolerance_on_main_screen),
                     description = stringResource(R.string.show_tolerance_on_main_screen_desc),
                 )
+
+                SettingsSwitchRow(
+                    setting = UiSettingsStore.rgbLoading,
+                    title = stringResource(R.string.rgb_loading_settings),
+                    description = stringResource(R.string.rgb_loading_description)
+                )
             }
         }
 
@@ -335,12 +341,6 @@ fun AppearanceTab(
 
         item {
             DragonColumnGroup {
-                SettingsSwitchRow(
-                    setting = UiSettingsStore.rgbLoading,
-                    title = stringResource(R.string.rgb_loading_settings),
-                    description = stringResource(R.string.rgb_loading_description)
-                )
-
                 SettingsSwitchRow(
                     setting = UiSettingsStore.rgbLine,
                     title = stringResource(R.string.rgb_line_selector),
