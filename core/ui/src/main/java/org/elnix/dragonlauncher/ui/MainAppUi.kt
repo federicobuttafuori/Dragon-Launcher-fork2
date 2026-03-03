@@ -167,7 +167,7 @@ fun MainAppUi(
     val privateSpaceState = appsViewModel.privateSpaceState
 
     // Changelogs system
-    val lastSeenVersionCodeWelcome by PrivateSettingsStore.lastSeenVersionCodeWelcome.asState()
+    val lastSeenVersionCodeWhatsNew by PrivateSettingsStore.lastSeenVersionCodeWhatsNew.asState()
     val lastSeenVersionCodeGoogleLockdownWarning by PrivateSettingsStore.lastSeenVersionCodeGoogleLockdownWarning.asState()
 
     val currentVersionCode = getVersionCode(ctx)
@@ -329,9 +329,9 @@ fun MainAppUi(
         pendingAppName = null
     }
 
-    LaunchedEffect(Unit, lastSeenVersionCodeWelcome, currentRoute) {
+    LaunchedEffect(Unit, lastSeenVersionCodeWhatsNew, currentRoute) {
         showWhatsNewBottomSheet =
-            lastSeenVersionCodeWelcome < currentVersionCode && currentRoute != ROUTES.WELCOME
+            lastSeenVersionCodeWhatsNew < currentVersionCode && currentRoute != ROUTES.WELCOME
     }
 
     DisposableEffect(lifecycleOwner) {
@@ -814,7 +814,7 @@ fun MainAppUi(
             updates = updates
         ) {
             showWhatsNewBottomSheet = false
-            scope.launch { PrivateSettingsStore.lastSeenVersionCodeWelcome.set(ctx, currentVersionCode) }
+            scope.launch { PrivateSettingsStore.lastSeenVersionCodeWhatsNew.set(ctx, currentVersionCode) }
         }
     }
 

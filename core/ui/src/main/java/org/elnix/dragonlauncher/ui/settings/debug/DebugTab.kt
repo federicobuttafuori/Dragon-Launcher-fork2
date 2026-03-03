@@ -200,7 +200,7 @@ fun DebugTab(
 
                 DragonButton(
                     onClick = {
-                        scope.launch { PrivateSettingsStore.lastSeenVersionCodeWelcome.set(ctx, 0) }
+                        scope.launch { PrivateSettingsStore.lastSeenVersionCodeWhatsNew.set(ctx, 0) }
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
