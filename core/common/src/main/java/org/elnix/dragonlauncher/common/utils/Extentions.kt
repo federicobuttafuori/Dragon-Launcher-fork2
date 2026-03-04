@@ -448,7 +448,7 @@ val String?.isBlankJson: Boolean
     get() {
         if (this == null) return true
         val trimmed = trim()
-        return trimmed.isEmpty() && (trimmed == "{}" || trimmed == "[]")
+        return trimmed.isEmpty() || trimmed == "{}" || trimmed == "[]"
     }
 
 
