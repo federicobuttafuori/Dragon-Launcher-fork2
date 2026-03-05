@@ -439,13 +439,13 @@ fun AdvancedSettingsScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(R.drawable.ragebreaker),
-                    contentDescription = "ragebreaker (mlm-games) profile picture",
+                    painter = painterResource(R.drawable.yoanndev90),
+                    contentDescription = "YoannDev90 profile picture",
                     modifier = Modifier
                         .size(48.dp)
                         .clip(CircleShape)
                         .clickable {
-                            ctx.openUrl("https://github.com/mlm-games/CCLauncher")
+                            ctx.openUrl("https://github.com/YoannDev90")
                         }
                         .background(MaterialTheme.colorScheme.surfaceVariant),
                     contentScale = ContentScale.Fit
@@ -470,18 +470,6 @@ fun AdvancedSettingsScreen(
                         .clip(CircleShape)
                         .clickable {
                             ctx.openUrl("https://github.com/acress1")
-                        }
-                        .background(MaterialTheme.colorScheme.surfaceVariant),
-                    contentScale = ContentScale.Fit
-                )
-                Image(
-                    painter = painterResource(R.drawable.yoanndev90),
-                    contentDescription = "YoannDev90 profile picture",
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clip(CircleShape)
-                        .clickable {
-                            ctx.openUrl("https://github.com/YoannDev90")
                         }
                         .background(MaterialTheme.colorScheme.surfaceVariant),
                     contentScale = ContentScale.Fit
