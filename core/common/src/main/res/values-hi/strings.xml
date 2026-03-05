@@ -377,7 +377,7 @@
     <string name="wellbeing">डिजिटल भलाई</string>
     <string name="wellbeing_help">अपनी डिजिटल आदतों पर नियंत्रण रखें। ध्यान भटकाने वाले ऐप्स खोलने से पहले रुकें और अपने उपयोग पर विचार करें।</string>
     <string name="social_media_pause">सोशल मीडिया पर रोक</string>
-    <string name="social_media_pause_description">ऐसे ऐप्स खोलने से पहले माइंडफुलनेस स्क्रीन दिखाएं जो आपका ध्यान भटका सकती हैं (टिकटॉक, इंस्टाग्राम, स्नैपचैट...)</string>
+    <string name="social_media_pause_description">ऐसे ऐप्स खोलने से पहले माइंडफुलनेस स्क्रीन दिखाएं जो आपका ध्यान भटका सकती हैं (टिकटॉक, इंस्टाग्राम, स्नैपचैट…)</string>
     <string name="guilt_mode">समय जागरूकता मोड</string>
     <string name="guilt_mode_description">ऐप्स में बिताए गए समय को प्रतिबिंबित करने में आपकी सहायता के लिए वास्तविक उपयोग आँकड़े प्रदर्शित करें</string>
     <string name="pause_duration">विराम अवधि</string>
@@ -391,14 +391,14 @@
 
     <!--  ─────────────  Digital Pause Screen  ─────────────  -->
     <string name="digital_pause_title">डिजिटल विराम</string>
-    <string name="pause_breathe_1">साँस लेने के लिए एक क्षण लें...</string>
-    <string name="pause_breathe_2">इस क्षण में उपस्थित रहें...</string>
+    <string name="pause_breathe_1">साँस लेने के लिए एक क्षण लें…</string>
+    <string name="pause_breathe_2">इस क्षण में उपस्थित रहें…</string>
     <string name="pause_breathe_3">क्या आपको वास्तव में अभी इसी की आवश्यकता है\?</string>
-    <string name="pause_breathe_4">आपका ध्यान अनमोल है...</string>
+    <string name="pause_breathe_4">आपका ध्यान अनमोल है…</string>
     <string name="pause_breathe_5">वर्तमान के साथ पुनः जुड़ें…</string>
     <string name="pause_question">क्या आपको वाकई यह ऐप खोलने की ज़रूरत है\?</string>
     <string name="pause_no_thanks">नहीं, मैं पास हो जाऊंगा</string>
-    <string name="pause_yes_open">हाँ, फिर भी खोलें...</string>
+    <string name="pause_yes_open">हाँ, फिर भी खोलें…</string>
     <string name="usage_yesterday">आपने कल इस ऐप का उपयोग %s के लिए किया था</string>
     <string name="usage_today">आप इस ऐप पर आज पहले ही %s खर्च कर चुके हैं</string>
     <string name="usage_guilt_yearly">यदि आप इसे जारी रखते हैं तो यह प्रति वर्ष लगभग %s है!</string>
@@ -449,7 +449,7 @@
     <string name="time_limit_minutes">%dmin</string>
     <string name="time_limit_encourage_short">बढ़िया विकल्प! छोटे सत्र आपको ध्यान केंद्रित रहने में मदद करते हैं 🎯</string>
     <string name="time_limit_encourage_medium">यह उचित है. सावधान रहें! 🧘</string>
-    <string name="time_limit_encourage_long">यह काफी लंबा है... क्या आप वाकई इतना समय चाहते हैं\? 🤔</string>
+    <string name="time_limit_encourage_long">यह काफी लंबा है… क्या आप वाकई इतना समय चाहते हैं\? 🤔</string>
     <string name="time_limit_encourage_very_long">यह बहुत सारा स्क्रीन समय है। शायद पहले एक छोटा सत्र आज़माएँ\? 😅</string>
     <string name="time_limit_start">शुरू</string>
     <string name="time_limit_cancel">रद्द करना</string>
@@ -810,10 +810,4 @@
     <string name="glow_radius">चमक त्रिज्या</string>
     <string name="glow_color">चमक रंग</string>
     <string name="enable_glow">चमक सक्षम करें</string>
-
-    <string name="solution">विलयन</string>
-    <string name="dismiss">खारिज करें</string>
-    <string name="nest_radius">नेस्ट त्रिज्या</string>
-    <string name="edit_nest">नेस्ट संपादित करें</string>
-
 </resources>
