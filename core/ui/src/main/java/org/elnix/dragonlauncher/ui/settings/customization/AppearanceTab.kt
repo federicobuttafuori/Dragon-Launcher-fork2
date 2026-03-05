@@ -4,8 +4,6 @@ package org.elnix.dragonlauncher.ui.settings.customization
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -85,15 +83,12 @@ fun AppearanceTab(
 
 
     var isDraggingAppPreviewOverlays by remember { mutableStateOf(false) }
+    var demoIcon by remember { mutableStateOf(icons.keys.random()) }
 
-    val alpha by animateFloatAsState(
-        targetValue = if (isDraggingAppPreviewOverlays) 1f else 0f,
-        animationSpec = tween(150)
-    )
-    val offsetY by animateDpAsState(
-        targetValue = if (isDraggingAppPreviewOverlays) 0.dp else (-20).dp,
-        animationSpec = tween(150)
-    )
+    LaunchedEffect(isDraggingAppPreviewOverlays) {
+        // Changed the icon only when the user stops dragging, to prevent UI animations overhead
+        demoIcon = icons.keys.random()
+    }
 
 
     SettingsLazyHeader(
@@ -395,11 +390,9 @@ fun AppearanceTab(
 
     if (isDraggingAppPreviewOverlays) {
         AppPreviewTitle(
-            offsetY = offsetY,
-            alpha = alpha,
             point = dummySwipePoint(SwipeActionSerializable.OpenRecentApps).copy(
                 customName = "Preview",
-                id = icons.keys.random() // Kinda funny so I'll keep it :)
+                id = demoIcon
             ),
             topPadding = appLabelIconOverlayTopPadding.dp,
             labelSize = appLabelOverlaySize,

@@ -2,9 +2,6 @@
 
 package org.elnix.dragonlauncher.ui
 
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -182,7 +179,6 @@ fun MainScreenOverlay(
 
     // ───────────── For displaying the banner ─────────────
     var hoveredPoint by remember { mutableStateOf<SwipePointSerializable?>(null) }
-    var bannerVisible by remember { mutableStateOf(false) }
 
 
     // The chosen swipe action
@@ -250,20 +246,10 @@ fun MainScreenOverlay(
         currentAction = selectedPoint
 
         hoveredPoint = currentAction
-        bannerVisible = currentAction != null
     } else {
-        bannerVisible = false
         exposedClosest = null
     }
 
-    val alpha by animateFloatAsState(
-        targetValue = if (bannerVisible) 1f else 0f,
-        animationSpec = tween(150)
-    )
-    val offsetY by animateDpAsState(
-        targetValue = if (bannerVisible) 0.dp else (-20).dp,
-        animationSpec = tween(150)
-    )
 
     LaunchedEffect(hoveredPoint?.id) {
         hoveredPoint?.let { point ->
@@ -283,7 +269,6 @@ fun MainScreenOverlay(
             }
             hoveredPoint = null
             currentAction = null
-            bannerVisible = false
         }
     }
 
@@ -540,12 +525,9 @@ fun MainScreenOverlay(
 
 
     // Label on top of the screen to indicate the launching app
-    if (hoveredPoint != null && (showLaunchingAppLabel || showLaunchingAppIcon)) {
-        val currentPoint = hoveredPoint!!
+    if (showLaunchingAppLabel || showLaunchingAppIcon) {
         AppPreviewTitle(
-            offsetY = offsetY,
-            alpha = alpha,
-            point = currentPoint,
+            point = hoveredPoint,
             topPadding = appLabelIconOverlayTopPadding.dp,
             labelSize = appLabelOverlaySize,
             iconSize = appIconOverlaySize,

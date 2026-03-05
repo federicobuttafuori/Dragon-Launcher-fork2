@@ -6,7 +6,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.VectorConverter
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
@@ -264,17 +263,6 @@ fun SettingsScreen(
     LaunchedEffect(points, nestId, appIconOverlaySize, defaultPoint) {
         reloadIcons()
     }
-
-
-    var bannerVisible by remember { mutableStateOf(false) }
-    val alpha by animateFloatAsState(
-        targetValue = if (bannerVisible) 1f else 0f,
-        animationSpec = tween(150)
-    )
-    val offsetY by animateDpAsState(
-        targetValue = if (bannerVisible) 0.dp else (-20).dp,
-        animationSpec = tween(150)
-    )
 
 
     var undoStack by remember { mutableStateOf<List<List<SwipePointSerializable>>>(emptyList()) }
@@ -878,8 +866,6 @@ fun SettingsScreen(
                                             selectedPointTempOffset.snapTo(offset)
                                         }
                                     }
-
-                                    bannerVisible = selectedPoint != null
                                 },
                                 onDrag = { change, _ ->
                                     change.consume()
@@ -1093,7 +1079,6 @@ fun SettingsScreen(
                                         }
 
                                         selectedPoint = point
-                                        bannerVisible = true
 
                                         // Dequeue: move to the next app
                                         manualPlacementQueue = manualPlacementQueue.drop(1)
@@ -1135,8 +1120,6 @@ fun SettingsScreen(
                                         else null
 
                                     selectedPoint?.let { lastSelectedCircle = it.circleNumber }
-
-                                    bannerVisible = selectedPoint != null
                                 }
                             )
                         }
@@ -1599,19 +1582,14 @@ fun SettingsScreen(
         )
     }
 
-    if (selectedPoint != null) {
-        val currentPoint = selectedPoint!!
-        AppPreviewTitle(
-            offsetY = offsetY,
-            alpha = alpha,
-            point = currentPoint,
-            topPadding = 80.dp,
-            labelSize = appLabelOverlaySize,
-            iconSize = appIconOverlaySize,
-            showLabel = true,
-            showIcon = true
-        )
-    }
+    AppPreviewTitle(
+        point = selectedPoint,
+        topPadding = 80.dp,
+        labelSize = appLabelOverlaySize,
+        iconSize = appIconOverlaySize,
+        showLabel = true,
+        showIcon = true
+    )
 
     // Manual placement mode banner
     if (isInManualPlacementMode) {
