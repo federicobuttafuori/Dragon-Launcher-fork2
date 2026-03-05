@@ -2,6 +2,7 @@ package org.elnix.dragonlauncher.ui
 
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.VectorConverter
@@ -662,8 +663,8 @@ fun SettingsScreen(
 
     Box(
         Modifier
-        .fillMaxSize()
-        .windowInsetsPadding(WindowInsets.safeDrawing.exclude(WindowInsets.ime))
+            .fillMaxSize()
+            .windowInsetsPadding(WindowInsets.safeDrawing.exclude(WindowInsets.ime))
     ) {
         Column {
             Row(
@@ -935,7 +936,7 @@ fun SettingsScreen(
                                                 nests.find { it.id == targetNestId }?.let { targetNest ->
 
                                                     // I remove 1 because the dragDistances counts the cancel zone
-                                                    val targetNestCircleNumbers = targetNest.dragDistances.size -1
+                                                    val targetNestCircleNumbers = targetNest.dragDistances.size - 1
 
                                                     // Add 1 because the circle number starts at 0
                                                     val selectedPointCircleNumber = p.circleNumber + 1
@@ -1454,15 +1455,20 @@ fun SettingsScreen(
             }
         }
 
-        SettingsSlider(
-            setting = SwipeMapSettingsStore.subNestDefaultRadius,
-            title = "",
-            valueRange = 0..50,
-            modifier = Modifier
-                .height(50.dp)
-                .width(150.dp)
-                .offset(x = 20.dp, y = 50.dp)
-        )
+        // Only show the toggler if user has a point that opens a nest, otherwise it may be confusing
+        AnimatedVisibility(
+            visible = points.any { it.action is SwipeActionSerializable.OpenCircleNest }
+        ) {
+            SettingsSlider(
+                setting = SwipeMapSettingsStore.subNestDefaultRadius,
+                title = "",
+                valueRange = 0..50,
+                modifier = Modifier
+                    .height(50.dp)
+                    .width(150.dp)
+                    .offset(x = 20.dp, y = 50.dp)
+            )
+        }
     }
 
     if (showAddDialog) {
