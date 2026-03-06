@@ -56,6 +56,7 @@ import org.elnix.dragonlauncher.ui.components.settings.asState
 import org.elnix.dragonlauncher.ui.helpers.customobjects.customObject
 import org.elnix.dragonlauncher.ui.helpers.nests.actionsInCircle
 import org.elnix.dragonlauncher.ui.helpers.nests.circlesSettingsOverlay
+import org.elnix.dragonlauncher.ui.helpers.nests.drawNeonGlowArc
 import org.elnix.dragonlauncher.ui.helpers.nests.drawNeonGlowLine
 import org.elnix.dragonlauncher.ui.helpers.nests.swipeDefaultParams
 import org.elnix.dragonlauncher.ui.remembers.LocalAngleLineObject
@@ -296,7 +297,7 @@ fun MainScreenOverlay(
 
     val filteredCircles = circles.filter {
         showAllActionsOnCurrentNest ||
-        (showAllActionsOnCurrentCircle && it.id == targetCircle)
+                (showAllActionsOnCurrentCircle && it.id == targetCircle)
     }
 
 
@@ -622,17 +623,31 @@ fun DrawScope.actionLine(
                 start.y + arcRadius
             )
 
-            drawArc(
-                color = angleLineCustomObject.color ?: lineColor,
-                startAngle = -90f,
-                sweepAngle = sweepAngle,
-                useCenter = false,
+            val angleGLow = angleLineCustomObject.glow
+
+
+            val glowRadius = if (angleGLow != null ) {
+                angleGLow.radius
+                    ?: UiConstants.defaultAngleCustomObject.glow!!.radius!!
+            } else 0f
+
+            val glowColor = if (angleGLow != null ) {
+                angleGLow.color
+                    ?: UiConstants.defaultAngleCustomObject.glow!!.color
+            } else null
+
+
+            drawNeonGlowArc(
                 topLeft = rect.topLeft,
                 size = Size(rect.width, rect.height),
-                style = Stroke(
-                    width = arcStroke,
-                    cap = StrokeCap.Round
-                )
+                startAngle = -90f,
+                sweepAngle = sweepAngle,
+                color = angleLineCustomObject.color ?: lineColor,
+                lineStrokeWidth = arcStroke,
+                glowRadius = glowRadius,
+                glowColor = glowColor,
+                erase = angleLineCustomObject.eraseBackground
+                    ?: UiConstants.defaultLineCustomObject.eraseBackground!!
             )
         }
     }

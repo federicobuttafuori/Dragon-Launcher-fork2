@@ -33,7 +33,7 @@ object UiConstants {
         stroke = 3f,
         color = null, // RGB Color according to the angle
         glow = CustomGlow(
-            radius = 75f
+            radius = 20f
         ),
         shape = IconShape.Circle,
         size = 20f,

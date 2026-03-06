@@ -243,7 +243,6 @@ fun AngleLineTab(onBack: () -> Unit) {
                         editObject = angleLineObject,
                         default = UiConstants.defaultAngleCustomObject,
                         properties = CustomObjectBlockProperties(
-                            allowGlowCustomization = false,
                             allowShapeCustomization = false
                         )
                     ) {
