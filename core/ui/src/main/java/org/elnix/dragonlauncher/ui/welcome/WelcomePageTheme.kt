@@ -12,25 +12,23 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.utils.ThemeObject
-import org.elnix.dragonlauncher.ui.helpers.ThemesList
 import org.elnix.dragonlauncher.common.utils.loadThemes
+import org.elnix.dragonlauncher.ui.helpers.ThemesList
 
 @Composable
 fun WelcomePageTheme() {
     val ctx = LocalContext.current
 
     var themes by remember { mutableStateOf<List<ThemeObject>?>(null) }
-    var loading by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
         themes = loadThemes(ctx)
-        loading = false
     }
 
     WelcomePagerHeader(
         title = stringResource(R.string.theme_selector),
-    icon = Icons.Default.ColorLens
+        icon = Icons.Default.ColorLens
     ) {
-        ThemesList(loading, themes)
+        ThemesList(themes)
     }
 }

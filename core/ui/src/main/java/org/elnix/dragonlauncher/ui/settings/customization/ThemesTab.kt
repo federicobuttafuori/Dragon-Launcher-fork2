@@ -10,9 +10,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.utils.ThemeObject
+import org.elnix.dragonlauncher.common.utils.loadThemes
 import org.elnix.dragonlauncher.ui.helpers.ThemesList
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsLazyHeader
-import org.elnix.dragonlauncher.common.utils.loadThemes
 
 @Composable
 fun ThemesTab(
@@ -21,11 +21,9 @@ fun ThemesTab(
     val ctx = LocalContext.current
 
     var themes by remember { mutableStateOf<List<ThemeObject>?>(null) }
-    var loading by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
         themes = loadThemes(ctx)
-        loading = false
     }
 
     SettingsLazyHeader(
@@ -34,7 +32,7 @@ fun ThemesTab(
         helpText = stringResource(R.string.theme_selector_help),
         onReset = null,
         content = {
-            ThemesList(loading, themes)
+            ThemesList(themes)
         }
     )
 }
