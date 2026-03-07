@@ -35,7 +35,7 @@ fun SettingsTitle(
     ) {
 
         DragonIconButton(
-            onClick = { onBack() },
+            onClick = { onBack() }
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -47,39 +47,45 @@ fun SettingsTitle(
             text = title,
             color = MaterialTheme.colorScheme.onBackground,
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
+                .align(Alignment.CenterVertically)
         )
 
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(5.dp)
+        ) {
+            otherIcons.forEach {
+                DragonIconButton(
+                    onClick = { it.first() },
+                ) {
+                    Icon(
+                        imageVector = it.second,
+                        contentDescription = null
+                    )
+                }
+            }
 
-       otherIcons.forEach {
-           DragonIconButton(
-               onClick = { it.first() },
-           ) {
-               Icon(
-                   imageVector = it.second,
-                   contentDescription = null
-               )
-           }
-       }
+            if (resetIcon != null) {
+                DragonIconButton(
+                    onClick = { resetIcon() },
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Restore,
+                        contentDescription = stringResource(R.string.reset)
+                    )
+                }
+            }
 
-        if (resetIcon != null){
             DragonIconButton(
-                onClick = { resetIcon() },
+                onClick = { helpIcon() },
             ) {
                 Icon(
-                    imageVector = Icons.Default.Restore,
-                    contentDescription = stringResource(R.string.reset)
+                    imageVector = Icons.AutoMirrored.Filled.Help,
+                    contentDescription = stringResource(R.string.help)
                 )
             }
-        }
-
-        DragonIconButton(
-            onClick = { helpIcon() },
-        ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.Help,
-                contentDescription = stringResource(R.string.help)
-            )
         }
     }
 }
