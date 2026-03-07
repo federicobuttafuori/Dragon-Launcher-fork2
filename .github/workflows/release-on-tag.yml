@@ -26,7 +26,6 @@ jobs:
         id: changelog
         shell: bash
         run: |
-          DIR="fastlane/metadata/android/en-US/changelogs"
           echo "changelog<<EOF" >> "$GITHUB_OUTPUT"
           .github/scripts/read-changelog.sh >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"      
@@ -39,28 +38,34 @@ jobs:
           cache: gradle
 
       - name: Decode keystore
-        run: echo "${{ secrets.KEYSTORE_FILE_B64 }}" | base64 -d > my-release-key.jks
+        env:
+          KEYSTORE_FILE_B64: ${{ secrets.KEYSTORE_FILE_B64 }}
+        run: echo "$KEYSTORE_FILE_B64" | base64 -d > my-release-key.jks
 
       - name: Export signing env
         run: |
-          echo "KEYSTORE_FILE=$PWD/my-release-key.jks" >> $GITHUB_ENV
-          echo "KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}" >> $GITHUB_ENV
-          echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> $GITHUB_ENV
-          echo "KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> $GITHUB_ENV
+          {
+            echo "KEYSTORE_FILE=$PWD/my-release-key.jks"
+            echo "KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}"
+            echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}"
+            echo "KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}"
+          } >> $GITHUB_ENV
 
       - name: Build Release APK
-        run: ./gradlew assembleStableRelease assembleBetaDebuggableRelease
+        run: ./gradlew assembleStableRelease assembleBetaDebuggableRelease --parallel --no-daemon --build-cache
 
       - name: Rename APK
         run: |
           NAME="DragonLauncher-${{ env.VERSION }}.apk"
           mv app/build/outputs/apk/stable/release/app-stable-release.apk "$NAME"
 
-          DEBUG="DragonLauncher-v${{ env.VERSION }}-debuggable.apk"
+          DEBUG="DragonLauncher-${{ env.VERSION }}-debuggable.apk"
           mv app/build/outputs/apk/beta/debuggableRelease/app-beta-debuggableRelease.apk "$DEBUG"
           
-          echo "APK_DEBUG=$DEBUG" >> $GITHUB_ENV
-          echo "APK=$NAME" >> $GITHUB_ENV
+          {
+            echo "APK_DEBUG=$DEBUG"
+            echo "APK=$NAME"
+          } >> $GITHUB_ENV
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2

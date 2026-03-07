@@ -14,6 +14,9 @@ on:
       - '**.java'
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -22,6 +25,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
 
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -35,55 +40,61 @@ jobs:
         id: version
         run: |
           VER=$(grep "VERSION_NAME" gradle.properties | cut -d'=' -f2 | tr -d '[:space:]')
-          echo "versionName=$VER" >> $GITHUB_ENV
+          echo "versionName=$VER" >> $GITHUB_OUTPUT
           echo "Detected versionName: $VER"
-
 
       # Decode keystore
       - name: Decode keystore
-        run: echo "${{ secrets.KEYSTORE_FILE_B64 }}" | base64 -d > my-release-key.jks
+        env:
+          KEYSTORE_FILE_B64: ${{ secrets.KEYSTORE_FILE_B64 }}
+        run: echo "$KEYSTORE_FILE_B64" | base64 -d > my-release-key.jks
 
       - name: Export signing env
         run: |
-          echo "KEYSTORE_FILE=$PWD/my-release-key.jks" >> $GITHUB_ENV
-          echo "KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}" >> $GITHUB_ENV
-          echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}" >> $GITHUB_ENV
-          echo "KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}" >> $GITHUB_ENV
+          {
+            echo "KEYSTORE_FILE=$PWD/my-release-key.jks"
+            echo "KEYSTORE_PASSWORD=${{ secrets.KEYSTORE_PASSWORD }}"
+            echo "KEY_ALIAS=${{ secrets.KEY_ALIAS }}"
+            echo "KEY_PASSWORD=${{ secrets.KEY_PASSWORD }}"
+          } >> $GITHUB_ENV
 
       - name: Build Release APK
         uses: nick-fields/retry@v3
         with:
-          timeout_minutes: 10
+          timeout_minutes: 15
           max_attempts: 3
-          command: ./gradlew assembleBetaRelease assembleBetaUnminifiedRelease assembleBetaDebuggableRelease assembleBetaDebug
+          command: ./gradlew lintBetaRelease assembleBetaRelease assembleBetaUnminifiedRelease assembleBetaDebuggableRelease assembleBetaDebug --parallel --no-daemon --build-cache
 
       - name: Rename APKs with version
         run: |
-          MIN="DragonLauncher-v${{ env.versionName }}-${{ github.run_number }}.apk"
-          UNMIN="DragonLauncher-v${{ env.versionName }}-${{ github.run_number }}-unminified.apk"
-          DEBUG="DragonLauncher-v${{ env.versionName }}-${{ github.run_number }}-debuggable.apk"
+          VER="${{ steps.version.outputs.versionName }}"
+          RUN="${{ github.run_number }}"
+          MIN="DragonLauncher-v${VER}-${RUN}.apk"
+          UNMIN="DragonLauncher-v${VER}-${RUN}-unminified.apk"
+          DEBUG="DragonLauncher-v${VER}-${RUN}-debuggable.apk"
 
           mv app/build/outputs/apk/beta/release/app-beta-release.apk "$MIN"
           mv app/build/outputs/apk/beta/unminifiedRelease/app-beta-unminifiedRelease.apk "$UNMIN"
           mv app/build/outputs/apk/beta/debuggableRelease/app-beta-debuggableRelease.apk "$DEBUG"
           
-          echo "APK_MIN=$MIN" >> $GITHUB_ENV
-          echo "APK_UNMIN=$UNMIN" >> $GITHUB_ENV
-          echo "APK_DEBUG=$DEBUG" >> $GITHUB_ENV
+          {
+            echo "APK_MIN=$MIN"
+            echo "APK_UNMIN=$UNMIN"
+            echo "APK_DEBUG=$DEBUG"
+            echo "TAG_NAME=v${VER}-beta-${RUN}"
+          } >> $GITHUB_ENV
 
       # Create tag before release
       - name: Create tag
         run: |
-          TAG="v${{ env.versionName }}-beta-${{ github.run_number }}"
-          git tag "$TAG"
-          git push origin "$TAG"
-          echo "TAG_NAME=$TAG" >> $GITHUB_ENV
+          git tag "$TAG_NAME"
+          git push origin "$TAG_NAME"
 
       - name: Upload pre-release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.TAG_NAME }}
-          name: "v${{ env.versionName }}-beta-${{ github.run_number }}"
+          name: ${{ env.TAG_NAME }}
           prerelease: true
           files: |
             ${{ env.APK_MIN }}
