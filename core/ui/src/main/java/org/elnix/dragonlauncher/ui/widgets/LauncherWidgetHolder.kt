@@ -6,11 +6,12 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProviderInfo
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.util.SparseArray
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
+import org.elnix.dragonlauncher.common.logging.logD
+import org.elnix.dragonlauncher.common.logging.logE
 import java.lang.ref.WeakReference
 
 /**
@@ -64,9 +65,9 @@ class LauncherWidgetHolder(private val context: Context) : DefaultLifecycleObser
             try {
                 appWidgetHost.startListening()
                 isListening = true
-                Log.d(TAG, "AppWidgetHost started listening")
+                logD(TAG, "AppWidgetHost started listening")
             } catch (e: Exception) {
-                Log.e(TAG, "Failed to start listening", e)
+                logE(TAG, "Failed to start listening", e)
             }
         }
     }
@@ -76,34 +77,34 @@ class LauncherWidgetHolder(private val context: Context) : DefaultLifecycleObser
             try {
                 appWidgetHost.stopListening()
                 isListening = false
-                Log.d(TAG, "AppWidgetHost stopped listening")
+                logD(TAG, "AppWidgetHost stopped listening")
             } catch (e: Exception) {
-                Log.e(TAG, "Failed to stop listening", e)
+                logE(TAG, "Failed to stop listening", e)
             }
         }
     }
 
     fun allocateAppWidgetId(): Int {
         val id = appWidgetHost.allocateAppWidgetId()
-        android.util.Log.d("DRAGON", "DRAGON_WIDGET: Allocated new ID: $id")
+        logD("DRAGON", "DRAGON_WIDGET: Allocated new ID: $id")
         return id
     }
 
     fun bindWidget(appWidgetId: Int, provider: android.content.ComponentName, options: android.os.Bundle? = null): Boolean {
-        android.util.Log.d("DRAGON", "DRAGON_WIDGET: Starting bind for ID $appWidgetId with provider $provider")
+        logD("DRAGON", "DRAGON_WIDGET: Starting bind for ID $appWidgetId with provider $provider")
         val result = appWidgetManager.bindAppWidgetIdIfAllowed(appWidgetId, provider, options)
-        android.util.Log.d("DRAGON", "DRAGON_WIDGET: bindAppWidgetIdIfAllowed result for ID $appWidgetId: $result")
+        logD("DRAGON", "DRAGON_WIDGET: bindAppWidgetIdIfAllowed result for ID $appWidgetId: $result")
         return result
     }
 
     fun deleteAppWidgetId(appWidgetId: Int) {
-        android.util.Log.d("DRAGON", "DRAGON_WIDGET: Deleting ID $appWidgetId")
+        logD("DRAGON", "DRAGON_WIDGET: Deleting ID $appWidgetId")
         appWidgetHost.deleteAppWidgetId(appWidgetId)
         views.remove(appWidgetId)
     }
 
     fun createView(appWidgetId: Int, info: AppWidgetProviderInfo): AppWidgetHostView {
-        android.util.Log.d("DRAGON", "DRAGON_WIDGET: Creating view for ID $appWidgetId (Provider: ${info.provider})")
+        logD("DRAGON", "DRAGON_WIDGET: Creating view for ID $appWidgetId (Provider: ${info.provider})")
         val view = appWidgetHost.createView(context, appWidgetId, info)
         views.put(appWidgetId, WeakReference(view))
         return view
@@ -111,7 +112,7 @@ class LauncherWidgetHolder(private val context: Context) : DefaultLifecycleObser
 
     fun getAppWidgetInfo(appWidgetId: Int): AppWidgetProviderInfo? {
         val info = appWidgetManager.getAppWidgetInfo(appWidgetId)
-        android.util.Log.d("DRAGON", "DRAGON_WIDGET: getAppWidgetInfo for ID $appWidgetId: ${info?.provider ?: "NULL"}")
+        logD("DRAGON", "DRAGON_WIDGET: getAppWidgetInfo for ID $appWidgetId: ${info?.provider ?: "NULL"}")
         return info
     }
 

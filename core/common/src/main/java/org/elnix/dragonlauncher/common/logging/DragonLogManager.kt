@@ -26,10 +26,15 @@ object DragonLogManager {
 
     private fun updateLoggingState() {
         val tree = fileTree ?: return
+        val plantedTrees = Timber.forest()
         if (isLoggingEnabled) {
-            Timber.plant(tree)
+            if (tree !in plantedTrees) {
+                Timber.plant(tree)
+            }
         } else {
-            Timber.uproot(tree)
+            if (tree in plantedTrees) {
+                Timber.uproot(tree)
+            }
         }
     }
 
@@ -39,5 +44,21 @@ object DragonLogManager {
 
     fun clearLogs(ctx: android.content.Context) {
         fileTree?.clearAllLogs()
+    }
+
+    fun readLogFile(file: java.io.File): String {
+        return try {
+            file.readText()
+        } catch (e: Exception) {
+            "Failed to read log file: ${e.message}"
+        }
+    }
+
+    fun deleteLogFile(file: java.io.File) {
+        try {
+            file.delete()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

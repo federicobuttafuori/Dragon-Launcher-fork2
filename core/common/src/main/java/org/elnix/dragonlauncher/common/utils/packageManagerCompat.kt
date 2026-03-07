@@ -36,6 +36,7 @@ class PackageManagerCompat(private val pm: PackageManager, private val ctx: Cont
         val launcherApps = ctx.getSystemService(LauncherApps::class.java)
 
         val result = mutableListOf<AppModel>()
+        val seenKeys = mutableSetOf<String>()
 
         userManager.userProfiles.forEach { userHandle ->
             val userId = userHandle.hashCode()
@@ -50,12 +51,12 @@ class PackageManagerCompat(private val pm: PackageManager, private val ctx: Cont
                         val userInfo = launcherApps?.getLauncherUserInfo(userHandle)
                         val userType = userInfo?.userType
 
-                        logD(PM_COMPAT_TAG, "UserTYpe: ${userType.toString()}")
+                        logD(PM_COMPAT_TAG) { "UserType: ${userType.toString()}" }
 
                         isPrivateProfile = userType == "android.os.usertype.profile.PRIVATE"
                         isWorkProfile = !isPrivateProfile
                     } catch (e: Exception) {
-                        logE(PM_COMPAT_TAG, e.toString())
+                        logE(PM_COMPAT_TAG, e) { e.toString() }
                         isWorkProfile = false
                         isPrivateProfile = false
                     }
@@ -72,18 +73,21 @@ class PackageManagerCompat(private val pm: PackageManager, private val ctx: Cont
             // It is used to simulate people's phone that have no private detection working
             // Only called during the differential detection
             if (isPrivateProfile && skipAnyKnownPrivate) {
-                logD(PM_COMPAT_TAG, "Skipping ${activities.size} apps for userId: $userId")
+                logD(PM_COMPAT_TAG) { "Skipping ${activities.size} apps for userId: $userId" }
                 return@forEach
             }
 
-            logD(PM_COMPAT_TAG, "Loading ${activities.size} apps for userId: $userId (Private: $isPrivateProfile)")
+            logD(PM_COMPAT_TAG) { "Loading ${activities.size} apps for userId: $userId (Private: $isPrivateProfile)" }
 
             activities.forEach { activity ->
                 val appInfo = activity.applicationInfo
-                val category = mapAppToSection(appInfo)
                 val pkg = appInfo.packageName
+                val key = "${pkg}_$userId"
 
+                if (seenKeys.contains(key)) return@forEach
                 if (!isAppEnabled(pkg)) return@forEach
+
+                val category = mapAppToSection(appInfo)
 
                 result += AppModel(
                     name = activity.label?.toString() ?: pkg,
@@ -96,22 +100,26 @@ class PackageManagerCompat(private val pm: PackageManager, private val ctx: Cont
                     isLaunchable = true,
                     category = category
                 )
+                seenKeys.add(key)
             }
 
             if (isMainProfile) {
                 pm.getInstalledApplications(PackageManager.GET_META_DATA)
                     .forEach { appInfo ->
                         val pkg = appInfo.packageName
-                        val category = mapAppToSection(appInfo)
+                        val userIdMain = Process.myUserHandle().hashCode()
+                        val key = "${pkg}_$userIdMain"
 
-                        if (result.any { it.packageName == pkg && it.userId == userId }) return@forEach
+                        if (seenKeys.contains(key)) return@forEach
                         if (!isSystemApp(appInfo)) return@forEach
                         if (!appInfo.enabled) return@forEach
+
+                        val category = mapAppToSection(appInfo)
 
                         result += AppModel(
                             name = pm.getApplicationLabel(appInfo).toString(),
                             packageName = pkg,
-                            userId = userId,
+                            userId = userIdMain,
                             isEnabled = true,
                             isSystem = true,
                             isWorkProfile = false,
@@ -119,6 +127,7 @@ class PackageManagerCompat(private val pm: PackageManager, private val ctx: Cont
                             isLaunchable = false,
                             category = category
                         )
+                        seenKeys.add(key)
                     }
             }
         }
@@ -131,7 +140,7 @@ class PackageManagerCompat(private val pm: PackageManager, private val ctx: Cont
             "Apps loaded: $userCount user, $workCount work, $privateCount private (total: ${result.size})"
         )
 
-        return result.distinctBy { "${it.packageName}_${it.userId}" }
+        return result
     }
 
     private fun isAppEnabled(pkgName: String): Boolean {

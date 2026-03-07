@@ -6,12 +6,15 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.content.res.XmlResourceParser
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.util.LruCache
 import android.util.Xml
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.Density
 import androidx.core.content.res.ResourcesCompat
@@ -106,15 +109,29 @@ class AppsViewModel(
     val packTint = _packTint.asStateFlow()
 
     /**
-     * All the icons that are drawn around the app, changed from 2 separate lists to only one.
-     *
-     * For the app icons, in the drawer for example, the icons are stored using the cache key [AppModel.iconCacheKey]
-     * For the points icons, in the circles and other places around the app, ths icons are linked using the point id
-     *
-     * When an icon that opens an app has no overrides, it tries to pick the icon that corresponds to its app
+     * Cache for icons with memory management (20MB size for better storage of bitmaps)
      */
-    private val _icons = MutableStateFlow<Map<String, ImageBitmap>>(emptyMap())
-    val icons = _icons.asStateFlow()
+    private val iconCache = object : LruCache<String, ImageBitmap>(20 * 1024 * 1024) {
+        override fun sizeOf(key: String, value: ImageBitmap): Int {
+            return value.width * value.height * 4 // 4 bytes per pixel for ARGB_8888
+        }
+    }
+
+    private val _iconsTrigger = MutableStateFlow(0)
+    
+    /**
+     * Reactive access to icons. 
+     * Note: For high-performance icon rendering (list scrolling), 
+     * use getIcon(key) which hits the LruCache directly.
+     */
+    val icons: StateFlow<Map<String, ImageBitmap>> = _iconsTrigger
+        .map { iconCache.snapshot() }
+        .stateIn(scope, SharingStarted.Lazily, emptyMap())
+
+    /**
+     * Direct synchronous access to icon cache for UI components
+     */
+    fun getIcon(key: String): ImageBitmap? = iconCache.get(key)
 
 
     private val _defaultPoint = MutableStateFlow(defaultSwipePointsValues)
@@ -180,18 +197,24 @@ class AppsViewModel(
      * Loads everything the AppViewModel needs
      * Runs at start and when the user restore from a backup
      */
-    suspend fun loadAll() {
-        loadWorkspaces()
-        loadRecentlyUsedApps()
+    suspend fun loadAll() = withContext(Dispatchers.IO) {
+        // Parallel loading of non-dependent data
+        val workspacesJob = launch { loadWorkspaces() }
+        val recentAppsJob = launch { loadRecentlyUsedApps() }
+        val iconPacksJob = launch { loadIconPacks() }
+
         val savedPackTint = UiSettingsStore.iconPackTint.get(ctx)
-        savedPackTint.let { tint ->
-            _packTint.value = tint.toArgb()
-        }
+        _packTint.value = savedPackTint.toArgb()
 
         val savedPackName = UiSettingsStore.selectedIconPack.get(ctx)
-        savedPackName.let { pkg ->
-            loadIconPacks()
-            _selectedIconPack.value = _iconPacksList.value.find { it.packageName == pkg }
+        
+        // Wait for basic config before proceeding to icons/apps
+        workspacesJob.join()
+        recentAppsJob.join()
+        iconPacksJob.join()
+
+        if (savedPackName.isNotBlank()) {
+            _selectedIconPack.value = _iconPacksList.value.find { it.packageName == savedPackName }
         }
 
         reloadApps()
@@ -749,7 +772,7 @@ class AppsViewModel(
         val baseBitmap = createUntintedBitmap(
             action = point.action,
             ctx = ctx,
-            icons = _icons.value,
+            icons = icons.value,
             width = sizePx,
             height = sizePx
         )
@@ -851,7 +874,8 @@ class AppsViewModel(
         scope.launch(Dispatchers.IO) {
             val bmp = loadPointIcon(point)
 
-            _icons.update { it + (id to bmp) }
+            iconCache.put(id, bmp)
+            _iconsTrigger.update { it + 1 }
             _iconsVersion.value++
         }
     }
@@ -868,22 +892,22 @@ class AppsViewModel(
         useOverride: Boolean,
         sizePx: Int = 128
     ) {
-        val icon = loadSingleIcon(
-            app = app,
-            useOverrides = useOverride,
-            sizePx = sizePx
-        )
-        _icons.update { current ->
-            val updated = current.toMutableMap()
-            updated[app.iconCacheKey.cacheKey] = icon
+        scope.launch(Dispatchers.IO) {
+            val icon = loadSingleIcon(
+                app = app,
+                useOverrides = useOverride,
+                sizePx = sizePx
+            )
+            
+            iconCache.put(app.iconCacheKey.cacheKey, icon)
 
-            if (!updated.containsKey(app.packageName) || (!app.isWorkProfile && !app.isPrivateProfile)) {
-                updated[app.packageName] = icon
+            if (!app.isWorkProfile && !app.isPrivateProfile) {
+                iconCache.put(app.packageName, icon)
             }
 
-            updated
+            _iconsTrigger.update { it + 1 }
+            _iconsVersion.value++
         }
-        _iconsVersion.value++
     }
 
 
@@ -903,7 +927,7 @@ class AppsViewModel(
         scope.launch(Dispatchers.Default) {
             points.forEach { p ->
                 val id = p.id
-                if (_icons.value.containsKey(id) && !override) return@forEach
+                if (iconCache.get(id) != null && !override) return@forEach
 
                 reloadPointIcon(p)
             }
@@ -920,8 +944,6 @@ class AppsViewModel(
         apps: List<AppModel>,
         sizePx: Int
     ) = withContext(Dispatchers.IO) {
-        val updated = _icons.value.toMutableMap()
-
         apps.forEach { app ->
             val bitmap = runCatching {
                 iconSemaphore.withPermit {
@@ -933,9 +955,9 @@ class AppsViewModel(
                 }
             }.getOrNull() ?: return@forEach
 
-            updated[app.iconCacheKey.cacheKey] = bitmap
+            iconCache.put(app.iconCacheKey.cacheKey, bitmap)
         }
-        _icons.update { updated }
+        _iconsTrigger.update { it + 1 }
         _iconsVersion.value++
     }
 
@@ -1169,44 +1191,33 @@ class AppsViewModel(
 
 
     /** Load the user's workspaces into the _state var, enforced safety due to some crash at start */
-    private suspend fun loadWorkspaces() {
+    private suspend fun loadWorkspaces() = withContext(Dispatchers.IO) {
         try {
             val json = WorkspaceSettingsStore.getAll(ctx).toString()
+            if (json.isBlank()) return@withContext
 
-            logD(WORKSPACES_TAG, "Loading Workspaces...")
-            logD(WORKSPACES_TAG, json)
-            // Correct generic type: WorkspaceState with List<Workspace>
             val type = object : TypeToken<WorkspaceState>() {}.type
             val loadedState: WorkspaceState? = gson.fromJson(json, type)
+            
+            val finalState = loadedState ?: WorkspaceState()
+            _workspacesState.value = finalState
 
-            _workspacesState.value = loadedState?.copy(
-                workspaces = loadedState.workspaces,
-                appOverrides = loadedState.appOverrides,
-                appAliases = loadedState.appAliases
-            ) ?: WorkspaceState()
+            // Async reload of icons to not block the workspace state emission
+            launch {
+                finalState.appOverrides.forEach { (iconCacheKey, override) ->
+                    val (packageName, userId) = iconCacheKey.splitCacheKey()
+                    override.customIcon?.let { customIcon ->
+                        reloadPointIcon(
+                            point = dummySwipePoint(
+                                SwipeActionSerializable.LaunchApp(packageName, false, userId)
+                            ).copy(customIcon = customIcon, id = packageName)
+                        )
+                    }
+                }
+            }
         } catch (e: Exception) {
             logE(WORKSPACES_TAG, "Error while loading the workspaces state", e)
             _workspacesState.value = WorkspaceState()
-        }
-
-        // Load the appOverrides in the pointsIcons too
-        _workspacesState.value.appOverrides.forEach { (iconCacheKey, override) ->
-            val (packageName, userId) = iconCacheKey.splitCacheKey()
-
-            override.customIcon?.let { customIcon ->
-                reloadPointIcon(
-                    point = dummySwipePoint(
-                        SwipeActionSerializable.LaunchApp(
-                            packageName,
-                            false,
-                            userId
-                        )
-                    ).copy(
-                        customIcon = customIcon,
-                        id = packageName
-                    )
-                )
-            }
         }
     }
 

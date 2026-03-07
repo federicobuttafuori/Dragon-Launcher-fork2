@@ -1,5 +1,6 @@
 package org.elnix.dragonlauncher.common.serializables
 
+import androidx.compose.runtime.Immutable
 import com.google.gson.annotations.SerializedName
 
 
@@ -7,6 +8,7 @@ import com.google.gson.annotations.SerializedName
  * New CircleNest system, where every bloc of circles is contained inside one of those*
  * This way, we can navigate across those nests, to achieve more actions, using the jump actions
  */
+@Immutable
 data class CircleNest(
     /**
      *  By default the id 0 is the first nest that is available,

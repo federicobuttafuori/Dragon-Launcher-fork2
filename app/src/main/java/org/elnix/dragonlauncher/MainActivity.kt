@@ -348,27 +348,37 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Initialize logging system
-        DragonLogManager.init(this)
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            registerReceiver(packageReceiver, filter, RECEIVER_EXPORTED)
-        }
-
-        // Use hardware acceleration
+        val startTime = System.currentTimeMillis()
+        // Use hardware acceleration ASAP
         window.setFlags(
             WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
             WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
         )
 
         super.onCreate(savedInstanceState)
+        logI("StartupPerf", "MainActivity.onCreate started")
+
+        // Initialize logging & other background tasks asynchronously
+        org.elnix.dragonlauncher.common.utils.AsyncInitializer.init(this)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(packageReceiver, filter, RECEIVER_EXPORTED)
+        }
 
         appWidgetHost.startListening()
 
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        // Force launch of full viewmodel after first frame for performance
+        // This avoids layout & loading overlap
+        lifecycleScope.launch(Dispatchers.Main) {
+            yield() // Wait for first frame
+            logI("StartupPerf", "First frame rendered in ${System.currentTimeMillis() - startTime}ms. Starting AppsViewModel.loadAll().")
+            (applicationContext as MyApplication).appsViewModel.loadAll()
+            logI("StartupPerf", "AppsViewModel.loadAll() finished at ${System.currentTimeMillis() - startTime}ms total.")
+        }
 
         setContent {
             val ctx = LocalContext.current
@@ -380,18 +390,17 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
                 (ctx.applicationContext as MyApplication).appsViewModel
             }
 
-
             // Used internally by the app view model
             appsViewModel.cacheDensity(LocalDensity.current)
 
             // Launch full viewmodel after first frame for performance
-            LaunchedEffect(Unit) {
-                yield()
-                appsViewModel.loadAll()
-            }
+            // LaunchedEffect(Unit) {
+            //     yield()
+            //     appsViewModel.loadAll()
+            // }
 
             // May be used in the future for some quit action / operation
-//            DoubleBackToExit()
+            // DoubleBackToExit()
 
             // Used to visually block private space content on window quit, and if user locks his phone,
             // the apps are also visually blocked, since they can't be launched

@@ -60,6 +60,8 @@ import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.burnoutcrew.reorderable.reorderable
 import org.elnix.dragonlauncher.common.R
+import org.elnix.dragonlauncher.common.logging.logD
+import org.elnix.dragonlauncher.common.logging.logE
 import org.elnix.dragonlauncher.common.serializables.StatusBarJson
 import org.elnix.dragonlauncher.common.serializables.StatusBarSerializable
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
@@ -179,6 +181,7 @@ fun EditStatusBar() {
     val haptic = LocalHapticFeedback.current
 
     val scope = rememberCoroutineScope()
+    val logger = remember { object {} } // used as target for log helpers
 
     val statusBarBackground by StatusBarSettingsStore.barBackgroundColor.asState()
     val statusBarText by StatusBarSettingsStore.barTextColor.asState()
@@ -279,11 +282,11 @@ fun EditStatusBar() {
                 val toIdx = elements.indexOfFirst { it.id == to.key }
 
                 if (fromIdx != -1 && toIdx != -1 && fromIdx != toIdx) {
-                    android.util.Log.d("StatusBarDebug", "Moving element from $fromIdx to $toIdx (IDs: ${from.key} -> ${to.key})")
+                    logger.logD("StatusBarDebug", "Moving element from $fromIdx to $toIdx (IDs: ${from.key} -> ${to.key})")
                     elements.add(toIdx, elements.removeAt(fromIdx))
                 }
             } catch (e: Exception) {
-                android.util.Log.e("StatusBarDebug", "Crash avoided during reorder: ${e.message}")
+                logger.logE("StatusBarDebug", "Crash avoided during reorder: ${e.message}", e)
             }
         },
         onDragEnd = { _, _ ->

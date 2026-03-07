@@ -1,10 +1,12 @@
 package org.elnix.dragonlauncher.common.serializables
 
 import android.content.pm.ApplicationInfo
+import androidx.compose.runtime.Immutable
 import com.google.gson.annotations.SerializedName
 import org.elnix.dragonlauncher.common.logging.logE
 import org.elnix.dragonlauncher.common.utils.Constants
 
+@Immutable
 data class AppModel(
     @SerializedName("a") val name: String,
     @SerializedName("b") val packageName: String,
