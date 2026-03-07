@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -18,7 +19,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -123,7 +123,7 @@ fun MainScreenOverlay(
     val dragData by remember(start, current) {
         derivedStateOf {
             if (isDragging) {
-                val dxVal = current!!.x - start!!.x
+                val dxVal = current.x - start.x
                 val dyVal = current.y - start.y
                 val distVal = hypot(dxVal, dyVal)
                 val angleRadVal = atan2(dxVal.toDouble(), -dyVal.toDouble())
