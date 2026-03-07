@@ -821,6 +821,8 @@
     <string name="disable_auto_launch_on_space_first_char">Disable auto launch on space first char</string>
     <string name="disable_auto_launch_on_space_first_char_desc">When you press space before searching, the auto launch wont activate</string>
     <string name="configure_draw_order">Configure Draw Order</string>
+    <string name="device_info_copied_to_clipboard">Device Info copied to clipboard</string>
+    <string name="debug_mode_already_enabled">Debug Mode is already enabled</string>
 
 
 </resources>

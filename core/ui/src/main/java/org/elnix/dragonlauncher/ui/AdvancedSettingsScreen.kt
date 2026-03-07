@@ -2,6 +2,7 @@ package org.elnix.dragonlauncher.ui
 
 
 import android.annotation.SuppressLint
+import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -32,6 +33,7 @@ import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.ColorLens
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.GridOn
 import androidx.compose.material.icons.filled.Language
@@ -62,15 +64,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.material.icons.filled.ContentCopy
-import android.app.ActivityManager
-import org.elnix.dragonlauncher.common.utils.detectSystemLauncher
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
@@ -83,17 +81,20 @@ import org.elnix.dragonlauncher.common.serializables.allShapesWithoutRandom
 import org.elnix.dragonlauncher.common.utils.Constants.Links.discordInviteLink
 import org.elnix.dragonlauncher.common.utils.SETTINGS
 import org.elnix.dragonlauncher.common.utils.UiConstants.DragonShape
+import org.elnix.dragonlauncher.common.utils.alphaMultiplier
 import org.elnix.dragonlauncher.common.utils.copyToClipboard
+import org.elnix.dragonlauncher.common.utils.detectSystemLauncher
 import org.elnix.dragonlauncher.common.utils.getVersionCode
+import org.elnix.dragonlauncher.common.utils.isDefaultLauncher
 import org.elnix.dragonlauncher.common.utils.obtainiumPackageName
 import org.elnix.dragonlauncher.common.utils.openUrl
 import org.elnix.dragonlauncher.common.utils.showToast
-import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
 import org.elnix.dragonlauncher.enumsui.LockMethod
 import org.elnix.dragonlauncher.settings.SettingsStoreRegistry
 import org.elnix.dragonlauncher.settings.stores.DebugSettingsStore
 import org.elnix.dragonlauncher.settings.stores.PrivateSettingsStore
 import org.elnix.dragonlauncher.ui.components.TextDivider
+import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
 import org.elnix.dragonlauncher.ui.components.settings.asState
 import org.elnix.dragonlauncher.ui.dialogs.CustomAlertDialog
 import org.elnix.dragonlauncher.ui.dialogs.PinSetupDialog
@@ -502,18 +503,17 @@ fun AdvancedSettingsScreen(
                     .padding(top = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                val infoModifier = Modifier.padding(vertical = 1.dp)
                 val infoStyle = MaterialTheme.typography.labelSmall
-                val infoColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                val infoColor = MaterialTheme.colorScheme.onBackground.alphaMultiplier(0.7f)
 
                 val density = LocalDensity.current
-                val config = LocalConfiguration.current
+                val windowInfo = LocalWindowInfo.current
                 val am = ctx.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
                 val memInfo = ActivityManager.MemoryInfo()
                 am.getMemoryInfo(memInfo)
 
                 val currentLauncher = detectSystemLauncher(ctx)
-                val isDefault = currentLauncher == ctx.packageName
+                val isDefault = ctx.isDefaultLauncher
 
                 val deviceDetails = buildString {
                     appendLine("System: ${Build.MANUFACTURER} ${Build.MODEL} (${Build.PRODUCT})")
@@ -522,8 +522,14 @@ fun AdvancedSettingsScreen(
                         appendLine("Security Patch: ${Build.VERSION.SECURITY_PATCH}")
                     }
                     appendLine("Arch: ${Build.SUPPORTED_ABIS.firstOrNull() ?: "unknown"}")
-                    appendLine("Display: ${config.screenWidthDp}x${config.screenHeightDp}dp (${ctx.resources.displayMetrics.densityDpi} dpi)")
-                    appendLine("RAM: ${(memInfo.totalMem / 1024 / 1024 / 1024) + 1}GB total")
+                    appendLine("Display: ${windowInfo.containerSize.width.dp}x${windowInfo.containerSize.height.dp}dp (${density.density} dpi)")
+                    appendLine(
+                        "RAM: %.1fGB used / %.1fGB total (%d%% available)".format(
+                            (memInfo.totalMem - memInfo.availMem) / 1024.0 / 1024 / 1024,
+                            memInfo.totalMem / 1024.0 / 1024 / 1024,
+                            memInfo.availMem * 100 / memInfo.totalMem
+                        )
+                    )
                     appendLine("Default Launcher: ${if (isDefault) "Yes" else "No ($currentLauncher)"}")
                     appendLine("App version: $versionName ($versionCode)")
                 }
@@ -558,48 +564,14 @@ fun AdvancedSettingsScreen(
                     }
                 }
 
-                Text(
-                    text = "System: ${Build.MANUFACTURER} ${Build.MODEL} (${Build.PRODUCT})",
-                    style = infoStyle, color = infoColor, modifier = infoModifier
-                )
-                Text(
-                    text = "OS: Android ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT})",
-                    style = infoStyle, color = infoColor, modifier = infoModifier
-                )
-                if (Build.VERSION.SECURITY_PATCH.isNotEmpty()) {
-                    Text(
-                        text = "Security Patch: ${Build.VERSION.SECURITY_PATCH}",
-                        style = infoStyle, color = infoColor, modifier = infoModifier
-                    )
-                }
-                Text(
-                    text = "Arch: ${Build.SUPPORTED_ABIS.firstOrNull() ?: "unknown"}",
-                    style = infoStyle, color = infoColor, modifier = infoModifier
-                )
-                Text(
-                    text = "Display: ${config.screenWidthDp}x${config.screenHeightDp}dp (${ctx.resources.displayMetrics.densityDpi} dpi)",
-                    style = infoStyle, color = infoColor, modifier = infoModifier
-                )
-                Text(
-                    text = "RAM: ${(memInfo.totalMem / 1024 / 1024 / 1024) + 1}GB total",
-                    style = infoStyle, color = infoColor, modifier = infoModifier
-                )
-                Text(
-                    text = "Default Launcher: ${if (isDefault) "Yes" else "No ($currentLauncher)"}",
-                    style = infoStyle, color = infoColor, modifier = infoModifier
-                )
-                Text(
-                    text = "App version: $versionName ($versionCode)",
-                    style = infoStyle,
-                    color = infoColor,
-                    modifier = infoModifier,
-                    textAlign = TextAlign.Center
-                )
+                val debugModeAlreadyEnabledText = stringResource(R.string.debug_mode_already_enabled)
+                val deviceInfoCopiedToClipboard = stringResource(R.string.device_info_copied_to_clipboard)
 
                 Text(
-                    text = stringResource(R.string.version) + " click to copy or enable debug",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
+                    text = deviceDetails,
+                    style = infoStyle,
+                    textAlign = TextAlign.Center,
+                    color = infoColor,
                     modifier = Modifier
                         .padding(top = 16.dp, bottom = 16.dp)
                         .clickable(
@@ -612,14 +584,14 @@ fun AdvancedSettingsScreen(
 
                                 timesClickedOnVersion == 0 -> {
                                     ctx.copyToClipboard(versionName)
-                                    ctx.showToast("Version name copied to clipboard")
+                                    ctx.showToast(deviceInfoCopiedToClipboard)
                                     timesClickedOnVersion += 1
                                 }
 
                                 isDebugModeEnabled -> {
                                     toast = Toast.makeText(
                                         ctx,
-                                        "Debug Mode is already enabled",
+                                        debugModeAlreadyEnabledText,
                                         Toast.LENGTH_SHORT
                                     )
                                     toast?.show()
