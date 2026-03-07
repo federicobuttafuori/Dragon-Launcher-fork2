@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Polyline
 import androidx.compose.material.icons.filled.SignalCellular4Bar
 import androidx.compose.material.icons.filled.Style
+import androidx.compose.material.icons.filled.TextFields
 import androidx.compose.material.icons.filled.Wallpaper
 import androidx.compose.material.icons.filled.Widgets
 import androidx.compose.material3.MaterialTheme
@@ -54,6 +55,7 @@ import org.elnix.dragonlauncher.ui.components.dragon.DragonColumnGroup
 import org.elnix.dragonlauncher.ui.components.settings.SettingsSlider
 import org.elnix.dragonlauncher.ui.components.settings.SettingsSwitchRow
 import org.elnix.dragonlauncher.ui.components.settings.asState
+import org.elnix.dragonlauncher.ui.dialogs.FontPickerDialog
 import org.elnix.dragonlauncher.ui.helpers.HoldToActivateArc
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsItem
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsLazyHeader
@@ -77,6 +79,8 @@ fun AppearanceTab(
     val appLabelOverlaySize by appLabelOverlaySize.asState()
     val appIconOverlaySize by appIconOverlaySize.asState()
     val showAllActionsOnCurrentCircle by UiSettingsStore.showAllActionsOnCurrentCircle.asState()
+
+    var showFontPicker by remember { mutableStateOf(false) }
 
     val topOverlaySettingsState = rememberExpandableSection(stringResource(R.string.app_preview_settings))
     val holdExpandableSectionState = rememberExpandableSection(stringResource(R.string.hold_settings))
@@ -136,6 +140,16 @@ fun AppearanceTab(
                 title = stringResource(R.string.theme_selector),
                 icon = Icons.Default.Style
             ) { navController.navigate(SETTINGS.THEME) }
+        }
+
+        item {
+            SettingsItem(
+                title = stringResource(R.string.font_selector),
+                description = stringResource(R.string.font_selector_desc),
+                icon = Icons.Default.TextFields
+            ) {
+                showFontPicker = true
+            }
         }
 
         item {
@@ -400,5 +414,9 @@ fun AppearanceTab(
             showLabel = showLaunchingAppLabel,
             showIcon = showLaunchingAppIcon
         )
+    }
+
+    if (showFontPicker) {
+        FontPickerDialog { showFontPicker = false }
     }
 }

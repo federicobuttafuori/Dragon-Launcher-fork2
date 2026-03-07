@@ -1,10 +1,12 @@
 package org.elnix.dragonlauncher.common.serializables
 
 import android.content.pm.ApplicationInfo
+import androidx.compose.runtime.Immutable
 import com.google.gson.annotations.SerializedName
 import org.elnix.dragonlauncher.common.logging.logE
 import org.elnix.dragonlauncher.common.utils.Constants
 
+@Immutable
 data class AppModel(
     @SerializedName("a") val name: String,
     @SerializedName("b") val packageName: String,
@@ -54,7 +56,7 @@ fun CacheKey.splitCacheKey(): Pair<String, Int> {
             return Pair(split.first(), split.last().toInt())
         }
     } catch (e: Throwable) {
-        logE(Constants.Logging.WORKSPACES_TAG, "Error splitting cacheKey", e)
+        logE(Constants.Logging.WORKSPACES_TAG) { "Error splitting cacheKey" }
     }
     // Fallback if user has still the old storage way, with no cacheKey
     return Pair(cacheKey, 0)

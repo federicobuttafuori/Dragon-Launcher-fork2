@@ -1,23 +1,32 @@
 package org.elnix.dragonlauncher
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import androidx.core.app.NotificationCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
 import org.elnix.dragonlauncher.common.logging.logE
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.BROADCAST_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.TAG
+import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
 
 class PackageReceiver : BroadcastReceiver() {
+
+    companion object {
+        const val CHANNEL_IPS = "ips_regeneration"
+        const val NOTIF_ID_IPS = 1001
+    }
+
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action ?: return
 
         Log.i(BROADCAST_TAG, "Got intent: $intent")
-
 
         if (
             action == Intent.ACTION_PACKAGE_ADDED ||
@@ -36,11 +45,65 @@ class PackageReceiver : BroadcastReceiver() {
                     val app = context.applicationContext as MyApplication
                     scope.launch {
                         app.appsViewModel.reloadApps()
+
+                        // If a new app is added and the user uses an IPS exported icon pack,
+                        // suggest regenerating the pack in Icon Pack Studio.
+                        if (action == Intent.ACTION_PACKAGE_ADDED) {
+                            val selectedPack = UiSettingsStore.selectedIconPack.get(context)
+                            if (selectedPack == "ginlemon.iconpackstudio.exported") {
+                                notifyIpsRegeneration(context)
+                            }
+                        }
                     }
                 } catch (e: Exception) {
-                    logE(TAG, e.toString())
+                    logE(TAG) { e.toString() }
                 }
             }
+        }
+    }
+
+    private fun notifyIpsRegeneration(ctx: Context) {
+        try {
+            val ipsIntent = ctx.packageManager.getLaunchIntentForPackage("ginlemon.iconpackstudio")
+            if (ipsIntent != null) {
+                ipsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+                val nm = ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+                // Create channel for Android O+
+                nm.createNotificationChannel(
+                    NotificationChannel(
+                        CHANNEL_IPS,
+                        "Icon Pack Studio",
+                        NotificationManager.IMPORTANCE_DEFAULT
+                    ).apply {
+                        description = "Notifications to refresh your Icon Pack Studio icons"
+                    }
+                )
+
+                val pendingIntent = PendingIntent.getActivity(
+                    ctx, 0, ipsIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+
+                val notification = NotificationCompat.Builder(ctx, CHANNEL_IPS)
+                    .setSmallIcon(org.elnix.dragonlauncher.common.R.mipmap.ic_launcher_foreground)
+                    .setContentTitle("New app installed")
+                    .setContentText("Refresh your Icon Pack Studio icons to include this app.")
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setAutoCancel(true)
+                    .setContentIntent(pendingIntent)
+                    .addAction(
+                        org.elnix.dragonlauncher.common.R.mipmap.ic_launcher_foreground,
+                        "Open Icon Pack Studio",
+                        pendingIntent
+                    )
+                    .build()
+
+                nm.notify(NOTIF_ID_IPS, notification)
+            }
+        } catch (e: Exception) {
+            logE(TAG) { "Failed to suggest IPS regeneration: ${e.message}" }
         }
     }
 }

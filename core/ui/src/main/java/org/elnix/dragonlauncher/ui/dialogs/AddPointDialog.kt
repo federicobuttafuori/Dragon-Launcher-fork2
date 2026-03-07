@@ -193,7 +193,7 @@ fun AddPointDialog(
             onDismiss = { showAppPicker = false },
             onAppSelected = { app ->
 
-                ctx.logD(Constants.Logging.APP_LAUNCH_TAG,"Selected App: $app")
+                ctx.logD(Constants.Logging.APP_LAUNCH_TAG) { "Selected App: $app" }
 
                 // Try to query shortcuts, but handle crashes gracefully
                 val list = if (promptForShortcuts) {
@@ -217,7 +217,13 @@ fun AddPointDialog(
                     shortcuts = list
                     shortcutDialogVisible = true
                 } else {
-                    onActionSelected(SwipeActionSerializable.LaunchApp(app.packageName, app.isPrivateProfile, app.userId ?: 0))
+                    onActionSelected(
+                        SwipeActionSerializable.LaunchApp(
+                            app.packageName,
+                            app.isPrivateProfile,
+                            app.userId ?: 0
+                        )
+                    )
                 }
             },
             onMultipleAppsSelected = if (onMultipleActionsSelected != null) { { apps, autoPlace ->

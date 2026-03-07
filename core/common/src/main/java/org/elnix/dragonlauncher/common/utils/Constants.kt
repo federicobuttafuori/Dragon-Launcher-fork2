@@ -189,6 +189,7 @@ object Constants {
         const val WORKSPACES_TAG = "WorkspacesDebug"
         const val NESTS_TAG = "NestsDebug"
         const val ANGLE_LINE_TAG = "AngleLineDebug"
+        const val LAUNCHER_WIDGET_HOLDER_TAG = "LauncherWidgetHolder"
     }
 
     /*  ─────────────  Links  ─────────────  */

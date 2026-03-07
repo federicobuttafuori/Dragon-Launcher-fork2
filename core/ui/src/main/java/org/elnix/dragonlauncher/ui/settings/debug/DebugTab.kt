@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Notes
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -108,15 +107,6 @@ fun DebugTab(
         }
 
         item { TextDivider("Debug things") }
-
-        item {
-            SettingsItem(
-                title = "Logs",
-                icon = Icons.AutoMirrored.Filled.Notes
-            ) {
-                navController.navigate(SETTINGS.LOGS)
-            }
-        }
 
         item {
             SettingsItem(
@@ -308,22 +298,6 @@ fun DebugTab(
 
         item {
             SettingsSwitchRow(
-                setting = DebugSettingsStore.forceAppWidgetsSelector,
-                title = stringResource(R.string.force_app_widgets_selector),
-                description = stringResource(R.string.force_app_widgets_selector_desc)
-            )
-        }
-
-//        item {
-//            SettingsSwitchRow(
-//                setting = DebugSettingsStore.forceAppWidgetsBinding,
-//                title = "Force App Widget Binding Consent",
-//                description = "Forces the system bind dialog to appear every time you add a widget (Useful for debugging/MIUI fixes)"
-//            )
-//        }
-
-        item {
-            SettingsSwitchRow(
                 setting = DebugSettingsStore.useAccessibilityInsteadOfContextToExpandActionPanel,
                 title = stringResource(R.string.use_accessibility_instead_of_context),
                 description = stringResource(R.string.use_accessibility_instead_of_context_desc)
@@ -478,7 +452,7 @@ fun ActivateDeviceAdminButton() {
     TextButton(
         enabled = !isActive,
         onClick = {
-            ctx.logD("Compose", "Button clicked - context: ${ctx.packageName}")
+            ctx.logD("Compose") { "Button clicked - context: ${ctx.packageName}" }
             activateDeviceAdmin(ctx)
         }
     ) {

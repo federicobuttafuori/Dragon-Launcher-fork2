@@ -45,16 +45,6 @@ object DebugSettingsStore : MapSettingsStore() {
         default = false
     )
 
-    val forceAppWidgetsSelector = Settings.boolean(
-        key = "forceAppWidgetsSelector",
-        dataStoreName = dataStoreName,
-        default = false
-    )
-//    val forceAppWidgetsBinding = Settings.boolean(
-//        key = "forceAppWidgetsBinding",
-//        dataStoreName = dataStoreName,
-//        default = false
-//    )
     val autoRaiseDragonOnSystemLauncher = Settings.boolean(
         key = "autoRaiseDragonOnSystemLauncher",
         dataStoreName = dataStoreName,
@@ -76,7 +66,7 @@ object DebugSettingsStore : MapSettingsStore() {
     val enableLogging = Settings.boolean(
         key = "enableLogging",
         dataStoreName = dataStoreName,
-        default = false
+        default = true
     )
 
     val privateSpaceDebugInfo = Settings.boolean(
@@ -94,7 +84,6 @@ object DebugSettingsStore : MapSettingsStore() {
             this.widgetsDebugInfo,
             this.workspacesDebugInfo,
             this.forceAppLanguageSelector,
-            this.forceAppWidgetsSelector,
             this.autoRaiseDragonOnSystemLauncher,
             this.systemLauncherPackageName,
             this.useAccessibilityInsteadOfContextToExpandActionPanel,

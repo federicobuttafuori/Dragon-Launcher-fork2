@@ -20,21 +20,22 @@ fun Context.findFragmentActivity(): FragmentActivity? {
     var ctx: Context? = this
     var depth = 0
     while (ctx != null && depth < 20) { // Prevent infinite loops
-        logD("SecurityHelper", "findFragmentActivity: depth=$depth, ctx=${ctx::class.simpleName}")
+        logD("SecurityHelper") { "findFragmentActivity: depth=$depth, ctx=${ctx::class.simpleName}" }
         when (ctx) {
             is FragmentActivity -> {
-                logD("SecurityHelper", "Found FragmentActivity at depth $depth")
+                logD("SecurityHelper") { "Found FragmentActivity at depth $depth" }
                 return ctx
             }
+
             is ContextWrapper -> ctx = ctx.baseContext
             else -> {
-                logD("SecurityHelper", "Context is not ContextWrapper, cannot unwrap further")
+                logD("SecurityHelper") { "Context is not ContextWrapper, cannot unwrap further" }
                 return null
             }
         }
         depth++
     }
-    logD("SecurityHelper", "findFragmentActivity failed after $depth iterations")
+    logD("SecurityHelper") { "findFragmentActivity failed after $depth iterations" }
     return null
 }
 
@@ -64,8 +65,8 @@ object SecurityHelper {
      */
     fun isDeviceUnlockAvailable(context: Context): Boolean {
         val biometricManager = BiometricManager.from(context)
-        
-        context.logD("SecurityHelper", "Checking device unlock availability, SDK=${Build.VERSION.SDK_INT}")
+
+        context.logD("SecurityHelper") { "Checking device unlock availability, SDK=${Build.VERSION.SDK_INT}" }
 
         // On API 30+ we can safely use BIOMETRIC_STRONG | DEVICE_CREDENTIAL
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -73,7 +74,7 @@ object SecurityHelper {
                 BiometricManager.Authenticators.BIOMETRIC_STRONG or
                         BiometricManager.Authenticators.DEVICE_CREDENTIAL
             )
-            context.logD("SecurityHelper", "API 30+: canAuthenticate(STRONG|DEVICE_CREDENTIAL) = $canAuth")
+            context.logD("SecurityHelper") { "API 30+: canAuthenticate(STRONG|DEVICE_CREDENTIAL) = $canAuth" }
             if (canAuth == BiometricManager.BIOMETRIC_SUCCESS) return true
         }
 
@@ -83,13 +84,13 @@ object SecurityHelper {
             BiometricManager.Authenticators.BIOMETRIC_WEAK or
                     BiometricManager.Authenticators.DEVICE_CREDENTIAL
         )
-        context.logD("SecurityHelper", "canAuthenticate(WEAK|DEVICE_CREDENTIAL) = $canAuthWeak")
+        context.logD("SecurityHelper") { "canAuthenticate(WEAK|DEVICE_CREDENTIAL) = $canAuthWeak" }
         if (canAuthWeak == BiometricManager.BIOMETRIC_SUCCESS) return true
 
         // Final fallback: check if a screen lock (PIN/pattern/password) is set
         val keyguardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
         val isDeviceSecure = keyguardManager.isDeviceSecure
-        context.logD("SecurityHelper", "KeyguardManager.isDeviceSecure = $isDeviceSecure")
+        context.logD("SecurityHelper") { "KeyguardManager.isDeviceSecure = $isDeviceSecure" }
         return isDeviceSecure
     }
 

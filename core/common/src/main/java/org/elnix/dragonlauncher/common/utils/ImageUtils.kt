@@ -136,7 +136,7 @@ object ImageUtils {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, output)
             Base64.encodeToString(output.toByteArray(), Base64.NO_WRAP)
         } catch (e: Exception) {
-            logE(IMAGE_TAG, e.toString())
+            ImageUtils.logE(IMAGE_TAG) { e.toString() }
             null
         }
     }
@@ -149,7 +149,7 @@ object ImageUtils {
 
             bitmapToBase64(bmp)
         } catch (e: Exception) {
-            logE(IMAGE_TAG, e.toString())
+            ImageUtils.logE(IMAGE_TAG) { e.toString() }
             null
         }
     }
@@ -160,7 +160,7 @@ object ImageUtils {
             val androidBitmap = imageBitmap.asAndroidBitmap()
             bitmapToBase64(androidBitmap)
         } catch (e: Exception) {
-            logE(IMAGE_TAG, e.toString())
+            ImageUtils.logE(IMAGE_TAG) { e.toString() }
             null
         }
     }

@@ -2,6 +2,7 @@ package org.elnix.dragonlauncher.ui
 
 
 import android.annotation.SuppressLint
+import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -32,6 +33,7 @@ import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.ColorLens
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.GridOn
 import androidx.compose.material.icons.filled.Language
@@ -62,8 +64,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
@@ -76,8 +81,11 @@ import org.elnix.dragonlauncher.common.serializables.allShapesWithoutRandom
 import org.elnix.dragonlauncher.common.utils.Constants.Links.discordInviteLink
 import org.elnix.dragonlauncher.common.utils.SETTINGS
 import org.elnix.dragonlauncher.common.utils.UiConstants.DragonShape
+import org.elnix.dragonlauncher.common.utils.alphaMultiplier
 import org.elnix.dragonlauncher.common.utils.copyToClipboard
+import org.elnix.dragonlauncher.common.utils.detectSystemLauncher
 import org.elnix.dragonlauncher.common.utils.getVersionCode
+import org.elnix.dragonlauncher.common.utils.isDefaultLauncher
 import org.elnix.dragonlauncher.common.utils.obtainiumPackageName
 import org.elnix.dragonlauncher.common.utils.openUrl
 import org.elnix.dragonlauncher.common.utils.showToast
@@ -86,6 +94,7 @@ import org.elnix.dragonlauncher.settings.SettingsStoreRegistry
 import org.elnix.dragonlauncher.settings.stores.DebugSettingsStore
 import org.elnix.dragonlauncher.settings.stores.PrivateSettingsStore
 import org.elnix.dragonlauncher.ui.components.TextDivider
+import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
 import org.elnix.dragonlauncher.ui.components.settings.asState
 import org.elnix.dragonlauncher.ui.dialogs.CustomAlertDialog
 import org.elnix.dragonlauncher.ui.dialogs.PinSetupDialog
@@ -297,6 +306,16 @@ fun AdvancedSettingsScreen(
             }
         }
 
+        item {
+            SettingsItem(
+                title = "Logs",
+                icon = Icons.AutoMirrored.Filled.Notes,
+                modifier = Modifier.animateItem()
+            ) {
+                navController.navigate(SETTINGS.LOGS)
+            }
+        }
+
 
         item { TextDivider(stringResource(R.string.about)) }
 
@@ -464,7 +483,7 @@ fun AdvancedSettingsScreen(
                 )
                 Image(
                     painter = painterResource(R.drawable.acress1),
-                    contentDescription = "Across1 profile picture",
+                    contentDescription = "Acress1 profile picture",
                     modifier = Modifier
                         .size(48.dp)
                         .clip(CircleShape)
@@ -478,54 +497,126 @@ fun AdvancedSettingsScreen(
         }
 
         item {
-            Text(
-                text = "${stringResource(R.string.version)} $versionName",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onBackground,
+            Column(
                 modifier = Modifier
-                    .padding(top = 8.dp, bottom = 16.dp)
-                    .clickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
+                    .fillMaxWidth()
+                    .padding(top = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                val infoStyle = MaterialTheme.typography.labelSmall
+                val infoColor = MaterialTheme.colorScheme.onBackground.alphaMultiplier(0.7f)
+
+                val density = LocalDensity.current
+                val windowInfo = LocalWindowInfo.current
+                val am = ctx.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+                val memInfo = ActivityManager.MemoryInfo()
+                am.getMemoryInfo(memInfo)
+
+                val currentLauncher = detectSystemLauncher(ctx)
+                val isDefault = ctx.isDefaultLauncher
+
+                val deviceDetails = buildString {
+                    appendLine("System: ${Build.MANUFACTURER} ${Build.MODEL} (${Build.PRODUCT})")
+                    appendLine("OS: Android ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT})")
+                    if (Build.VERSION.SECURITY_PATCH.isNotEmpty()) {
+                        appendLine("Security Patch: ${Build.VERSION.SECURITY_PATCH}")
+                    }
+                    appendLine("Arch: ${Build.SUPPORTED_ABIS.firstOrNull() ?: "unknown"}")
+                    appendLine("Display: ${windowInfo.containerSize.width.dp}x${windowInfo.containerSize.height.dp}dp (${density.density} dpi)")
+                    appendLine(
+                        "RAM: %.1fGB used / %.1fGB total (%d%% available)".format(
+                            (memInfo.totalMem - memInfo.availMem) / 1024.0 / 1024 / 1024,
+                            memInfo.totalMem / 1024.0 / 1024 / 1024,
+                            memInfo.availMem * 100 / memInfo.totalMem
+                        )
+                    )
+                    appendLine("Default Launcher: ${if (isDefault) "Yes" else "No ($currentLauncher)"}")
+                    appendLine("App version: $versionName ($versionCode)")
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Device Information",
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+
+                    Spacer(Modifier.width(8.dp))
+
+                    DragonIconButton(
+                        onClick = {
+                            ctx.copyToClipboard(deviceDetails)
+                            ctx.showToast("Device details copied to clipboard")
+                        },
+                        modifier = Modifier.size(24.dp)
                     ) {
-                        toast?.cancel()
+                        Icon(
+                            imageVector = Icons.Default.ContentCopy,
+                            contentDescription = "Copy device info",
+                            modifier = Modifier.size(16.dp),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
 
-                        when {
+                val debugModeAlreadyEnabledText = stringResource(R.string.debug_mode_already_enabled)
+                val deviceInfoCopiedToClipboard = stringResource(R.string.device_info_copied_to_clipboard)
 
-                            timesClickedOnVersion == 0 -> {
-                                ctx.copyToClipboard(versionName)
-                                ctx.showToast("Version name copied to clipboard")
-                                timesClickedOnVersion += 1
-                            }
+                Text(
+                    text = deviceDetails,
+                    style = infoStyle,
+                    textAlign = TextAlign.Center,
+                    color = infoColor,
+                    modifier = Modifier
+                        .padding(top = 16.dp, bottom = 16.dp)
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) {
+                            toast?.cancel()
 
-                            isDebugModeEnabled -> {
-                                toast = Toast.makeText(
-                                    ctx,
-                                    "Debug Mode is already enabled",
-                                    Toast.LENGTH_SHORT
-                                )
-                                toast?.show()
-                            }
+                            when {
 
+                                timesClickedOnVersion == 0 -> {
+                                    ctx.copyToClipboard(versionName)
+                                    ctx.showToast(deviceInfoCopiedToClipboard)
+                                    timesClickedOnVersion += 1
+                                }
 
-                            timesClickedOnVersion < 6 -> {
-                                timesClickedOnVersion++
-                                if (timesClickedOnVersion > 2) {
+                                isDebugModeEnabled -> {
                                     toast = Toast.makeText(
                                         ctx,
-                                        "${7 - timesClickedOnVersion} more times to enable Debug Mode",
+                                        debugModeAlreadyEnabledText,
                                         Toast.LENGTH_SHORT
                                     )
+                                    toast?.show()
                                 }
-                                toast?.show()
-                            }
 
-                            else -> {
-                                scope.launch { DebugSettingsStore.debugEnabled.set(ctx, true) }
+
+                                timesClickedOnVersion < 6 -> {
+                                    timesClickedOnVersion++
+                                    if (timesClickedOnVersion > 2) {
+                                        toast = Toast.makeText(
+                                            ctx,
+                                            "${7 - timesClickedOnVersion} more times to enable Debug Mode",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                    }
+                                    toast?.show()
+                                }
+
+                                else -> {
+                                    scope.launch { DebugSettingsStore.debugEnabled.set(ctx, true) }
+                                }
                             }
                         }
-                    }
-            )
+                )
+            }
         }
     }
 
@@ -666,11 +757,12 @@ fun AdvancedSettingsScreen(
                                     // Test biometric authentication immediately
                                     val activity = ctx.findFragmentActivity()
                                     ctx.logD(
-                                        "AdvSettings",
+                                        "AdvSettings"
+                                    ) {
                                         "DEVICE_UNLOCK selected: activity=$activity, isAvailable=${
                                             SecurityHelper.isDeviceUnlockAvailable(ctx)
                                         }"
-                                    )
+                                    }
                                     if (activity != null && SecurityHelper.isDeviceUnlockAvailable(
                                             ctx
                                         )

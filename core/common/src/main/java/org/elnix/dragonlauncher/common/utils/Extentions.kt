@@ -56,7 +56,7 @@ fun Context.showToast(
                 }
             }
         } catch (e: Exception) {
-            logE(TAG, "Error while showing toast", e)
+            logE(TAG) { "Error while showing toast" }
         }
     }
 }
@@ -284,7 +284,7 @@ fun openAlarmApp(ctx: Context) {
     if (!openAlarmApp2(ctx)) return
 
     // No alarm-capable app found
-    ctx.logD("TAG", "No alarm app found")
+    ctx.logD("TAG") { "No alarm app found" }
 }
 
 

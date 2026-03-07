@@ -51,10 +51,10 @@ abstract class MapSettingsStore :
     override suspend fun setAll(ctx: Context, value: Map<String, Any?>) {
         ALL.forEach { setting ->
             val raw = value[setting.key]
-            logI(SETTINGS_TAG, "Raw : $raw")
+            logI(SETTINGS_TAG) { "Raw : $raw" }
             val typedValue = setting.decode(raw)
 
-            logI(SETTINGS_TAG, "Typed value : $typedValue")
+            logI(SETTINGS_TAG) { "Typed value : $typedValue" }
             setting.setAny(ctx, typedValue)
         }
     }

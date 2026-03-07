@@ -55,7 +55,7 @@ fun launchSwipeAction(
 
             try {
 
-                ctx.logD(APP_LAUNCH_TAG, "Launching action: $action")
+                ctx.logD(APP_LAUNCH_TAG) { "Launching action: $action" }
 
                 /*  ─────────────  1. Private Space Check ─────────────  */
                 if (action.isPrivateSpace) {
@@ -89,9 +89,9 @@ fun launchSwipeAction(
                 // If app has no wellbeing checks to do; it launches directly
                 launchAppDirectly(appsViewModel, ctx, action.packageName, action.userId ?: 0)
             } catch (e: AppLaunchException) {
-                ctx.logE(APP_LAUNCH_TAG, e.toString())
+                ctx.logE(APP_LAUNCH_TAG) { e.toString() }
             } catch (e: Exception) {
-                ctx.logE(APP_LAUNCH_TAG, e.toString())
+                ctx.logE(APP_LAUNCH_TAG) { e.toString() }
                 e.printStackTrace()
             }
         }
@@ -167,7 +167,7 @@ fun launchSwipeAction(
 
             } catch (e: Exception) {
                 ctx.showToast("Unable to open file: ${e.message}")
-                ctx.logE("OpenFile", e.toString())
+                ctx.logE("OpenFile") { e.toString() }
             }
         }
 
@@ -216,7 +216,7 @@ fun launchAppDirectly(
 //            .any { it.applicationInfo.packageName == packageName }
     } ?: Process.myUserHandle()
 
-    ctx.logD(APP_LAUNCH_TAG, "pkg: $packageName; userId: $userId: handle: $targetUserHandle")
+    ctx.logD(APP_LAUNCH_TAG) { "pkg: $packageName; userId: $userId: handle: $targetUserHandle" }
 
     // 2. Find the launcher activity in that profile
     val activity = launcherApps
@@ -236,13 +236,13 @@ fun launchAppDirectly(
         // Track recently used app
         appsViewModel.addRecentlyUsedApp(packageName)
     } catch (e: SecurityException) {
-        ctx.logE(APP_LAUNCH_TAG, "Security error launching $packageName",e)
+        ctx.logE(APP_LAUNCH_TAG) { "Security error launching $packageName" }
         throw AppLaunchException("Security error launching $packageName", e)
     } catch (e: NullPointerException) {
-        ctx.logE(APP_LAUNCH_TAG, "App component not found for $packageName", e)
+        ctx.logE(APP_LAUNCH_TAG) { "App component not found for $packageName" }
         throw AppLaunchException("App component not found for $packageName", e)
     } catch (e: Exception) {
-        ctx.logE(APP_LAUNCH_TAG, "Failed to launch $packageName", e)
+        ctx.logE(APP_LAUNCH_TAG) { "Failed to launch $packageName" }
         throw AppLaunchException("Failed to launch $packageName", e)
     }
 }

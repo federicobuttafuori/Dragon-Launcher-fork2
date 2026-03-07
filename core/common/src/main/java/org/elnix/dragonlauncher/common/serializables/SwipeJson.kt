@@ -259,7 +259,7 @@ object SwipeJson {
         return try {
             gson.fromJson(jsonString, listType)
         } catch (e: Throwable) {
-            logE("SwipeJson", "Decode failed: ${e.message}", e)
+            SwipeJson.logE("SwipeJson") { "Decode failed: ${e.message}" }
             emptyList()
         }
     }
@@ -308,7 +308,7 @@ object SwipeJson {
         return try {
             gson.fromJson(json, type)
         } catch (e: Throwable) {
-            logE("SwipeJson", "Decode failed: ${e.message}", e)
+            SwipeJson.logE("SwipeJson") { "Decode failed: ${e.message}" }
             emptyList()
         }
     }

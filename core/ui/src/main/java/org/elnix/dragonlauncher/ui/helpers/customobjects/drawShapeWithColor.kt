@@ -45,7 +45,7 @@ fun DrawScope.drawShapeWithColor(
         translate(center - Offset(size.width / 2, size.height / 2))
     }
 
-    logD(ANGLE_LINE_TAG, "erase: $erase, strokeWidth: $strokeWidth")
+    logD(ANGLE_LINE_TAG) { "erase: $erase, strokeWidth: $strokeWidth" }
 
     if (erase) {
         drawPath(

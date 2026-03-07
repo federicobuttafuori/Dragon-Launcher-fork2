@@ -48,18 +48,18 @@ object PrivateSpaceUtils {
                 try {
                     val userInfo = launcherApps.getLauncherUserInfo(userHandle)
                     if (userInfo?.userType == PRIVATE_PROFILE_TYPE) {
-                        logD(TAG, "Found Private Space profile: $userHandle")
+                        PrivateSpaceUtils.logD(TAG) { "Found Private Space profile: $userHandle" }
                         return userHandle
                     }
                 } catch (e: Exception) {
-                    logE(TAG, "Error checking user profile: ${e.message}")
+                    PrivateSpaceUtils.logE(TAG) { "Error checking user profile: ${e.message}" }
                 }
             }
 
-            logI(TAG, "No Private Space profile found")
+            PrivateSpaceUtils.logI(TAG) { "No Private Space profile found" }
             return null
         } catch (e: Exception) {
-            logE(TAG, "Error getting Private Space user handle: ${e.message}")
+            PrivateSpaceUtils.logE(TAG) { "Error getting Private Space user handle: ${e.message}" }
             return null
         }
     }
@@ -75,10 +75,10 @@ object PrivateSpaceUtils {
         try {
             val userManager = context.getSystemService(Context.USER_SERVICE) as UserManager
             val isLocked = userManager.isQuietModeEnabled(privateUserHandle)
-            logD(TAG, "Private Space locked status: $isLocked")
+            PrivateSpaceUtils.logD(TAG) { "Private Space locked status: $isLocked" }
             return isLocked
         } catch (e: Exception) {
-            logE(TAG, "Error checking Private Space lock status: ${e.message}")
+            PrivateSpaceUtils.logE(TAG) { "Error checking Private Space lock status: ${e.message}" }
             return null
         }
     }
@@ -109,7 +109,7 @@ object PrivateSpaceUtils {
     @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     fun requestUnlockPrivateSpace(ctx: Context): Boolean {
         val privateUserHandle = getPrivateSpaceUserHandle(ctx) ?: run {
-            logE(TAG, "Cannot unlock: Private Space not found")
+            logE(TAG) { "Cannot unlock: Private Space not found" }
             return false
         }
 
@@ -118,20 +118,20 @@ object PrivateSpaceUtils {
 
             // Check if already unlocked
             if (!userManager.isQuietModeEnabled(privateUserHandle)) {
-                logI(TAG, "Private Space is already unlocked")
+                PrivateSpaceUtils.logI(TAG) { "Private Space is already unlocked" }
                 return true
             }
 
-            logI(TAG, "Requesting Private Space unlock")
+            PrivateSpaceUtils.logI(TAG) { "Requesting Private Space unlock" }
 
             // Request to disable quiet mode (unlock)
             // On some devices this may trigger biometric auth, on others it may do nothing
             val success = userManager.requestQuietModeEnabled(false, privateUserHandle)
 
-            logI(TAG, "requestQuietModeEnabled returned: $success")
+            PrivateSpaceUtils.logI(TAG) { "requestQuietModeEnabled returned: $success" }
             return success
         } catch (e: Exception) {
-            logE(TAG, "Error requesting Private Space unlock: ${e.message}", e)
+            PrivateSpaceUtils.logE(TAG) { "Error requesting Private Space unlock: ${e.message}" }
             return false
         }
     }

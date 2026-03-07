@@ -31,14 +31,14 @@ object SettingsBackupManager {
      */
     suspend fun triggerBackup(ctx: Context) {
         if (!BackupSettingsStore.autoBackupEnabled.get(ctx)) {
-            logW(BACKUP_TAG, "Auto-backup disabled")
+            SettingsBackupManager.logW(BACKUP_TAG) { "Auto-backup disabled" }
             return
         }
 
         try {
             val uriString = BackupSettingsStore.autoBackupUri.get(ctx)
             if (uriString.isBlank()) {
-                logW(BACKUP_TAG, "No backup URI set")
+                SettingsBackupManager.logW(BACKUP_TAG) { "No backup URI set" }
                 return
             }
 
@@ -46,7 +46,7 @@ object SettingsBackupManager {
             val path = getFilePathFromUri(ctx, uri)
 
             if (!ctx.hasUriReadWritePermission(uri)) {
-                this.logW(BACKUP_TAG, "URI permission expired!")
+                logW(BACKUP_TAG) { "URI permission expired!" }
                 ctx.showToast("Auto-backup URI expired. Please reselect file.")
                 return
             }
@@ -61,10 +61,10 @@ object SettingsBackupManager {
             exportSettings(ctx, uri, selectedStores)
 
             PrivateSettingsStore.lastBackupTime.set(ctx, System.currentTimeMillis())
-            logI(BACKUP_TAG, "Auto-backup completed to $path")
+            SettingsBackupManager.logI(BACKUP_TAG) { "Auto-backup completed to $path" }
 
         } catch (e: Exception) {
-            this.logE(BACKUP_TAG, "Auto-backup failed", e)
+            logE(BACKUP_TAG) { "Auto-backup failed" }
             if (e.message?.contains("permission") == true) {
                 ctx.showToast("URI permission lost. Reselect backup file.")
             }
@@ -81,10 +81,9 @@ object SettingsBackupManager {
                     fos.flush()
                 }
             } ?: run {
-                this.logE(
-                    BACKUP_TAG,
+                logE(BACKUP_TAG) {
                     "Failed to open FileDescriptor - URI permission expired!"
-                )
+                }
                 throw IllegalStateException("Cannot write to URI - permission expired")
             }
         }
@@ -110,7 +109,7 @@ object SettingsBackupManager {
 
 
             if (dataStoreName.backupKey in requestedStores.map { it.backupKey }) {
-                logW(BACKUP_TAG, "$dataStoreName ,backup : ${settingsStore.exportForBackup(ctx)}")
+                SettingsBackupManager.logW(BACKUP_TAG) { "$dataStoreName ,backup : ${settingsStore.exportForBackup(ctx)}" }
                 settingsStore.exportForBackup(ctx)?.let {
                     json.put(dataStoreName.backupKey, it)
                 }
@@ -136,7 +135,7 @@ object SettingsBackupManager {
         json: JSONObject,
         requestedStores: Set<DataStoreName>
     ) {
-        logD(BACKUP_TAG, json.toString())
+        SettingsBackupManager.logD(BACKUP_TAG) { json.toString() }
 
         allStores.forEach { entry ->
             val dataStoreName = entry.key
@@ -165,18 +164,20 @@ object SettingsBackupManager {
                             settingsStore.importFromBackup(ctx, raw)
                         }
                     }
-                    else -> { /* no-op */ }
+
+                    else -> { /* no-op */
+                    }
                 }
             }
         }
 
-        logE(BACKUP_TAG, json.optJSONArray("actions")?.toString() ?: "No actions")
+        SettingsBackupManager.logE(BACKUP_TAG) { json.optJSONArray("actions")?.toString() ?: "No actions" }
 
         // LEGACY format: fallback for "actions" array
         json.optJSONArray("actions")?.let { actionsArray ->
-            logD(BACKUP_TAG, "Fallback to legacy system")
+            SettingsBackupManager.logD(BACKUP_TAG) { "Fallback to legacy system" }
             val legacyPoints = SwipeJson.decodeLegacy(actionsArray.toString())
-            logE(BACKUP_TAG, legacyPoints.toString())
+            SettingsBackupManager.logE(BACKUP_TAG) { legacyPoints.toString() }
             SwipeSettingsStore.savePoints(ctx, legacyPoints)
         }
     }

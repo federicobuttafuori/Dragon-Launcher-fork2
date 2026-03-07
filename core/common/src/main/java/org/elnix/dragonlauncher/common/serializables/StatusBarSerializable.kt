@@ -151,7 +151,7 @@ class StatusBarAdapter : JsonSerializer<StatusBarSerializable>, JsonDeserializer
         if (json == null || !json.isJsonObject) return null
         val obj = json.asJsonObject
         val type = if (obj.has("type")) obj.get("type").asString else return null
-        
+
         return try {
             when (type) {
                 "Time" -> StatusBarSerializable.Time(
@@ -202,7 +202,7 @@ class StatusBarAdapter : JsonSerializer<StatusBarSerializable>, JsonDeserializer
                 else -> null
             }
         } catch (e: Exception) {
-            logE(STATUS_BAR_TAG, "Deserialization error for type $type: ${e.message}", e)
+            logE(STATUS_BAR_TAG) { "Deserialization error for type $type: ${e.message}" }
             null
         }
     }
@@ -226,11 +226,11 @@ object StatusBarJson {
     fun decodeStatusBarElements(json: String?): List<StatusBarSerializable> {
         if (json == null || json.isBlankJson) return emptyList()
 
-        logD(STATUS_BAR_TAG, json)
+        StatusBarJson.logD(STATUS_BAR_TAG) { json }
         return try {
             gson.fromJson(json, type) ?: emptyList()
         } catch (e: Throwable) { // Catch Throwable to be safe against everything
-            logE(STATUS_BAR_TAG, "Decode failed for JSON: $json", e)
+            StatusBarJson.logE(STATUS_BAR_TAG) { "Decode failed for JSON: $json" }
             emptyList()
         }
     }

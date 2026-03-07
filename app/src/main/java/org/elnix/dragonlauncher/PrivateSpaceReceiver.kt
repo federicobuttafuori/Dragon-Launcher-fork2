@@ -45,17 +45,16 @@ class PrivateSpaceReceiver : BroadcastReceiver() {
                 val privateUser = PrivateSpaceUtils.getPrivateSpaceUserHandle(context)
 
                 if (privateUser == null || eventUser == null || eventUser != privateUser) {
-                    logD(
-                        PRIVATE_SPACE_TAG,
+                    logD(PRIVATE_SPACE_TAG) {
                         "Ignoring profile action=$action for non-private user=$eventUser"
-                    )
+                    }
                     return@launch
                 }
 
-                logI(PRIVATE_SPACE_TAG, "Private Space action=$action, reloading apps")
+                logI(PRIVATE_SPACE_TAG) { "Private Space action=$action, reloading apps" }
                 app.appsViewModel.unlockAndReloadPrivateSpace()
             } catch (e: Exception) {
-                logE(PRIVATE_SPACE_TAG, "Failed to process Private Space broadcast: ${e.message}", e)
+                logE(PRIVATE_SPACE_TAG) { "Failed to process Private Space broadcast: ${e.message}" }
             } finally {
                 pendingResult.finish()
             }

@@ -78,7 +78,7 @@ suspend fun loadChangelogs(
             )
 
         } catch (e: Exception) {
-            logE("Changelogs", "Failed to parse $filename", e)
+            logE("Changelogs") { "Failed to parse $filename" }
             null
         }
     }

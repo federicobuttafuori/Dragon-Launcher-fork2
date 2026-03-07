@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -69,6 +70,14 @@ fun MainScreenOverlay(
     nestId: Int,
     onLaunch: ((SwipePointSerializable) -> Unit)?
 ) {
+    // Data class to hold geometric calculations
+    data class DragData(
+        val dx: Float,
+        val dy: Float,
+        val dist: Float,
+        val angle0to360: Double,
+        val angleDeg: Double
+    )
     val ctx = LocalContext.current
     val nests = LocalNests.current
     val points = LocalPoints.current
@@ -109,36 +118,48 @@ fun MainScreenOverlay(
 
     val isDragging = start != null && current != null
 
-    val currentNest = nests.find { it.id == nestId } ?: CircleNest()
+    // Optimization: Calculate geometric values only when dragging and using derivedStateOf
+    // to avoid recomposing the entire overlay on every pixel move if the end result doesn't change.
+    val dragData by remember(start, current) {
+        derivedStateOf {
+            if (isDragging) {
+                val dxVal = current.x - start.x
+                val dyVal = current.y - start.y
+                val distVal = hypot(dxVal, dyVal)
+                val angleRadVal = atan2(dxVal.toDouble(), -dyVal.toDouble())
+                val angleDegVal = Math.toDegrees(angleRadVal)
+                val angle360 = if (angleDegVal < 0) angleDegVal + 360 else angleDegVal
+
+                DragData(dxVal, dyVal, distVal, angle360, angleDegVal)
+            } else {
+                DragData(0f, 0f, 0f, 0.0, 0.0)
+            }
+        }
+    }
+
+    val dx = dragData.dx
+    val dy = dragData.dy
+    val dist = dragData.dist
+    val angle0to360 = dragData.angle0to360
+    val angleDeg = dragData.angleDeg
+
+    val currentNest = remember(nests, nestId) { nests.find { it.id == nestId } ?: CircleNest() }
 
     var lastAngle by remember { mutableStateOf<Double?>(null) }
     var cumulativeAngle by remember { mutableDoubleStateOf(0.0) }   // continuous rotation without jumps
 
+    val dragRadii = currentNest.dragDistances
+    val haptics = currentNest.haptic
+    val minAngles = currentNest.minAngleActivation
 
-    val dragRadii = nests.find { it.id == nestId }?.dragDistances ?: CircleNest().dragDistances
-    val haptics = nests.find { it.id == nestId }?.haptic ?: CircleNest().haptic
-    val minAngles =
-        nests.find { it.id == nestId }?.minAngleActivation ?: CircleNest().minAngleActivation
-
-    val dx: Float
-    val dy: Float
-    val dist: Float
-    val angleRad: Double
-    val angleDeg: Double
-    val angle0to360: Double
-
-    val lineColor: Color
+    val lineColor: Color = if (isDragging) {
+        if (rgbLine) Color.hsv(angle0to360.toFloat(), 1f, 1f)
+        else extraColors.angleLine
+    } else {
+        Color.Transparent
+    }
 
     if (isDragging) {
-        dx = current.x - start.x
-        dy = current.y - start.y
-        dist = hypot(dx, dy)
-
-        // angle relative to UP = 0°
-        angleRad = atan2(dx.toDouble(), -dy.toDouble())
-        angleDeg = Math.toDegrees(angleRad)
-        angle0to360 = if (angleDeg < 0) angleDeg + 360 else angleDeg
-
         // --- smooth 360° tracking ---
         lastAngle?.let { prev ->
             val diff = angle0to360 - prev
@@ -153,18 +174,9 @@ fun MainScreenOverlay(
         }
         @Suppress("AssignedValueIsNeverRead")
         lastAngle = angle0to360
-
-
-        lineColor = if (rgbLine) Color.hsv(angle0to360.toFloat(), 1f, 1f)
-        else extraColors.angleLine
-
     } else {
-        dx = 0f; dy = 0f
-        dist = 0f
-        angleDeg = 0.0
-        angle0to360 = 0.0
+        lastAngle = null
         cumulativeAngle = 0.0
-        lineColor = Color.Transparent
     }
 
     val sweepAngle = (cumulativeAngle % 360).toFloat()
@@ -468,7 +480,7 @@ fun MainScreenOverlay(
                         canvas.saveLayer(bounds, Paint())
 
                         if (showAllActionsOnCurrentCircle || showAllActionsOnCurrentNest) {
-                            logI(NESTS_TAG, "Got circle settings\ncircles: $circles\nfiltered: $filteredCircles")
+                            logI(NESTS_TAG) { "Got circle settings\ncircles: $circles\nfiltered: $filteredCircles" }
                             // If you selected to draw the selected circle / nest
                             circlesSettingsOverlay(
                                 drawParams = drawParams,
@@ -479,7 +491,7 @@ fun MainScreenOverlay(
                                 nestId = nestId
                             )
                         } else if (showAppLaunchPreview) {
-                            logI(NESTS_TAG, "Got action in settings")
+                            logI(NESTS_TAG) { "Got action in settings" }
 
 
                             // Main circle (the selected) drawn before any apps to be behind
@@ -501,7 +513,7 @@ fun MainScreenOverlay(
                                 depth = 1
                             )
                         } else {
-                            logI(NESTS_TAG, "Got else")
+                            logI(NESTS_TAG) { "Got else" }
                         }
 
 

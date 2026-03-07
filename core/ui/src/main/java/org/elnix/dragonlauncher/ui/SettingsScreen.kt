@@ -235,7 +235,7 @@ fun SettingsScreen(
      */
     LaunchedEffect(nestId, nests.size) {
         if (nests.isNotEmpty() && nests.none { it.id == nestId }) {
-            logD(NESTS_TAG, "Creating missing nest $nestId")
+            logD(NESTS_TAG) { "Creating missing nest $nestId" }
             nests.add(CircleNest(id = nestId))
         }
     }
@@ -502,7 +502,7 @@ fun SettingsScreen(
         try {
             points.addAll(savedPoints)
         } catch (e: NullPointerException) {
-            logE(SWIPE_TAG, "NullPointerException loading swipe points: $e")
+            logE(SWIPE_TAG) { "NullPointerException loading swipe points: $e" }
             ctx.showToast("NullPointerException loading swipe points: $e")
 
             // Fallback load them the old way
@@ -517,10 +517,10 @@ fun SettingsScreen(
                     )
                 }
             } catch (e: Exception) {
-                logE(SWIPE_TAG, "Fallback loading also failed, clearing all points: $e")
+                logE(SWIPE_TAG) { "Fallback loading also failed, clearing all points: $e" }
             }
         } catch (e: Exception) {
-            logE(SWIPE_TAG, "Error loading swipe points: $e")
+            logE(SWIPE_TAG) { "Error loading swipe points: $e" }
             ctx.showToast("Error loading swipe points: $e")
         }
 
@@ -529,7 +529,7 @@ fun SettingsScreen(
         try {
             nests.addAll(savedNests)
         } catch (e: Exception) {
-            logE(SWIPE_TAG, "Error loading nests: $e")
+            logE(SWIPE_TAG) { "Error loading nests: $e" }
             ctx.showToast("Error loading swipe points: $e")
         }
     }
@@ -929,10 +929,9 @@ fun SettingsScreen(
 
                                                     if (selectedPointCircleNumber > targetNestCircleNumbers) {
                                                         repeat(selectedPointCircleNumber - targetNestCircleNumbers) {
-                                                            logD(
-                                                                NESTS_TAG,
+                                                            logD(NESTS_TAG) {
                                                                 "Adding a circle to nest n°$targetNestId "
-                                                            )
+                                                            }
                                                             addCircle(targetNestId)
                                                         }
                                                     }

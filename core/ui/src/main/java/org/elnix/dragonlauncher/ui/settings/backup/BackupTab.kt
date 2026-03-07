@@ -197,7 +197,7 @@ fun BackupTab(onBack: () -> Unit) {
                         title = "Backup saved (limited persistence)"
                     )
                 )
-                ctx.logE("Backup", "Persistable permission not available for URI: $uri", e)
+                ctx.logE("Backup") { "Persistable permission not available for URI: $uri" }
             }
         }
     }

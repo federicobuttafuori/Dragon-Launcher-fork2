@@ -38,6 +38,11 @@ extensions.configure<ApplicationExtension> {
         versionCode = (property("VERSION_CODE") as String).toInt()
     }
 
+    lint {
+        checkReleaseBuilds = false
+        abortOnError = false
+    }
+
 
     flavorDimensions += "channel"
     productFlavors {

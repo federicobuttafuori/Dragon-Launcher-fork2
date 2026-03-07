@@ -98,6 +98,8 @@
     <string name="drawer_actions_width">Largeur des actions du tiroir</string>
     <string name="drawer_actions">Actions du tiroir</string>
     <string name="close_app_drawer">Fermer le tiroir</string>
+    <string name="font_selector">Sélecteur de police globale</string>
+    <string name="font_selector_desc">Choisissez une police pour toute l\'application. Plus de polices à venir !</string>
     <string name="toggle_kb">Clavier basculant</string>
     <string name="behavior">Comportement</string>
     <string name="workspaces">Espaces de travail</string>
@@ -716,7 +718,6 @@
     <string name="force_app_language_selector_desc">Utilisez le sélecteur de langue de l’application au lieu du sélecteur système d’Android</string>
 
     <string name="force_app_widgets_selector">Forcer le sélecteur de widgets de l’application</string>
-    <string name="force_app_widgets_selector_desc">Forcez l’application à utiliser son propre sélecteur de widgets</string>
 
     <string name="use_accessibility_instead_of_context">Utilisez l’accessibilité plutôt que le contexte</string>
     <string name="use_accessibility_instead_of_context_desc">Élargir le panneau d’actions en utilisant l’accessibilité plutôt que le contexte</string>

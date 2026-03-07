@@ -716,7 +716,6 @@
     <string name="force_app_language_selector_desc">एंड्रॉइड के सिस्टम चयनकर्ता के बजाय ऐप के भाषा चयनकर्ता का उपयोग करें</string>
 
     <string name="force_app_widgets_selector">ऐप विजेट चयनकर्ता को बाध्य करें</string>
-    <string name="force_app_widgets_selector_desc">ऐप को अपने स्वयं के विजेट चयनकर्ता का उपयोग करने के लिए बाध्य करें</string>
 
     <string name="use_accessibility_instead_of_context">संदर्भ के बजाय पहुंच-योग्यता का उपयोग करें</string>
     <string name="use_accessibility_instead_of_context_desc">संदर्भ के बजाय एक्सेसिबिलिटी का उपयोग करके एक्शन पैनल का विस्तार करें</string>

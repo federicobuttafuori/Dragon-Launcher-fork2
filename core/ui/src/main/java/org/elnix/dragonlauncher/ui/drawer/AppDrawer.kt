@@ -240,7 +240,7 @@ fun AppDrawerScreen(
             newWorkspace.type == WorkspaceType.PRIVATE &&
             privateSpaceState.isLocked
         ) {
-            logE(Constants.Logging.PRIVATE_SPACE_TAG, "Drawer launch!")
+            logE(Constants.Logging.PRIVATE_SPACE_TAG) { "Drawer launch!" }
             appLifecycleViewModel.onUnlockPrivateSpace()
         }
 
@@ -586,10 +586,9 @@ fun AppDrawerScreen(
                                         it.isLocked -> {
                                             DragonIconButton(
                                                 onClick = {
-                                                    logE(
-                                                        Constants.Logging.PRIVATE_SPACE_TAG,
+                                                    logE(Constants.Logging.PRIVATE_SPACE_TAG) {
                                                         "Drawer reload button launch!"
-                                                    )
+                                                    }
                                                     appLifecycleViewModel.onUnlockPrivateSpace()
                                                 }) {
                                                 Icon(

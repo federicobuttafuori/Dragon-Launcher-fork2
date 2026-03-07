@@ -22,7 +22,9 @@ import org.elnix.dragonlauncher.enumsui.DefaultThemes.DARK
 import org.elnix.dragonlauncher.enumsui.DefaultThemes.LIGHT
 import org.elnix.dragonlauncher.enumsui.DefaultThemes.SYSTEM
 import org.elnix.dragonlauncher.settings.stores.ColorModesSettingsStore
+import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
 import org.elnix.dragonlauncher.ui.components.settings.asState
+import org.elnix.dragonlauncher.ui.dialogs.fontNameToFont
 import org.elnix.dragonlauncher.ui.remembers.rememberCustomColorScheme
 import org.elnix.dragonlauncher.ui.remembers.rememberExtraColors
 
@@ -72,16 +74,37 @@ fun DragonLauncherTheme(
 ) {
     val dynamicColor by ColorModesSettingsStore.dynamicColor.asState()
     val defaultTheme by ColorModesSettingsStore.defaultTheme.asState()
+    val globalFontName by UiSettingsStore.globalFont.asState()
 
     val colorScheme = getDefaultColorScheme(defaultTheme, dynamicColor)
     val extraColors = rememberExtraColors()
+
+    val fontFamily = fontNameToFont(globalFontName)
+
+    val themeTypography = Typography.copy(
+        displayLarge = Typography.displayLarge.copy(fontFamily = fontFamily),
+        displayMedium = Typography.displayMedium.copy(fontFamily = fontFamily),
+        displaySmall = Typography.displaySmall.copy(fontFamily = fontFamily),
+        headlineLarge = Typography.headlineLarge.copy(fontFamily = fontFamily),
+        headlineMedium = Typography.headlineMedium.copy(fontFamily = fontFamily),
+        headlineSmall = Typography.headlineSmall.copy(fontFamily = fontFamily),
+        titleLarge = Typography.titleLarge.copy(fontFamily = fontFamily),
+        titleMedium = Typography.titleMedium.copy(fontFamily = fontFamily),
+        titleSmall = Typography.titleSmall.copy(fontFamily = fontFamily),
+        bodyLarge = Typography.bodyLarge.copy(fontFamily = fontFamily),
+        bodyMedium = Typography.bodyMedium.copy(fontFamily = fontFamily),
+        bodySmall = Typography.bodySmall.copy(fontFamily = fontFamily),
+        labelLarge = Typography.labelLarge.copy(fontFamily = fontFamily),
+        labelMedium = Typography.labelMedium.copy(fontFamily = fontFamily),
+        labelSmall = Typography.labelSmall.copy(fontFamily = fontFamily)
+    )
 
     CompositionLocalProvider(
         LocalExtraColors provides extraColors,
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
-            typography = Typography,
+            typography = themeTypography,
             content = content
         )
     }

@@ -1,23 +1,23 @@
 package org.elnix.dragonlauncher.common.logging
 
-import android.util.Log
+import timber.log.Timber
 
-fun Any.logD(tag: String = this::class.java.simpleName, message: String) {
-    Log.d(tag, message)
-    DragonLogManager.log(Log.DEBUG, tag, message)
+/**
+ * Extension for optimized logging with Timber.
+ * Uses inline and lambda for performance when logging complex strings.
+ */
+inline fun Any.logD(tag: String = this::class.java.simpleName, message: () -> String) {
+    Timber.tag(tag).d(message())
 }
 
-fun Any.logI(tag: String = this::class.java.simpleName, message: String) {
-    Log.i(tag, message)
-    DragonLogManager.log(Log.INFO, tag, message)
+inline fun Any.logI(tag: String = this::class.java.simpleName, message: () -> String) {
+    Timber.tag(tag).i(message())
 }
 
-fun Any.logW(tag: String = this::class.java.simpleName, message: String) {
-    Log.w(tag, message)
-    DragonLogManager.log(Log.WARN, tag, message)
+inline fun Any.logW(tag: String = this::class.java.simpleName, message: () -> String) {
+    Timber.tag(tag).w(message())
 }
 
-fun Any.logE(tag: String = this::class.java.simpleName, message: String, throwable: Throwable? = null) {
-    Log.e(tag, message, throwable)
-    DragonLogManager.log(Log.ERROR, tag, message, throwable)
+inline fun Any.logE(tag: String = this::class.java.simpleName, throwable: Throwable? = null, message: () -> String) {
+    Timber.tag(tag).e(throwable, message())
 }

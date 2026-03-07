@@ -98,6 +98,8 @@
     <string name="drawer_actions_width">Drawer Actions Width</string>
     <string name="drawer_actions">Drawer Actions</string>
     <string name="close_app_drawer">Close Drawer</string>
+    <string name="font_selector">Global Font Selector</string>
+    <string name="font_selector_desc">Choose a font for the entire app. More fonts coming soon!</string>
     <string name="toggle_kb">Toggle Keyboard</string>
     <string name="behavior">Behavior</string>
     <string name="workspaces">Workspaces</string>
@@ -716,7 +718,6 @@
     <string name="force_app_language_selector_desc">Use the app\'s language selector instead of Android\'s system selector</string>
 
     <string name="force_app_widgets_selector">Force app widgets selector</string>
-    <string name="force_app_widgets_selector_desc">Force the app to use its own widget selector</string>
 
     <string name="use_accessibility_instead_of_context">Use accessibility instead of context</string>
     <string name="use_accessibility_instead_of_context_desc">Expand action panel using accessibility instead of context</string>
@@ -819,6 +820,8 @@
     <string name="disable_auto_launch_on_space_first_char">Disable auto launch on space first char</string>
     <string name="disable_auto_launch_on_space_first_char_desc">When you press space before searching, the auto launch wont activate</string>
     <string name="configure_draw_order">Configure Draw Order</string>
+    <string name="device_info_copied_to_clipboard">Device Info copied to clipboard</string>
+    <string name="debug_mode_already_enabled">Debug Mode is already enabled</string>
 
 
 </resources>

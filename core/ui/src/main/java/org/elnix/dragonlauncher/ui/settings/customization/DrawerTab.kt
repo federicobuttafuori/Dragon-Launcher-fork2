@@ -458,7 +458,7 @@ fun DrawerTab(
             selected = iconsShape,
             onDismiss = { showShapePickerDialog = false }
         ) {
-            ctx.logD(SHAPES_TAG, "Picked: $it")
+            ctx.logD(SHAPES_TAG) { "Picked: $it" }
             scope.launch {
                 DrawerSettingsStore.iconsShape.set(ctx, it)
                 showShapePickerDialog = false

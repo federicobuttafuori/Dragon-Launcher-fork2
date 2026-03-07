@@ -60,6 +60,7 @@ import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.burnoutcrew.reorderable.reorderable
 import org.elnix.dragonlauncher.common.R
+import org.elnix.dragonlauncher.common.logging.logE
 import org.elnix.dragonlauncher.common.serializables.StatusBarJson
 import org.elnix.dragonlauncher.common.serializables.StatusBarSerializable
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
@@ -179,6 +180,7 @@ fun EditStatusBar() {
     val haptic = LocalHapticFeedback.current
 
     val scope = rememberCoroutineScope()
+    val logger = remember { object {} } // used as target for log helpers
 
     val statusBarBackground by StatusBarSettingsStore.barBackgroundColor.asState()
     val statusBarText by StatusBarSettingsStore.barTextColor.asState()
@@ -266,8 +268,10 @@ fun EditStatusBar() {
         val index = elements.indexOfFirst { it.id == selectedElementId }
         if (index == -1) return
 
-        elements[index] = elements[index].copy(item = updated)
-        save()
+        if (elements[index].item != updated) {
+            elements[index] = elements[index].copy(item = updated)
+            save()
+        }
     }
 
     val reorderState = rememberReorderableLazyListState(
@@ -279,11 +283,11 @@ fun EditStatusBar() {
                 val toIdx = elements.indexOfFirst { it.id == to.key }
 
                 if (fromIdx != -1 && toIdx != -1 && fromIdx != toIdx) {
-                    android.util.Log.d("StatusBarDebug", "Moving element from $fromIdx to $toIdx (IDs: ${from.key} -> ${to.key})")
-                    elements.add(toIdx, elements.removeAt(fromIdx))
+                    val item = elements.removeAt(fromIdx)
+                    elements.add(toIdx, item)
                 }
             } catch (e: Exception) {
-                android.util.Log.e("StatusBarDebug", "Crash avoided during reorder: ${e.message}")
+                logger.logE("StatusBarDebug") { "Crash avoided during reorder: ${e.message}" }
             }
         },
         onDragEnd = { _, _ ->
@@ -322,29 +326,32 @@ fun EditStatusBar() {
                     val element = statusBarElement.item
                     val selected = statusBarElement.id == selectedElementId
 
-                    val scale = animateFloatAsState(
+                    val scale by animateFloatAsState(
                         targetValue = when {
                             isDragging && selected -> 1.2f
                             isDragging -> 1.3f
                             selected -> 0.9f
                             else -> 1f
-                        }
+                        },
+                        label = "reorderScale"
                     )
-                    val backgroundColor = animateColorAsState(
+                    val backgroundColor by animateColorAsState(
                         targetValue = if (selected) {
                             MaterialTheme.colorScheme.primary
                         } else {
                             MaterialTheme.colorScheme.surfaceVariant
-                        }
+                        },
+                        label = "reorderBackground"
                     )
 
 
-                    val borderColor = animateColorAsState(
+                    val borderColor by animateColorAsState(
                         targetValue = if (selected) {
                             MaterialTheme.colorScheme.onPrimary
                         } else {
                             MaterialTheme.colorScheme.primary
-                        }
+                        },
+                        label = "reorderBorder"
                     )
 
                     LaunchedEffect(isDragging) {
@@ -353,12 +360,12 @@ fun EditStatusBar() {
 
                     Box(
                         modifier = Modifier
-                            .scale(scale.value)
+                            .scale(scale)
                             .detectReorderAfterLongPress(reorderState)
                             .sizeIn(minWidth = 50.dp, minHeight = 50.dp)
-                            .border(1.dp, borderColor.value, DragonShape)
+                            .border(1.dp, borderColor, DragonShape)
                             .clip(DragonShape)
-                            .background(backgroundColor.value)
+                            .background(backgroundColor)
                             .clickable {
                                 selectedElementId =
                                     if (selectedElementId == statusBarElement.id) null
@@ -656,9 +663,11 @@ fun EditStatusBar() {
             horizontalArrangement = Arrangement.spacedBy(5.dp),
             verticalArrangement = Arrangement.spacedBy(5.dp)
         ) {
-            allStatusBarSerializable.forEach {
+            allStatusBarSerializable.forEach { item ->
 
                 var showHelp by remember { mutableStateOf(false) }
+                val itemName = remember(item) { item::class.simpleName.toString() }
+
                 Box(contentAlignment = Alignment.Center) {
                     Box(
                         modifier = Modifier
@@ -668,12 +677,12 @@ fun EditStatusBar() {
                             .sizeIn(minWidth = 50.dp, minHeight = 50.dp)
                             .combinedClickable(
                                 onLongClick = { showHelp = true },
-                                onClick = { addElement(it) }
+                                onClick = { addElement(item) }
                             )
                             .padding(15.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        StatusBarItem(it, previewMode = true)
+                        StatusBarItem(item, previewMode = true)
                     }
 
                     DropdownMenu(
@@ -684,7 +693,7 @@ fun EditStatusBar() {
                         tonalElevation = 0.dp
                     ) {
                         Text(
-                            text = it::class.simpleName.toString(),
+                            text = itemName,
                             modifier = Modifier
                                 .clip(DragonShape)
                                 .background(MaterialTheme.colorScheme.background)
@@ -721,7 +730,10 @@ fun StatusBarItem(
         }
 
         is StatusBarSerializable.Connectivity -> {
-            StatusBarConnectivity(element)
+            StatusBarConnectivity(
+                element = element,
+                previewMode = previewMode
+            )
         }
 
         is StatusBarSerializable.Date -> {

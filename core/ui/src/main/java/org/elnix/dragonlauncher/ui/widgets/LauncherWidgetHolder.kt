@@ -6,11 +6,14 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProviderInfo
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.util.SparseArray
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
+import org.elnix.dragonlauncher.common.logging.logD
+import org.elnix.dragonlauncher.common.logging.logE
+import org.elnix.dragonlauncher.common.utils.Constants.Logging.LAUNCHER_WIDGET_HOLDER_TAG
+import org.elnix.dragonlauncher.common.utils.Constants.Logging.WIDGET_TAG
 import java.lang.ref.WeakReference
 
 /**
@@ -20,7 +23,6 @@ import java.lang.ref.WeakReference
 class LauncherWidgetHolder(private val context: Context) : DefaultLifecycleObserver {
 
     companion object {
-        private const val TAG = "LauncherWidgetHolder"
         private const val HOST_ID = 1024
 
         @Volatile
@@ -64,9 +66,9 @@ class LauncherWidgetHolder(private val context: Context) : DefaultLifecycleObser
             try {
                 appWidgetHost.startListening()
                 isListening = true
-                Log.d(TAG, "AppWidgetHost started listening")
+                logD(LAUNCHER_WIDGET_HOLDER_TAG) { "AppWidgetHost started listening" }
             } catch (e: Exception) {
-                Log.e(TAG, "Failed to start listening", e)
+                logE(LAUNCHER_WIDGET_HOLDER_TAG) { "Failed to start listening" }
             }
         }
     }
@@ -76,34 +78,34 @@ class LauncherWidgetHolder(private val context: Context) : DefaultLifecycleObser
             try {
                 appWidgetHost.stopListening()
                 isListening = false
-                Log.d(TAG, "AppWidgetHost stopped listening")
+                logD(LAUNCHER_WIDGET_HOLDER_TAG) { "AppWidgetHost stopped listening" }
             } catch (e: Exception) {
-                Log.e(TAG, "Failed to stop listening", e)
+                logE(LAUNCHER_WIDGET_HOLDER_TAG) { "Failed to stop listening" }
             }
         }
     }
 
     fun allocateAppWidgetId(): Int {
         val id = appWidgetHost.allocateAppWidgetId()
-        android.util.Log.d("DRAGON", "DRAGON_WIDGET: Allocated new ID: $id")
+        logD(WIDGET_TAG) { "DRAGON_WIDGET: Allocated new ID: $id" }
         return id
     }
 
-    fun bindWidget(appWidgetId: Int, provider: android.content.ComponentName, options: android.os.Bundle? = null): Boolean {
-        android.util.Log.d("DRAGON", "DRAGON_WIDGET: Starting bind for ID $appWidgetId with provider $provider")
+    fun bindWidget(appWidgetId: Int, provider: android.content.ComponentName, options: Bundle? = null): Boolean {
+        logD(WIDGET_TAG) { "DRAGON_WIDGET: Starting bind for ID $appWidgetId with provider $provider" }
         val result = appWidgetManager.bindAppWidgetIdIfAllowed(appWidgetId, provider, options)
-        android.util.Log.d("DRAGON", "DRAGON_WIDGET: bindAppWidgetIdIfAllowed result for ID $appWidgetId: $result")
+        logD(WIDGET_TAG) { "DRAGON_WIDGET: bindAppWidgetIdIfAllowed result for ID $appWidgetId: $result" }
         return result
     }
 
     fun deleteAppWidgetId(appWidgetId: Int) {
-        android.util.Log.d("DRAGON", "DRAGON_WIDGET: Deleting ID $appWidgetId")
+        logD(WIDGET_TAG) { "DRAGON_WIDGET: Deleting ID $appWidgetId" }
         appWidgetHost.deleteAppWidgetId(appWidgetId)
         views.remove(appWidgetId)
     }
 
     fun createView(appWidgetId: Int, info: AppWidgetProviderInfo): AppWidgetHostView {
-        android.util.Log.d("DRAGON", "DRAGON_WIDGET: Creating view for ID $appWidgetId (Provider: ${info.provider})")
+        logD(WIDGET_TAG) { "DRAGON_WIDGET: Creating view for ID $appWidgetId (Provider: ${info.provider})" }
         val view = appWidgetHost.createView(context, appWidgetId, info)
         views.put(appWidgetId, WeakReference(view))
         return view
@@ -111,7 +113,7 @@ class LauncherWidgetHolder(private val context: Context) : DefaultLifecycleObser
 
     fun getAppWidgetInfo(appWidgetId: Int): AppWidgetProviderInfo? {
         val info = appWidgetManager.getAppWidgetInfo(appWidgetId)
-        android.util.Log.d("DRAGON", "DRAGON_WIDGET: getAppWidgetInfo for ID $appWidgetId: ${info?.provider ?: "NULL"}")
+        logD(WIDGET_TAG) { "DRAGON_WIDGET: getAppWidgetInfo for ID $appWidgetId: ${info?.provider ?: "NULL"}" }
         return info
     }
 

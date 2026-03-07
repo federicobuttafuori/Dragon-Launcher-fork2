@@ -414,10 +414,10 @@ fun FloatingAppsTab(
             onNewNest = null,
             onNameChange = null
         ) {
-            ctx.logD(WIDGET_TAG, it.toString())
+            ctx.logD(WIDGET_TAG) { it.toString() }
             nestId = it.id
             selected = null
-            ctx.logD(WIDGET_TAG, nestId.toString())
+            ctx.logD(WIDGET_TAG) { nestId.toString() }
 
             showNestPickerDialog = false
         }

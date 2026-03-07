@@ -165,10 +165,8 @@ fun rememberLineObjectsOrder(): MutableState<List<AngleLineObjects>> {
                     ?.map { AngleLineObjects.valueOf(it) }
             } catch (e: Exception) {
                 ctx.logE(
-                    ANGLE_LINE_TAG,
-                    "Failed to decode angle line objects order, using default value",
-                    e
-                )
+                    ANGLE_LINE_TAG
+                ) { "Failed to decode angle line objects order, using default value" }
                 null
             } ?: AngleLineObjects.entries.toList()
 

@@ -73,7 +73,7 @@ class SystemControlService : AccessibilityService() {
             eventText.contains("overview") ||
             eventText.contains("apps")
         ) {
-            logD(ACCESSIBILITY_TAG, "Blocked recents by event text: $eventText")
+            logD(ACCESSIBILITY_TAG) { "Blocked recents by event text: $eventText" }
             return
         }
 
@@ -116,15 +116,15 @@ class SystemControlService : AccessibilityService() {
 //            lastForegroundPackage != null &&
 //            lastForegroundPackage != systemLauncher
 //        ) {
-            logD(ACCESSIBILITY_TAG, "MAIN HOME SCREEN DETECTED, LAUNCHING DRAGON")
-            launchDragon()
+        logD(ACCESSIBILITY_TAG) { "MAIN HOME SCREEN DETECTED, LAUNCHING DRAGON" }
+        launchDragon()
 //        } else {
 //            logD(ACCESSIBILITY_TAG, "Skipped (not home): $className")
 //        }
     }
 
     override fun onInterrupt() {
-        logW(ACCESSIBILITY_TAG, "Accessibility service interrupted")
+        logW(ACCESSIBILITY_TAG) { "Accessibility service interrupted" }
     }
 
     override fun onServiceConnected() {
@@ -147,7 +147,7 @@ class SystemControlService : AccessibilityService() {
         serviceInfo = info
 
         SystemControl.attachInstance(this)
-        logD(ACCESSIBILITY_TAG, "Service ready - Gestures & window monitoring enabled")
+        logD(ACCESSIBILITY_TAG) { "Service ready - Gestures & window monitoring enabled" }
     }
 
     fun openNotificationShade() {
@@ -168,7 +168,7 @@ class SystemControlService : AccessibilityService() {
         lastLaunchTime = System.currentTimeMillis()
 
         SystemControl.launchDragon(this)
-        logD(ACCESSIBILITY_TAG, "Dragon Launcher launched")
+        logD(ACCESSIBILITY_TAG) { "Dragon Launcher launched" }
 
         // Post to handler for debounce; after launching Dragon, for faster visual effect
         Handler(Looper.getMainLooper()).postDelayed({
@@ -181,7 +181,7 @@ class SystemControlService : AccessibilityService() {
             DebugSettingsStore.systemLauncherPackageName.get(this@SystemControlService)
                 ?.let { pkg ->
                     systemLauncher = pkg.ifBlank { null }
-                    logD(ACCESSIBILITY_TAG, "Launcher setting updated: $pkg")
+                    logD(ACCESSIBILITY_TAG) { "Launcher setting updated: $pkg" }
                 }
         }
 
@@ -189,7 +189,7 @@ class SystemControlService : AccessibilityService() {
             DebugSettingsStore.autoRaiseDragonOnSystemLauncher.get(this@SystemControlService)
                 ?.let { enabled ->
                     autoRaiseEnabled = enabled
-                    logD(ACCESSIBILITY_TAG, "Auto-raise toggled: $enabled")
+                    logD(ACCESSIBILITY_TAG) { "Auto-raise toggled: $enabled" }
                 }
         }
     }
@@ -219,7 +219,7 @@ class SystemControlService : AccessibilityService() {
  * doesn't work on my redmagic thus.
  */
 private fun isLikelyRecents(ctx: Context, root: AccessibilityNodeInfo): Boolean {
-    ctx.logI(ACCESSIBILITY_TAG, "Root: $root")
+    ctx.logI(ACCESSIBILITY_TAG) { "Root: $root" }
 
     var nodeCount = 0
     var clickableCount = 0
@@ -239,8 +239,8 @@ private fun isLikelyRecents(ctx: Context, root: AccessibilityNodeInfo): Boolean 
 
     traverse(root)
 
-    ctx.logI(ACCESSIBILITY_TAG, "NodeCount: $nodeCount")
-    ctx.logI(ACCESSIBILITY_TAG, "clickableCount: $clickableCount, focusableCount: $focusableCount")
+    ctx.logI(ACCESSIBILITY_TAG) { "NodeCount: $nodeCount" }
+    ctx.logI(ACCESSIBILITY_TAG) { "clickableCount: $clickableCount, focusableCount: $focusableCount" }
     if (nodeCount < 5) return true
     if (clickableCount == 0 && focusableCount == 0) return true
 

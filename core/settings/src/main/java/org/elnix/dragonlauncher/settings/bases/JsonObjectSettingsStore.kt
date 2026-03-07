@@ -42,11 +42,11 @@ abstract class JsonObjectSettingsStore :
         // Skips if default value provided (no changes made), keeps the backup lighter
         val raw = jsonSetting.getEncoded(ctx)?.trim() ?: return null
 
-        logI(WORKSPACES_TAG, raw)
+        logI(WORKSPACES_TAG) { raw }
         return try {
             if (raw.isEmpty()) null else JSONObject(raw)
         } catch (e: JSONException) {
-            logE(BACKUP_TAG, "Error while creating json object of backup", e)
+            logE(BACKUP_TAG) { "Error while creating json object of backup" }
             null
         }
     }
@@ -57,7 +57,7 @@ abstract class JsonObjectSettingsStore :
      * Serializes and writes the provided [JSONObject] into DataStore.
      */
     override suspend fun setAll(ctx: Context, value: JSONObject?) {
-        logI(WORKSPACES_TAG, value?.toString() ?: "null")
+        logI(WORKSPACES_TAG) { value?.toString() ?: "null" }
         jsonSetting.set(ctx, value?.toString())
     }
 

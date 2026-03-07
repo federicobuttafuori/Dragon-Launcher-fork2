@@ -144,6 +144,11 @@ object UiSettingsStore : MapSettingsStore() {
         allowedRange = 0f..1f
     )
 
+    val globalFont = Settings.string(
+        key = "globalFont",
+        dataStoreName = dataStoreName,
+        default = "Default"
+    )
 
     /** How far the points drawing system `actionsInCircle` draws the points */
     val maxNestsDepth = Settings.int(
@@ -175,6 +180,7 @@ object UiSettingsStore : MapSettingsStore() {
         this.appIconOverlaySize,
         this.wallpaperDimMainScreen,
         this.wallpaperDimDrawerScreen,
+        this.globalFont,
         this.maxNestsDepth
     )
 }

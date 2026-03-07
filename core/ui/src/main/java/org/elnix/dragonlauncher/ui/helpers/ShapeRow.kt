@@ -39,7 +39,7 @@ fun ShapeRow(
 
     val ctx = LocalContext.current
 
-    ctx.logD(SHAPES_TAG, "Selected: $selected")
+    ctx.logD(SHAPES_TAG) { "Selected: $selected" }
 
     Row(
         modifier = Modifier
@@ -59,7 +59,7 @@ fun ShapeRow(
         ) {
 
             ShapePreview(selected)
-            logD(SHAPES_TAG, "Current Shape: $selected")
+            logD(SHAPES_TAG) { "Current Shape: $selected" }
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(2.dp),

@@ -133,7 +133,7 @@ fun AppPickerDialog(
             newWorkspace.type == WorkspaceType.PRIVATE &&
             privateSpaceState.isLocked
         ) {
-            logE(Constants.Logging.PRIVATE_SPACE_TAG, "Picker launch!")
+            logE(Constants.Logging.PRIVATE_SPACE_TAG) { "Picker launch!" }
             appLifecycleViewModel.onUnlockPrivateSpace()
         }
 
@@ -346,7 +346,7 @@ fun AppPickerDialog(
                                     it.isLocked -> {
                                         DragonIconButton(
                                             onClick = {
-                                                logE(Constants.Logging.PRIVATE_SPACE_TAG, "Drawer reload button launch!")
+                                                logE(Constants.Logging.PRIVATE_SPACE_TAG) { "Drawer reload button launch!" }
                                                 appLifecycleViewModel.onUnlockPrivateSpace()
                                             }) {
                                             Icon(

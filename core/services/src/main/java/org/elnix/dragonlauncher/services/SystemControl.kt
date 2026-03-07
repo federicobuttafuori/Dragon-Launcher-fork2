@@ -86,7 +86,7 @@ object SystemControl {
             val method = statusBarManagerClass.getMethod("expandSettingsPanel")
             method.invoke(statusBarService)
         } catch (e: Exception) {
-            this.logE(ACCESSIBILITY_TAG, "Reflection failed", e)
+            logE(ACCESSIBILITY_TAG) { "Reflection failed" }
             // Fallback to notifications if quick settings fails
             expandNotifications(ctx)
         }
@@ -135,27 +135,29 @@ object SystemControl {
         }
 
         val componentName = ComponentName(ctx, org.elnix.dragonlauncher.services.DeviceAdminReceiver::class.java)
-        logD(ACCESSIBILITY_TAG, "component name: $componentName")
+        SystemControl.logD(ACCESSIBILITY_TAG) { "component name: $componentName" }
 
 
         val intent = Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN).apply {
             putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, componentName)
-            putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                "Required for persistence on Xiaomi - prevents battery kills")
+            putExtra(
+                DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+                "Required for persistence on Xiaomi - prevents battery kills"
+            )
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
 
-        logD(ACCESSIBILITY_TAG, "intent: $intent")
+        SystemControl.logD(ACCESSIBILITY_TAG) { "intent: $intent" }
 
 
         // Verify component exists (common APK issue)
         val adminReceiver = ctx.packageManager.getReceiverInfo(componentName, 0)
-        logD(ACCESSIBILITY_TAG, "Admin receiver found: ${adminReceiver.packageName}")
+        SystemControl.logD(ACCESSIBILITY_TAG) { "Admin receiver found: ${adminReceiver.packageName}" }
 
         try {
             ctx.startActivity(intent)
         } catch (e: Exception) {
-            this.logE(ACCESSIBILITY_TAG, "Admin activation failed", e)
+            logE(ACCESSIBILITY_TAG) { "Admin activation failed" }
             ctx.showToast("Failed to open admin settings - check manifest")
         }
     }
@@ -169,7 +171,7 @@ object SystemControl {
         try {
             ctx.startActivity(intent)
         } catch (e: Exception) {
-            this.logE(ACCESSIBILITY_TAG, "Launch failed", e)
+            logE(ACCESSIBILITY_TAG) { "Launch failed" }
             ctx.showToast("Failed to launch Dragon Launcher")
         }
     }

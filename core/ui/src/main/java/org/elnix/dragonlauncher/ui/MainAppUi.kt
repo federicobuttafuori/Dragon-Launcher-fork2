@@ -1,9 +1,11 @@
 package org.elnix.dragonlauncher.ui
 
+import android.Manifest
 import android.R.attr.versionCode
 import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Intent
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -164,7 +166,6 @@ fun MainAppUi(
     navController: NavHostController,
     widgetHostProvider: WidgetHostProvider,
     onBindCustomWidget: (Int, ComponentName, nestId: Int) -> Unit,
-    onLaunchSystemWidgetPicker: (nestId: Int) -> Unit,
     onResetWidgetSize: (id: Int, widgetId: Int) -> Unit,
     onRemoveFloatingApp: (FloatingAppObject) -> Unit
 ) {
@@ -173,6 +174,20 @@ fun MainAppUi(
     val appsViewModel = LocalAppsViewModel.current
     val appLifecycleViewModel = LocalAppLifecycleViewModel.current
     val backupViewModel = LocalBackupViewModel.current
+
+    val notificationLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (!isGranted) {
+            ctx.logW(TAG) { "Notification permission denied" }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            notificationLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
 
     val result by backupViewModel.result.collectAsState()
 
@@ -207,8 +222,6 @@ fun MainAppUi(
 
     val leftDrawerWidth by DrawerSettingsStore.leftDrawerWidth.asState()
     val rightDrawerWidth by DrawerSettingsStore.rightDrawerWidth.asState()
-
-    val forceAppWidgetsSelector by DebugSettingsStore.forceAppWidgetsSelector.asState()
 
     val showSetDefaultLauncherBanner by PrivateSettingsStore.showSetDefaultLauncherBanner.asStateNull()
 
@@ -273,7 +286,7 @@ fun MainAppUi(
         if (pendingPackageToLaunch != null) {
             val packageName = pendingPackageToLaunch!!
 
-            ctx.logD(APP_LAUNCH_TAG, "result: $result")
+            ctx.logD(APP_LAUNCH_TAG) { "result: $result" }
 
             if (result.resultCode == DigitalPauseActivity.RESULT_PROCEED) {
                 try {
@@ -296,7 +309,7 @@ fun MainAppUi(
                         pendingUserIdToLaunch!!
                     )
                 } catch (e: Exception) {
-                    ctx.logE(TAG, "Failed to launch after pause: ${e.message}")
+                    ctx.logE(TAG) { "Failed to launch after pause: ${e.message}" }
                 }
             } else if (result.resultCode == DigitalPauseActivity.RESULT_PROCEED_WITH_TIMER) {
                 try {
@@ -330,9 +343,10 @@ fun MainAppUi(
                     )
                 } catch (e: Exception) {
                     ctx.logE(
-                        APP_LAUNCH_TAG,
+                        APP_LAUNCH_TAG
+                    ) {
                         "Failed to launch after pause with timer: ${e.message}"
-                    )
+                    }
                 }
             }
         }
@@ -480,7 +494,7 @@ fun MainAppUi(
 
                     scope.launch {
 
-                        logD(APP_LAUNCH_TAG, "Waiting for private space to unlock before launch")
+                        logD(APP_LAUNCH_TAG) { "Waiting for private space to unlock before launch" }
 
                         val unlocked = withTimeoutOrNull(10_000L) {
                             privateSpaceState
@@ -489,10 +503,10 @@ fun MainAppUi(
                         }
 
                         if (unlocked != null) {
-                            logD(APP_LAUNCH_TAG, "Private space unlocked, launching")
+                            logD(APP_LAUNCH_TAG) { "Private space unlocked, launching" }
                             launchAction(dummySwipePoint(action.copy(isPrivateSpace = false)))
                         } else {
-                            logW(APP_LAUNCH_TAG, "Timeout expired for private space unlock")
+                            logW(APP_LAUNCH_TAG) { "Timeout expired for private space unlock" }
                         }
                     }
                 },
@@ -507,9 +521,9 @@ fun MainAppUi(
                 }
             )
         } catch (e: AppLaunchException) {
-            ctx.logE(TAG, e.message ?: "")
+            ctx.logE(TAG) { e.message ?: "" }
         } catch (e: Exception) {
-            ctx.logE(TAG, e.message ?: "")
+            ctx.logE(TAG) { e.message ?: "" }
         }
     }
 
@@ -526,7 +540,7 @@ fun MainAppUi(
     LaunchedEffect(Unit) {
         appLifecycleViewModel.homeEvents.collect {
 
-            logD(Constants.Logging.DRAWER_TAG, "Got home event, launching home action, lastRoute: $lastRoute")
+            logD(Constants.Logging.DRAWER_TAG) { "Got home event, launching home action, lastRoute: $lastRoute" }
             when (lastRoute) {
                 ROUTES.DRAWER -> {
                     drawerHomeHandler?.invoke()
@@ -620,7 +634,7 @@ fun MainAppUi(
 
     val elements by remember(elementsJson) {
         val decoded = StatusBarJson.decodeStatusBarElements(elementsJson)
-        ctx.logW(STATUS_BAR_TAG, "Element: $elementsJson, decoded: $decoded")
+        ctx.logW(STATUS_BAR_TAG) { "Element: $elementsJson, decoded: $decoded" }
 
         derivedStateOf { decoded }
     }
@@ -640,7 +654,7 @@ fun MainAppUi(
         default = UiConstants.defaultLineCustomObject,
         json = json
     ) {
-        ctx.logE(ANGLE_LINE_TAG, "Error decoding lineObject", it)
+        ctx.logE(ANGLE_LINE_TAG) { "Error decoding lineObject" }
     }
 
     val angleLineJson by AngleLineSettingsStore.angleLineJson.asState()
@@ -649,7 +663,7 @@ fun MainAppUi(
         default = UiConstants.defaultAngleCustomObject,
         json = json
     ) {
-        ctx.logE(ANGLE_LINE_TAG, "Error decoding angleLineObject", it)
+        ctx.logE(ANGLE_LINE_TAG) { "Error decoding angleLineObject" }
     }
 
     val startLineJson by AngleLineSettingsStore.startLineJson.asState()
@@ -658,7 +672,7 @@ fun MainAppUi(
         default = UiConstants.defaultStartCustomObject,
         json = json
     ) {
-        ctx.logE(ANGLE_LINE_TAG, "Error decoding startLineObject", it)
+        ctx.logE(ANGLE_LINE_TAG) { "Error decoding startLineObject" }
     }
 
     val endLineJson by AngleLineSettingsStore.endLineJson.asState()
@@ -667,7 +681,7 @@ fun MainAppUi(
         default = UiConstants.defaultEndCustomObject,
         json = json
     ) {
-        ctx.logE(ANGLE_LINE_TAG, "Error decoding endLineObject", it)
+        ctx.logE(ANGLE_LINE_TAG) { "Error decoding endLineObject" }
     }
 
     /**
@@ -800,7 +814,7 @@ fun MainAppUi(
                             onBack = ::goAdvSettingsRoot
                         )
                     }
-                    noAnimComposable(SETTINGS.LOGS) { LogsTab(::goDebug) }
+                    noAnimComposable(SETTINGS.LOGS) { LogsTab(::goAdvSettingsRoot) }
                     noAnimComposable(SETTINGS.SETTINGS_JSON) { SettingsDebugTab(::goDebug) }
                     noAnimComposable(SETTINGS.LANGUAGE) { LanguageTab(::goAdvSettingsRoot) }
                     noAnimComposable(SETTINGS.ANGLE_LINE_EDIT) { AngleLineTab(::goAppearance) }

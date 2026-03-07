@@ -27,7 +27,7 @@ fun rememberSettingsImportLauncher(
         ActivityResultContracts.OpenDocument()
     ) { uri ->
 
-        ctx.logD("BackupManager", "File picked: $uri")
+        ctx.logD("BackupManager") { "File picked: $uri" }
 
         if (uri == null) {
             onCancel()

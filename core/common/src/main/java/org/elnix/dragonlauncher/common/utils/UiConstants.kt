@@ -36,7 +36,7 @@ object UiConstants {
             radius = 20f
         ),
         shape = IconShape.Circle,
-        size = 25f,
+        size = 50f,
         eraseBackground = false
     )
 

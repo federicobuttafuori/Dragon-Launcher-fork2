@@ -716,7 +716,6 @@
     <string name="force_app_language_selector_desc">Verwenden Sie die Sprachauswahl der App anstelle der Systemauswahl von Android</string>
 
     <string name="force_app_widgets_selector">Auswahl der App-Widgets erzwingen</string>
-    <string name="force_app_widgets_selector_desc">Zwinge die App, einen eigenen Widget-Auswahlschalter zu verwenden.</string>
 
     <string name="use_accessibility_instead_of_context">Nutze Barrierefreiheit statt Kontext</string>
     <string name="use_accessibility_instead_of_context_desc">Erweitere das Aktionspanel mit Barrierefreiheit statt mit Kontext</string>

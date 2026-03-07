@@ -32,16 +32,27 @@ import org.elnix.dragonlauncher.common.serializables.StatusBarSerializable
 @Composable
 fun StatusBarConnectivity(
     element: StatusBarSerializable.Connectivity,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    previewMode: Boolean = false
 ) {
     val ctx = LocalContext.current
-    var connectivityState by remember { mutableStateOf(ConnectivityState()) }
+    var connectivityState by remember {
+        mutableStateOf(
+            if (previewMode) ConnectivityState(
+                isWifiEnabled = true,
+                isBluetoothEnabled = true,
+                isMobileDataEnabled = true
+            ) else ConnectivityState()
+        )
+    }
 
     // Periodic updates
-    LaunchedEffect(element.updateFrequency) {
-        while (true) {
-            connectivityState = readConnectivityState(ctx)
-            delay(element.updateFrequency * 1000L)
+    if (!previewMode) {
+        LaunchedEffect(element.updateFrequency) {
+            while (true) {
+                connectivityState = readConnectivityState(ctx)
+                delay(element.updateFrequency * 1000L)
+            }
         }
     }
 
