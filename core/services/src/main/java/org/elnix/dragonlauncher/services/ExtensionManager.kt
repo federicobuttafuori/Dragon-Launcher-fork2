@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import org.elnix.dragonlauncher.common.serializables.ExtensionModel
 import org.elnix.dragonlauncher.common.utils.PackageManagerCompat
 import org.elnix.dragonlauncher.common.utils.openUrl
@@ -60,21 +61,39 @@ object ExtensionManager {
 
     fun isExtensionInstalled(context: Context, packageNameOrId: String): Boolean {
         val pmCompat = PackageManagerCompat(context.packageManager, context)
-        
+        Log.d("ExtensionManager", "Checking extension installed for: $packageNameOrId")
+
         // 1. Direct check with provided packageName or ID
-        if (pmCompat.isPackageInstalled(packageNameOrId)) return true
-        
-        // 2. Scan for any package containing "dragon.launcher" that matches the end of the identifier
-        // and also check if those packages are actually extensions (via metadata or specific naming)
-        return try {
-            val installedPackages = context.packageManager.getInstalledPackages(0)
-            val suffix = packageNameOrId.split(".").last()
-            installedPackages.any { pkg -> 
-                val pName = pkg.packageName
-                (pName.contains("dragon.launcher") && pName.endsWith(suffix, ignoreCase = true)) ||
-                (pName.contains("dragonlauncher") && pName.contains(suffix, ignoreCase = true))
+        try {
+            if (pmCompat.isPackageInstalled(packageNameOrId)) {
+                Log.d("ExtensionManager", "Direct package present: $packageNameOrId")
+                return true
             }
         } catch (e: Exception) {
+            Log.d("ExtensionManager", "Direct check failed for $packageNameOrId: ${e.message}")
+        }
+
+        // 2. Scan installed packages for plausible matches and log candidates
+        return try {
+            val installedPackages = context.packageManager.getInstalledPackages(0)
+            val suffix = packageNameOrId.split(".").lastOrNull() ?: packageNameOrId
+            var found = false
+            for (pkg in installedPackages) {
+                val pName = pkg.packageName
+                val matches = (pName.contains("dragon.launcher") && pName.endsWith(suffix, ignoreCase = true)) ||
+                        (pName.contains("dragonlauncher") && pName.contains(suffix, ignoreCase = true))
+                if (matches) {
+                    Log.d("ExtensionManager", "Found matching installed candidate: $pName for requested $packageNameOrId")
+                    found = true
+                    break
+                } else {
+                    Log.d("ExtensionManager", "Checked package: $pName - no match for $packageNameOrId")
+                }
+            }
+            Log.d("ExtensionManager", "Final detection result for $packageNameOrId = $found")
+            found
+        } catch (e: Exception) {
+            Log.d("ExtensionManager", "Exception while scanning packages for $packageNameOrId: ${e.message}")
             false
         }
     }

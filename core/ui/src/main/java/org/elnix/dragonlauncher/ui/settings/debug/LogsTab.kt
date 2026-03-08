@@ -53,8 +53,7 @@ import androidx.core.content.FileProvider
 import java.io.InputStreamReader
 import org.elnix.dragonlauncher.common.serializables.ExtensionModel
 import kotlinx.coroutines.delay
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.*
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.logging.DragonLogManager
 import org.elnix.dragonlauncher.common.logging.logD
@@ -107,51 +106,53 @@ fun LogsTab(
     val versionName = packageInfo.versionName ?: "unknown"
     val versionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) packageInfo.longVersionCode else packageInfo.versionCode.toLong()
 
-    // Calculate extensions in a completely isolated try-catch
+    // Build extension list by parsing the registry JSON directly (robust to field names)
     var finalExtensionText = "No extensions installed"
     try {
         val registryContent = ctx.assets.open("extensions-registry.json").bufferedReader().readText()
-        val extensions: List<ExtensionModel> = Json.decodeFromString(registryContent)
-        
+        val root = Json.parseToJsonElement(registryContent)
         val lines = ArrayList<String>()
-        val extensionListSize = extensions.size
-        
-        var idx = 0
-        while (idx < extensionListSize) {
-            val ext = extensions[idx]
-            val labelValue = ext.name
-            val pkgValue = ext.packageName
-            
-            if (pkgValue != null) {
+
+        if (root is JsonArray) {
+            for (elem in root) {
                 try {
-                    val isInstalled = ExtensionManager.isExtensionInstalled(ctx, pkgValue)
-                    if (isInstalled) {
-                        val pkgData = ctx.packageManager.getPackageInfo(pkgValue, 0)
-                        val versionStr = pkgData.versionName ?: "unknown"
-                        lines.add("$labelValue ($versionStr)")
+                    val obj = elem.jsonObject
+                    // package may be under "package" or "packageName" in different registries
+                    val pkgField = obj["package"] ?: obj["packageName"] ?: obj["id"]
+                    val pkgValue = pkgField?.jsonPrimitive?.contentOrNull
+
+                    // name may be a string or an object (localized); try multiple fallbacks
+                    val nameField = obj["name"]
+                    val labelValue = when {
+                        nameField == null -> (obj["id"]?.jsonPrimitive?.contentOrNull ?: "Unknown")
+                        nameField is JsonPrimitive && nameField.isString -> nameField.content
+                        nameField is JsonObject -> (nameField["en"]?.jsonPrimitive?.contentOrNull
+                            ?: nameField.values.firstOrNull()?.jsonPrimitive?.contentOrNull
+                            ?: obj["id"]?.jsonPrimitive?.contentOrNull
+                            ?: "Unknown")
+                        else -> obj["id"]?.jsonPrimitive?.contentOrNull ?: "Unknown"
                     }
-                } catch (ex: Exception) {
-                    // package not found, skip
+
+                    if (!pkgValue.isNullOrEmpty()) {
+                        try {
+                            if (ExtensionManager.isExtensionInstalled(ctx, pkgValue)) {
+                                val pkgInfo = ctx.packageManager.getPackageInfo(pkgValue, 0)
+                                val versionStr = pkgInfo.versionName ?: "unknown"
+                                lines.add("$labelValue ($versionStr)")
+                            }
+                        } catch (_: Exception) {
+                            // ignore missing packages
+                        }
+                    }
+                } catch (_: Exception) {
+                    // skip malformed entry
                 }
             }
-            
-            idx = idx + 1
         }
-        
-        if (lines.size > 0) {
-            val sb = StringBuilder()
-            var lineIdx = 0
-            while (lineIdx < lines.size) {
-                sb.append(lines[lineIdx])
-                lineIdx = lineIdx + 1
-                if (lineIdx < lines.size) {
-                    sb.append("\n")
-                }
-            }
-            finalExtensionText = sb.toString()
-        }
-    } catch (ex: Exception) {
-        // registry not available
+
+        if (lines.isNotEmpty()) finalExtensionText = lines.joinToString("\n")
+    } catch (_: Exception) {
+        // registry not available or parse failed -> leave default text
     }
 
     val deviceDetails = remember {
