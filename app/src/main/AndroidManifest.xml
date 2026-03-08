@@ -40,6 +40,10 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
+    <!-- Extension Security: Launcher defines the signature-level permission -->
+    <permission android:name="org.dragon.launcher.APP_EXTENSION"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="org.dragon.launcher.APP_EXTENSION" />
 
     <application
         android:name=".MyApplication"

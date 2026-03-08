@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class ExtensionModel(
     @SerializedName("id") val id: String,
     @SerializedName("name") val name: String,
-    @SerializedName("packageName") val packageName: String?,
+    @SerializedName("package") val packageName: String?,
     @SerializedName("version") val version: String?,
     @SerializedName("descriptions") val description: Map<String, String>,
     @SerializedName("author") val author: String?,

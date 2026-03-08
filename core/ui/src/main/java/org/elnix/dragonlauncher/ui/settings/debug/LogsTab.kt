@@ -117,36 +117,20 @@ fun LogsTab(
             for (elem in root) {
                 try {
                     val obj = elem.jsonObject
-                    // package may be under "package" or "packageName" in different registries
-                    val pkgField = obj["package"] ?: obj["packageName"] ?: obj["id"]
-                    val pkgValue = pkgField?.jsonPrimitive?.contentOrNull
-
-                    // name may be a string or an object (localized); try multiple fallbacks
-                    val nameField = obj["name"]
-                    val labelValue = when {
-                        nameField == null -> (obj["id"]?.jsonPrimitive?.contentOrNull ?: "Unknown")
-                        nameField is JsonPrimitive && nameField.isString -> nameField.content
-                        nameField is JsonObject -> (nameField["en"]?.jsonPrimitive?.contentOrNull
-                            ?: nameField.values.firstOrNull()?.jsonPrimitive?.contentOrNull
-                            ?: obj["id"]?.jsonPrimitive?.contentOrNull
-                            ?: "Unknown")
-                        else -> obj["id"]?.jsonPrimitive?.contentOrNull ?: "Unknown"
-                    }
+                    val pkgValue = obj["package"]?.jsonPrimitive?.contentOrNull
+                    val nameValue = obj["name"]?.jsonPrimitive?.contentOrNull ?: "Unknown"
 
                     if (!pkgValue.isNullOrEmpty()) {
-                        try {
-                            if (ExtensionManager.isExtensionInstalled(ctx, pkgValue)) {
-                                val pkgInfo = ctx.packageManager.getPackageInfo(pkgValue, 0)
-                                val versionStr = pkgInfo.versionName ?: "unknown"
-                                lines.add("$labelValue ($versionStr)")
-                            }
-                        } catch (_: Exception) {
-                            // ignore missing packages
+                        if (ExtensionManager.isExtensionInstalled(ctx, pkgValue)) {
+                            val pkgInfo = try {
+                                ctx.packageManager.getPackageInfo(pkgValue, 0)
+                            } catch (e: Exception) { null }
+                            
+                            val versionStr = pkgInfo?.versionName ?: "unknown"
+                            lines.add("$nameValue ($versionStr)")
                         }
                     }
-                } catch (_: Exception) {
-                    // skip malformed entry
-                }
+                } catch (_: Exception) {}
             }
         }
 

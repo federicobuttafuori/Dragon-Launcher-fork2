@@ -8,6 +8,12 @@ import android.appwidget.AppWidgetProviderInfo
 import android.content.ComponentName
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.util.Log
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
@@ -260,6 +266,41 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
     }
 
     private val packageReceiver = PackageReceiver()
+    private val fontsReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            try {
+                val action = intent?.action ?: "<null>"
+                Log.d("FontsReceiver", "Received intent action=$action")
+                    if (action == "org.dragon.launcher.FONTS_UPDATED") {
+                    val fontPath = intent?.getStringExtra("FONT_PATH")
+                    val fontName = intent?.getStringExtra("FONT_NAME") ?: "unknown"
+                    Log.d("FontsReceiver", "FONTS_UPDATED for $fontName -> path=$fontPath")
+
+                    if (fontPath != null && context != null) {
+                        try {
+                            val src = File(fontPath)
+                            val destDir = File(context.getExternalFilesDir(null), "fonts")
+                            if (!destDir.exists()) destDir.mkdirs()
+                            val dest = File(destDir, src.name)
+
+                            FileInputStream(src).use { input ->
+                                FileOutputStream(dest).use { output ->
+                                    input.copyTo(output)
+                                }
+                            }
+
+                            Log.d("FontsReceiver", "Copied font to ${dest.absolutePath}")
+                        } catch (e: Exception) {
+                            Log.e("FontsReceiver", "Failed to copy font: ${e.message}")
+                            Log.e("FontsReceiver", "If this path is inside another app's cache, the extension must provide a content URI or write the file into a shared location. ")
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("FontsReceiver", "Receiver error: ${e.message}")
+            }
+        }
+    }
     private val filter = IntentFilter().apply {
         addAction(Intent.ACTION_PACKAGE_ADDED)
         addAction(Intent.ACTION_PACKAGE_REMOVED)
@@ -287,6 +328,12 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerReceiver(packageReceiver, filter, RECEIVER_EXPORTED)
+            // Register fonts update receiver (extensions send org.dragon.launcher.FONTS_UPDATED)
+            try {
+                registerReceiver(fontsReceiver, IntentFilter("org.dragon.launcher.FONTS_UPDATED"), RECEIVER_EXPORTED)
+            } catch (e: Exception) {
+                Log.e("MainActivity", "Failed to register fontsReceiver: ${e.message}")
+            }
         }
 
         appWidgetHost.startListening()
@@ -582,7 +629,8 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(packageReceiver)
+        try { unregisterReceiver(packageReceiver) } catch (_: Exception) {}
+        try { unregisterReceiver(fontsReceiver) } catch (_: Exception) {}
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         lifecycleScope.launch {
             SettingsBackupManager.triggerBackup(this@MainActivity)

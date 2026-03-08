@@ -27,6 +27,10 @@ import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.utils.UiConstants.DragonShape
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
+import org.elnix.dragonlauncher.common.utils.showToast
+import android.content.Intent
+import android.util.Log
+import android.content.pm.PackageManager
 import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
 import org.elnix.dragonlauncher.ui.components.settings.asState
 import org.elnix.dragonlauncher.ui.dialogs.CustomAlertDialog
@@ -76,7 +80,42 @@ fun FontPickerDialog(onDismiss: () -> Unit) {
                             .clip(DragonShape)
                             .clickable {
                                 scope.launch {
-                                    UiSettingsStore.globalFont.set(ctx, font)
+                                    // If font file exists locally, apply it. Otherwise request from extensions.
+                                    val extDir = File(ctx.getExternalFilesDir(null), "fonts")
+                                    val ttf = File(extDir, "$font.ttf")
+                                    val otf = File(extDir, "$font.otf")
+
+                                    if (ttf.exists() || otf.exists()) {
+                                        UiSettingsStore.globalFont.set(ctx, font)
+                                    } else {
+                                        // Not present locally: try to request from the specific fonts extension (Additional Fonts)
+                                        try {
+                                            val pm = ctx.packageManager
+                                            val fontsExtPkg = "org.dragon.launcher.fonts"
+                                            
+                                            val isInstalled = try {
+                                                pm.getPackageInfo(fontsExtPkg, 0)
+                                                true
+                                            } catch (e: Exception) { false }
+
+                                            if (isInstalled) {
+                                                val i = Intent("org.dragon.launcher.ACTION_GET_FONTS").apply {
+                                                    putExtra("FONT_NAME", font)
+                                                    setPackage(fontsExtPkg)
+                                                }
+                                                // FontProviderService uses onStartCommand, we trigger it via startService
+                                                ctx.startService(i)
+                                                Log.d("FontPicker", "Requested font $font from $fontsExtPkg")
+                                                ctx.showToast("Downloading $font from Additional Fonts...")
+                                            } else {
+                                                ctx.showToast("Additional Fonts extension not found")
+                                                Log.d("FontPicker", "Candidate extension $fontsExtPkg not installed")
+                                            }
+                                        } catch (e: Exception) {
+                                            Log.e("FontPicker", "Request error: ${e.message}")
+                                            ctx.showToast("Error requesting font")
+                                        }
+                                    }
                                 }
                             }
                             .padding(8.dp),

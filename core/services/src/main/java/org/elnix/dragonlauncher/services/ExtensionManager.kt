@@ -63,38 +63,23 @@ object ExtensionManager {
         val pmCompat = PackageManagerCompat(context.packageManager, context)
         Log.d("ExtensionManager", "Checking extension installed for: $packageNameOrId")
 
-        // 1. Direct check with provided packageName or ID
+        // 1. Direct check with provided packageName or ID (The correct way)
         try {
             if (pmCompat.isPackageInstalled(packageNameOrId)) {
                 Log.d("ExtensionManager", "Direct package present: $packageNameOrId")
                 return true
             }
         } catch (e: Exception) {
-            Log.d("ExtensionManager", "Direct check failed for $packageNameOrId: ${e.message}")
+            // ignore
         }
 
-        // 2. Scan installed packages for plausible matches and log candidates
-        return try {
-            val installedPackages = context.packageManager.getInstalledPackages(0)
-            val suffix = packageNameOrId.split(".").lastOrNull() ?: packageNameOrId
-            var found = false
-            for (pkg in installedPackages) {
-                val pName = pkg.packageName
-                val matches = (pName.contains("dragon.launcher") && pName.endsWith(suffix, ignoreCase = true)) ||
-                        (pName.contains("dragonlauncher") && pName.contains(suffix, ignoreCase = true))
-                if (matches) {
-                    Log.d("ExtensionManager", "Found matching installed candidate: $pName for requested $packageNameOrId")
-                    found = true
-                    break
-                } else {
-                    Log.d("ExtensionManager", "Checked package: $pName - no match for $packageNameOrId")
-                }
-            }
-            Log.d("ExtensionManager", "Final detection result for $packageNameOrId = $found")
-            found
-        } catch (e: Exception) {
-            Log.d("ExtensionManager", "Exception while scanning packages for $packageNameOrId: ${e.message}")
-            false
+        // 2. Fallback: If it's an ID (like "fonts"), search for org.elnix.dragonlauncher.extension.ID
+        val standardPkg = "org.elnix.dragonlauncher.extension.$packageNameOrId"
+        if (packageNameOrId != standardPkg && pmCompat.isPackageInstalled(standardPkg)) {
+             Log.d("ExtensionManager", "Found via standard prefix: $standardPkg")
+             return true
         }
+
+        return false
     }
 }
