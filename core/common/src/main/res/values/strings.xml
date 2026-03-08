@@ -16,6 +16,15 @@
     <string name="app_display">App display</string>
     <string name="color_selector">Color selector</string>
     <string name="debug">Debug</string>
+    <string name="extensions">Extensions</string>
+    <string name="extensions_description">Download and manage additional features for Dragon Launcher.</string>
+    <string name="install">Install</string>
+    <string name="uninstall">Uninstall</string>
+    <string name="permissions">Permissions</string>
+    <string name="no_extensions_found">No extensions found in registry.</string>
+    <string name="extension_manual_install_title">Manual Installation</string>
+    <string name="extension_manual_install_desc">If you don\'t have an installation extension, download the APK and select it below to install.</string>
+    <string name="select_apk">Select APK</string>
     <string name="language_english">English</string>
     <string name="language_french">French</string>
     <string name="language_german">German</string>

@@ -26,6 +26,7 @@ val settingsRoutes = listOf(
     SETTINGS.SETTINGS_JSON,
     SETTINGS.LANGUAGE,
     SETTINGS.CHANGELOGS,
+    SETTINGS.EXTENSIONS,
     SETTINGS.ANGLE_LINE_EDIT
 )
 
@@ -35,6 +36,8 @@ fun routeName(route: String): String {
     val ctx = LocalContext.current
 
     return when (route) {
+        SETTINGS.EXTENSIONS ->
+            ctx.getString(R.string.extensions)
         SETTINGS.ROOT ->
             ctx.getString(R.string.points_settings)
         SETTINGS.ADVANCED_ROOT ->

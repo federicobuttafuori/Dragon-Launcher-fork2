@@ -24,6 +24,7 @@ object SETTINGS {
     const val SETTINGS_JSON = "settings/advanced/debug/settings_json"
     const val LANGUAGE = "settings/advanced/language"
     const val CHANGELOGS = "settings/advanced/changelogs"
+    const val EXTENSIONS = "settings/advanced/extensions"
     const val NESTS_EDIT = "settings/nest"
     const val ANGLE_LINE_EDIT = "settings/advanced/angleLineEdit"
 }

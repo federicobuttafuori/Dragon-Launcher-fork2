@@ -30,6 +30,15 @@ class PackageManagerCompat(private val pm: PackageManager, private val ctx: Cont
         return pm.getInstalledPackages(flags)
     }
 
+    fun isPackageInstalled(packageName: String): Boolean {
+        return try {
+            pm.getPackageInfo(packageName, 0)
+            true
+        } catch (e: PackageManager.NameNotFoundException) {
+            false
+        }
+    }
+
     fun getAllApps(skipAnyKnownPrivate: Boolean = false): List<AppModel> {
         val userManager = ctx.getSystemService(Context.USER_SERVICE) as UserManager
         val launcherApps = ctx.getSystemService(LauncherApps::class.java)

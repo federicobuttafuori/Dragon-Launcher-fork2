@@ -34,6 +34,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.ColorLens
 import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.Extension
 import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.GridOn
 import androidx.compose.material.icons.filled.Language
@@ -93,6 +94,7 @@ import org.elnix.dragonlauncher.enumsui.LockMethod
 import org.elnix.dragonlauncher.settings.SettingsStoreRegistry
 import org.elnix.dragonlauncher.settings.stores.DebugSettingsStore
 import org.elnix.dragonlauncher.settings.stores.PrivateSettingsStore
+import org.elnix.dragonlauncher.services.ExtensionManager
 import org.elnix.dragonlauncher.ui.components.TextDivider
 import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
 import org.elnix.dragonlauncher.ui.components.settings.asState
@@ -387,6 +389,16 @@ fun AdvancedSettingsScreen(
         }
 
         item {
+
+            SettingItemWithExternalOpen(
+                title = stringResource(R.string.extensions),
+                icon = Icons.Default.Extension,
+                onExtClick = { ctx.openUrl("https://github.com/Elnix90/Dragon-Launcher-Extensions") }
+            ) { navController.navigate(SETTINGS.EXTENSIONS) }
+
+        }
+
+        item {
             SettingsItem(
                 title = stringResource(R.string.source_code),
                 icon = Icons.Default.Code,
@@ -532,6 +544,16 @@ fun AdvancedSettingsScreen(
                     )
                     appendLine("Default Launcher: ${if (isDefault) "Yes" else "No ($currentLauncher)"}")
                     appendLine("App version: $versionName ($versionCode)")
+                    
+                    val extensions = listOf(
+                        "org.elnix.dragonlauncher.extension.internet" to "Internet",
+                        "org.elnix.dragonlauncher.extension.shizuku" to "Shizuku"
+                    ).mapNotNull { (pkg, name) ->
+                        if (ExtensionManager.isExtensionInstalled(ctx, pkg)) name else null
+                    }
+                    if (extensions.isNotEmpty()) {
+                        appendLine("Extensions: ${extensions.joinToString(", ")}")
+                    }
                 }
 
                 Row(
