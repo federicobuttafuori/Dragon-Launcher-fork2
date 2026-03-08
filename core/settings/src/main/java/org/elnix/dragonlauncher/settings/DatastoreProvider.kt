@@ -126,23 +126,23 @@ private val Context.angleLineDatastore by preferencesDataStore(name = ANGLE_LINE
 fun Context.resolveDataStore(name: DataStoreName): DataStore<Preferences> {
     val appCtx = applicationContext
     return when (name) {
-        UI -> appCtx.uiDatastore
-        COLOR_MODE -> appCtx.colorModeDatastore
-        COLOR -> appCtx.colorDatastore
-        PRIVATE_SETTINGS -> appCtx.privateSettingsStore
-        SWIPE -> appCtx.swipeDataStore
-        LANGUAGE -> appCtx.languageDatastore
-        DRAWER -> appCtx.drawerDataStore
-        DEBUG -> appCtx.debugDatastore
-        WORKSPACES -> appCtx.workspaceDataStore
-        PRIVATE_APPS -> appCtx.privateAppsDatastore
-        BEHAVIOR -> appCtx.behaviorDataStore
-        BACKUP -> appCtx.backupDatastore
-        STATUS_BAR -> appCtx.statusBarDatastore
-        FLOATING_APPS -> appCtx.floatingAppsDatastore
-        WELLBEING -> appCtx.wellbeingDatastore
-        SWIPE_MAP -> appCtx.swipeMapDatastore
-        STATUS_BAR_JSON -> appCtx.statusBarJsonDataStore
-        ANGLE_LINE -> appCtx.angleLineDatastore
+        DataStoreName.UI -> appCtx.uiDatastore
+        DataStoreName.COLOR_MODE -> appCtx.colorModeDatastore
+        DataStoreName.COLOR -> appCtx.colorDatastore
+        DataStoreName.PRIVATE_SETTINGS -> appCtx.privateSettingsStore
+        DataStoreName.SWIPE -> appCtx.swipeDataStore
+        DataStoreName.LANGUAGE -> appCtx.languageDatastore
+        DataStoreName.DRAWER -> appCtx.drawerDataStore
+        DataStoreName.DEBUG -> appCtx.debugDatastore
+        DataStoreName.WORKSPACES -> appCtx.workspaceDataStore
+        DataStoreName.PRIVATE_APPS -> appCtx.privateAppsDatastore
+        DataStoreName.BEHAVIOR -> appCtx.behaviorDataStore
+        DataStoreName.BACKUP -> appCtx.backupDatastore
+        DataStoreName.STATUS_BAR -> appCtx.statusBarDatastore
+        DataStoreName.FLOATING_APPS -> appCtx.floatingAppsDatastore
+        DataStoreName.WELLBEING -> appCtx.wellbeingDatastore
+        DataStoreName.SWIPE_MAP -> appCtx.swipeMapDatastore
+        DataStoreName.STATUS_BAR_JSON -> appCtx.statusBarJsonDataStore
+        DataStoreName.ANGLE_LINE -> appCtx.angleLineDatastore
     }
 }

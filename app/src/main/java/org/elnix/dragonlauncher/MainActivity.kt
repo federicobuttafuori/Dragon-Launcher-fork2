@@ -211,7 +211,7 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
                 showToast("Failed to launch configuration")
                 // Add it anyway if config fails to launch
                 floatingAppsViewModel.addFloatingApp(
-                    SwipeActionSerializable.OpenWidget(widgetId, info.provider),
+                    SwipeActionSerializable.OpenWidget(widgetId, info.provider.packageName, info.provider.className),
                     info,
                     pendingAddNestId ?: 0
                 )
@@ -219,7 +219,7 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
         } else {
             logD(WIDGET_TAG) { "DRAGON_FLOW: No configuration needed, adding widget" }
             floatingAppsViewModel.addFloatingApp(
-                SwipeActionSerializable.OpenWidget(widgetId, info.provider),
+                SwipeActionSerializable.OpenWidget(widgetId, info.provider.packageName, info.provider.className),
                 info,
                 pendingAddNestId ?: 0
             )
@@ -239,7 +239,7 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
                 val info = widgetHolder.getAppWidgetInfo(widgetId)
                 if (info != null) {
                     floatingAppsViewModel.addFloatingApp(
-                        SwipeActionSerializable.OpenWidget(widgetId, info.provider),
+                        SwipeActionSerializable.OpenWidget(widgetId, info.provider.packageName, info.provider.className),
                         info,
                         0
                     )

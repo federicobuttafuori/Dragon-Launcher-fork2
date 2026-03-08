@@ -11,6 +11,8 @@ object SETTINGS {
     const val ICON_PACK = "settings/advanced/appearance/icon_pack"
     const val STATUS_BAR = "settings/advanced/appearance/status_bar"
     const val THEME = "settings/advanced/appearance/theme"
+    const val WIDGETS = "settings/advanced/widgets"
+    const val PERMISSIONS = "settings/advanced/permissions"
     const val FLOATING_APPS = "settings/advanced/appearance/floating_apps"
     const val BEHAVIOR = "settings/advanced/behavior"
     const val COLORS = "settings/advanced/appearance/colors"

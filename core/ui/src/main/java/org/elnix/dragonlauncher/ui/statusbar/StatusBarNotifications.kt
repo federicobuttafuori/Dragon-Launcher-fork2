@@ -52,7 +52,7 @@ fun StatusBarNotifications(
             imageVector = Icons.Default.NotificationsOff,
             contentDescription = "Notifications",
             modifier = Modifier
-                .size(14.dp)
+                .size(18.dp)
                 .clickable { DragonNotificationListenerService.openNotificationSettings(ctx) }
         )
         return
@@ -76,13 +76,13 @@ fun StatusBarNotifications(
                 Image(
                     bitmap = bitmap,
                     contentDescription = pkg,
-                    modifier = Modifier.size(14.dp)
+                    modifier = Modifier.size(18.dp)
                 )
             } else {
                 Icon(
                     imageVector = Icons.Default.Notifications,
                     contentDescription = pkg,
-                    modifier = Modifier.size(14.dp)
+                    modifier = Modifier.size(18.dp)
                 )
             }
         }
@@ -91,7 +91,7 @@ fun StatusBarNotifications(
             Icon(
                 imageVector = Icons.Default.MoreHoriz,
                 contentDescription = "More notifications",
-                modifier = Modifier.size(14.dp)
+                modifier = Modifier.size(18.dp)
             )
         }
     }

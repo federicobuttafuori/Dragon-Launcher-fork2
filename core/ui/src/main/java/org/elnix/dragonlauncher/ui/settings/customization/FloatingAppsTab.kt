@@ -148,7 +148,7 @@ fun FloatingAppsTab(
         }
 
         SettingsLazyHeader(
-            title = "${stringResource(R.string.widgets_floating_apps)} (${widgetNumber}) (${floatingAppsNumber})",
+            title = stringResource(R.string.widgets),
             onBack = onBack,
             helpText = stringResource(R.string.floating_apps_tab_help),
             onReset = {
@@ -380,7 +380,7 @@ fun FloatingAppsTab(
         AddPointDialog(
             onDismiss = { showAddDialog = false },
             actions = listOf(
-                SwipeActionSerializable.OpenWidget(0, ComponentName("", "")),
+                SwipeActionSerializable.OpenWidget(0, "", ""),
                 SwipeActionSerializable.OpenCircleNest(0),
                 SwipeActionSerializable.GoParentNest,
                 SwipeActionSerializable.LaunchShortcut("", ""),

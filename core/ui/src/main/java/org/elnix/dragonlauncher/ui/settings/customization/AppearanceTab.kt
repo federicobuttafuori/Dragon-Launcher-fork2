@@ -154,13 +154,6 @@ fun AppearanceTab(
 
         item {
             SettingsItem(
-                title = stringResource(R.string.widgets_floating_apps),
-                icon = Icons.Default.Widgets
-            ) { navController.navigate(SETTINGS.FLOATING_APPS) }
-        }
-
-        item {
-            SettingsItem(
                 title = stringResource(R.string.angle_line),
                 icon = Icons.Default.Polyline
             ) { navController.navigate(SETTINGS.ANGLE_LINE_EDIT) }

@@ -143,9 +143,6 @@ fun MainScreen(
     val systemInsets = WindowInsets.systemBars.asPaddingValues()
     val isRealFullscreen = systemInsets.calculateTopPadding() == 0.dp
 
-    /* ────────────────────────────────────────────── */
-
-
     /* Dim wallpaper system */
     val mainBlurRadius by UiSettingsStore.wallpaperDimMainScreen.asState()
 
@@ -400,7 +397,7 @@ fun MainScreen(
                         BurgerAction(
                             onClick = {
                                 showDropDownMenuSettings = false
-                                onSettings(SETTINGS.FLOATING_APPS)
+                                onSettings(SETTINGS.WIDGETS)
                             }
                         ) {
                             Icon(

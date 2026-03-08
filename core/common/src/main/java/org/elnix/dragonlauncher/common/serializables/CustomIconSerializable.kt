@@ -1,6 +1,7 @@
 package org.elnix.dragonlauncher.common.serializables
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerialName
 
 /**
  * Describes a highly customizable icon that can be rendered from multiple sources
@@ -8,10 +9,11 @@ import com.google.gson.annotations.SerializedName
  *
  * This model is renderer-agnostic and supports extreme theming and animation use cases.
  */
+@Serializable
 data class CustomIconSerializable(
 
     /** Icon source type determining how `source` is interpreted. */
-    @SerializedName("a")
+    @SerialName("a")
     val type: IconType? = null,
 
     /**
@@ -21,65 +23,66 @@ data class CustomIconSerializable(
      * - TEXT: emoji or glyph
      * - SHAPE: renderer-defined primitive
      */
-    @SerializedName("b")
+    @SerialName("b")
     val source: String? = null,
 
     /** Tint color (ARGB) applied after rendering. */
-    @SerializedName("c")
+    @SerialName("c")
     val tint: Int? = null,
 
     /** Icon opacity multiplier (0.0 – 1.0). */
-    @SerializedName("d")
+    @SerialName("d")
     val opacity: Float? = null,
 
     /** Per-corner radius override for icon clipping. */
-    @SerializedName("shape")
+    @SerialName("shape")
     val shape: IconShape? = null,
 
     /** Stroke width (dp) around the icon shape. */
-    @SerializedName("g")
+    @SerialName("g")
     val strokeWidth: Float? = null,
 
     /** Stroke color (ARGB) around the icon. */
-    @SerializedName("h")
+    @SerialName("h")
     val strokeColor: Long? = null,
 
     /** Blur radius for icon shadow. */
-    @SerializedName("i")
+    @SerialName("i")
     val shadowRadius: Float? = null,
 
     /** Shadow color (ARGB). */
-    @SerializedName("j")
+    @SerialName("j")
     val shadowColor: Long? = null,
 
     /** Horizontal shadow offset (dp). */
-    @SerializedName("k")
+    @SerialName("k")
     val shadowOffsetX: Float? = null,
 
     /** Vertical shadow offset (dp). */
-    @SerializedName("l")
+    @SerialName("l")
     val shadowOffsetY: Float? = null,
 
     /** Rotation applied to the icon in degrees. */
-    @SerializedName("m")
+    @SerialName("m")
     val rotationDeg: Float? = null,
 
     /** Horizontal scale multiplier. */
-    @SerializedName("n")
+    @SerialName("n")
     val scaleX: Float? = null,
 
     /** Vertical scale multiplier. */
-    @SerializedName("o")
+    @SerialName("o")
     val scaleY: Float? = null,
 
     /** Optional blend mode name (renderer-defined, e.g. SRC_IN, MULTIPLY). */
-    @SerializedName("p")
+    @SerialName("p")
     val blendMode: String? = null
 )
 
 /**
  * Defines how a custom icon should be interpreted and rendered.
  */
+@Serializable
 enum class IconType {
 
     /** Icon sourced from an installed icon pack. */
@@ -97,6 +100,7 @@ enum class IconType {
  * Custom BlendModes usd in the icon resolution
  * @see org.elnix.dragonlauncher.common.utils.ImageUtils.resolveCustomIconBitmap
  */
+@Serializable
 enum class BlendModes {
     DEFAULT,
     MULTIPLY,

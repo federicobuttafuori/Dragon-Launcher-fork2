@@ -242,6 +242,9 @@
     <string name="auto_separate">Auto Separate</string>
     <string name="add_widget">Add Widget</string>
     <string name="widgets">Widgets</string>
+    <string name="edit">Edit</string>
+    <string name="active_widgets">Active Widgets</string>
+    <string name="options">Options</string>
     <string name="widgets_floating_apps">Widgets / Floating Apps</string>
     <string name="floating_apps_tab_help">Manage your workspace widgets and floating apps: add, reorder, resize, and position them.\n Ghosted means the widget is not clickable\nForeground means the drag gestures aren\'t registered on the widget\nYou may try a combinaison of these two to achieve the configuration you like</string>
     <string name="delete_widget">Delete widget</string>
@@ -830,6 +833,5 @@
     <string name="configure_draw_order">Configure Draw Order</string>
     <string name="device_info_copied_to_clipboard">Device Info copied to clipboard</string>
     <string name="debug_mode_already_enabled">Debug Mode is already enabled</string>
-
 
 </resources>

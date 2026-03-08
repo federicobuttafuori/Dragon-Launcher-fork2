@@ -75,12 +75,12 @@ object SwipeSettingsStore : JsonObjectSettingsStore() {
 
     fun getDefaultPointFlow(ctx: Context): Flow<SwipePointSerializable> =
         ctx.resolveDataStore(dataStoreName).data.map { prefs ->
-            prefs[DEFAULT_CIRCLE]?.let { SwipeJson.decodePoints(it).first() } ?: defaultSwipePointsValues
+            prefs[DEFAULT_CIRCLE]?.let { SwipeJson.decodePoints(it).firstOrNull() } ?: defaultSwipePointsValues
         }
 
     suspend fun getDefaultPoint(ctx: Context): SwipePointSerializable =
         ctx.resolveDataStore(dataStoreName).data.map { prefs ->
-            prefs[DEFAULT_CIRCLE]?.let { SwipeJson.decodePoints(it).first() } ?: defaultSwipePointsValues
+            prefs[DEFAULT_CIRCLE]?.let { SwipeJson.decodePoints(it).firstOrNull() } ?: defaultSwipePointsValues
         }.first()
 
     suspend fun setDefaultPoint(ctx: Context, point: SwipePointSerializable) {

@@ -133,6 +133,7 @@ import org.elnix.dragonlauncher.ui.remembers.LocalShowStatusBar
 import org.elnix.dragonlauncher.ui.remembers.LocalStartLineObject
 import org.elnix.dragonlauncher.ui.remembers.LocalStatusBarElements
 import org.elnix.dragonlauncher.ui.remembers.rememberDecodedObject
+import org.elnix.dragonlauncher.ui.settings.PermissionsTab
 import org.elnix.dragonlauncher.ui.settings.backup.BackupTab
 import org.elnix.dragonlauncher.ui.settings.customization.AngleLineTab
 import org.elnix.dragonlauncher.ui.settings.customization.AppearanceTab
@@ -804,6 +805,16 @@ fun MainAppUi(
                     noAnimComposable(SETTINGS.ICON_PACK) { IconPackTab(appsViewModel, ::goAppearance) }
                     noAnimComposable(SETTINGS.STATUS_BAR) { StatusBarTab(::goAppearance) }
                     noAnimComposable(SETTINGS.THEME) { ThemesTab(::goAppearance) }
+                    noAnimComposable(SETTINGS.WIDGETS) {
+                        FloatingAppsTab(
+                            widgetHostProvider = widgetHostProvider,
+                            onBack = ::goAdvSettingsRoot,
+                            onLaunchSystemWidgetPicker = ::launchWidgetsPicker,
+                            onResetWidgetSize = onResetWidgetSize,
+                            onRemoveWidget = onRemoveFloatingApp
+                        )
+                    }
+                    noAnimComposable(SETTINGS.PERMISSIONS) { PermissionsTab { goAdvSettingsRoot() } }
 
                     noAnimComposable(SETTINGS.BEHAVIOR) { BehaviorTab(::goAdvSettingsRoot) }
                     noAnimComposable(SETTINGS.DRAWER) { DrawerTab(appsViewModel, ::goAdvSettingsRoot) }

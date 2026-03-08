@@ -42,9 +42,11 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.material.icons.filled.ReportProblem
 import androidx.compose.material.icons.filled.Restore
+import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.SelfImprovement
 import androidx.compose.material.icons.filled.SettingsSuggest
 import androidx.compose.material.icons.filled.Update
+import androidx.compose.material.icons.filled.Widgets
 import androidx.compose.material.icons.filled.Workspaces
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -227,6 +229,24 @@ fun AdvancedSettingsScreen(
                 icon = Icons.Default.Workspaces
             ) {
                 navController.navigate(SETTINGS.WORKSPACE)
+            }
+        }
+
+        item {
+            SettingsItem(
+                title = stringResource(R.string.widgets),
+                icon = Icons.Default.Widgets
+            ) {
+                navController.navigate(SETTINGS.WIDGETS)
+            }
+        }
+
+        item {
+            SettingsItem(
+                title = stringResource(R.string.permissions),
+                icon = Icons.Default.Security
+            ) {
+                navController.navigate(SETTINGS.PERMISSIONS)
             }
         }
 
