@@ -78,8 +78,9 @@ fun DragonLauncherTheme(
 
     val colorScheme = getDefaultColorScheme(defaultTheme, dynamicColor)
     val extraColors = rememberExtraColors()
+    val context = LocalContext.current
 
-    val fontFamily = fontNameToFont(globalFontName)
+    val fontFamily = fontNameToFont(globalFontName, context)
 
     val themeTypography = Typography.copy(
         displayLarge = Typography.displayLarge.copy(fontFamily = fontFamily),
