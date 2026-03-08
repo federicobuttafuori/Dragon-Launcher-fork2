@@ -1,6 +1,9 @@
 
 import com.android.build.api.dsl.ApplicationExtension
 import java.util.Properties
+import java.net.URI
+import java.io.InputStream
+import java.io.OutputStream
 
 plugins {
     alias(libs.plugins.android.application)
@@ -188,7 +191,28 @@ tasks.register<Copy>("copyChangelogsToAssets") {
     include("*.txt")
 }
 
+// Download the extensions registry from GitHub
+tasks.register("downloadExtensionsRegistry") {
+    description = "Downloads the extensions registry JSON from GitHub"
+    val registryUrl = "https://raw.githubusercontent.com/Elnix90/Dragon-Launcher-Extensions/main/extensions-registry.json"
+    val outputFile = file("src/main/assets/extensions-registry.json")
+
+    inputs.property("url", registryUrl)
+    outputs.file(outputFile)
+
+    doLast {
+        println("Downloading extensions registry from $registryUrl...")
+        outputFile.parentFile.mkdirs()
+        URI(registryUrl).toURL().openStream().use { input: InputStream ->
+            outputFile.outputStream().use { output: OutputStream ->
+                input.copyTo(output)
+            }
+        }
+    }
+}
+
 // Use preBuild tasks instead of merge* (they exist in AGP)
 tasks.named("preBuild") {
     dependsOn("copyChangelogsToAssets")
+    dependsOn("downloadExtensionsRegistry")
 }
