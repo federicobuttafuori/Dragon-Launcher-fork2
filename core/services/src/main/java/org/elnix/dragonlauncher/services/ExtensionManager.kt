@@ -6,6 +6,7 @@ import android.net.Uri
 import org.elnix.dragonlauncher.common.serializables.ExtensionModel
 import org.elnix.dragonlauncher.common.utils.PackageManagerCompat
 import org.elnix.dragonlauncher.common.utils.openUrl
+import org.elnix.dragonlauncher.common.utils.showToast
 
 object ExtensionManager {
     private const val INTERNET_EXTENSION_PKG = "org.elnix.dragonlauncher.extension.internet"

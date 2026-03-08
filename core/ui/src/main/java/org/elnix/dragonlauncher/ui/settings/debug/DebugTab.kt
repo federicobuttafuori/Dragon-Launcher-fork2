@@ -63,6 +63,11 @@ import org.elnix.dragonlauncher.ui.remembers.LocalAppsViewModel
 import org.elnix.dragonlauncher.ui.remembers.rememberExpandableSection
 import org.elnix.dragonlauncher.ui.wellbeing.OverlayReminderService
 
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Icon
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.foundation.layout.padding
+
 @Composable
 fun DebugTab(
     navController: NavController,
@@ -80,7 +85,11 @@ fun DebugTab(
     var showEditAppOverrides by remember { mutableStateOf(false) }
 
     val debugInfosSectionState = rememberExpandableSection(stringResource(R.string.debug_infos))
+    val packageSearchSectionState = rememberExpandableSection("Package Search")
     val storeResetSectionState = rememberExpandableSection(stringResource(R.string.store_reset))
+
+    var packageQuery by remember { mutableStateOf("") }
+    var packageResult by remember { mutableStateOf<String?>(null) }
 
 
     LaunchedEffect(Unit) {
@@ -305,6 +314,49 @@ fun DebugTab(
         }
 
         item {
+            ExpandableSection(packageSearchSectionState) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    OutlinedTextField(
+                        value = packageQuery,
+                        onValueChange = { packageQuery = it },
+                        modifier = Modifier.fillMaxWidth(),
+                        label = { Text("Search package") },
+                        placeholder = { Text("e.g. org.dragon.launcher.fonts") },
+                        singleLine = true
+                    )
+                    DragonButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            packageResult = try {
+                                val info = ctx.packageManager.getPackageInfo(packageQuery.trim(), 0)
+                                buildString {
+                                    appendLine("Package: ${info.packageName}")
+                                    appendLine("Version: ${info.versionName} (${if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) info.longVersionCode else info.versionCode})")
+                                    appendLine("Enabled: ${info.applicationInfo?.enabled ?: "unknown"}")
+                                    appendLine("Data Dir: ${info.applicationInfo?.dataDir ?: "unknown"}")
+                                }
+                            } catch (e: Exception) {
+                                "Not found or error: ${e.message}"
+                            }
+                        }
+                    ) {
+                        Icon(Icons.Default.Search, contentDescription = null)
+                        Text("Search")
+                    }
+
+                    packageResult?.let {
+                        Text(
+                            text = it,
+                            style = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+
             ExpandableSection(storeResetSectionState) {
                 allStores.entries.forEach { entry ->
                     val settingsStore = entry.value
