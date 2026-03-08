@@ -103,63 +103,69 @@ fun DebugTab(
     SettingsLazyHeader(
         title = stringResource(R.string.debug),
         onBack = onBack,
-        helpText = "Debug, too busy to make a translated explanation",
+        helpText = "Advanced developer tools and system overrides.",
         onReset = null,
         resetText = null
     ) {
-
-        item {
-            SettingsSwitchRow(
-                setting = DebugSettingsStore.debugEnabled,
-                title = stringResource(R.string.activate_debug_mode),
-                description = stringResource(R.string.activate_debug_mode_desc)
-            ) {
-                scope.launch { DebugSettingsStore.debugEnabled.set(ctx, it) }
-                navController.popBackStack()
-            }
-        }
-
-        item {
-            SettingsSwitchRow(
-                setting = DebugSettingsStore.disableExtensionSignatureCheck,
-                title = "Disable extension signature check",
-                description = "Allow extensions not signed with the official key (DANGEROUS)"
-            )
-        }
-
-        item { TextDivider("Debug things") }
-
-        item {
-            SettingsItem(
-                title = "Settings debug json",
-                icon = Icons.Default.Settings
-            ) {
-                navController.navigate(SETTINGS.SETTINGS_JSON)
-            }
-        }
-
         item {
             DragonColumnGroup {
-                DragonButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        kill(9, 9)
-                    }
+                SettingsSwitchRow(
+                    setting = DebugSettingsStore.debugEnabled,
+                    title = stringResource(R.string.activate_debug_mode),
+                    description = stringResource(R.string.activate_debug_mode_desc)
                 ) {
-                    Text("☠\uFE0F Kill app")
+                    scope.launch { DebugSettingsStore.debugEnabled.set(ctx, it) }
+                }
+
+                SettingsSwitchRow(
+                    setting = DebugSettingsStore.disableExtensionSignatureCheck,
+                    title = "Disable extension signature check",
+                    description = "Allow extensions not signed with the official key (DANGEROUS)"
+                )
+            }
+        }
+
+        item {
+            ExpandableSection(uiDebugSectionState) {
+                SettingsItem(
+                    title = "Settings debug json",
+                    icon = Icons.Default.Settings
+                ) {
+                    navController.navigate(SETTINGS.SETTINGS_JSON)
                 }
 
                 DragonButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        ctx.startActivity(
-                            Intent(Intent.ACTION_DELETE).apply {
-                                data = "package:${ctx.packageName}".toUri()
-                            }
-                        )
-                    }
+                    onClick = { onShowWelcome() },
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("☠\uFE0F Uninstall app")
+                    Text(text = "Show welcome screen")
+                }
+
+                DragonButton(
+                    onClick = {
+                        scope.launch { PrivateSettingsStore.lastSeenVersionCodeWhatsNew.set(ctx, 0) }
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "Reset What's New sheet")
+                }
+
+                DragonButton(
+                    onClick = {
+                        scope.launch { PrivateSettingsStore.lastSeenVersionCodeGoogleLockdownWarning.set(ctx, 0) }
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "Reset Google lockdown warning")
+                }
+                
+                DragonButton(
+                    onClick = {
+                        showEditAppOverrides = true
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "Edit ALL app overrides \uD83D\uDE08")
                 }
             }
         }
@@ -199,133 +205,6 @@ fun DebugTab(
         }
 
         item {
-            DragonColumnGroup {
-                DragonButton(
-                    onClick = { onShowWelcome() },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = "Show welcome screen",
-                    )
-                }
-
-                DragonButton(
-                    onClick = {
-                        scope.launch { PrivateSettingsStore.lastSeenVersionCodeWhatsNew.set(ctx, 0) }
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = "Show what's new sheet",
-                    )
-                }
-
-                DragonButton(
-                    onClick = {
-                        scope.launch { PrivateSettingsStore.lastSeenVersionCodeGoogleLockdownWarning.set(ctx, 0) }
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = "Show google lockdown warning",
-                    )
-                }
-            }
-        }
-
-
-        item {
-            DragonColumnGroup {
-                DragonButton(
-                    onClick = {
-                        if (!Settings.canDrawOverlays(ctx)) {
-                            ctx.showToast("Overlay permission not granted")
-                            return@DragonButton
-                        }
-                        OverlayReminderService.show(
-                            ctx,
-                            "TikTok",
-                            "15 min",
-                            "42 min",
-                            "10 min",
-                            true,
-                            "reminder"
-                        )
-                    },
-                    colors = AppObjectsColors.buttonColors(),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = "Test: Reminder overlay popup")
-                }
-
-                DragonButton(
-                    onClick = {
-                        if (!Settings.canDrawOverlays(ctx)) {
-                            ctx.showToast("Overlay permission not granted")
-                            return@DragonButton
-                        }
-                        OverlayReminderService.show(
-                            ctx,
-                            "TikTok",
-                            "25 min",
-                            "58 min",
-                            "5 min",
-                            true,
-                            "time_warning"
-                        )
-                    },
-                    colors = AppObjectsColors.buttonColors(),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = "Test: Time almost up overlay")
-                }
-            }
-        }
-
-        item {
-            SettingsSwitchRow(
-                setting = PrivateSettingsStore.hasInitialized,
-                title = stringResource(R.string.has_initialized),
-                description = stringResource(R.string.has_initialized_desc),
-                needValidationToDisable = true
-            )
-        }
-
-        item {
-            SettingsSwitchRow(
-                setting = PrivateSettingsStore.showSetDefaultLauncherBanner,
-                title = stringResource(R.string.show_default_launcher_banner),
-                description = stringResource(R.string.show_default_launcher_banner_desc)
-            )
-        }
-
-        item {
-            // >= Android 13
-            val enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-            if (!enabled) {
-                Text(
-                    text = "Since you're under android 13, or code name TIRAMISU you can't use the android language selector and you're blocked with the app custom one.",
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-            }
-
-            SettingsSwitchRow(
-                setting = DebugSettingsStore.forceAppLanguageSelector,
-                title = stringResource(R.string.force_app_language_selector),
-                description = stringResource(R.string.force_app_language_selector_desc),
-                enabled = enabled
-            )
-        }
-
-        item {
-            SettingsSwitchRow(
-                setting = DebugSettingsStore.useAccessibilityInsteadOfContextToExpandActionPanel,
-                title = stringResource(R.string.use_accessibility_instead_of_context),
-                description = stringResource(R.string.use_accessibility_instead_of_context_desc)
-            )
-        }
-
-        item {
             ExpandableSection(packageSearchSectionState) {
                 Column(
                     modifier = Modifier.padding(16.dp),
@@ -337,7 +216,8 @@ fun DebugTab(
                         modifier = Modifier.fillMaxWidth(),
                         label = { Text("Search package") },
                         placeholder = { Text("e.g. org.dragon.launcher.fonts") },
-                        singleLine = true
+                        singleLine = true,
+                        colors = AppObjectsColors.outlinedTextFieldColors()
                     )
                     DragonButton(
                         modifier = Modifier.fillMaxWidth(),
@@ -368,48 +248,15 @@ fun DebugTab(
                     }
                 }
             }
-
-            ExpandableSection(storeResetSectionState) {
-                allStores.entries.forEach { entry ->
-                    val settingsStore = entry.value
-
-                    OutlinedButton(
-                        onClick = { scope.launch { settingsStore.resetAll(ctx) } },
-                        colors = AppObjectsColors.cancelButtonColors(),
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.error),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = buildAnnotatedString {
-                                append("Reset ")
-                                withStyle(
-                                    style = SpanStyle(
-                                        fontWeight = FontWeight.Bold,
-                                        textDecoration = TextDecoration.Underline
-                                    ),
-                                ) {
-                                    append(settingsStore.name)
-                                }
-                            }
-                        )
-                    }
-                }
-            }
         }
 
         item {
-            TextDivider("Hacky launching accessibility things")
-        }
-
-        item {
-            DragonColumnGroup {
-                TextButton(
-                    onClick = { SystemControl.openServiceSettings((ctx)) }
-                ) {
-                    Text("Open Service settings")
-                }
-                ActivateDeviceAdminButton()
-
+            ExpandableSection(accessibilitySectionState) {
+                SettingsSwitchRow(
+                    setting = DebugSettingsStore.useAccessibilityInsteadOfContextToExpandActionPanel,
+                    title = stringResource(R.string.use_accessibility_instead_of_context),
+                    description = stringResource(R.string.use_accessibility_instead_of_context_desc)
+                )
 
                 SettingsSwitchRow(
                     setting = DebugSettingsStore.autoRaiseDragonOnSystemLauncher,
@@ -417,9 +264,19 @@ fun DebugTab(
                     description = stringResource(R.string.auto_raise_dragon_on_system_launcher_desc)
                 )
 
-                Column {
+                DragonButton(
+                    onClick = { SystemControl.openServiceSettings((ctx)) },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Open Accessibility Services")
+                }
+
+                ActivateDeviceAdminButton()
+
+                Column(modifier = Modifier.padding(top = 8.dp)) {
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(5.dp)
+                        horizontalArrangement = Arrangement.spacedBy(5.dp),
+                        modifier = Modifier.fillMaxWidth()
                     ) {
                         DragonButton(
                             onClick = {
@@ -427,44 +284,34 @@ fun DebugTab(
                             },
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("Detect System launcher")
+                            Text("Detect Launcher")
                         }
                         DragonButton(
                             onClick = {
                                 scope.launch {
                                     DebugSettingsStore.systemLauncherPackageName.set(
                                         ctx,
-                                        pendingSystemLauncher
+                                        pendingSystemLauncher ?: ""
                                     )
                                 }
                             },
                             enabled = pendingSystemLauncher != null
                         ) {
-                            Text("Set")
+                            Text("Set Default")
                         }
                     }
 
-                    if (pendingSystemLauncher != null) {
+                    pendingSystemLauncher?.let {
                         Text(
-                            buildAnnotatedString {
-                                append("Your system launcher: ")
-                                withStyle(style = SpanStyle(textDecoration = TextDecoration.Underline)) {
-                                    append(pendingSystemLauncher)
-                                }
-                            }
+                            text = "Detected: $it",
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(top = 4.dp)
                         )
-                    } else {
-                        Text("No system launcher detected")
                     }
                 }
 
                 OutlinedTextField(
-                    label = {
-                        Text(
-                            text = "Your system launcher package name",
-                            color = MaterialTheme.colorScheme.onBackground
-                        )
-                    },
+                    label = { Text("System launcher package") },
                     value = systemLauncherPackageName,
                     onValueChange = { newValue ->
                         scope.launch {
@@ -472,26 +319,94 @@ fun DebugTab(
                         }
                     },
                     singleLine = true,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
                     colors = AppObjectsColors.outlinedTextFieldColors()
                 )
             }
         }
 
         item {
-            TextDivider("Random debug settings")
+            ExpandableSection(testOverlaysSectionState) {
+                DragonButton(
+                    onClick = {
+                        if (!Settings.canDrawOverlays(ctx)) {
+                            ctx.showToast("Overlay permission not granted")
+                            return@DragonButton
+                        }
+                        OverlayReminderService.show(ctx, "TikTok", "15 min", "42 min", "10 min", true, "reminder")
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "Test: Reminder overlay")
+                }
+
+                DragonButton(
+                    onClick = {
+                        if (!Settings.canDrawOverlays(ctx)) {
+                            ctx.showToast("Overlay permission not granted")
+                            return@DragonButton
+                        }
+                        OverlayReminderService.show(ctx, "TikTok", "25 min", "58 min", "5 min", true, "time_warning")
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "Test: Limit overlay")
+                }
+            }
         }
 
         item {
-            TextButton(
-                onClick = {
-                    showEditAppOverrides = true
+            ExpandableSection(storeResetSectionState) {
+                allStores.entries.forEach { entry ->
+                    val settingsStore = entry.value
+                    OutlinedButton(
+                        onClick = { scope.launch { settingsStore.resetAll(ctx) } },
+                        colors = AppObjectsColors.cancelButtonColors(),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.error),
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                    ) {
+                        Text(text = "Reset ${settingsStore.name}", color = MaterialTheme.colorScheme.error)
+                    }
                 }
-            ) {
-                Text(
-                    text = "Edit ALL app overrides \uD83D\uDE08",
-                    color = MaterialTheme.colorScheme.onBackground
+                
+                SettingsSwitchRow(
+                    setting = PrivateSettingsStore.hasInitialized,
+                    title = stringResource(R.string.has_initialized),
+                    description = "De-initializing will re-run the welcome flow.",
+                    needValidationToDisable = true
                 )
+                
+                SettingsSwitchRow(
+                    setting = PrivateSettingsStore.showSetDefaultLauncherBanner,
+                    title = "Show default banner",
+                    description = "Forces the 'Set as default' banner to appear."
+                )
+            }
+        }
+
+        item {
+            ExpandableSection(dangerousActionsSectionState) {
+                DragonButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = AppObjectsColors.cancelButtonColors(),
+                    onClick = { kill(9, 9) }
+                ) {
+                    Text("☠\uFE0F Kill Process")
+                }
+
+                DragonButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = AppObjectsColors.cancelButtonColors(),
+                    onClick = {
+                        ctx.startActivity(
+                            Intent(Intent.ACTION_DELETE).apply {
+                                data = "package:${ctx.packageName}".toUri()
+                            }
+                        )
+                    }
+                ) {
+                    Text("☠\uFE0F Uninstall Launcher")
+                }
             }
         }
     }
