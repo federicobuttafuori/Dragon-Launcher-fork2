@@ -10,19 +10,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.elnix.dragonlauncher.common.utils.UiConstants.DragonShape
+import org.elnix.dragonlauncher.common.utils.semiTransparentIfDisabled
 
 
 @Composable
 fun Modifier.settingsGroup(
     clickModifier: Modifier? = null,
     backgroundColor: Color = MaterialTheme.colorScheme.surfaceVariant,
-    border: Boolean = true
+    border: Boolean = true,
+    enabled: Boolean = true
 ): Modifier {
     return this
         .clip(DragonShape)
-        .background(backgroundColor)
+        .background(backgroundColor.semiTransparentIfDisabled(enabled))
         .conditional(border) {
-            border(1.dp, MaterialTheme.colorScheme.outlineVariant, DragonShape)
+            border(1.dp, MaterialTheme.colorScheme.outlineVariant.semiTransparentIfDisabled(enabled), DragonShape)
         }
         .then(clickModifier ?: this)
         .padding(10.dp)

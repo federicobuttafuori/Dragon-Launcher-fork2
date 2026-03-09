@@ -32,6 +32,12 @@ fun ExpandableSection(
     state: ExpandableSectionState,
     content: @Composable ColumnScope.() -> Unit
 ) {
+    val enabled = state.enabled()
+
+    // Expanded only if the expandable is also enabled
+    val expanded = state.isExpanded() && enabled
+
+
     val expandedColor = MaterialTheme.colorScheme.surfaceVariant
     val collapsedColor = MaterialTheme.colorScheme.surface
 
@@ -45,7 +51,10 @@ fun ExpandableSection(
         )
     }
 
-    val expanded = state.isExpanded()
+    // Collapse on disable
+    LaunchedEffect(enabled) {
+        if (state.isExpanded()) state.toggle()
+    }
 
     LaunchedEffect(expanded) {
         rotationDegrees.animateTo(if (expanded) 90f else 0f)
@@ -56,12 +65,14 @@ fun ExpandableSection(
 
     Column(
         modifier = Modifier.settingsGroup(
-            clickModifier = Modifier.conditional(!expanded) {
+            clickModifier = Modifier.conditional(!expanded && enabled) {
                 clickable {
                     state.toggle()
                 }
             },
-            backgroundColor = backgroundColor.value
+            backgroundColor = backgroundColor.value,
+            border = true,
+            enabled = enabled
         ),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
@@ -74,7 +85,8 @@ fun ExpandableSection(
                         }
                     },
                     backgroundColor = Color.Transparent,
-                    border = false
+                    border = false,
+                    enabled = enabled
                 )
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
