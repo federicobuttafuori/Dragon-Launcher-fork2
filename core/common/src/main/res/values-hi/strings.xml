@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ड्रैगन लांचर</string>
     <string name="accessibility_service_description">DragonLauncher अधिसूचना छाया, त्वरित सेटिंग्स पैनल, हाल के क्षुधा खोलने और वर्तमान गतिविधि के लिए जाँच करने के लिए अनुमति देता है (xiaomi उपयोगकर्ताओं के लिए जो इशारा नेविगेशन खोने के बिना डिफ़ॉल्ट लांचर के रूप में ड्रैगन सेट नहीं कर सकते हैं</string>
@@ -383,7 +384,6 @@
     <string name="open_kb">कीबोर्ड खोलें</string>
     <string name="open_settings">खुली सेटिंग</string>
     <string name="clear_all">सभी साफ करें</string>
-
     <!--  ─────────────  Wellbeing Section  ─────────────  -->
     <string name="wellbeing">डिजिटल भलाई</string>
     <string name="wellbeing_help">अपनी डिजिटल आदतों पर नियंत्रण रखें। ध्यान भटकाने वाले ऐप्स खोलने से पहले रुकें और अपने उपयोग पर विचार करें।</string>
@@ -399,7 +399,6 @@
     <string name="no_paused_apps">अभी तक कोई ऐप नहीं रोका गया. ऐसे ऐप्स जोड़ें जो आपका ध्यान भटकाते हों.</string>
     <string name="usage_permission_required">उपयोग पहुंच अनुमति</string>
     <string name="usage_permission_description">आपके वास्तविक उपयोग के आंकड़े प्रदर्शित करने के लिए, ड्रैगन लॉन्चर को ऐप उपयोग डेटा तक पहुंच की आवश्यकता है। इससे आपको ऐप्स पर बिताए गए समय के बारे में अधिक जागरूक होने में मदद मिलती है।</string>
-
     <!--  ─────────────  Digital Pause Screen  ─────────────  -->
     <string name="digital_pause_title">डिजिटल विराम</string>
     <string name="pause_breathe_1">साँस लेने के लिए एक क्षण लें…</string>
@@ -419,7 +418,6 @@
     <string name="not_used_yet">आपने अभी तक इस ऐप का उपयोग नहीं किया है, शायद इसे जारी रखना अच्छा रहेगा\?</string>
     <string name="usage_permission_needed">उपयोग पहुंच अनुमति की आवश्यकता है</string>
     <string name="grant_usage_permission">अनुमति प्रदान करें</string>
-
     <!--  ─────────────  Wellbeing: Reminder Mode  ─────────────  -->
     <string name="reminder_mode_title">उपयोग अनुस्मारक</string>
     <string name="reminder_mode_description">जब आप किसी रुके हुए ऐप पर बहुत देर तक रहते हैं तो समय-समय पर अनुस्मारक प्राप्त करें</string>
@@ -430,7 +428,6 @@
     <string name="reminder_mode_overlay">ऑन-स्क्रीन पॉपअप</string>
     <string name="overlay_permission_required">ओवरले अनुमति</string>
     <string name="overlay_permission_description">अन्य ऐप्स पर अनुस्मारक प्रदर्शित करने के लिए, ड्रैगन लॉन्चर को \"अन्य ऐप्स पर प्रदर्शित करें\" अनुमति की आवश्यकता होती है।</string>
-
     <!--  Popup Display Options  -->
     <string name="popup_display_title">पॉपअप सामग्री</string>
     <string name="popup_display_description">चुनें कि रिमाइंडर पॉपअप में कौन सी जानकारी दिखानी है</string>
@@ -440,18 +437,15 @@
     <string name="popup_show_today_time_desc">आज इस ऐप पर बिताया गया कुल समय</string>
     <string name="popup_show_remaining_time">शेष समय दिखाएँ</string>
     <string name="popup_show_remaining_time_desc">स्वतः-वापसी से पहले बचा हुआ समय (यदि सक्षम हो)</string>
-
     <!--  Popup Display Labels  -->
     <string name="popup_session_label">सत्र</string>
     <string name="popup_today_label">आज</string>
     <string name="popup_remaining_label">शेष</string>
     <string name="popup_no_limit">कोई सीमा नहीं</string>
-
     <string name="reminder_notification_title">अभी भी %s पर है</string>
     <string name="reminder_notification_text">आप %2$s के लिए %1$s का उपयोग कर रहे हैं। शायद यह अवकाश का समय है\?</string>
     <string name="reminder_overlay_text">आप %2$s के लिए %1$s पर हैं</string>
     <string name="reminder_overlay_subtext">थोड़ा आराम करें, आपकी आंखें आपको धन्यवाद देंगी 🌿</string>
-
     <!--  ─────────────  Wellbeing: Return to Launcher  ─────────────  -->
     <string name="return_to_launcher_title">लॉन्चर पर स्वतः वापसी</string>
     <string name="return_to_launcher_description">रुके हुए ऐप को खोलने से पहले एक समय सीमा निर्धारित करें। समय समाप्त होने पर ड्रैगन आपको वापस लाता है।</string>
@@ -478,7 +472,6 @@
     <string name="encouragement_stretch">अपने शरीर को तानें 🧘</string>
     <string name="encouragement_window">खिड़की से बाहर देखो 🪟</string>
     <string name="encouragement_text_someone">जिसे आप प्यार करते हैं उसे टेक्स्ट करें 💬</string>
-
     <!--  ─────────────  Appearance ?  ─────────────  -->
     <string name="edit_icons_shape">प्रतीक आकार संपादित करें</string>
     <string name="edit_icons_shape_desc">ड्रॉअर और ऐप के बाकी हिस्सों में आइकन पर आकृति को अनुकूलित करें</string>
@@ -494,8 +487,6 @@
     <string name="dynamic_colors">गतिशील रंग</string>
     <string name="dynamic_colors_desc">आपको एक गतिशील रंग योजना प्रदान करने के लिए एंड्रॉइड डायनेमिक रंगों का उपयोग करें</string>
     <string name="use_pure_black_background">शुद्ध काली पृष्ठभूमि का प्रयोग करें</string>
-
-
     <!--  ───────────── Colors  ─────────────  -->
     <string name="primary_colors_section">प्राथमिक रंग</string>
     <string name="primary_color">प्राथमिक रंग</string>
@@ -503,19 +494,16 @@
     <string name="primary_container_color">प्राथमिक कंटेनर</string>
     <string name="on_primary_container_color">प्राथमिक कंटेनर पर</string>
     <string name="inverse_primary_color">उलटा प्राथमिक</string>
-
     <string name="secondary_colors_section">द्वितीयक रंग</string>
     <string name="secondary_color">द्वितीयक रंग</string>
     <string name="on_secondary_color">द्वितीयक रंग पर</string>
     <string name="secondary_container_color">द्वितीयक कंटेनर</string>
     <string name="on_secondary_container_color">द्वितीयक कंटेनर पर</string>
-
     <string name="tertiary_colors_section">तृतीयक रंग</string>
     <string name="tertiary_color">तृतीयक रंग</string>
     <string name="on_tertiary_color">तृतीयक रंग पर</string>
     <string name="tertiary_container_color">तृतीयक कंटेनर</string>
     <string name="on_tertiary_container_color">तृतीयक कंटेनर पर</string>
-
     <string name="background_surface_colors_section">पृष्ठभूमि/सतह के रंग</string>
     <string name="background_color">पृष्ठभूमि का रंग</string>
     <string name="on_background_color">पृष्ठभूमि के रंग पर</string>
@@ -526,18 +514,15 @@
     <string name="surface_tint_color">सतह का रंग</string>
     <string name="inverse_surface_color">उलटा सतह</string>
     <string name="inverse_on_surface_color">सतह पर उलटा</string>
-
     <string name="error_colors_section">त्रुटि रंग</string>
     <string name="error_color">त्रुटि रंग</string>
     <string name="on_error_color">त्रुटि रंग पर</string>
     <string name="error_container_color">त्रुटि कंटेनर</string>
     <string name="on_error_container_color">त्रुटि कंटेनर पर</string>
-
     <string name="outline_colors_section">रूपरेखा / विविध रंग</string>
     <string name="outline_color">रूपरेखा रंग</string>
     <string name="outline_variant_color">रूपरेखा संस्करण</string>
     <string name="scrim_color">कनवास</string>
-
     <string name="surface_container_colors_section">सतह कंटेनर रंग</string>
     <string name="surface_bright_color">सतह चमकदार</string>
     <string name="surface_container_color">भूतल कंटेनर</string>
@@ -546,7 +531,6 @@
     <string name="surface_container_low_color">भूतल कंटेनर कम</string>
     <string name="surface_container_lowest_color">भूतल कंटेनर निम्नतम</string>
     <string name="surface_dim_color">सतह मंद</string>
-
     <string name="fixed_colors_section">निश्चित रंग</string>
     <string name="primary_fixed_color">प्राथमिक निश्चित</string>
     <string name="primary_fixed_dim_color">प्राइमरी फिक्स्ड डिम</string>
@@ -582,7 +566,6 @@
     <string name="grid_settings">ग्रिड सेटिंग्स</string>
     <string name="category_cells">श्रेणी कोशिकाएँ</string>
     <string name="category_cells_desc">श्रेणी बॉक्स में पंक्तियों और स्तंभों की संख्या</string>
-
     <!--  ─────────────  Multi Select  ─────────────  -->
     <string name="multi_select_hint">मल्टी-सेलेक्शन शुरू करने के लिए किसी ऐप पर देर तक दबाएं</string>
     <string name="multi_select_count">%d चयनित</string>
@@ -594,12 +577,10 @@
     <string name="apps_added_successfully">%d ऐप्स सफलतापूर्वक जोड़ी गईं</string>
     <string name="multi_select_drawer_hint">💡 एक साथ कई ऐप्स चुनने के लिए देर तक दबाएं</string>
     <string name="deselect_all">सभी को अचयनित करें</string>
-
     <!--  ─────────────  Shortcuts Settings  ─────────────  -->
     <string name="shortcuts_settings">शॉर्टकट</string>
     <string name="prompt_shortcuts_when_adding_app">ऐप जोड़ते समय शॉर्टकट के लिए संकेत दें</string>
     <string name="prompt_shortcuts_when_adding_app_desc">सक्षम होने पर, आपसे ऐप या उसके शॉर्टकट के बीच चयन करने के लिए कहा जाएगा। अक्षम होने पर, ऐप सीधे जुड़ जाता है।</string>
-
     <!--  ─────────────  Lock Settings  ─────────────  -->
     <string name="lock_settings">सेटिंग्स लॉक करें</string>
     <string name="lock_settings_description">सुरक्षा विधि से लॉन्चर सेटिंग्स को सुरक्षित करें</string>
@@ -626,12 +607,10 @@
     <string name="device_credentials_not_available">कोई लॉक स्क्रीन कॉन्फ़िगर नहीं है</string>
     <string name="authentication_failed">प्रमाणीकरण विफल</string>
     <string name="authentication_error">प्रमाणीकरण त्रुटि: %s</string>
-
     <!--  ─────────────  Drawer Workspace Selection  ─────────────  -->
     <string name="select_default_workspace">डिफ़ॉल्ट वर्कस्पेस चुनें</string>
     <string name="select_workspace_hint">चुनें कि कौन सा वर्कस्पेस डिफ़ॉल्ट रूप से खुलेगा। आप ड्रॉअर में बाएं या दाएं स्वाइप करके हमेशा बदल सकते हैं।</string>
     <string name="workspace_default">डिफ़ॉल्ट</string>
-
     <!--  ─────────────  Pinned Shortcuts  ─────────────  -->
     <string name="pinned_shortcut_added">शॉर्टकट "%s" आपके सर्कल में जोड़ा गया</string>
     <string name="pinned_shortcut_failed">पिन किए गए शॉर्टकट को जोड़ने में विफल</string>
@@ -640,7 +619,6 @@
     <string name="pinned_shortcuts_desc">अपने ऐप्स से पिन किए गए शॉर्टकट ब्राउज़ करें और जोड़ें</string>
     <string name="no_pinned_shortcuts">कोई पिन किया गया शॉर्टकट उपलब्ध नहीं</string>
     <string name="pinned_shortcuts_from">%s के शॉर्टकट</string>
-
     <!--  ─────────────  Recently Used Apps  ─────────────  -->
     <string name="recently_used_apps">हाल ही में उपयोग किए गए ऐप्स</string>
     <string name="show_recently_used_apps">हाल के ऐप्स दिखाएं</string>
@@ -701,51 +679,37 @@
     <string name="app_info_cacheKey">कैशकी = %1$s</string>
     <string name="no_apps">कोई ऐप्स नहीं</string>
     <string name="unlock">अनलॉक</string>
-
     <string name="activate_debug_mode">डिबग मोड सक्रिय करें</string>
     <string name="activate_debug_mode_desc">पूरे ऐप में डिबग सुविधाएं सक्षम करें</string>
-
     <string name="show_debug_infos">डिबग जानकारी दिखाएँ</string>
     <string name="show_debug_infos_desc">विश्व स्तर पर डिबग जानकारी प्रदर्शित करें</string>
-
     <string name="show_debug_infos_settings">सेटिंग पृष्ठ में डिबग जानकारी दिखाएँ</string>
     <string name="show_debug_infos_settings_desc">सेटिंग्स के अंदर डिबग जानकारी प्रदर्शित करें</string>
-
     <string name="show_debug_infos_widgets">विजेट पृष्ठ में डिबग जानकारी दिखाएँ</string>
     <string name="show_debug_infos_widgets_desc">विजेट्स के अंदर डिबग जानकारी प्रदर्शित करें</string>
-
     <string name="show_debug_infos_workspace">कार्यस्थान पृष्ठ में डिबग जानकारी दिखाएँ</string>
     <string name="show_debug_infos_workspace_desc">कार्यक्षेत्र में डिबग जानकारी प्रदर्शित करें</string>
-
     <string name="has_initialized">प्रारंभ किया गया है</string>
     <string name="has_initialized_desc">क्या ऐप ने इनिशियलाइज़ेशन पूरा कर लिया है</string>
-
     <string name="show_default_launcher_banner">डिफ़ॉल्ट लॉन्चर बैनर दिखाएं</string>
     <string name="show_default_launcher_banner_desc">डिफ़ॉल्ट लॉन्चर सेट करने के लिए संकेत देने वाला बैनर प्रदर्शित करें</string>
-
     <string name="force_app_language_selector">ऐप भाषा चयनकर्ता को बाध्य करें</string>
     <string name="force_app_language_selector_desc">एंड्रॉइड के सिस्टम चयनकर्ता के बजाय ऐप के भाषा चयनकर्ता का उपयोग करें</string>
-
     <string name="force_app_widgets_selector">ऐप विजेट चयनकर्ता को बाध्य करें</string>
-
     <string name="use_accessibility_instead_of_context">संदर्भ के बजाय पहुंच-योग्यता का उपयोग करें</string>
     <string name="use_accessibility_instead_of_context_desc">संदर्भ के बजाय एक्सेसिबिलिटी का उपयोग करके एक्शन पैनल का विस्तार करें</string>
-
     <string name="ask_notifications_behavior">सूचनाएं व्यवहार पूछें</string>
     <string name="ask_notifications_behavior_desc">सूचनाओं/त्वरित सेटिंग्स व्यवहार के लिए हर बार संकेत दें</string>
-
     <string name="auto_raise_dragon_on_system_launcher">सिस्टम लॉन्चर पर ऑटो लॉन्च ड्रैगन</string>
     <string name="auto_raise_dragon_on_system_launcher_desc">सिस्टम लॉन्चर पर ड्रैगन को स्वचालित रूप से बढ़ाएं (पहुंच-योग्यता की आवश्यकता है)</string>
     <string name="are_you_sure">क्या आपको यकीन है\?</string>
     <string name="store_reset">स्टोर रीसेट</string>
     <string name="debug_infos">डीबग जानकारी</string>
-
     <string name="private_space_debug_info">निजी स्थान डिबग जानकारी</string>
     <string name="private_space_debug_info_desc">हर चीज़ के शीर्ष पर निजी स्थान स्थिति डिबग जानकारी प्रदर्शित करें</string>
     <string name="backspace">बैकस्पेस</string>
     <string name="super_warning_mode">सुपर चेतावनी मोड</string>
     <string name="super_warning_mode_desc">जब आप गलत पिन डालें तो कुछ मज़ेदार करें</string>
-
     <string name="super_warning_mode_sound">सुपर चेतावनी मोड + ध्वनि</string>
     <string name="super_warning_mode_sound_desc">ध्वनि जोड़ता है</string>
     <string name="alarm_sound">अलार्म ध्वनि</string>
@@ -754,19 +718,13 @@
     <string name="metal_pipes_sound_desc">गलत पिन डालने पर मेटल पाइप की ध्वनि बजाएं</string>
     <string name="vibrate_on_error">त्रुटि पर कंपन करें</string>
     <string name="vibrate_on_error_desc">पिन त्रुटि पर एक अनंत कंपन लॉन्च करता है</string>
-
-
     <string name="drawer_pull_down_settings">सेटिंग्स नीचे खींचें</string>
-
     <string name="pull_down_animations">पुल-डाउन एनिमेशन</string>
     <string name="pull_down_animations_desc">ड्रॉअर को नीचे खींचते समय एनिमेशन सक्षम या अक्षम करें</string>
-
     <string name="pull_down_wallpaper_dim">पुल-डाउन वॉलपेपर मंद</string>
     <string name="pull_down_wallpaper_dim_desc">जब दराज को नीचे खींचा जाए तो वॉलपेपर को हल्का कर दें</string>
-
     <string name="pull_down_icon_fade">पुल-डाउन चिह्न फीका</string>
     <string name="pull_down_icon_fade_desc">पुल-डाउन ड्रॉअर एनीमेशन के दौरान आइकन अंदर/बाहर फीके पड़ जाते हैं</string>
-
     <string name="pull_down_scale_in">पुल-डाउन स्केल इन</string>
     <string name="pull_down_scale_in_desc">जब दराज को नीचे खींचा जाता है तो स्केल आइकन</string>
     <string name="drawer_enter_exit_animations">दराज में प्रवेश/निकास एनिमेशन</string>
@@ -776,7 +734,6 @@
     <string name="more">अधिक</string>
     <string name="reload">पुनः लोड करें</string>
     <string name="select_icon">आइकन चुनें</string>
-
     <string name="show_notifications_desc">सक्रिय सूचनाओं वाले ऐप्स के आइकन दिखाएं (अधिसूचना पहुंच अनुमति की आवश्यकता है)</string>
     <string name="max_notification_icons">अधिकतम अधिसूचना चिह्न</string>
     <string name="max_notification_icons_desc">स्टेटस बार में प्रदर्शित करने के लिए ऐप नोटिफिकेशन आइकन की अधिकतम संख्या</string>
@@ -832,5 +789,4 @@
     <string name="debug_mode_already_enabled">डीबग मोड पहले से ही सक्षम है</string>
     <string name="not_supported_in_this_android_version">इस Android संस्करण में समर्थित नहीं है</string>
     <string name="please_enable_accessibility_services_to_use_that_feature">कृपया उस सुविधा का उपयोग करने के लिए पहुँच क्षमता सेवा सक्षम करें</string>
-
 </resources>
