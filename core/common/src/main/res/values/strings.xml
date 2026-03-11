@@ -106,8 +106,25 @@
     <string name="drawer_actions_width">Drawer Actions Width</string>
     <string name="drawer_actions">Drawer Actions</string>
     <string name="close_app_drawer">Close Drawer</string>
-    <string name="font_selector">Global Font Selector</string>
-    <string name="font_selector_desc">Choose a font for the entire app. More fonts coming soon!</string>
+    <string name="font_selector">Font Selector</string>
+    <string name="font_selector_desc">Choose a font for the entire app. You can import your own or use the catalog.</string>
+    <string name="font_manage_help">Manage fonts here. You can import your own TTF/OTF files or download from the Google Fonts catalog.</string>
+    <string name="font_catalog">Catalog</string>
+    <string name="font_import">Import</string>
+    <string name="font_installed_fonts">Installed Fonts</string>
+    <string name="font_available_in_extension">Available in Extension (%1$d)</string>
+    <string name="font_download_all_started">Starting all fonts download. Check notifications.</string>
+    <string name="font_delete_mode">Selection Mode</string>
+    <string name="font_confirm_delete">Confirm (%1$d)</string>
+    <string name="font_search_placeholder">Search fonts…</string>
+    <string name="font_downloading">Downloading %1$s…</string>
+
+    <string name="font_cat_all">ALL</string>
+    <string name="font_cat_serif">SERIF</string>
+    <string name="font_cat_sans_serif">SANS-SERIF</string>
+    <string name="font_cat_monospace">MONOSPACE</string>
+    <string name="font_cat_display">DISPLAY</string>
+    <string name="font_cat_handwriting">HANDWRITING</string>
     <string name="toggle_kb">Toggle Keyboard</string>
     <string name="behavior">Behavior</string>
     <string name="workspaces">Workspaces</string>

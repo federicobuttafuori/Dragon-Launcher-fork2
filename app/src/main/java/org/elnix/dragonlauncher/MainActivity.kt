@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import java.io.File
 import java.io.FileInputStream
@@ -271,28 +272,42 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
             try {
                 val action = intent?.action ?: "<null>"
                 Log.d("FontsReceiver", "Received intent action=$action")
-                    if (action == "org.dragon.launcher.FONTS_UPDATED") {
+                if (action == "org.elnix.dragonlauncher.ACTION_FONTS_RESULT") {
                     val fontPath = intent?.getStringExtra("FONT_PATH")
                     val fontName = intent?.getStringExtra("FONT_NAME") ?: "unknown"
-                    Log.d("FontsReceiver", "FONTS_UPDATED for $fontName -> path=$fontPath")
+                    Log.d("FontsReceiver", "ACTION_FONTS_RESULT for $fontName -> path=$fontPath")
 
                     if (fontPath != null && context != null) {
                         try {
-                            val src = File(fontPath)
-                            val destDir = File(context.getExternalFilesDir(null), "fonts")
-                            if (!destDir.exists()) destDir.mkdirs()
-                            val dest = File(destDir, src.name)
+                            // If it's a content URI, we must copy via content resolver
+                            if (fontPath.startsWith("content://")) {
+                                val uri = Uri.parse(fontPath)
+                                val destDir = File(context.getExternalFilesDir(null), "fonts")
+                                if (!destDir.exists()) destDir.mkdirs()
+                                val dest = File(destDir, "$fontName.ttf")
 
-                            FileInputStream(src).use { input ->
-                                FileOutputStream(dest).use { output ->
-                                    input.copyTo(output)
+                                context.contentResolver.openInputStream(uri)?.use { input ->
+                                    FileOutputStream(dest).use { output ->
+                                        input.copyTo(output)
+                                    }
                                 }
-                            }
+                                Log.d("FontsReceiver", "Copied font from URI to ${dest.absolutePath}")
+                            } else {
+                                // Fallback to direct file copy if it's a raw path
+                                val src = File(fontPath)
+                                val destDir = File(context.getExternalFilesDir(null), "fonts")
+                                if (!destDir.exists()) destDir.mkdirs()
+                                val dest = File(destDir, src.name)
 
-                            Log.d("FontsReceiver", "Copied font to ${dest.absolutePath}")
+                                FileInputStream(src).use { input ->
+                                    FileOutputStream(dest).use { output ->
+                                        input.copyTo(output)
+                                    }
+                                }
+                                Log.d("FontsReceiver", "Copied font file to ${dest.absolutePath}")
+                            }
                         } catch (e: Exception) {
                             Log.e("FontsReceiver", "Failed to copy font: ${e.message}")
-                            Log.e("FontsReceiver", "If this path is inside another app's cache, the extension must provide a content URI or write the file into a shared location. ")
                         }
                     }
                 }
@@ -328,9 +343,9 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerReceiver(packageReceiver, filter, RECEIVER_EXPORTED)
-            // Register fonts update receiver (extensions send org.dragon.launcher.FONTS_UPDATED)
+            // Register fonts update receiver (extensions send org.elnix.dragonlauncher.ACTION_FONTS_RESULT)
             try {
-                registerReceiver(fontsReceiver, IntentFilter("org.dragon.launcher.FONTS_UPDATED"), RECEIVER_EXPORTED)
+                registerReceiver(fontsReceiver, IntentFilter("org.elnix.dragonlauncher.ACTION_FONTS_RESULT"), RECEIVER_EXPORTED)
             } catch (e: Exception) {
                 Log.e("MainActivity", "Failed to register fontsReceiver: ${e.message}")
             }

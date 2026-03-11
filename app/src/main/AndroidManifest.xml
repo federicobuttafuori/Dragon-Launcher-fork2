@@ -40,12 +40,23 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
-    <!-- Extension Security: Launcher defines the permission -->
-    <!-- We use 'normal' protection so developers can build extensions without matching signatures -->
-    <!-- The launcher's internal code will handle the actual security check based on settings -->
-    <permission android:name="org.dragon.launcher.APP_EXTENSION"
+    <!-- Extension Security: Launcher defines the permissions -->
+    <permission
+        android:name="org.elnix.dragonlauncher.permission.READ_SETTINGS"
         android:protectionLevel="normal" />
-    <uses-permission android:name="org.dragon.launcher.APP_EXTENSION" />
+    <permission
+        android:name="org.elnix.dragonlauncher.permission.WRITE_SETTINGS"
+        android:protectionLevel="normal" />
+
+    <uses-permission android:name="org.elnix.dragonlauncher.permission.READ_SETTINGS" />
+    <uses-permission android:name="org.elnix.dragonlauncher.permission.WRITE_SETTINGS" />
+
+    <queries>
+        <!-- Pour que le Launcher puisse trouver le provider de polices de l'extension -->
+        <provider android:authorities="org.elnix.dragonlauncher.fonts.provider" />
+        <!-- Pour que le Launcher puisse trouver l'extension de polices par son package -->
+        <package android:name="org.elnix.dragonlauncher.fonts" />
+    </queries>
 
     <application
         android:name=".MyApplication"
@@ -57,6 +68,15 @@
         android:theme="@style/DragonLauncherTheme"
         tools:targetApi="33"
         android:appCategory="productivity">
+
+        <!-- 
+        <provider
+            android:name=".data.ExtensionsProvider"
+            android:authorities="org.elnix.dragonlauncher.extensions.provider"
+            android:exported="true"
+            android:readPermission="org.elnix.dragonlauncher.permission.READ_SETTINGS"
+            android:writePermission="org.elnix.dragonlauncher.permission.WRITE_SETTINGS" />
+        -->
 
         <activity
             android:name=".MainActivity"

@@ -48,7 +48,9 @@ class PackageReceiver : BroadcastReceiver() {
 
                         // If a new app is added and the user uses an IPS exported icon pack,
                         // suggest regenerating the pack in Icon Pack Studio.
-                        if (action == Intent.ACTION_PACKAGE_ADDED) {
+                        // We skip this for updates/replacements (ACTION_PACKAGE_ADDED with EXTRA_REPLACING).
+                        val isUpdate = intent.getBooleanExtra(Intent.EXTRA_REPLACING, false)
+                        if (action == Intent.ACTION_PACKAGE_ADDED && !isUpdate) {
                             val selectedPack = UiSettingsStore.selectedIconPack.get(context)
                             if (selectedPack == "ginlemon.iconpackstudio.exported") {
                                 notifyIpsRegeneration(context)

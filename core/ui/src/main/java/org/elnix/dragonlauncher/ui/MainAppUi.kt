@@ -145,6 +145,7 @@ import org.elnix.dragonlauncher.ui.settings.customization.IconPackTab
 import org.elnix.dragonlauncher.ui.settings.customization.NestEditingScreen
 import org.elnix.dragonlauncher.ui.settings.customization.StatusBarTab
 import org.elnix.dragonlauncher.ui.settings.customization.ThemesTab
+import org.elnix.dragonlauncher.ui.settings.customization.FontPickerScreen
 import org.elnix.dragonlauncher.ui.settings.customization.WallpaperTab
 import org.elnix.dragonlauncher.ui.settings.debug.DebugTab
 import org.elnix.dragonlauncher.ui.settings.debug.LogsTab
@@ -805,6 +806,7 @@ fun MainAppUi(
                     noAnimComposable(SETTINGS.ICON_PACK) { IconPackTab(appsViewModel, ::goAppearance) }
                     noAnimComposable(SETTINGS.STATUS_BAR) { StatusBarTab(::goAppearance) }
                     noAnimComposable(SETTINGS.THEME) { ThemesTab(::goAppearance) }
+                    noAnimComposable(SETTINGS.FONTS) { FontPickerScreen(::goAppearance) }
                     noAnimComposable(SETTINGS.WIDGETS) {
                         FloatingAppsTab(
                             widgetHostProvider = widgetHostProvider,

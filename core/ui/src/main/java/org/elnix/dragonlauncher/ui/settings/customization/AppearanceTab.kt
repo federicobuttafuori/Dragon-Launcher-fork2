@@ -55,7 +55,6 @@ import org.elnix.dragonlauncher.ui.components.dragon.DragonColumnGroup
 import org.elnix.dragonlauncher.ui.components.settings.SettingsSlider
 import org.elnix.dragonlauncher.ui.components.settings.SettingsSwitchRow
 import org.elnix.dragonlauncher.ui.components.settings.asState
-import org.elnix.dragonlauncher.ui.dialogs.FontPickerDialog
 import org.elnix.dragonlauncher.ui.helpers.HoldToActivateArc
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsItem
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsLazyHeader
@@ -148,7 +147,7 @@ fun AppearanceTab(
                 description = stringResource(R.string.font_selector_desc),
                 icon = Icons.Default.TextFields
             ) {
-                showFontPicker = true
+                navController.navigate(SETTINGS.FONTS)
             }
         }
 
@@ -410,6 +409,6 @@ fun AppearanceTab(
     }
 
     if (showFontPicker) {
-        FontPickerDialog { showFontPicker = false }
+        FontPickerScreen { showFontPicker = false }
     }
 }
