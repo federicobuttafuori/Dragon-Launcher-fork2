@@ -17,6 +17,7 @@
 
 [<img src="https://hosted.weblate.org/widgets/dragon-launcher/-/287x66-grey.png" alt="Translation Status">](https://hosted.weblate.org/engage/dragon-launcher/)
 
+[![Website](https://img.shields.io/badge/website-dragonlauncher.lthb.fr-blue?style=for-the-badge)](https://dragonlauncher.lthb.fr/)
 
 [![GitHub release](https://img.shields.io/github/v/release/Elnix90/Dragon-Launcher.svg?include_prereleases&style=for-the-badge)](https://github.com/Elnix90/Dragon-Launcher/releases/latest)
 [![GitHub stars](https://img.shields.io/github/stars/Elnix90/Dragon-Launcher?style=for-the-badge)](https://github.com/Elnix90/Dragon-Launcher/stargazers)
