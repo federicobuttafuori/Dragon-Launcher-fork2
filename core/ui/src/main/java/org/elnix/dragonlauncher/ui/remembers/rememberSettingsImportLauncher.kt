@@ -58,7 +58,7 @@ fun rememberSettingsImportLauncher(
                 onJsonReady(JSONObject(jsonString))
 
             } catch (e: Exception) {
-                onError("Failed to read backup file: ${e.message}")
+                onError("Failed to read backup file")
             }
         }
     }

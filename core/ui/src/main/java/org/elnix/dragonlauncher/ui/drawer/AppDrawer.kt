@@ -75,7 +75,6 @@ import kotlinx.coroutines.yield
 import org.elnix.dragonlauncher.base.ktx.px
 import org.elnix.dragonlauncher.base.ktx.toDp
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.common.logging.logE
 import org.elnix.dragonlauncher.common.serializables.AppModel
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.common.serializables.WorkspaceType
@@ -240,7 +239,6 @@ fun AppDrawerScreen(
             newWorkspace.type == WorkspaceType.PRIVATE &&
             privateSpaceState.isLocked
         ) {
-            logE(Constants.Logging.PRIVATE_SPACE_TAG) { "Drawer launch!" }
             appLifecycleViewModel.onUnlockPrivateSpace()
         }
 
@@ -487,7 +485,7 @@ fun AppDrawerScreen(
 
                 Column(modifier = Modifier.weight(1f)) {
                     /* ───────────── Recently Used Apps section ───────────── */
-                    AnimatedVisibility (showRecentlyUsedApps && searchQuery.isBlank() && recentApps.isNotEmpty()) {
+                    AnimatedVisibility(showRecentlyUsedApps && searchQuery.isBlank() && recentApps.isNotEmpty()) {
 
                         Box(
                             modifier = Modifier
@@ -557,9 +555,9 @@ fun AppDrawerScreen(
 
                             val autoLaunch =
                                 autoLaunchSingleMatch &&
-                                filteredApps.size == 1 &&
-                                searchQuery.isNotEmpty() &&
-                                !(disableAutoLaunchOnSpaceFirstChar && searchQuery.first() == ' ')
+                                        filteredApps.size == 1 &&
+                                        searchQuery.isNotEmpty() &&
+                                        !(disableAutoLaunchOnSpaceFirstChar && searchQuery.first() == ' ')
 
                             if (haveToLaunchFirstApp || autoLaunch) {
                                 onLaunchAction(filteredApps.first().action)
@@ -585,12 +583,7 @@ fun AppDrawerScreen(
                                         it.isAuthenticating -> CircularProgressIndicator(color = Color.Yellow)
                                         it.isLocked -> {
                                             DragonIconButton(
-                                                onClick = {
-                                                    logE(Constants.Logging.PRIVATE_SPACE_TAG) {
-                                                        "Drawer reload button launch!"
-                                                    }
-                                                    appLifecycleViewModel.onUnlockPrivateSpace()
-                                                }) {
+                                                onClick = { appLifecycleViewModel.onUnlockPrivateSpace() }) {
                                                 Icon(
                                                     Icons.Default.Lock,
                                                     contentDescription = "Private Space Locked"

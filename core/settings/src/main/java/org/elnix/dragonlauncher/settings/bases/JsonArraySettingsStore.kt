@@ -43,7 +43,7 @@ abstract class JsonArraySettingsStore :
         return try {
             if (raw.isEmpty()) null else JSONArray(raw)
         } catch (e: JSONException) {
-            logE(BACKUP_TAG) { "Error while creating json object of backup" }
+            logE(BACKUP_TAG, e) { "Error while creating json object of backup" }
             null
         }
     }

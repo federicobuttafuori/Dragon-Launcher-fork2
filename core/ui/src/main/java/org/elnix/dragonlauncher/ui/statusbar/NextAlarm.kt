@@ -44,7 +44,7 @@ fun StatusBarNextAlarm(
         try {
             DateTimeFormatter.ofPattern(formatter)
         } catch (e: Exception) {
-            println("⚠️ Invalid time format '$formatter': ${e.message}")
+            println("⚠️ Invalid time format '$formatter'")
             DateTimeFormatter.ofPattern("HH:mm")
         }
     }
@@ -98,7 +98,7 @@ private fun getNextAlarm(ctx: Context, formatter: DateTimeFormatter): NextAlarmI
         )
 
     } catch (e: Exception) {
-        println("Alarm read failed: ${e.message}")
+        println("Alarm read failed")
         null
     }
 }

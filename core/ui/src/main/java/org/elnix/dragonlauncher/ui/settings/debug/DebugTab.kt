@@ -221,7 +221,7 @@ fun DebugTab(
                                     appendLine("Data Dir: ${info.applicationInfo?.dataDir ?: "unknown"}")
                                 }
                             } catch (e: Exception) {
-                                "Not found or error: ${e.message}"
+                                "Not found or error"
                             }
                         }
                     ) {

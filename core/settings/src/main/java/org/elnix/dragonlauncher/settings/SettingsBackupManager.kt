@@ -62,7 +62,7 @@ object SettingsBackupManager {
             logI(BACKUP_TAG) { "Auto-backup completed to $path" }
 
         } catch (e: Exception) {
-            logE(BACKUP_TAG) { "Auto-backup failed" }
+            logE(BACKUP_TAG, e) { "Auto-backup failed" }
             if (e.message?.contains("permission") == true) {
                 ctx.showToast("URI permission lost. Reselect backup file.")
             }
@@ -79,7 +79,7 @@ object SettingsBackupManager {
                     fos.flush()
                 }
             } ?: run {
-                logE(BACKUP_TAG) {
+                logW(BACKUP_TAG) {
                     "Failed to open FileDescriptor - URI permission expired!"
                 }
                 throw IllegalStateException("Cannot write to URI - permission expired")

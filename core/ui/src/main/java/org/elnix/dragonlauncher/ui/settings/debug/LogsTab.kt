@@ -169,7 +169,7 @@ fun LogsTab(
                     appendLine("${perm.substringAfterLast(".")}: ${if (granted) "GRANTED" else "DENIED"}")
                 }
             } catch (e: Exception) {
-                appendLine("Error reading permissions: ${e.message}")
+                appendLine("Error reading permissions")
             }
         }
     }
@@ -430,7 +430,7 @@ private fun exportLogFile(ctx: Context, file: File) {
         logD(LOGS_TAG) {" Share opened: ${file.name} (${shareFile.absolutePath})" }
 
     } catch (e: SecurityException) {
-        logE(LOGS_TAG, e) { "FileProvider not configured: ${e.message}" }
+        logE(LOGS_TAG, e) { "FileProvider not configured" }
         val content = DragonLogManager.readLogFile(file)
         val textIntent = Intent().apply {
             action = Intent.ACTION_SEND
@@ -440,6 +440,6 @@ private fun exportLogFile(ctx: Context, file: File) {
         }
         ctx.startActivity(Intent.createChooser(textIntent, "Share logs (text)"))
     } catch (e: Exception) {
-        logE(LOGS_TAG, e) { "Share failed: ${e.message}" }
+        logE(LOGS_TAG, e) { "Share failed" }
     }
 }

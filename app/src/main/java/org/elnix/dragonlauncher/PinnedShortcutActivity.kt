@@ -7,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.logging.logD
 import org.elnix.dragonlauncher.common.logging.logE
+import org.elnix.dragonlauncher.common.logging.logW
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.PINNED_SHORTCUTS
@@ -32,21 +33,21 @@ class PinnedShortcutActivity : ComponentActivity() {
 
         val launcherApps = getSystemService(LauncherApps::class.java)
         if (launcherApps == null) {
-            logE(PINNED_SHORTCUTS) { "LauncherApps service not available" }
+            logW(PINNED_SHORTCUTS) { "LauncherApps service not available" }
             finish()
             return
         }
 
         val request = launcherApps.getPinItemRequest(intent)
         if (request == null) {
-            logE(PINNED_SHORTCUTS) { "No pin item request found in intent" }
+            logW(PINNED_SHORTCUTS) { "No pin item request found in intent" }
             finish()
             return
         }
 
         val shortcutInfo = request.shortcutInfo
         if (shortcutInfo == null) {
-            logE(PINNED_SHORTCUTS) { "Pin request does not contain a shortcut (maybe a widget?)" }
+            logW(PINNED_SHORTCUTS) { "Pin request does not contain a shortcut (maybe a widget?)" }
             // For now, we don't handle widget pin requests
             finish()
             return
@@ -61,7 +62,7 @@ class PinnedShortcutActivity : ComponentActivity() {
         // Accept the pin request — this tells the system the shortcut is pinned
         val accepted = request.accept()
         if (!accepted) {
-            logE(PINNED_SHORTCUTS) { "Failed to accept pin request for $packageName / $shortcutId" }
+            logW(PINNED_SHORTCUTS) { "Failed to accept pin request for $packageName / $shortcutId" }
             showToast(getString(org.elnix.dragonlauncher.common.R.string.pinned_shortcut_failed))
             finish()
             return
@@ -116,7 +117,7 @@ class PinnedShortcutActivity : ComponentActivity() {
                     )
                 )
             } catch (e: Exception) {
-                logE(PINNED_SHORTCUTS) { "Failed to save pinned shortcut: ${e.message}" }
+                logE(PINNED_SHORTCUTS, e) { "Failed to save pinned shortcut" }
                 showToast(getString(org.elnix.dragonlauncher.common.R.string.pinned_shortcut_failed))
             }
 

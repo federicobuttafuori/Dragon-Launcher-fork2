@@ -1,5 +1,6 @@
 package org.elnix.dragonlauncher.ui.widgets
 
+import android.annotation.SuppressLint
 import android.appwidget.AppWidgetHost
 import android.appwidget.AppWidgetHostView
 import android.appwidget.AppWidgetManager
@@ -25,6 +26,7 @@ class LauncherWidgetHolder(private val context: Context) : DefaultLifecycleObser
     companion object {
         private const val HOST_ID = 1024
 
+        @SuppressLint("StaticFieldLeak")
         @Volatile
         private var instance: LauncherWidgetHolder? = null
 
@@ -68,7 +70,7 @@ class LauncherWidgetHolder(private val context: Context) : DefaultLifecycleObser
                 isListening = true
                 logD(LAUNCHER_WIDGET_HOLDER_TAG) { "AppWidgetHost started listening" }
             } catch (e: Exception) {
-                logE(LAUNCHER_WIDGET_HOLDER_TAG) { "Failed to start listening" }
+                logE(LAUNCHER_WIDGET_HOLDER_TAG, e) { "Failed to start listening" }
             }
         }
     }
@@ -80,7 +82,7 @@ class LauncherWidgetHolder(private val context: Context) : DefaultLifecycleObser
                 isListening = false
                 logD(LAUNCHER_WIDGET_HOLDER_TAG) { "AppWidgetHost stopped listening" }
             } catch (e: Exception) {
-                logE(LAUNCHER_WIDGET_HOLDER_TAG) { "Failed to stop listening" }
+                logE(LAUNCHER_WIDGET_HOLDER_TAG, e) { "Failed to stop listening" }
             }
         }
     }
@@ -91,12 +93,12 @@ class LauncherWidgetHolder(private val context: Context) : DefaultLifecycleObser
         return id
     }
 
-    fun bindWidget(appWidgetId: Int, provider: android.content.ComponentName, options: Bundle? = null): Boolean {
-        logD(WIDGET_TAG) { "DRAGON_WIDGET: Starting bind for ID $appWidgetId with provider $provider" }
-        val result = appWidgetManager.bindAppWidgetIdIfAllowed(appWidgetId, provider, options)
-        logD(WIDGET_TAG) { "DRAGON_WIDGET: bindAppWidgetIdIfAllowed result for ID $appWidgetId: $result" }
-        return result
-    }
+//    fun bindWidget(appWidgetId: Int, provider: android.content.ComponentName, options: Bundle? = null): Boolean {
+//        logD(WIDGET_TAG) { "DRAGON_WIDGET: Starting bind for ID $appWidgetId with provider $provider" }
+//        val result = appWidgetManager.bindAppWidgetIdIfAllowed(appWidgetId, provider, options)
+//        logD(WIDGET_TAG) { "DRAGON_WIDGET: bindAppWidgetIdIfAllowed result for ID $appWidgetId: $result" }
+//        return result
+//    }
 
     fun deleteAppWidgetId(appWidgetId: Int) {
         logD(WIDGET_TAG) { "DRAGON_WIDGET: Deleting ID $appWidgetId" }

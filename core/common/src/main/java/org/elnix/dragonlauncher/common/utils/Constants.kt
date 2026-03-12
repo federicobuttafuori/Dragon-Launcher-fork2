@@ -197,6 +197,10 @@ object Constants {
         val LOGS_TAG = LogTag("LogsTab")
         val STARTUP_TAG = LogTag("StartupPerf")
         val OVERLAY_REMINDER_TAG = LogTag("OverlayReminder")
+        val FONT_RECEIVER_TAG = LogTag("FontsReceiver")
+        val FONT_PROVIDER = LogTag("FontsProvider")
+        val SAMSUNG_INTEGRATION_TAG = LogTag("SamsungIntegration")
+        val EXTENSION_MANAGER_TAG = LogTag("ExtensionManager")
     }
 
     /*  ─────────────  Links  ─────────────  */

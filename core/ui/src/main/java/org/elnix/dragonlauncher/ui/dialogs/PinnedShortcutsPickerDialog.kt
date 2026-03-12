@@ -69,7 +69,7 @@ fun PinnedShortcutsPickerDialog(
         try {
             queryAllPinnedShortcuts(ctx)
         } catch (e: Exception) {
-            logE(PINNED_SHORTCUTS) { "Failed to query pinned shortcuts: ${e.message}" }
+            logE(PINNED_SHORTCUTS, e) { "Failed to query pinned shortcuts" }
             emptyMap()
         }
     }
@@ -270,9 +270,9 @@ private fun queryAllPinnedShortcuts(
                 )
             }
         } catch (e: SecurityException) {
-            logD(PINNED_SHORTCUTS, e) { "SecurityException for $pkg: ${e.message}" }
+            logD(PINNED_SHORTCUTS, e) { "SecurityException for $pkg" }
         } catch (e: Exception) {
-            logE(PINNED_SHORTCUTS, e) { "Error querying shortcuts for $pkg: ${e.message}" }
+            logE(PINNED_SHORTCUTS, e) { "Error querying shortcuts for $pkg" }
         }
     }
 

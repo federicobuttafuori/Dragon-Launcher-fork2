@@ -54,7 +54,7 @@ class PrivateSpaceReceiver : BroadcastReceiver() {
                 logI(PRIVATE_SPACE_TAG) { "Private Space action=$action, reloading apps" }
                 app.appsViewModel.unlockAndReloadPrivateSpace()
             } catch (e: Exception) {
-                logE(PRIVATE_SPACE_TAG) { "Failed to process Private Space broadcast: ${e.message}" }
+                logE(PRIVATE_SPACE_TAG, e) { "Failed to process Private Space broadcast" }
             } finally {
                 pendingResult.finish()
             }

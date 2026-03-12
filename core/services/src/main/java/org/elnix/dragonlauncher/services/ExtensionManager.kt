@@ -4,9 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
-import android.util.Log
+import androidx.core.net.toUri
+import org.elnix.dragonlauncher.common.logging.logD
+import org.elnix.dragonlauncher.common.logging.logW
 import org.elnix.dragonlauncher.common.serializables.ExtensionModel
+import org.elnix.dragonlauncher.common.utils.Constants.Logging.EXTENSION_MANAGER_TAG
 import org.elnix.dragonlauncher.common.utils.PackageManagerCompat
 import org.elnix.dragonlauncher.common.utils.openUrl
 import org.elnix.dragonlauncher.common.utils.showToast
@@ -41,9 +43,9 @@ object ExtensionManager {
 
     fun installApk(context: Context, uri: Uri) {
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !context.packageManager.canRequestPackageInstalls()) {
+            if (!context.packageManager.canRequestPackageInstalls()) {
                 val intent = Intent(android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES).apply {
-                    data = Uri.parse("package:${context.packageName}")
+                    data = "package:${context.packageName}".toUri()
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 }
                 context.startActivity(intent)
@@ -57,13 +59,13 @@ object ExtensionManager {
             }
             context.startActivity(intent)
         } catch (e: Exception) {
-            context.showToast("Failed to install APK: ${e.message}")
+            context.showToast("Failed to install APK")
         }
     }
 
     fun isExtensionInstalled(context: Context, packageNameOrId: String): Boolean {
         val pmCompat = PackageManagerCompat(context.packageManager, context)
-        Log.d("ExtensionManager", "Checking extension installed for: $packageNameOrId")
+        logD(EXTENSION_MANAGER_TAG) { "Checking extension installed for: $packageNameOrId" }
 
         val disableSigCheck = kotlinx.coroutines.runBlocking {
             DebugSettingsStore.disableExtensionSignatureCheck.get(context)
@@ -71,7 +73,7 @@ object ExtensionManager {
 
         // 1. Direct check with provided packageName or ID (The correct way)
         try {
-            val pInfo = context.packageManager.getPackageInfo(packageNameOrId, 0)
+//            val pInfo = context.packageManager.getPackageInfo(packageNameOrId, 0)
             
             // Signature check
             if (!disableSigCheck) {
@@ -87,21 +89,21 @@ object ExtensionManager {
                 val targetSig = targetSignatures?.firstOrNull()?.toCharsString()
 
                 if (mySig == null || mySig != targetSig) {
-                    Log.w("ExtensionManager", "Signature mismatch for $packageNameOrId! Blocking detection. Enable 'Disable extension signature check' in debug to bypass.")
+                    logW(EXTENSION_MANAGER_TAG) { "Signature mismatch for $packageNameOrId! Blocking detection. Enable 'Disable extension signature check' in debug to bypass." }
                     return false
                 }
             }
 
-            Log.d("ExtensionManager", "Direct package present: $packageNameOrId")
+            logD(EXTENSION_MANAGER_TAG) { "Direct package present: $packageNameOrId" }
             return true
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             // ignore
         }
 
         // 2. Fallback: If it's an ID (like "fonts"), search for org.elnix.dragonlauncher.extension.ID
         val standardPkg = "org.elnix.dragonlauncher.extension.$packageNameOrId"
         if (packageNameOrId != standardPkg && pmCompat.isPackageInstalled(standardPkg)) {
-             Log.d("ExtensionManager", "Found via standard prefix: $standardPkg")
+             logD(EXTENSION_MANAGER_TAG) { "Found via standard prefix: $standardPkg" }
              return true
         }
 

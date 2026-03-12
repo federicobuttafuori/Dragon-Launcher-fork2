@@ -37,7 +37,7 @@ fun StatusBarDate(
         try {
             DateTimeFormatter.ofPattern(formatterPattern)
         } catch (e: Exception) {
-            logW(STATUS_BAR_TAG) { "Invalid date format '$formatterPattern': ${e.message}" }
+            logW(STATUS_BAR_TAG) { "Invalid date format '$formatterPattern'" }
             DateTimeFormatter.ofPattern("MMM dd")
         }
     }
@@ -63,7 +63,7 @@ fun StatusBarDate(
             try {
                 date.format(dateFormat)
             } catch (e: Exception) {
-                logW(STATUS_BAR_TAG) { "Date formatting failed: ${e.message}" }
+                logW(STATUS_BAR_TAG) { "Date formatting failed" }
                 date.format(DateTimeFormatter.ofPattern("MMM dd"))
             }
         }
@@ -97,7 +97,7 @@ fun StatusBarTime(
         try {
             DateTimeFormatter.ofPattern(formatter)
         } catch (e: Exception) {
-            logW(STATUS_BAR_TAG) { "Invalid time format '$formatter': ${e.message}" }
+            logW(STATUS_BAR_TAG) { "Invalid time format '$formatter'" }
             DateTimeFormatter.ofPattern("HH:mm")
         }
     }
@@ -121,7 +121,7 @@ fun StatusBarTime(
             try {
                 time.format(timeFormat)
             } catch (e: Exception) {
-                logW(STATUS_BAR_TAG) { "Time formatting failed: ${e.message}" }
+                logW(STATUS_BAR_TAG) { "Time formatting failed" }
                 time.format(DateTimeFormatter.ofPattern("HH:mm"))
             }
         }

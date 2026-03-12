@@ -25,6 +25,6 @@ inline fun logW(tag: LogTag, throwable: Throwable? = null, message: () -> String
     Timber.tag(tag.tag).w(throwable,message())
 }
 
-inline fun logE(tag: LogTag, throwable: Throwable? = null, message: () -> String) {
+inline fun logE(tag: LogTag, throwable: Throwable, message: () -> String) {
     Timber.tag(tag.tag).e(throwable, message())
 }

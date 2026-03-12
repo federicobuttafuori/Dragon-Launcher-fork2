@@ -366,7 +366,7 @@ class AppsViewModel(
                         PrivateAppsSettingsStore.jsonSetting.set(ctx, gson.toJson(existingMap))
                         logI(APPS_TAG) { "Persisted ${assignments.size} private app assignments" }
                     } catch (e: Exception) {
-                        logE(APPS_TAG) { "Error persisting private package assignments: ${e.message}" }
+                        logE(APPS_TAG, e) { "Error persisting private package assignments" }
                     }
 
 
@@ -429,7 +429,7 @@ class AppsViewModel(
 //                        }
 //                    }
 //                } catch (e: Exception) {
-//                    logE(APPS_TAG, "Error applying persisted private assignments: ${e.message}", e)
+//                    logE(APPS_TAG, "Error applying persisted private assignments", e)
 //                }
             }
 
@@ -464,7 +464,7 @@ class AppsViewModel(
             logI(APPS_TAG) { "========== Finished reloadApps() ==========" }
 
         } catch (e: Exception) {
-            logE(APPS_TAG) { "Error in reloadApps: ${e.message}" }
+            logE(APPS_TAG, e) { "Error in reloadApps" }
         }
     }
 
@@ -482,7 +482,7 @@ class AppsViewModel(
             }
             logD(APPS_TAG) { "Snapshot captured: ${privateSnapshotBefore?.size ?: 0} packages" }
         } catch (e: Exception) {
-            logE(APPS_TAG) { "Error capturing main profile snapshot: ${e.message}" }
+            logE(APPS_TAG, e) { "Error capturing main profile snapshot" }
             privateSnapshotBefore = null
         }
     }
@@ -525,7 +525,7 @@ class AppsViewModel(
                     }
                 }
             } catch (e: Exception) {
-                logE(APPS_TAG) { "Error removing packages from USER workspaces: ${e.message}" }
+                logE(APPS_TAG, e) { "Error removing packages from USER workspaces" }
             }
 
             // Clear the before snapshot
@@ -549,7 +549,7 @@ class AppsViewModel(
             scheduledReloadJob?.join()
 
         } catch (e: Exception) {
-            logE(APPS_TAG) { "Error during differential private detection: ${e.message}" }
+            logE(APPS_TAG, e) { "Error during differential private detection" }
             pendingPrivateAssignments = null
             privateSnapshotBefore = null
 
@@ -1149,7 +1149,7 @@ class AppsViewModel(
                 componentToDrawable = componentToDrawable
             )
         } catch (e: Exception) {
-            logE(ICONS_TAG) { "Failed to load mappings for $packPkg: ${e.message}" }
+            logE(ICONS_TAG, e) { "Failed to load mappings for $packPkg" }
             IconPackCache(emptyMap(), emptyMap())
         }
     }
@@ -1574,8 +1574,8 @@ private fun parseAppFilterXml(ctx: Context, packPkg: String): List<IconMapping>?
             logD(ICONS_TAG) { "Loaded ${mappings.size} mappings from assets/appfilter.xml" }
             return mappings
         }
-    } catch (e: Exception) {
-        logD(ICONS_TAG) { "Assets appfilter.xml failed: ${e.message}" }
+    } catch (_: Exception) {
+        logD(ICONS_TAG) { "Assets appfilter.xml failed" }
     }
 
     // 2. Fallback to res/xml/appfilter.xml
@@ -1587,7 +1587,7 @@ private fun parseAppFilterXml(ctx: Context, packPkg: String): List<IconMapping>?
         mappings = parseXml(parser)
         logD(ICONS_TAG) { "Loaded ${mappings.size} mappings from res/xml/appfilter.xml" }
     } catch (e: Exception) {
-        logE(ICONS_TAG) { "res/xml/appfilter.xml parse failed: ${e.message}" }
+        logE(ICONS_TAG, e) { "res/xml/appfilter.xml parse failed" }
     }
 
     return mappings

@@ -33,7 +33,7 @@ suspend fun loadThemes(ctx: Context): List<ThemeObject> = withContext(Dispatcher
                 imageAssetPath = imageAssetPath
             ))
         } catch (e: Exception) {
-            println("Failed to load theme $jsonFileName: ${e.message}")
+            println("Failed to load theme $jsonFileName")
         }
     }
     themesList

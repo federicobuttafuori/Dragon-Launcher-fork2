@@ -183,7 +183,7 @@ class PackageManagerCompat(private val pm: PackageManager, private val ctx: Cont
 //                "snapshotMainProfilePackageNames: found ${packages.size} launcher-visible packages"
 //            }
 //        } catch (e: Exception) {
-//            logE(TAG) { "Error snapshotting main profile packages: ${e.message}" }
+//            logE(TAG) { "Error snapshotting main profile packages" }
 //        }
 //        return packages
 //    }
@@ -201,7 +201,7 @@ class PackageManagerCompat(private val pm: PackageManager, private val ctx: Cont
 //            val activities = launcherApps.getActivityList(packageName, userHandle)
 //            return !activities.isNullOrEmpty()
 //        } catch (e: Exception) {
-//            logE(TAG) { "Error checking package visibility for user $userId: ${e.message}" }
+//            logE(TAG) { "Error checking package visibility for user $userId" }
 //            return false
 //        }
 //    }

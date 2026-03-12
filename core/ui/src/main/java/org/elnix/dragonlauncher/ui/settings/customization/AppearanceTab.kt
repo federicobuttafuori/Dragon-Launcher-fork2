@@ -81,8 +81,6 @@ fun AppearanceTab(
     val appIconOverlaySize by appIconOverlaySize.asState()
     val showAllActionsOnCurrentCircle by UiSettingsStore.showAllActionsOnCurrentCircle.asState()
 
-    var showFontPicker by remember { mutableStateOf(false) }
-
     val topOverlaySettingsState = rememberExpandableSection(stringResource(R.string.app_preview_settings))
     val holdExpandableSectionState = rememberExpandableSection(stringResource(R.string.hold_settings))
 
@@ -422,9 +420,5 @@ fun AppearanceTab(
             showLabel = showLaunchingAppLabel,
             showIcon = showLaunchingAppIcon
         )
-    }
-
-    if (showFontPicker) {
-        FontPickerScreen { showFontPicker = false }
     }
 }

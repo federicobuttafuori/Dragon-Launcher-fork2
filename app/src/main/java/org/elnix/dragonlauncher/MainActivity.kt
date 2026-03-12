@@ -10,14 +10,10 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.Log
 import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -31,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -52,7 +49,10 @@ import org.elnix.dragonlauncher.common.logging.logI
 import org.elnix.dragonlauncher.common.logging.logW
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
+import org.elnix.dragonlauncher.common.utils.Constants.Logging.FONT_RECEIVER_TAG
+import org.elnix.dragonlauncher.common.utils.Constants.Logging.PRIVATE_SPACE_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.STARTUP_TAG
+import org.elnix.dragonlauncher.common.utils.Constants.Logging.TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.WIDGET_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Navigation.ignoredReturnRoutes
 import org.elnix.dragonlauncher.common.utils.Constants.Settings.HOME_REENTER_WINDOW_MS
@@ -78,6 +78,9 @@ import org.elnix.dragonlauncher.ui.remembers.LocalBackupViewModel
 import org.elnix.dragonlauncher.ui.remembers.LocalFloatingAppsViewModel
 import org.elnix.dragonlauncher.ui.theme.DragonLauncherTheme
 import org.elnix.dragonlauncher.ui.widgets.LauncherWidgetHolder
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.util.UUID
 
 class MainActivity : FragmentActivity(), WidgetHostProvider {
@@ -163,7 +166,7 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
                         widgetHolder.getAppWidgetInfo(widgetId)
                     } catch (e: SecurityException) {
                         logW(WIDGET_TAG) {
-                            "DRAGON_FLOW: SecurityException on attempt $attempt for ID $widgetId: ${e.message}"
+                            "DRAGON_FLOW: SecurityException on attempt $attempt for ID $widgetId"
                         }
                         null
                     }
@@ -214,7 +217,7 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
                     null
                 )
             } catch (e: Exception) {
-                logE(WIDGET_TAG) { "DRAGON_FLOW: Proxy launch failed: ${e.message}" }
+                logE(WIDGET_TAG, e) { "DRAGON_FLOW: Proxy launch failed" }
                 showToast("Failed to launch configuration")
                 // Add it anyway if config fails to launch
                 floatingAppsViewModel.addFloatingApp(
@@ -284,17 +287,17 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
         override fun onReceive(context: Context?, intent: Intent?) {
             try {
                 val action = intent?.action ?: "<null>"
-                Log.d("FontsReceiver", "Received intent action=$action")
+                logD(FONT_RECEIVER_TAG) { "Received intent action=$action" }
                 if (action == "org.elnix.dragonlauncher.ACTION_FONTS_RESULT") {
                     val fontPath = intent?.getStringExtra("FONT_PATH")
                     val fontName = intent?.getStringExtra("FONT_NAME") ?: "unknown"
-                    Log.d("FontsReceiver", "ACTION_FONTS_RESULT for $fontName -> path=$fontPath")
+                    logD(FONT_RECEIVER_TAG) { "ACTION_FONTS_RESULT for $fontName -> path=$fontPath" }
 
                     if (fontPath != null && context != null) {
                         try {
                             // If it's a content URI, we must copy via content resolver
                             if (fontPath.startsWith("content://")) {
-                                val uri = Uri.parse(fontPath)
+                                val uri = fontPath.toUri()
                                 val destDir = File(context.getExternalFilesDir(null), "fonts")
                                 if (!destDir.exists()) destDir.mkdirs()
                                 val dest = File(destDir, "$fontName.ttf")
@@ -304,7 +307,7 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
                                         input.copyTo(output)
                                     }
                                 }
-                                Log.d("FontsReceiver", "Copied font from URI to ${dest.absolutePath}")
+                                logD(FONT_RECEIVER_TAG) { "Copied font from URI to ${dest.absolutePath}" }
                             } else {
                                 // Fallback to direct file copy if it's a raw path
                                 val src = File(fontPath)
@@ -317,15 +320,15 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
                                         input.copyTo(output)
                                     }
                                 }
-                                Log.d("FontsReceiver", "Copied font file to ${dest.absolutePath}")
+                                logD(FONT_RECEIVER_TAG) { "Copied font file to ${dest.absolutePath}" }
                             }
                         } catch (e: Exception) {
-                            Log.e("FontsReceiver", "Failed to copy font: ${e.message}")
+                            logE(FONT_RECEIVER_TAG, e) { "Failed to copy font" }
                         }
                     }
                 }
             } catch (e: Exception) {
-                Log.e("FontsReceiver", "Receiver error: ${e.message}")
+                logE(FONT_RECEIVER_TAG, e) { "Receiver error" }
             }
         }
     }
@@ -360,7 +363,7 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
             try {
                 registerReceiver(fontsReceiver, IntentFilter("org.elnix.dragonlauncher.ACTION_FONTS_RESULT"), RECEIVER_EXPORTED)
             } catch (e: Exception) {
-                Log.e("MainActivity", "Failed to register fontsReceiver: ${e.message}")
+                logE(TAG, e) { "Failed to register fontsReceiver" }
             }
         }
 
@@ -562,7 +565,7 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
     }
 
 
-    // For the home action, to prevent it to work TOO MUCH (I tested and it was launching
+    // For the home action, to prevent it to work TOO MUCH (I tested, and it was launching
     // the action everytime I clicked on the home button/gesture lol
     var pauseTime: Long = 0L
     var isNewHomeIntent: Boolean = false

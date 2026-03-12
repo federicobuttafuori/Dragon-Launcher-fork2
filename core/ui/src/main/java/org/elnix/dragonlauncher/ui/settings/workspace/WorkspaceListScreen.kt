@@ -2,7 +2,6 @@
 
 package org.elnix.dragonlauncher.ui.settings.workspace
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,8 +34,12 @@ import kotlinx.coroutines.launch
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.elnix.dragonlauncher.common.R
+import org.elnix.dragonlauncher.common.logging.logD
+import org.elnix.dragonlauncher.common.logging.logI
+import org.elnix.dragonlauncher.common.logging.logW
 import org.elnix.dragonlauncher.common.serializables.Workspace
 import org.elnix.dragonlauncher.common.serializables.WorkspaceType
+import org.elnix.dragonlauncher.common.utils.Constants.Logging.SAMSUNG_INTEGRATION_TAG
 import org.elnix.dragonlauncher.common.utils.SamsungWorkspaceIntegration
 import org.elnix.dragonlauncher.common.utils.showToast
 import org.elnix.dragonlauncher.enumsui.WorkspaceAction
@@ -58,7 +61,6 @@ fun WorkspaceListScreen(
 
     val scope = rememberCoroutineScope()
 
-    val tag = "SamsungIntegration"
     val state by appsViewModel.state.collectAsState()
     val samsungPreference by PrivateSettingsStore.samsungPreferSecureFolder.asState()
     val isSamsung = remember { SamsungWorkspaceIntegration.isSamsungDevice() }
@@ -83,14 +85,14 @@ fun WorkspaceListScreen(
     val privateWorkspaceEnabled = uiList.firstOrNull { it.type == WorkspaceType.PRIVATE }?.enabled == true
 
     LaunchedEffect(samsungPreference) {
-        Log.i(tag, "Loading Samsung preference: $samsungPreference")
+        logI(SAMSUNG_INTEGRATION_TAG) { "Loading Samsung preference: $samsungPreference" }
     }
 
     LaunchedEffect(isSamsung, privateWorkspaceEnabled) {
         if (isSamsung && privateWorkspaceEnabled) {
-            Log.d(tag, "Showing Samsung settings icon - Private Space toggle enabled")
+            logD(SAMSUNG_INTEGRATION_TAG) { "Showing Samsung settings icon - Private Space toggle enabled" }
         } else {
-            Log.d(tag, "Samsung settings icon hidden (not Samsung or toggle disabled)")
+            logD(SAMSUNG_INTEGRATION_TAG) { "Samsung settings icon hidden (not Samsung or toggle disabled)" }
         }
     }
 
@@ -98,7 +100,7 @@ fun WorkspaceListScreen(
         if (isSamsung && showSamsungSettingsDialog) {
             hasSecureFolder = SamsungWorkspaceIntegration.isSecureFolderAvailable(ctx)
             if (!hasSecureFolder && samsungPreference) {
-                Log.w(tag, "Secure Folder not available, disabling toggle")
+                logW(SAMSUNG_INTEGRATION_TAG) { "Secure Folder not available, disabling toggle" }
                 PrivateSettingsStore.samsungPreferSecureFolder.set(ctx, false)
             }
         }
@@ -250,11 +252,11 @@ fun WorkspaceListScreen(
                         onCheckedChange = { newValue ->
                             scope.launch {
                                 if (newValue && !hasSecureFolder) {
-                                    Log.w(tag, "Secure Folder not available, disabling toggle")
+                                    logW(SAMSUNG_INTEGRATION_TAG) { "Secure Folder not available, disabling toggle" }
                                     ctx.showToast(secureFolderUnavailableText)
                                     PrivateSettingsStore.samsungPreferSecureFolder.set(ctx, false)
                                 } else {
-                                    Log.i(tag, "User preference changed: useSecureFolder=$newValue")
+                                    logI(SAMSUNG_INTEGRATION_TAG) { "User preference changed: useSecureFolder=$newValue" }
                                     PrivateSettingsStore.samsungPreferSecureFolder.set(ctx, newValue)
                                 }
                             }
@@ -264,7 +266,7 @@ fun WorkspaceListScreen(
                     if (!hasSecureFolder) {
                         Text(
                             text = stringResource(R.string.secure_folder_unavailable),
-                            color = androidx.compose.material3.MaterialTheme.colorScheme.error
+                            color = MaterialTheme.colorScheme.error
                         )
                     }
                 }

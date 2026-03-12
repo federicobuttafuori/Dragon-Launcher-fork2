@@ -502,7 +502,7 @@ fun SettingsScreen(
         try {
             points.addAll(savedPoints)
         } catch (e: NullPointerException) {
-            logE(SWIPE_TAG) { "NullPointerException loading swipe points: $e" }
+            logE(SWIPE_TAG, e) { "NullPointerException loading swipe points" }
             ctx.showToast("NullPointerException loading swipe points: $e")
 
             // Fallback load them the old way
@@ -517,10 +517,10 @@ fun SettingsScreen(
                     )
                 }
             } catch (e: Exception) {
-                logE(SWIPE_TAG) { "Fallback loading also failed, clearing all points: $e" }
+                logE(SWIPE_TAG, e) { "Fallback loading also failed, clearing all points: $e" }
             }
         } catch (e: Exception) {
-            logE(SWIPE_TAG) { "Error loading swipe points: $e" }
+            logE(SWIPE_TAG, e) { "Error loading swipe points: $e" }
             ctx.showToast("Error loading swipe points: $e")
         }
 
@@ -529,7 +529,7 @@ fun SettingsScreen(
         try {
             nests.addAll(savedNests)
         } catch (e: Exception) {
-            logE(SWIPE_TAG) { "Error loading nests: $e" }
+            logE(SWIPE_TAG, e) { "Error loading nests: $e" }
             ctx.showToast("Error loading swipe points: $e")
         }
     }

@@ -12,6 +12,7 @@ import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import com.google.gson.reflect.TypeToken
 import org.elnix.dragonlauncher.common.logging.logE
+import org.elnix.dragonlauncher.common.logging.logW
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.SWIPE_TAG
 import org.elnix.dragonlauncher.common.utils.SETTINGS
 import java.lang.reflect.Type
@@ -205,13 +206,13 @@ object LegacySwipeJson {
 
     private fun <T> legacyDecodeSafe(json: String, type: Type): List<T> {
         if (json.isBlank()) {
-            logE(SWIPE_TAG) { "Legacy json is empty, using emptyList()" }
+            logW(SWIPE_TAG) { "Legacy json is empty, using emptyList()" }
             return emptyList()
         }
         return try {
             gson.fromJson(json, type)
         } catch (e: Throwable) {
-            logE(SWIPE_TAG) { "Legacy decode failed too, using emptyList(): ${e.message}" }
+            logE(SWIPE_TAG, e) { "Legacy decode failed too, using emptyList()" }
             emptyList()
         }
     }

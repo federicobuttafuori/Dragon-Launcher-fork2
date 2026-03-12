@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi
 import org.elnix.dragonlauncher.common.logging.logD
 import org.elnix.dragonlauncher.common.logging.logE
 import org.elnix.dragonlauncher.common.logging.logI
+import org.elnix.dragonlauncher.common.logging.logW
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.PRIVATE_SPACE_UTILS
 
 /**
@@ -51,14 +52,14 @@ object PrivateSpaceUtils {
                         return userHandle
                     }
                 } catch (e: Exception) {
-                    logE(PRIVATE_SPACE_UTILS) { "Error checking user profile: ${e.message}" }
+                    logE(PRIVATE_SPACE_UTILS, e) { "Error checking user profile" }
                 }
             }
 
             logI(PRIVATE_SPACE_UTILS) { "No Private Space profile found" }
             return null
         } catch (e: Exception) {
-            logE(PRIVATE_SPACE_UTILS) { "Error getting Private Space user handle: ${e.message}" }
+            logE(PRIVATE_SPACE_UTILS, e) { "Error getting Private Space user handle" }
             return null
         }
     }
@@ -77,7 +78,7 @@ object PrivateSpaceUtils {
             logD(PRIVATE_SPACE_UTILS) { "Private Space locked status: $isLocked" }
             return isLocked
         } catch (e: Exception) {
-            logE(PRIVATE_SPACE_UTILS) { "Error checking Private Space lock status: ${e.message}" }
+            logE(PRIVATE_SPACE_UTILS, e) { "Error checking Private Space lock status" }
             return null
         }
     }
@@ -108,7 +109,7 @@ object PrivateSpaceUtils {
     @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     fun requestUnlockPrivateSpace(ctx: Context): Boolean {
         val privateUserHandle = getPrivateSpaceUserHandle(ctx) ?: run {
-            logE(PRIVATE_SPACE_UTILS) { "Cannot unlock: Private Space not found" }
+            logW(PRIVATE_SPACE_UTILS) { "Cannot unlock: Private Space not found" }
             return false
         }
 
@@ -130,7 +131,7 @@ object PrivateSpaceUtils {
             logI(PRIVATE_SPACE_UTILS) { "requestQuietModeEnabled returned: $success" }
             return success
         } catch (e: Exception) {
-            logE(PRIVATE_SPACE_UTILS) { "Error requesting Private Space unlock: ${e.message}" }
+            logE(PRIVATE_SPACE_UTILS, e) { "Error requesting Private Space unlock" }
             return false
         }
     }
@@ -178,7 +179,7 @@ object PrivateSpaceUtils {
 //
 //            return success
 //        } catch (e: Exception) {
-//            logE(PRIVATE_SPACE_UTILS, "Error requesting Private Space lock: ${e.message}", e)
+//            logE(PRIVATE_SPACE_UTILS, "Error requesting Private Space lock", e)
 //            return false
 //        }
 //    }
@@ -195,7 +196,7 @@ object PrivateSpaceUtils {
 //            val activities = launcherApps.getActivityList(null, privateUserHandle)
 //            return activities.isNotEmpty()
 //        } catch (e: Exception) {
-//            logE(PRIVATE_SPACE_UTILS, "Error checking Private Space apps: ${e.message}")
+//            logE(PRIVATE_SPACE_UTILS, "Error checking Private Space apps")
 //            return false
 //        }
 //    }

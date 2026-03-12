@@ -88,7 +88,7 @@ fun AngleLineTab(onBack: () -> Unit) {
         default = UiConstants.defaultLineCustomObject,
         json = json
     ) {
-        logE(ANGLE_LINE_TAG) { "Error decoding lineObject" }
+        logE(ANGLE_LINE_TAG, it) { "Error decoding lineObject" }
     }
 
     val angleLineJson by AngleLineSettingsStore.angleLineJson.asState()
@@ -97,7 +97,7 @@ fun AngleLineTab(onBack: () -> Unit) {
         default = UiConstants.defaultAngleCustomObject,
         json = json
     ) {
-        logE(ANGLE_LINE_TAG) { "Error decoding angleLineObject" }
+        logE(ANGLE_LINE_TAG, it) { "Error decoding angleLineObject" }
     }
 
     val startLineJson by AngleLineSettingsStore.startLineJson.asState()
@@ -106,7 +106,7 @@ fun AngleLineTab(onBack: () -> Unit) {
         default = UiConstants.defaultStartCustomObject,
         json = json
     ) {
-        logE(ANGLE_LINE_TAG) { "Error decoding startLineObject" }
+        logE(ANGLE_LINE_TAG, it) { "Error decoding startLineObject" }
     }
 
     val endLineJson by AngleLineSettingsStore.endLineJson.asState()
@@ -115,7 +115,7 @@ fun AngleLineTab(onBack: () -> Unit) {
         default = UiConstants.defaultEndCustomObject,
         json = json
     ) {
-        logE(ANGLE_LINE_TAG) { "Error decoding endLineObject" }
+        logE(ANGLE_LINE_TAG, it) { "Error decoding endLineObject" }
     }
 
     val rgbLine by UiSettingsStore.rgbLine.asState()

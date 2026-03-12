@@ -57,10 +57,10 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.common.logging.logE
+import org.elnix.dragonlauncher.common.logging.logW
 import org.elnix.dragonlauncher.common.serializables.AppModel
 import org.elnix.dragonlauncher.common.serializables.WorkspaceType
-import org.elnix.dragonlauncher.common.utils.Constants
+import org.elnix.dragonlauncher.common.utils.Constants.Logging.PRIVATE_SPACE_TAG
 import org.elnix.dragonlauncher.common.utils.PrivateSpaceUtils
 import org.elnix.dragonlauncher.common.utils.UiConstants.DragonShape
 import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
@@ -72,7 +72,6 @@ import org.elnix.dragonlauncher.ui.modifiers.settingsGroup
 import org.elnix.dragonlauncher.ui.remembers.LocalAppLifecycleViewModel
 import org.elnix.dragonlauncher.ui.remembers.LocalAppsViewModel
 
-@Suppress("AssignedValueIsNeverRead")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AppPickerDialog(
@@ -133,7 +132,7 @@ fun AppPickerDialog(
             newWorkspace.type == WorkspaceType.PRIVATE &&
             privateSpaceState.isLocked
         ) {
-            logE(Constants.Logging.PRIVATE_SPACE_TAG) { "Picker launch!" }
+            logW(PRIVATE_SPACE_TAG) { "Picker launch!" }
             appLifecycleViewModel.onUnlockPrivateSpace()
         }
 
@@ -229,7 +228,7 @@ fun AppPickerDialog(
                             modifier = Modifier.focusRequester(focusRequester),
 
                             // No need to put anything here, the thing is working well without,
-                            // if i put isSearchbarEnabled = true inside, I need to spam
+                            // if I put isSearchbarEnabled = true inside, I need to spam
                             // that search button to show the search abr somehow
                             onFocusStateChanged = { }
                         )
@@ -346,7 +345,7 @@ fun AppPickerDialog(
                                     it.isLocked -> {
                                         DragonIconButton(
                                             onClick = {
-                                                logE(Constants.Logging.PRIVATE_SPACE_TAG) { "Drawer reload button launch!" }
+                                                logW(PRIVATE_SPACE_TAG) { "Drawer reload button launch!" }
                                                 appLifecycleViewModel.onUnlockPrivateSpace()
                                             }) {
                                             Icon(

@@ -46,7 +46,7 @@ object DragonLogManager {
         return try {
             file.readText()
         } catch (e: Exception) {
-            "Failed to read log file: ${e.message}"
+            "Failed to read log file"
         }
     }
 

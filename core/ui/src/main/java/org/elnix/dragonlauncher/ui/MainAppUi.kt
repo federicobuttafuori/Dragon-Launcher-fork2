@@ -141,11 +141,11 @@ import org.elnix.dragonlauncher.ui.settings.customization.BehaviorTab
 import org.elnix.dragonlauncher.ui.settings.customization.ColorSelectorTab
 import org.elnix.dragonlauncher.ui.settings.customization.DrawerTab
 import org.elnix.dragonlauncher.ui.settings.customization.FloatingAppsTab
+import org.elnix.dragonlauncher.ui.settings.customization.FontPickerScreen
 import org.elnix.dragonlauncher.ui.settings.customization.IconPackTab
 import org.elnix.dragonlauncher.ui.settings.customization.NestEditingScreen
 import org.elnix.dragonlauncher.ui.settings.customization.StatusBarTab
 import org.elnix.dragonlauncher.ui.settings.customization.ThemesTab
-import org.elnix.dragonlauncher.ui.settings.customization.FontPickerScreen
 import org.elnix.dragonlauncher.ui.settings.customization.WallpaperTab
 import org.elnix.dragonlauncher.ui.settings.debug.DebugTab
 import org.elnix.dragonlauncher.ui.settings.debug.LogsTab
@@ -272,7 +272,8 @@ fun MainAppUi(
     val socialMediaPauseEnabled by WellbeingSettingsStore.socialMediaPauseEnabled.asState()
     val guiltModeEnabled by WellbeingSettingsStore.guiltModeEnabled.asState()
     val pauseDuration by WellbeingSettingsStore.pauseDurationSeconds.asState()
-    val pausedApps by WellbeingSettingsStore.getPausedAppsFlow(ctx).collectAsState(initial = emptySet())
+    val pausedApps by WellbeingSettingsStore.getPausedAppsFlow(ctx)
+        .collectAsState(initial = emptySet())
     val reminderEnabled by WellbeingSettingsStore.reminderEnabled.asState()
     val reminderInterval by WellbeingSettingsStore.reminderIntervalMinutes.asState()
     val reminderMode by WellbeingSettingsStore.reminderMode.asState()
@@ -312,7 +313,7 @@ fun MainAppUi(
                         pendingUserIdToLaunch!!
                     )
                 } catch (e: Exception) {
-                    logE(TAG) { "Failed to launch after pause: ${e.message}" }
+                    logE(TAG, e) { "Failed to launch after pause" }
                 }
             } else if (result.resultCode == DigitalPauseActivity.RESULT_PROCEED_WITH_TIMER) {
                 try {
@@ -345,10 +346,8 @@ fun MainAppUi(
                         pendingUserIdToLaunch!!
                     )
                 } catch (e: Exception) {
-                    logE(
-                        APP_LAUNCH_TAG
-                    ) {
-                        "Failed to launch after pause with timer: ${e.message}"
+                    logE(APP_LAUNCH_TAG, e) {
+                        "Failed to launch after pause with timer"
                     }
                 }
             }
@@ -524,9 +523,9 @@ fun MainAppUi(
                 }
             )
         } catch (e: AppLaunchException) {
-            logE(TAG) { e.message ?: "" }
+            logE(TAG, e) { "Failed to launch action" }
         } catch (e: Exception) {
-            logE(TAG) { e.message ?: "" }
+            logE(TAG, e) { "Unknow error while launching action" }
         }
     }
 
@@ -626,7 +625,8 @@ fun MainAppUi(
 
     val nests by SwipeSettingsStore.getNestsFlow(ctx).collectAsState(initial = emptyList())
     val points by SwipeSettingsStore.getPointsFlow(ctx).collectAsState(emptyList())
-    val defaultPoint by SwipeSettingsStore.getDefaultPointFlow(ctx).collectAsState(defaultSwipePointsValues)
+    val defaultPoint by SwipeSettingsStore.getDefaultPointFlow(ctx)
+        .collectAsState(defaultSwipePointsValues)
 
 
     val showStatusBar by StatusBarSettingsStore.showStatusBar.asState()
@@ -657,7 +657,7 @@ fun MainAppUi(
         default = UiConstants.defaultLineCustomObject,
         json = json
     ) {
-        logE(ANGLE_LINE_TAG) { "Error decoding lineObject" }
+        logW(ANGLE_LINE_TAG) { "Error decoding lineObject" }
     }
 
     val angleLineJson by AngleLineSettingsStore.angleLineJson.asState()
@@ -666,7 +666,7 @@ fun MainAppUi(
         default = UiConstants.defaultAngleCustomObject,
         json = json
     ) {
-        logE(ANGLE_LINE_TAG) { "Error decoding angleLineObject" }
+        logW(ANGLE_LINE_TAG) { "Error decoding angleLineObject" }
     }
 
     val startLineJson by AngleLineSettingsStore.startLineJson.asState()
@@ -675,7 +675,7 @@ fun MainAppUi(
         default = UiConstants.defaultStartCustomObject,
         json = json
     ) {
-        logE(ANGLE_LINE_TAG) { "Error decoding startLineObject" }
+        logW(ANGLE_LINE_TAG) { "Error decoding startLineObject" }
     }
 
     val endLineJson by AngleLineSettingsStore.endLineJson.asState()
@@ -684,7 +684,7 @@ fun MainAppUi(
         default = UiConstants.defaultEndCustomObject,
         json = json
     ) {
-        logE(ANGLE_LINE_TAG) { "Error decoding endLineObject" }
+        logW(ANGLE_LINE_TAG) { "Error decoding endLineObject" }
     }
 
     /**
@@ -724,7 +724,10 @@ fun MainAppUi(
                         onClick = { navController.navigate(SETTINGS.COLORS) },
                         containerColor = MaterialTheme.colorScheme.primary
                     ) {
-                        Icon(Icons.Filled.Edit, contentDescription = stringResource(R.string.back_to_colors_settings))
+                        Icon(
+                            Icons.Filled.Edit,
+                            contentDescription = stringResource(R.string.back_to_colors_settings)
+                        )
                     }
                 }
             },
@@ -803,13 +806,28 @@ fun MainAppUi(
                         )
                     }
                     noAnimComposable(SETTINGS.WALLPAPER) { WallpaperTab(::goAppearance) }
-                    noAnimComposable(SETTINGS.ICON_PACK) { IconPackTab(appsViewModel, ::goAppearance) }
+                    noAnimComposable(SETTINGS.ICON_PACK) {
+                        IconPackTab(
+                            appsViewModel,
+                            ::goAppearance
+                        )
+                    }
                     noAnimComposable(SETTINGS.STATUS_BAR) { StatusBarTab(::goAppearance) }
                     noAnimComposable(SETTINGS.THEME) { ThemesTab(::goAppearance) }
                     noAnimComposable(SETTINGS.PERMISSIONS) { PermissionsTab { goAdvSettingsRoot() } }
 
-                    noAnimComposable(SETTINGS.BEHAVIOR) { BehaviorTab(navController ,::goAdvSettingsRoot) }
-                    noAnimComposable(SETTINGS.DRAWER) { DrawerTab(appsViewModel, ::goAdvSettingsRoot) }
+                    noAnimComposable(SETTINGS.BEHAVIOR) {
+                        BehaviorTab(
+                            navController,
+                            ::goAdvSettingsRoot
+                        )
+                    }
+                    noAnimComposable(SETTINGS.DRAWER) {
+                        DrawerTab(
+                            appsViewModel,
+                            ::goAdvSettingsRoot
+                        )
+                    }
                     noAnimComposable(SETTINGS.COLORS) { ColorSelectorTab(::goAppearance) }
                     noAnimComposable(SETTINGS.DEBUG) {
                         DebugTab(
@@ -825,190 +843,204 @@ fun MainAppUi(
                     noAnimComposable(SETTINGS.BACKUP) { BackupTab(::goAdvSettingsRoot) }
                     noAnimComposable(SETTINGS.CHANGELOGS) { ChangelogsScreen(::goAdvSettingsRoot) }
                     noAnimComposable(SETTINGS.EXTENSIONS) { ExtensionsTab(::goAdvSettingsRoot) }
+                    noAnimComposable(SETTINGS.FONTS) {
+                        FontPickerScreen(::goAppearance)
 
-                    noAnimComposable(SETTINGS.WELLBEING) { WellbeingTab(::goAdvSettingsRoot) }
+                        noAnimComposable(SETTINGS.WELLBEING) { WellbeingTab(::goAdvSettingsRoot) }
 
-                    noAnimComposable(SETTINGS.NESTS_EDIT) {
-                        NestEditingScreen(
-                            nestId = pendingNestToEdit,
-                            onBack = ::goSettingsRoot
-                        )
-                    }
+                        noAnimComposable(SETTINGS.NESTS_EDIT) {
+                            NestEditingScreen(
+                                nestId = pendingNestToEdit,
+                                onBack = ::goSettingsRoot
+                            )
+                        }
 
-                    noAnimComposable(SETTINGS.WIDGETS_FLOATING_APPS) {
-                        FloatingAppsTab(
-                            widgetHostProvider = widgetHostProvider,
-                            onBack = ::goAppearance,
-                            onLaunchSystemWidgetPicker = ::launchWidgetsPicker,
-                            onResetWidgetSize = onResetWidgetSize,
-                            onRemoveWidget = onRemoveFloatingApp
-                        )
-                    }
+                        noAnimComposable(SETTINGS.WIDGETS_FLOATING_APPS) {
+                            FloatingAppsTab(
+                                widgetHostProvider = widgetHostProvider,
+                                onBack = ::goAppearance,
+                                onLaunchSystemWidgetPicker = ::launchWidgetsPicker,
+                                onResetWidgetSize = onResetWidgetSize,
+                                onRemoveWidget = onRemoveFloatingApp
+                            )
+                        }
 
-                    noAnimComposable(SETTINGS.WORKSPACE) {
-                        WorkspaceListScreen(
-                            onOpenWorkspace = { id ->
-                                navController.navigate(
-                                    SETTINGS.WORKSPACE_DETAIL.replace("{id}", id)
-                                )
-                            },
-                            onBack = ::goAdvSettingsRoot
-                        )
-                    }
+                        noAnimComposable(SETTINGS.WORKSPACE) {
+                            WorkspaceListScreen(
+                                onOpenWorkspace = { id ->
+                                    navController.navigate(
+                                        SETTINGS.WORKSPACE_DETAIL.replace("{id}", id)
+                                    )
+                                },
+                                onBack = ::goAdvSettingsRoot
+                            )
+                        }
 
-                    noAnimComposable(
-                        route = SETTINGS.WORKSPACE_DETAIL,
-                        arguments = listOf(navArgument("id") { type = NavType.StringType }),
-                    ) { backStack ->
-                        WorkspaceDetailScreen(
-                            showLabels = showAppLabelsInDrawer,
-                            showIcons = showAppIconsInDrawer,
-                            gridSize = gridSize,
-                            workspaceId = backStack.arguments!!.getString("id")!!,
-                            onBack = { navController.popBackStack() },
-                            onLaunchAction = ::launchApp
-                        )
+                        noAnimComposable(
+                            route = SETTINGS.WORKSPACE_DETAIL,
+                            arguments = listOf(navArgument("id") { type = NavType.StringType }),
+                        ) { backStack ->
+                            WorkspaceDetailScreen(
+                                showLabels = showAppLabelsInDrawer,
+                                showIcons = showAppIconsInDrawer,
+                                gridSize = gridSize,
+                                workspaceId = backStack.arguments!!.getString("id")!!,
+                                onBack = { navController.popBackStack() },
+                                onLaunchAction = ::launchApp
+                            )
+                        }
                     }
                 }
             }
         }
-    }
 
-    if (showFilePicker != null) {
-        val currentPoint = showFilePicker!!
+        if (showFilePicker != null) {
+            val currentPoint = showFilePicker!!
 
-        FilePickerDialog(
-            onDismiss = { showFilePicker = null },
-            onFileSelected = { newAction ->
+            FilePickerDialog(
+                onDismiss = { showFilePicker = null },
+                onFileSelected = { newAction ->
 
-                // Build the updated point
-                val updatedPoint = currentPoint.copy(action = newAction)
+                    // Build the updated point
+                    val updatedPoint = currentPoint.copy(action = newAction)
 
-                // Replace only this point
-                val finalList = points.map { p ->
-                    if (p.id == currentPoint.id) updatedPoint else p
+                    // Replace only this point
+                    val finalList = points.map { p ->
+                        if (p.id == currentPoint.id) updatedPoint else p
+                    }
+
+
+                    scope.launch {
+                        SwipeSettingsStore.savePoints(ctx, finalList)
+                    }
+
+                    showFilePicker = null
                 }
+            )
+        }
 
-
+        if (showWhatsNewBottomSheet) {
+            WhatsNewBottomSheet(
+                updates = updates
+            ) {
+                showWhatsNewBottomSheet = false
                 scope.launch {
-                    SwipeSettingsStore.savePoints(ctx, finalList)
+                    PrivateSettingsStore.lastSeenVersionCodeWhatsNew.set(
+                        ctx,
+                        currentVersionCode
+                    )
                 }
-
-                showFilePicker = null
             }
-        )
-    }
-
-    if (showWhatsNewBottomSheet) {
-        WhatsNewBottomSheet(
-            updates = updates
-        ) {
-            showWhatsNewBottomSheet = false
-            scope.launch { PrivateSettingsStore.lastSeenVersionCodeWhatsNew.set(ctx, currentVersionCode) }
-        }
-    }
-
-    if (showWidgetPicker != null) {
-        val nestToBind = showWidgetPicker!!
-        WidgetPickerDialog(
-            onBindCustomWidget = { id, info ->
-                onBindCustomWidget(id, info, nestToBind)
-            }
-        ) { showWidgetPicker = null }
-    }
-
-    /* ───────────── RESULT DIALOG ( IMPORT / EXPORT ) ───────────── */
-    result?.let { res ->
-        val isError = res.error
-        val isExport = res.export
-        val errorMessage = res.message
-
-        // Reload the whole viewModel data after restore
-        scope.launch(Dispatchers.IO) {
-            appsViewModel.loadAll()
         }
 
-        UserValidation(
-            title = when {
-                isError && isExport -> stringResource(R.string.export_failed)
-                isError && !isExport -> stringResource(R.string.import_failed)
-                !isError && isExport -> stringResource(R.string.export_successful)
-                else -> stringResource(R.string.import_successful)
-            },
-            message = when {
-                isError -> errorMessage.ifBlank { stringResource(R.string.unknown_error) }
-                isExport -> stringResource(R.string.export_successful)
-                else -> null
-            },
-            titleIcon = if (isError) Icons.Default.Warning else Icons.Default.Check,
-            titleColor = if (isError) MaterialTheme.colorScheme.error else Color.Green,
-            copy = isError,
-            onValidate = { backupViewModel.setResult(null) }
-        )
-    }
+        if (showWidgetPicker != null) {
+            val nestToBind = showWidgetPicker!!
+            WidgetPickerDialog(
+                onBindCustomWidget = { id, info ->
+                    onBindCustomWidget(id, info, nestToBind)
+                }
+            ) { showWidgetPicker = null }
+        }
 
-    /* ────────── PIN unlock dialog ────────── */
-    if (showPinDialog != null) {
-        val routeQuery = showPinDialog!!
-        var pin by remember { mutableStateOf("") }
-        val pinShapes = remember { mutableStateListOf<IconShape>() }
-        var failedTries by remember { mutableIntStateOf(0) }
+        /* ───────────── RESULT DIALOG ( IMPORT / EXPORT ) ───────────── */
+        result?.let { res ->
+            val isError = res.error
+            val isExport = res.export
+            val errorMessage = res.message
 
-        PinUnlockDialog(
-            onDismiss = { showPinDialog = null; pinError = null },
-            onValidate = {
-                if (SecurityHelper.verifyPin(pin, pinHash)) {
-                    isUnlocked = true
-                    showPinDialog = null
+            // Reload the whole viewModel data after restore
+            scope.launch(Dispatchers.IO) {
+                appsViewModel.loadAll()
+            }
+
+            UserValidation(
+                title = when {
+                    isError && isExport -> stringResource(R.string.export_failed)
+                    isError && !isExport -> stringResource(R.string.import_failed)
+                    !isError && isExport -> stringResource(R.string.export_successful)
+                    else -> stringResource(R.string.import_successful)
+                },
+                message = when {
+                    isError -> errorMessage.ifBlank { stringResource(R.string.unknown_error) }
+                    isExport -> stringResource(R.string.export_successful)
+                    else -> null
+                },
+                titleIcon = if (isError) Icons.Default.Warning else Icons.Default.Check,
+                titleColor = if (isError) MaterialTheme.colorScheme.error else Color.Green,
+                copy = isError,
+                onValidate = { backupViewModel.setResult(null) }
+            )
+        }
+
+        /* ────────── PIN unlock dialog ────────── */
+        if (showPinDialog != null) {
+            val routeQuery = showPinDialog!!
+            var pin by remember { mutableStateOf("") }
+            val pinShapes = remember { mutableStateListOf<IconShape>() }
+            var failedTries by remember { mutableIntStateOf(0) }
+
+            PinUnlockDialog(
+                onDismiss = { showPinDialog = null; pinError = null },
+                onValidate = {
+                    if (SecurityHelper.verifyPin(pin, pinHash)) {
+                        isUnlocked = true
+                        showPinDialog = null
+                        pinError = null
+                        goSettings(routeQuery)
+                    } else {
+                        pinError = ctx.getString(R.string.wrong_pin)
+                        failedTries++
+                    }
+                    pinShapes.clear()
+                    pin = ""
+                },
+                errorMessage = pinError,
+                pin = { pin },
+                pinShapes = { pinShapes },
+                failedTries = { failedTries },
+                onPinChanged = { newValue ->
                     pinError = null
-                    goSettings(routeQuery)
-                } else {
-                    pinError = ctx.getString(R.string.wrong_pin)
-                    failedTries++
-                }
-                pinShapes.clear()
-                pin = ""
-            },
-            errorMessage = pinError,
-            pin = { pin },
-            pinShapes = { pinShapes },
-            failedTries = { failedTries },
-            onPinChanged = { newValue ->
-                pinError = null
-                pin = newValue
-                if (pinShapes.size < newValue.length) {
-                    repeat(newValue.length - pinShapes.size) {
-                        pinShapes.add(allShapesWithoutRandom.random())
-                    }
-                } else {
-                    repeat(pinShapes.size - newValue.length) {
-                        pinShapes.removeAt(pinShapes.lastIndex)
+                    pin = newValue
+                    if (pinShapes.size < newValue.length) {
+                        repeat(newValue.length - pinShapes.size) {
+                            pinShapes.add(allShapesWithoutRandom.random())
+                        }
+                    } else {
+                        repeat(pinShapes.size - newValue.length) {
+                            pinShapes.removeAt(pinShapes.lastIndex)
+                        }
                     }
                 }
-            }
-        )
-    }
+            )
+        }
 
 
-    if (lastSeenVersionCodeGoogleLockdownWarning < currentVersionCode) {
-        GoogleLockingWarning(
-            onSolution = {
-                ctx.openUrl("https://keepandroidopen.org/")
+        if (lastSeenVersionCodeGoogleLockdownWarning < currentVersionCode) {
+            GoogleLockingWarning(
+                onSolution = {
+                    ctx.openUrl("https://keepandroidopen.org/")
+                    scope.launch {
+                        PrivateSettingsStore.lastSeenVersionCodeGoogleLockdownWarning.set(
+                            ctx,
+                            currentVersionCode
+                        )
+                    }
+                }
+            ) {
                 scope.launch {
-                    PrivateSettingsStore.lastSeenVersionCodeGoogleLockdownWarning.set(ctx, currentVersionCode)
+                    PrivateSettingsStore.lastSeenVersionCodeGoogleLockdownWarning.set(
+                        ctx,
+                        currentVersionCode
+                    )
                 }
-            }
-        ) {
-            scope.launch {
-                PrivateSettingsStore.lastSeenVersionCodeGoogleLockdownWarning.set(ctx, currentVersionCode)
             }
         }
-    }
 
-    // Private space optional debug info
-    val state by privateSpaceState.collectAsState()
-    val privateSpaceDebugInfo by DebugSettingsStore.privateSpaceDebugInfo.asState()
-    AnimatedVisibility(privateSpaceDebugInfo) {
-        PrivateSpaceStateDebugScreen(state)
+        // Private space optional debug info
+        val state by privateSpaceState.collectAsState()
+        val privateSpaceDebugInfo by DebugSettingsStore.privateSpaceDebugInfo.asState()
+        AnimatedVisibility(privateSpaceDebugInfo) {
+            PrivateSpaceStateDebugScreen(state)
+        }
     }
 }

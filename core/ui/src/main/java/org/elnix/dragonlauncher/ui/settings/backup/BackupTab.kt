@@ -185,7 +185,7 @@ fun BackupTab(onBack: () -> Unit) {
                         title = "Auto-backup enabled"
                     )
                 )
-            } catch (_: SecurityException) {
+            } catch (e: SecurityException) {
                 // Fallback: Store non-persistable URI or notify user
                 backupViewModel.setResult(
                     BackupResult(
@@ -194,7 +194,7 @@ fun BackupTab(onBack: () -> Unit) {
                         title = "Backup saved (limited persistence)"
                     )
                 )
-                logE(BACKUP_TAG) { "Persistable permission not available for URI: $uri" }
+                logE(BACKUP_TAG, e) { "Persistable permission not available for URI: $uri" }
             }
         }
     }

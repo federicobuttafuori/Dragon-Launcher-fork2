@@ -121,7 +121,7 @@ object SwipeJson {
                 // If empty, but no errors reported, try the old method anyways
                 ?: LegacySwipeJson.decodePoints(json)
         } catch (e: Exception) {
-            logE(SWIPE_TAG, e) { "Modern points decode failed, trying legacy method: ${e.message}" }
+            logE(SWIPE_TAG, e) { "Modern points decode failed, trying legacy method" }
 
             // Decode the ol' way, returns emptyList if fails. (Skill issue if it happens)
             LegacySwipeJson.decodePoints(json)
@@ -141,7 +141,7 @@ object SwipeJson {
         return try {
             jsonConfig.decodeFromString(json)
         } catch (e: Exception) {
-            logE(SWIPE_TAG, e) { "Modern nest decode failed, trying legacy: ${e.message}" }
+            logE(SWIPE_TAG, e) { "Modern nest decode failed, trying legacy" }
 
             // Decode the ol' way, returns emptyList if fails. (Skill issue if it happens)
             LegacySwipeJson.decodeNests(json)

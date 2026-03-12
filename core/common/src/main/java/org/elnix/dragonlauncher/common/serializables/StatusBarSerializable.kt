@@ -108,7 +108,7 @@ object StatusBarJson {
         return try {
             jsonConfig.decodeFromString(json)
         } catch (e: Throwable) {
-            logE(STATUS_BAR_TAG) { "Decode failed for JSON: $json - ${e.message}" }
+            logE(STATUS_BAR_TAG, e) { "Decode failed for JSON: $json - ${e.message}" }
             emptyList()
         }
     }

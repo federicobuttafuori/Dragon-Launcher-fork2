@@ -4,7 +4,7 @@ import android.content.pm.ApplicationInfo
 import androidx.compose.runtime.Immutable
 import com.google.gson.annotations.SerializedName
 import org.elnix.dragonlauncher.common.logging.logE
-import org.elnix.dragonlauncher.common.utils.Constants
+import org.elnix.dragonlauncher.common.utils.Constants.Logging.WORKSPACES_TAG
 
 @Immutable
 data class AppModel(
@@ -56,7 +56,7 @@ fun CacheKey.splitCacheKey(): Pair<String, Int> {
             return Pair(split.first(), split.last().toInt())
         }
     } catch (e: Throwable) {
-        logE(Constants.Logging.WORKSPACES_TAG) { "Error splitting cacheKey" }
+        logE(WORKSPACES_TAG, e) { "Error splitting cacheKey" }
     }
     // Fallback if user has still the old storage way, with no cacheKey
     return Pair(cacheKey, 0)

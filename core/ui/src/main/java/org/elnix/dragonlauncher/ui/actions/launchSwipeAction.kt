@@ -92,9 +92,9 @@ fun launchSwipeAction(
                 // If app has no wellbeing checks to do; it launches directly
                 launchAppDirectly(appsViewModel, ctx, action.packageName, action.userId ?: 0)
             } catch (e: AppLaunchException) {
-                logE(APP_LAUNCH_TAG) { e.toString() }
+                logE(APP_LAUNCH_TAG, e) { e.toString() }
             } catch (e: Exception) {
-                logE(APP_LAUNCH_TAG) { e.toString() }
+                logE(APP_LAUNCH_TAG, e) { e.toString() }
                 e.printStackTrace()
             }
         }
@@ -173,8 +173,8 @@ fun launchSwipeAction(
                 }
 
             } catch (e: Exception) {
-                ctx.showToast("Unable to open file: ${e.message}")
-                logE(TAG) { e.toString() }
+                ctx.showToast("Unable to open file" )
+                logE(TAG, e) { "Unable to open file"}
             }
         }
 
@@ -243,13 +243,13 @@ fun launchAppDirectly(
         // Track recently used app
         appsViewModel.addRecentlyUsedApp(packageName)
     } catch (e: SecurityException) {
-        logE(APP_LAUNCH_TAG) { "Security error launching $packageName" }
+        logE(APP_LAUNCH_TAG, e) { "Security error launching $packageName" }
         throw AppLaunchException("Security error launching $packageName", e)
     } catch (e: NullPointerException) {
-        logE(APP_LAUNCH_TAG) { "App component not found for $packageName" }
+        logE(APP_LAUNCH_TAG, e) { "App component not found for $packageName" }
         throw AppLaunchException("App component not found for $packageName", e)
     } catch (e: Exception) {
-        logE(APP_LAUNCH_TAG) { "Failed to launch $packageName" }
+        logE(APP_LAUNCH_TAG, e) { "Failed to launch $packageName" }
         throw AppLaunchException("Failed to launch $packageName", e)
     }
 }
