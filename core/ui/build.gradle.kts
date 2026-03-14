@@ -85,4 +85,5 @@ dependencies {
     implementation(project(":core:enumsui"))
     implementation(project(":core:services"))
     implementation(project(":core:settings"))
+    implementation(libs.androidx.runtime)
 }
