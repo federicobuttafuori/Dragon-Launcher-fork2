@@ -1295,7 +1295,7 @@ fun SettingsScreen(
             ) {
                 CircleIconButton(
                     icon = Icons.Default.Grid3x3,
-                    contentDescription = stringResource(R.string.auto_separate),
+                    contentDescription = stringResource(R.string.snap_points),
                     tint = MaterialTheme.colorScheme.primary,
                     enabled = snapPoints,
                     padding = 10.dp
