@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LoadingIndicator
@@ -190,14 +189,12 @@ private fun IconCell(
         }
 
     } ?: run {
+
+        // Empty box, as the loading is fast and don't need to display an indicator everytime
         Box(
             modifier = Modifier
                 .height(48.dp)
-                .fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            // Keep old circular progress indicator as it seems to lag less
-            CircularProgressIndicator()
-        }
+                .fillMaxWidth()
+        )
     }
 }
