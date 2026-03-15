@@ -1,5 +1,6 @@
 package org.elnix.dragonlauncher.ui.helpers
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.fadeIn
@@ -134,6 +135,12 @@ private fun SliderWithLabelInternal(
     fun editValue() {
         commitEditText(editingText, valueRange, onDragStateChange, onChange)
         focusManager.clearFocus()
+    }
+
+
+    // If the user presses back when editing, the value is commited (I use that because I do back to quit the slider label thing
+    BackHandler(isEditing) {
+        editValue()
     }
 
     // Observe focus via InteractionSource
