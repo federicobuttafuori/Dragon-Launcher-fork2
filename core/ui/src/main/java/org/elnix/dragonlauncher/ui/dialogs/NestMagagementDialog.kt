@@ -134,11 +134,16 @@ private fun NestManagementItem(
     onSelect: (() -> Unit)? = null
 ) {
     val ctx = LocalContext.current
-    val drawParams = swipeDefaultParams(nests = nests)
+
+    val surfaceColorDraw = MaterialTheme.colorScheme.surface.adjustBrightness(0.5f)
+
+    val drawParams = swipeDefaultParams(
+        backgroundColor = surfaceColorDraw,
+        nests = nests
+    )
 
     var tempCustomName by remember { mutableStateOf(nest.name ?: "") }
 
-    val surfaceColorDraw = MaterialTheme.colorScheme.surface.adjustBrightness(0.5f)
 
     val editPoint = SwipePointSerializable(
         circleNumber = 0,
@@ -169,7 +174,8 @@ private fun NestManagementItem(
                 point = editPoint,
                 center = center,
                 depth = 1,
-                drawParams = drawParams
+                drawParams = drawParams,
+                preventBgErasing = true
             )
         }
 

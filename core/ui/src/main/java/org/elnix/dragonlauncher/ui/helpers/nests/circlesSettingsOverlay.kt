@@ -29,14 +29,16 @@ fun DrawScope.circlesSettingsOverlay(
     val extraColors = drawParams.extraColors
     val showCircle = drawParams.showCircle
 
-    // 0. Erases the inner circle
     /* ───────────── Erases the circle in the point ───────────── */
 
     // if no background color provided, erases the background
     val eraseBg = surfaceColorDraw == Color.Transparent && !preventBgErasing
     val maxCircleSize: UiCircle = circles.maxByOrNull { it.radius } ?: return
 
-    // Erases the color, instead of putting it, that lets the wallpaper pass trough
+    val currentNest = drawParams.nests.find { it.id == nestId } ?: error("CRITICAL ERROR: Current nest not found in nests list")
+
+    // Erases the color, instead of putting it, that lets the wallpaper pass through
+    // Always to it to remove the remaining circle line behind previous points (nests for instance that have their inner circle empty)
     drawCircle(
         color = Color.Transparent,
         radius = maxCircleSize.radius,
@@ -44,7 +46,7 @@ fun DrawScope.circlesSettingsOverlay(
         blendMode = BlendMode.Clear
     )
 
-    // If requested to not erase the bg, draw it (this avoid the more tinted bg when using a half transparent bg color
+    // If requested to not erase the bg, draw it (this avoids the more tinted bg when using a half transparent bg color
     if (!eraseBg) {
         drawCircle(
             color = surfaceColorDraw,
@@ -55,7 +57,7 @@ fun DrawScope.circlesSettingsOverlay(
 
     // 1. Draw all circles
     circles.forEach { circle ->
-        if (showCircle) {
+        if (currentNest.showCircle ?: showCircle) {
             drawCircle(
                 color = extraColors.circle,
                 radius = circle.radius,

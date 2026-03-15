@@ -124,7 +124,7 @@ fun DrawScope.actionsInCircle(
                 blendMode = BlendMode.Clear
             )
 
-            // If requested to not erase the bg, draw it (this avoid the more tinted bg when using a half transparent bg color
+            // If requested to not erase the bg, draw it (this avoids the more tinted bg when using a half transparent bg color
             if (!eraseBg) {
                 drawCircle(
                     color = backgroundColor,
