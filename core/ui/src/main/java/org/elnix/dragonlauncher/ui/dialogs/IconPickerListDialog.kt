@@ -29,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.stringResource
@@ -166,14 +167,13 @@ private fun IconCell(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
+                .clip(DragonShape)
+                .clickable(onClick = onClick)
                 .padding(4.dp)
         ){
             Icon(
                 bitmap = it,
                 contentDescription = null,
-                modifier = Modifier.clickable {
-                    onClick()
-                },
                 tint = Color.Unspecified
             )
             Text(
