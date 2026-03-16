@@ -250,8 +250,6 @@
     <string name="add_point">추가 점수</string>
     <string name="remove_point">제거 지점</string>
     <string name="copy_point">복사 지점</string>
-    <string name="move_point_to_right">오른쪽으로 이동하세요</string>
-    <string name="move_point_to_left">왼쪽으로 이동하세요</string>
     <string name="toggle_drag_distances_editing">토글 드래그 원 편집</string>
     <string name="ghosted">고스트</string>
     <string name="foreground">전경</string>

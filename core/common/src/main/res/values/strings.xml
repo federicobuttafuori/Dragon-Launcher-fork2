@@ -268,8 +268,6 @@
     <string name="add_point">Add Point</string>
     <string name="remove_point">Remove Point</string>
     <string name="copy_point">Copy Point</string>
-    <string name="move_point_to_right">Move point to right</string>
-    <string name="move_point_to_left">Move point to left</string>
     <string name="toggle_drag_distances_editing">Toggle drag circle editing</string>
     <string name="ghosted">Ghosted</string>
     <string name="foreground">Foreground</string>
@@ -842,7 +840,7 @@
     <string name="start_object">Start Object</string>
     <string name="end_object">End Object</string>
     <string name="show_all_actions_on_current_nest">Show all action on current nest</string>
-    <string name="show_all_actions_on_current_nest_desc">Diasplay all circles and points of the current  nest while dragging</string>
+    <string name="show_all_actions_on_current_nest_desc">Display all circles and points of the current  nest while dragging</string>
     <string name="disable_auto_launch_on_space_first_char">Disable auto launch on space first char</string>
     <string name="disable_auto_launch_on_space_first_char_desc">When you press space before searching, the auto launch wont activate</string>
     <string name="configure_draw_order">Configure Draw Order</string>
@@ -862,15 +860,15 @@
     <string name="select_all">Select All</string>
     <string name="invert">Invert</string>
     <string name="advanced">Advanced</string>
-    <string name="yoann_desc">Important contributor (Extentions, performances, widgets)</string>
+    <string name="yoann_desc">Important contributor (Extensions, performances, widgets)</string>
     <string name="lucky_desc">Imortant contributor (Digital wellbeing and reminders)</string>
     <string name="version_copied_to_clipboard">Version copied to clipboard</string>
-    <string name="permission_tab_help">Control the app permisions, and differents access it has to external extentions</string>
+    <string name="permission_tab_help">Control the app permissions, and different access it has to external extensions</string>
     <string name="special_system_access">Special system access</string>
     <string name="notification_access">Notification access</string>
     <string name="notification_access_desc">Allow displaying notification dots on apps</string>
     <string name="install_from_unknown_source_permission">Install from unknown source permission (APK)</string>
-    <string name="install_from_unknown_source_permission_desc">Needed to install extentions</string>
+    <string name="install_from_unknown_source_permission_desc">Needed to install extensions</string>
 
     <string name="accessibility_service">Accessibility Service</string>
     <string name="accessibility_service_desc">Used to expand the notification panel via gestures.</string>
@@ -884,5 +882,11 @@
     <string name="free_move_dragged_point">Free move dragged point</string>
     <string name="snap_points">Snap Points</string>
     <string name="show_circle">Show Circle</string>
+    <string name="undo">Undo</string>
+    <string name="undo_all">Undo All</string>
+    <string name="redo">Redo</string>
+    <string name="redo_all">Redo All</string>
+    <string name="move_point_clockwise">Move point clockwise</string>
+    <string name="move_point_anticlockwise">Move point anticlockwise</string>
 
 </resources>

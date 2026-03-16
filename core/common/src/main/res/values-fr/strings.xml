@@ -252,8 +252,6 @@
     <string name="add_point">Point d’ajout</string>
     <string name="remove_point">Point de retrait</string>
     <string name="copy_point">Point de copie</string>
-    <string name="move_point_to_right">Déplacez le point vers la droite</string>
-    <string name="move_point_to_left">Déplacez le point vers la gauche</string>
     <string name="toggle_drag_distances_editing">Modification du cercle par glisser à bascule</string>
     <string name="ghosted">Ghosté</string>
     <string name="foreground">Premier plan</string>

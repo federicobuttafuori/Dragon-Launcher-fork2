@@ -250,8 +250,6 @@
     <string name="add_point">Ponto de Adição</string>
     <string name="remove_point">Remover Ponto</string>
     <string name="copy_point">Ponto de Cópia</string>
-    <string name="move_point_to_right">Mova o ponto para a direita</string>
-    <string name="move_point_to_left">Mova o ponto para a esquerda</string>
     <string name="toggle_drag_distances_editing">Alternar arrastar e editar círculo</string>
     <string name="ghosted">Ignorado</string>
     <string name="foreground">Primeiro plano</string>

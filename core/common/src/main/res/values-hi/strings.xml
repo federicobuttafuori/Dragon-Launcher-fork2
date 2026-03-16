@@ -252,8 +252,6 @@
     <string name="add_point">बिंदु जोड़ें</string>
     <string name="remove_point">बिंदु निकालें</string>
     <string name="copy_point">कॉपी प्वाइंट</string>
-    <string name="move_point_to_right">बिंदु को दाईं ओर ले जाएँ</string>
-    <string name="move_point_to_left">बिंदु को बाईं ओर ले जाएँ</string>
     <string name="toggle_drag_distances_editing">ड्रैग सर्कल संपादन टॉगल करें</string>
     <string name="ghosted">भूत</string>
     <string name="foreground">अग्रभूमि</string>

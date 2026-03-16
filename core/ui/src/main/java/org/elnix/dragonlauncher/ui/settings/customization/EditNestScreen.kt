@@ -48,6 +48,7 @@ import org.elnix.dragonlauncher.ui.components.settings.asState
 import org.elnix.dragonlauncher.ui.defaultDragDistance
 import org.elnix.dragonlauncher.ui.defaultHapticFeedback
 import org.elnix.dragonlauncher.ui.helpers.SliderWithLabel
+import org.elnix.dragonlauncher.ui.helpers.SwitchRow
 import org.elnix.dragonlauncher.ui.helpers.nests.circlesSettingsOverlay
 import org.elnix.dragonlauncher.ui.helpers.nests.swipeDefaultParams
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsLazyHeader
@@ -107,8 +108,8 @@ fun NestEditingScreen(
         )
     }
 
+    var showSmallPreview by remember { mutableStateOf(false) }
     var currentEditMode by remember { mutableStateOf(DRAG) }
-
     var pendingNestUpdate by remember { mutableStateOf<List<CircleNest>?>(null) }
 
     /**
@@ -313,6 +314,7 @@ fun NestEditingScreen(
                             }
                     }
 
+                    // Well in this tab I'll just put whatever settings I can put
                     RADIUS -> {
                         SliderWithLabel(
                             label = stringResource(R.string.nest_radius),
@@ -335,6 +337,18 @@ fun NestEditingScreen(
                                 }
                             }
                         ) { newValue -> tempRadius = newValue }
+
+                        // Used to control whether the nest displays its circle individually or not
+                        SwitchRow(
+                            state = currentNest.showCircle ?: drawParams.showCircle,
+                            text = stringResource(R.string.show_circle)
+                        ) { showCircle ->
+
+                            pendingNestUpdate = nests.map {
+                                if (it.id == nestId) it.copy(showCircle = showCircle)
+                                else it
+                            }
+                        }
                     }
                 }
             }

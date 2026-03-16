@@ -12,16 +12,17 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.interaction.FocusInteraction
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -29,10 +30,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Redo
-import androidx.compose.material.icons.automirrored.filled.Undo
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ChangeCircle
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.ContentCopy
@@ -44,11 +44,13 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.Restore
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.ToggleButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -71,6 +73,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -83,7 +86,6 @@ import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.base.theme.LocalExtraColors
 import org.elnix.dragonlauncher.base.theme.addRemoveCirclesColor
 import org.elnix.dragonlauncher.base.theme.copyColor
-import org.elnix.dragonlauncher.base.theme.moveColor
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.logging.logD
 import org.elnix.dragonlauncher.common.logging.logE
@@ -102,7 +104,6 @@ import org.elnix.dragonlauncher.common.utils.circles.computePointPosition
 import org.elnix.dragonlauncher.common.utils.circles.normalizeAngle
 import org.elnix.dragonlauncher.common.utils.circles.randomFreeAngle
 import org.elnix.dragonlauncher.common.utils.circles.rememberNestNavigation
-import org.elnix.dragonlauncher.common.utils.semiTransparentIfDisabled
 import org.elnix.dragonlauncher.common.utils.showToast
 import org.elnix.dragonlauncher.enumsui.NestEditTools
 import org.elnix.dragonlauncher.enumsui.NestEditTools.EnterNest
@@ -112,6 +113,7 @@ import org.elnix.dragonlauncher.enumsui.PointsEditTools
 import org.elnix.dragonlauncher.enumsui.PointsEditTools.AutoSeparate
 import org.elnix.dragonlauncher.enumsui.PointsEditTools.FreeMove
 import org.elnix.dragonlauncher.enumsui.PointsEditTools.SnapPoints
+import org.elnix.dragonlauncher.enumsui.UndRedoEditTools
 import org.elnix.dragonlauncher.settings.stores.DebugSettingsStore
 import org.elnix.dragonlauncher.settings.stores.SwipeMapSettingsStore
 import org.elnix.dragonlauncher.settings.stores.SwipeSettingsStore
@@ -119,6 +121,7 @@ import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore.autoSeparatePoints
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore.freeMoveDraggedPoint
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore.snapPoints
+import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
 import org.elnix.dragonlauncher.ui.components.AppPreviewTitle
 import org.elnix.dragonlauncher.ui.components.burger.BurgerAction
 import org.elnix.dragonlauncher.ui.components.burger.BurgerListAction
@@ -132,7 +135,7 @@ import org.elnix.dragonlauncher.ui.dialogs.EditPointDialog
 import org.elnix.dragonlauncher.ui.dialogs.NestManagementDialog
 import org.elnix.dragonlauncher.ui.dialogs.UserValidation
 import org.elnix.dragonlauncher.ui.helpers.CircleIconButton
-import org.elnix.dragonlauncher.ui.helpers.RepeatingPressButton
+import org.elnix.dragonlauncher.ui.helpers.EditValueTextField
 import org.elnix.dragonlauncher.ui.helpers.nests.actionsInCircle
 import org.elnix.dragonlauncher.ui.helpers.nests.circlesSettingsOverlay
 import org.elnix.dragonlauncher.ui.helpers.nests.glowOverlay
@@ -161,6 +164,11 @@ fun SettingsScreen(
     val ctx = LocalContext.current
     val defaultPoint = LocalDefaultPoint.current
     val extraColors = LocalExtraColors.current
+
+    // For the editing angle
+    val focusManager = LocalFocusManager.current
+    val interactionSource = remember { MutableInteractionSource() }
+
 
     val appsViewModel = LocalAppsViewModel.current
 
@@ -331,6 +339,31 @@ fun SettingsScreen(
         save()
     }
 
+    fun undoAll() {
+        if (undoStack.isEmpty() && nestsUndoStack.isEmpty()) return
+
+        // Current state goes to redo
+        redoStack = redoStack + listOf(snapshotPoints())
+        nestsRedoStack = nestsRedoStack + listOf(snapshotNests())
+
+        // Clear undo and take the first one
+        val firstPoints = undoStack.first()
+        undoStack = emptyList()
+
+        val firstNests = nestsUndoStack.first()
+        nestsUndoStack = emptyList()
+
+        points.clear()
+        points.addAll(firstPoints.map { it.copy() })
+
+        nests.clear()
+        nests.addAll(firstNests)
+
+        selectedPoint = points.find { it.id == (selectedPoint?.id ?: "") }
+
+        save()
+    }
+
     fun redo() {
         if (redoStack.isEmpty() && nestsRedoStack.isEmpty()) return
 
@@ -349,6 +382,30 @@ fun SettingsScreen(
 
         nests.clear()
         nests.addAll(lastNests)
+
+        selectedPoint = points.find { it.id == (selectedPoint?.id ?: "") }
+
+        save()
+    }
+
+    fun redoAll() {
+        if (redoStack.isEmpty() && nestsRedoStack.isEmpty()) return
+
+        // Current state goes back to undo
+        undoStack = undoStack + listOf(snapshotPoints())
+        nestsUndoStack = nestsUndoStack + listOf(snapshotNests())
+
+        val firstPoints = redoStack.first()
+        redoStack = emptyList()
+
+        val firstNests = nestsRedoStack.first()
+        nestsRedoStack = emptyList()
+
+        points.clear()
+        points.addAll(firstPoints.map { it.copy() })
+
+        nests.clear()
+        nests.addAll(firstNests)
 
         selectedPoint = points.find { it.id == (selectedPoint?.id ?: "") }
 
@@ -678,7 +735,7 @@ fun SettingsScreen(
     Box(
         Modifier
             .fillMaxSize()
-            .windowInsetsPadding(WindowInsets.safeDrawing.exclude(WindowInsets.ime))
+            .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
         Column {
             Row(
@@ -1232,10 +1289,12 @@ fun SettingsScreen(
                             NestManagement -> {
                                 showNestManagementDialog = true
                             }
+
                             GoParentNest -> {
                                 nestNavigation.goBack()
                                 selectedPoint = null
                             }
+
                             EnterNest -> {
                                 nestToGo?.let {
                                     nestNavigation.goToNest(it)
@@ -1247,58 +1306,45 @@ fun SettingsScreen(
                 }
 
                 val undoButtonEnabled = undoStack.isNotEmpty()
-                DragonIconButton(onClick = { undo() }, enabled = undoButtonEnabled) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.Undo,
-                        tint = MaterialTheme.colorScheme.primary.semiTransparentIfDisabled(
-                            undoButtonEnabled
-                        ),
-                        contentDescription = "Undo"
-                    )
-                }
-
                 val redoButtonEnabled = redoStack.isNotEmpty()
-                DragonIconButton(onClick = { redo() }, enabled = redoButtonEnabled) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.Redo,
-                        tint = MaterialTheme.colorScheme.primary.semiTransparentIfDisabled(
-                            redoButtonEnabled
-                        ),
-                        contentDescription = "Redo"
-                    )
-                }
 
-//            RepeatingPressButton(
-//                enabled = undoButtonEnabled,
-//                onPress = ::undo
-//            ) {
-//                Icon(
-//                    imageVector = Icons.AutoMirrored.Filled.Undo,
-//                    tint = MaterialTheme.colorScheme.primary.copy(if (undoButtonEnabled) 1f else 0.5f),
-//                    contentDescription = "Undo"
-//                )
-//            }
-//
-//
-//            RepeatingPressButton(
-//                enabled = redoButtonEnabled,
-//                onPress = ::redo
-//            ) {
-//                Icon(
-//                    imageVector = Icons.AutoMirrored.Filled.Redo,
-//                    contentDescription = "Redo"
-//                )
-//            }
+                MultiSelectConnectedButtonGroup(
+                    entries = UndRedoEditTools.entries,
+                    showLabel = false,
+
+                    isEnabled = {
+                        when (it) {
+                            UndRedoEditTools.UndoAll -> undoButtonEnabled
+                            UndRedoEditTools.Undo -> undoButtonEnabled
+                            UndRedoEditTools.Redo -> redoButtonEnabled
+                            UndRedoEditTools.RedoAll -> redoButtonEnabled
+                        }
+                    },
+                    isChecked = {
+                        when (it) {
+                            UndRedoEditTools.UndoAll -> undoButtonEnabled
+                            UndRedoEditTools.Undo -> undoButtonEnabled
+                            UndRedoEditTools.Redo -> redoButtonEnabled
+                            UndRedoEditTools.RedoAll -> redoButtonEnabled
+                        }
+                    }
+                ) { entry ->
+                    scope.launch {
+                        when (entry) {
+                            UndRedoEditTools.UndoAll -> undoAll()
+                            UndRedoEditTools.Undo -> undo()
+                            UndRedoEditTools.Redo -> redo()
+                            UndRedoEditTools.RedoAll -> redoAll()
+                        }
+                    }
+                }
             }
 
             Row(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp),
+                Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceAround,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-
 
                 MultiSelectConnectedButtonGroup(
                     entries = PointsEditTools.entries,
@@ -1321,84 +1367,152 @@ fun SettingsScreen(
                 }
 
 
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(70.dp)
+                        .padding(5.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    ToggleButton(
+                        checked = !aPointIsSelected,
+                        onCheckedChange = {
+                            selectedPoint?.let { point ->
+                                applyChange {
+                                    point.angleDeg = normalizeAngle(point.angleDeg + 1)
+                                    if (snapPoints) point.angleDeg = point.angleDeg
+                                        .toInt()
+                                        .toDouble()
+                                    if (autoSeparatePoints) autoSeparate(
+                                        points,
+                                        nestId,
+                                        circles.find { it.id == point.circleNumber },
+                                        point
+                                    )
+                                }
+                            }
+                        },
+                        enabled = aPointIsSelected,
+                        shapes = ButtonGroupDefaults.connectedLeadingButtonShapes(),
+                        colors = AppObjectsColors.toggleButtonColors(),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ChevronLeft,
+                            contentDescription = stringResource(R.string.move_point_clockwise)
+                        )
+                    }
 
-                RepeatingPressButton(
-                    enabled = aPointIsSelected,
-                    intervalMs = 35L,
-                    onPress = {
-                        selectedPoint?.let { point ->
-                            applyChange {
-                                point.angleDeg = normalizeAngle(point.angleDeg + 1)
-                                if (snapPoints) point.angleDeg = point.angleDeg
-                                    .toInt()
-                                    .toDouble()
-                                if (autoSeparatePoints) autoSeparate(
-                                    points,
-                                    nestId,
-                                    circles.find { it.id == point.circleNumber },
-                                    point
-                                )
+
+                    val angleTextValue = selectedPoint
+                        ?.angleDeg
+                        ?.toBigDecimal()
+                        ?.setScale(1, RoundingMode.UP)
+                        ?.toDouble()
+                        ?.toString()
+                        ?: ""
+
+
+                    var angleText by remember { mutableStateOf(angleTextValue) }
+                    LaunchedEffect(angleTextValue) { angleText = angleTextValue }
+
+
+                    fun commitEditTExt() {
+                        try {
+                            selectedPoint?.let { point ->
+                                applyChange {
+                                    point.angleDeg = normalizeAngle(angleText.toDouble())
+                                    if (snapPoints) point.angleDeg = point.angleDeg
+                                        .toInt()
+                                        .toDouble()
+                                    if (autoSeparatePoints) autoSeparate(
+                                        points,
+                                        nestId,
+                                        circles.find { it.id == point.circleNumber },
+                                        point
+                                    )
+                                }
+                            }
+                        } catch (e: Exception) {
+                            ctx.showToast("Failed to set value: $e")
+                            logE(SWIPE_TAG, e) { "Failed to set value for point via text field" }
+                        }
+
+                        focusManager.clearFocus()
+                    }
+
+                    var isEditing by remember { mutableStateOf(false) }
+
+                    // Observe focus via InteractionSource
+                    LaunchedEffect(interactionSource) {
+                        interactionSource.interactions.collect { interaction ->
+                            when (interaction) {
+                                is FocusInteraction.Focus -> {
+                                    isEditing = true
+                                }
+
+                                is FocusInteraction.Unfocus -> {
+                                    commitEditTExt()
+                                    isEditing = false
+                                }
                             }
                         }
                     }
-                ) {
-                    CircleIconButton(
-                        icon = Icons.Default.ChevronLeft,
-                        contentDescription = stringResource(R.string.move_point_to_left),
-                        tint = moveColor,
-                        enabled = aPointIsSelected,
-                        padding = 10.dp,
-                        onClick = null
-                    )
-                }
 
+                    Spacer(Modifier.width(ButtonGroupDefaults.ConnectedSpaceBetween))
+                    AnimatedVisibility(aPointIsSelected) {
+                        EditValueTextField(
+                            value = angleText,
+                            onValueChange = { angleText = it },
+                            isEditing = isEditing,
+                            enabled = aPointIsSelected,
+                            interactionSource = interactionSource,
+                            backgroundColor = MaterialTheme.colorScheme.primary,
+                            onDone = ::commitEditTExt
+                        )
+                    }
 
-                val angleText = if (selectedPoint != null) {
-                    "${
-                        selectedPoint?.angleDeg?.toBigDecimal()?.setScale(1, RoundingMode.UP)
-                            ?.toDouble()
-                    }°"
-                } else {
-                    ""
-                }
-
-                Text(
-                    text = angleText,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    fontSize = 18.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Visible,
-                    modifier = Modifier.width(50.dp)
-                )
-
-                RepeatingPressButton(
-                    enabled = aPointIsSelected,
-                    intervalMs = 35L,
-                    onPress = {
-                        selectedPoint?.let { point ->
-                            applyChange {
-                                point.angleDeg = normalizeAngle(point.angleDeg - 1)
-                                if (snapPoints) point.angleDeg = point.angleDeg
-                                    .toInt()
-                                    .toDouble()
-                                if (autoSeparatePoints) autoSeparate(
-                                    points,
-                                    nestId,
-                                    circles.find { it.id == point.circleNumber },
-                                    point
-                                )
-                            }
+                    AnimatedVisibility(isEditing) {
+                        DragonIconButton(
+                            onClick = { commitEditTExt() },
+                            colors = AppObjectsColors.iconButtonColors(
+                                MaterialTheme.colorScheme.primary,
+                                MaterialTheme.colorScheme.onPrimary
+                            )
+                        ) {
+                            Icon(Icons.Default.Check, contentDescription = "Validate")
                         }
                     }
-                ) {
-                    CircleIconButton(
-                        icon = Icons.Default.ChevronRight,
-                        contentDescription = stringResource(R.string.move_point_to_right),
-                        tint = moveColor,
+
+                    Spacer(Modifier.width(ButtonGroupDefaults.ConnectedSpaceBetween))
+
+                    ToggleButton(
+                        checked = !aPointIsSelected,
+                        onCheckedChange = {
+                            selectedPoint?.let { point ->
+                                applyChange {
+                                    point.angleDeg = normalizeAngle(point.angleDeg - 1)
+                                    if (snapPoints) point.angleDeg = point.angleDeg
+                                        .toInt()
+                                        .toDouble()
+                                    if (autoSeparatePoints) autoSeparate(
+                                        points,
+                                        nestId,
+                                        circles.find { it.id == point.circleNumber },
+                                        point
+                                    )
+                                }
+                            }
+                        },
                         enabled = aPointIsSelected,
-                        padding = 10.dp,
-                        onClick = null
-                    )
+                        shapes = ButtonGroupDefaults.connectedTrailingButtonShapes(),
+                        colors = AppObjectsColors.toggleButtonColors(),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ChevronRight,
+                            contentDescription = stringResource(R.string.move_point_anticlockwise),
+                        )
+                    }
                 }
             }
 

@@ -252,8 +252,6 @@
     <string name="add_point">Add Point</string>
     <string name="remove_point">Punkt entfernen</string>
     <string name="copy_point">Kopierpunkt</string>
-    <string name="move_point_to_right">Punkt nach rechts bewegen</string>
-    <string name="move_point_to_left">Verschiebe den Punkt nach links</string>
     <string name="toggle_drag_distances_editing">Ziehkreis-Bearbeitung umschalten</string>
     <string name="ghosted">Geghostet</string>
     <string name="foreground">Vordergrund</string>

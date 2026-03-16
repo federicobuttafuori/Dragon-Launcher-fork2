@@ -178,8 +178,8 @@ object AppObjectsColors {
         return IconButtonDefaults.iconButtonColors(
             containerColor = backgroundColor ?: colors.surface,
             contentColor = contentColor ?: colors.primary,
-            disabledContainerColor = backgroundColor ?: colors.surface.alphaMultiplier(0.5f),
-            disabledContentColor = contentColor ?: colors.onSurface.alphaMultiplier(0.5f)
+            disabledContainerColor = backgroundColor?.alphaMultiplier(0.5f) ?: colors.surface.alphaMultiplier(0.5f),
+            disabledContentColor = contentColor?.alphaMultiplier(0.5f) ?: colors.onSurface.alphaMultiplier(0.5f)
         )
     }
 

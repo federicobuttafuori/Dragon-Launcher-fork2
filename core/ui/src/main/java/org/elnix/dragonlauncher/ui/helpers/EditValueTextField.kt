@@ -1,0 +1,89 @@
+package org.elnix.dragonlauncher.ui.helpers
+
+import androidx.compose.animation.core.Animatable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
+import org.elnix.dragonlauncher.common.utils.UiConstants
+import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
+
+@Composable
+fun EditValueTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    isEditing: Boolean,
+    enabled: Boolean = true,
+    interactionSource: MutableInteractionSource? = null,
+    backgroundColor: Color,
+    onDone: () -> Unit
+) {
+    val scope = rememberCoroutineScope()
+    val shapeRound = remember {
+        Animatable(
+            initialValue = UiConstants.CIRCLE_SHAPE_CORNER_DP.value,
+        )
+    }
+
+    // Animate to dragon shape on focus change
+    LaunchedEffect(isEditing) {
+        scope.launch {
+
+            shapeRound.animateTo(
+                if (isEditing) {
+                    UiConstants.CIRCLE_SHAPE_CORNER_DP.value
+                } else {
+                    UiConstants.DRAGON_SHAPE_CORNER_DP.value
+                }
+            )
+        }
+    }
+
+
+    val shape = RoundedCornerShape(shapeRound.value.dp)
+
+    TextField(
+        enabled = enabled,
+        interactionSource = interactionSource,
+        value = value,
+        onValueChange = { raw ->
+            onValueChange(raw)
+        },
+        textStyle = TextStyle(
+            textAlign = TextAlign.Center,
+            fontSize = 13.sp
+        ),
+        colors = AppObjectsColors.outlinedTextFieldColors(
+            removeBorder = true,
+            backgroundColor = backgroundColor
+        ),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Done
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = { onDone() }
+        ),
+        modifier = Modifier
+            .width(80.dp)
+            .height(50.dp)
+            .clip(shape)
+    )
+}

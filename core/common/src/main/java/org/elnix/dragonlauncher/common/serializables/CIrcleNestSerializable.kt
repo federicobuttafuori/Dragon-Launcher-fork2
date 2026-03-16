@@ -1,8 +1,8 @@
 package org.elnix.dragonlauncher.common.serializables
 
 import androidx.compose.runtime.Immutable
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 
 /**
@@ -13,7 +13,7 @@ import kotlinx.serialization.SerialName
 @Serializable
 data class CircleNest(
     /**
-     *  By default the id 0 is the first nest that is available,
+     *  By default, the id 0 is the first nest that is available,
      *  I'll try to make the old system importable, to avoid breaking changes like empty actions circle
      */
     @SerialName("id") val id: Int = 0,
@@ -48,7 +48,12 @@ data class CircleNest(
     /**
      * The nest radius, used to override the default nests radii, if set to null, it uses the default value, otherwise it picks this
      */
-    @SerialName("nestRadius") val nestRadius: Int? = null
+    @SerialName("nestRadius") val nestRadius: Int? = null,
+
+    /**
+     * If this nests displays it's circle, this is a per-nest setting
+     */
+    @SerialName("showCircle") val showCircle: Boolean? = null
 ) {
     override fun toString(): String {
         return "Nest N°$id | contains ${dragDistances.size} circles: \n${dragDistances.map { "\n${it.key} to ${it.value}" }}"

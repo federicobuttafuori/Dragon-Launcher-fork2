@@ -2,7 +2,6 @@ package org.elnix.dragonlauncher.ui.helpers
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
@@ -15,11 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Restore
@@ -27,27 +22,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.launch
-import org.elnix.dragonlauncher.common.utils.UiConstants
 import org.elnix.dragonlauncher.common.utils.semiTransparentIfDisabled
 import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
 import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
@@ -114,11 +100,7 @@ private fun SliderWithLabelInternal(
     onDragStateChange: ((Boolean) -> Unit)?,
     onChange: (Float) -> Unit
 ) {
-    val scope = rememberCoroutineScope()
-
     val displayColor = color.semiTransparentIfDisabled(enabled)
-
-
 
     val interactionSource = remember { MutableInteractionSource() }
     val focusManager = LocalFocusManager.current
@@ -193,57 +175,14 @@ private fun SliderWithLabelInternal(
 
             if (showValue) {
 
-                val shapeRound = remember {
-                    Animatable(
-                        initialValue = UiConstants.CIRCLE_SHAPE_CORNER_DP.value,
-                    )
-                }
-
-                // Animate to dragon shape on focus change
-                LaunchedEffect(isEditing) {
-                    scope.launch {
-
-                        shapeRound.animateTo(
-                            if (isEditing) {
-                                UiConstants.CIRCLE_SHAPE_CORNER_DP.value
-                            } else {
-                                UiConstants.DRAGON_SHAPE_CORNER_DP.value
-                            }
-                        )
-                    }
-                }
-
-
-                val shape = RoundedCornerShape(shapeRound.value.dp)
-
-                TextField(
+                EditValueTextField(
+                    value = editingText,
+                    onValueChange = { editingText = it },
+                    isEditing = isEditing,
                     enabled = allowTextEditValue,
                     interactionSource = interactionSource,
-                    value = editingText,
-                    onValueChange = { raw ->
-                        editingText = raw
-                    },
-                    textStyle = TextStyle(
-                        textAlign = TextAlign.Center,
-                        fontSize = 13.sp
-                    ),
-                    colors = AppObjectsColors.outlinedTextFieldColors(
-                        removeBorder = true,
-                        backgroundColor = backgroundColor
-                    ).copy(
-                        disabledTextColor = MaterialTheme.colorScheme.primary
-                    ),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Done
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone =  { editValue() }
-                    ),
-                    modifier = Modifier
-                        .width(80.dp)
-                        .height(50.dp)
-                        .clip(shape)
+                    backgroundColor = backgroundColor,
+                    onDone = ::editValue
                 )
             }
 
@@ -256,18 +195,22 @@ private fun SliderWithLabelInternal(
                 label = "icon_button_transition"
             ) { editing ->
                 when {
-                    editing -> DragonIconButton(
-                        onClick = { editValue() },
-                        colors = AppObjectsColors.iconButtonColors(backgroundColor)
-                    ) {
-                        Icon(Icons.Default.Check, contentDescription = "Validate")
+                    editing -> {
+                        DragonIconButton(
+                            onClick = { editValue() },
+                            colors = AppObjectsColors.iconButtonColors(backgroundColor)
+                        ) {
+                            Icon(Icons.Default.Check, contentDescription = "Validate")
+                        }
                     }
 
-                    onReset != null -> DragonIconButton(
-                        onClick = onReset,
-                        enabled = enabled
-                    ) {
-                        Icon(Icons.Default.Restore, contentDescription = "Reset")
+                    onReset != null -> {
+                        DragonIconButton(
+                            onClick = onReset,
+                            enabled = enabled
+                        ) {
+                            Icon(Icons.Default.Restore, contentDescription = "Reset")
+                        }
                     }
                 }
             }
