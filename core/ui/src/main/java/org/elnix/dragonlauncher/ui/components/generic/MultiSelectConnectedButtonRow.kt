@@ -1,18 +1,20 @@
 package org.elnix.dragonlauncher.ui.components.generic
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.ToggleButton
-import androidx.compose.material3.ToggleButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -46,8 +48,11 @@ import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
 fun <T : ToggleButtonOption> MultiSelectConnectedButtonRow(
     entries: List<T>,
 
+    modifier: Modifier = Modifier,
+
     // Optional parameters
     showLabel: Boolean = true,
+    showLabelOnPress: Boolean = false,
     hapticFeedback: Boolean = true,
 
     isEnabled: (T) -> Boolean = { true },
@@ -58,17 +63,20 @@ fun <T : ToggleButtonOption> MultiSelectConnectedButtonRow(
 
 
     Row(
-        Modifier.padding(horizontal = 8.dp),
+        modifier = modifier.padding(horizontal = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween)
     ) {
         entries.forEachIndexed { index, entry ->
+
+            val interactionSource = remember { MutableInteractionSource() }
+            val isPressed by interactionSource.collectIsPressedAsState()
+
 
             // No idea why, but using a not here feels more natural for the displayed entries
             val checked = !isChecked(entry)
 
             ToggleButton(
                 checked = checked,
-                enabled = isEnabled(entry),
                 onCheckedChange = {
                     onCheck(entry)
 
@@ -76,14 +84,15 @@ fun <T : ToggleButtonOption> MultiSelectConnectedButtonRow(
                         haptic.performHapticFeedback(HapticFeedbackType.KeyboardTap)
                     }
                 },
+                interactionSource = interactionSource,
+                enabled = isEnabled(entry),
                 colors = AppObjectsColors.toggleButtonColors(),
                 // Custom shapes
-                shapes =
-                    when (index) {
-                        0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
-                        entries.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
-                        else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
-                    }
+                shapes = when (index) {
+                    0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
+                    entries.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
+                    else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
+                }
             ) {
                 Crossfade(!checked) { notChecked ->
                     Icon(
@@ -92,9 +101,9 @@ fun <T : ToggleButtonOption> MultiSelectConnectedButtonRow(
                     )
                 }
 
-                if (showLabel && entry.resId != null) {
-                    Spacer(Modifier.size(ToggleButtonDefaults.IconSpacing))
-                    Text(stringResource(entry.resId!!))
+                // Animate the label on press, either always when asked, or only when pressed, using interactionSource
+                AnimatedVisibility((showLabel || (isPressed && showLabelOnPress)) && entry.resId != null) {
+                    Text(stringResource(entry.resId ?: -1))
                 }
             }
         }

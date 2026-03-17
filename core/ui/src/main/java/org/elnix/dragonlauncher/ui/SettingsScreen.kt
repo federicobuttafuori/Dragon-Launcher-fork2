@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
@@ -35,13 +34,10 @@ import androidx.compose.material.icons.filled.ChangeCircle
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.EditNote
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.Restore
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ButtonGroupDefaults
@@ -84,7 +80,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.base.theme.LocalExtraColors
-import org.elnix.dragonlauncher.base.theme.copyColor
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.logging.logD
 import org.elnix.dragonlauncher.common.logging.logE
@@ -113,6 +108,7 @@ import org.elnix.dragonlauncher.enumsui.PointsEditTools
 import org.elnix.dragonlauncher.enumsui.PointsEditTools.AutoSeparate
 import org.elnix.dragonlauncher.enumsui.PointsEditTools.FreeMove
 import org.elnix.dragonlauncher.enumsui.PointsEditTools.SnapPoints
+import org.elnix.dragonlauncher.enumsui.SelectedPointEditTools
 import org.elnix.dragonlauncher.enumsui.UndRedoEditTools
 import org.elnix.dragonlauncher.settings.stores.DebugSettingsStore
 import org.elnix.dragonlauncher.settings.stores.SwipeMapSettingsStore
@@ -125,7 +121,6 @@ import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
 import org.elnix.dragonlauncher.ui.components.AppPreviewTitle
 import org.elnix.dragonlauncher.ui.components.burger.BurgerAction
 import org.elnix.dragonlauncher.ui.components.burger.BurgerListAction
-import org.elnix.dragonlauncher.ui.components.dragon.DragonButton
 import org.elnix.dragonlauncher.ui.components.dragon.DragonColumnGroup
 import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
 import org.elnix.dragonlauncher.ui.components.generic.MultiSelectConnectedButtonColumn
@@ -136,12 +131,12 @@ import org.elnix.dragonlauncher.ui.dialogs.AddPointDialog
 import org.elnix.dragonlauncher.ui.dialogs.EditPointDialog
 import org.elnix.dragonlauncher.ui.dialogs.NestManagementDialog
 import org.elnix.dragonlauncher.ui.dialogs.UserValidation
-import org.elnix.dragonlauncher.ui.helpers.CircleIconButton
 import org.elnix.dragonlauncher.ui.helpers.EditValueTextField
 import org.elnix.dragonlauncher.ui.helpers.nests.actionsInCircle
 import org.elnix.dragonlauncher.ui.helpers.nests.circlesSettingsOverlay
 import org.elnix.dragonlauncher.ui.helpers.nests.glowOverlay
 import org.elnix.dragonlauncher.ui.helpers.nests.swipeDefaultParams
+import org.elnix.dragonlauncher.ui.modifiers.shapedClickable
 import org.elnix.dragonlauncher.ui.remembers.LocalAppsViewModel
 import org.elnix.dragonlauncher.ui.remembers.LocalDefaultPoint
 import java.math.RoundingMode
@@ -1266,6 +1261,7 @@ fun SettingsScreen(
 
                 MultiSelectConnectedButtonRow(
                     entries = NestEditTools.entries,
+                    showLabelOnPress = true,
                     showLabel = false,
 
                     isEnabled = {
@@ -1337,9 +1333,11 @@ fun SettingsScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
+                // The 3 points settings tools: Snap points / Auto separate / Lock to circle
                 MultiSelectConnectedButtonRow(
                     entries = PointsEditTools.entries,
                     showLabel = false,
+                    showLabelOnPress = true,
                     isChecked = {
                         when (it) {
                             SnapPoints -> snapPoints
@@ -1358,6 +1356,7 @@ fun SettingsScreen(
                 }
 
 
+                // The move left/right and text field entry, that animates on avery selected point
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -1517,81 +1516,64 @@ fun SettingsScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                DragonButton(
-                    onClick = { showAddDialog = true },
-                    modifier = Modifier.padding(35.dp),
-                    colors = AppObjectsColors.buttonColors()
+                Box(
+                    modifier = Modifier
+                        .shapedClickable { showAddDialog = true }
+                        .background(MaterialTheme.colorScheme.primary)
+                        .padding(20.dp),
                 ) {
                     Icon(
                         imageVector = Icons.Default.Add,
+                        tint = MaterialTheme.colorScheme.onPrimary,
                         contentDescription = stringResource(R.string.add_point),
-                        modifier = Modifier.size(35.dp)
                     )
                 }
 
 
-//                CircleIconButton(
-//                    icon = Icons.Default.Add,
-//                    contentDescription = stringResource(R.string.add_point),
-//                    tint = MaterialTheme.colorScheme.primary,
-//                    padding = 20.dp
-//
-
-
-                CircleIconButton(
-                    icon = Icons.Default.Edit,
-                    contentDescription = stringResource(R.string.edit_point),
-                    tint = MaterialTheme.colorScheme.secondary,
-                    enabled = aPointIsSelected,
-                    padding = 20.dp
+                MultiSelectConnectedButtonRow(
+                    entries = SelectedPointEditTools.entries,
+                    showLabelOnPress = true,
+                    showLabel = false,
+                    isChecked = { true },
+                    isEnabled = { aPointIsSelected }
                 ) {
-                    showEditDialog = selectedPoint
-                }
+                    scope.launch {
+                        when (it) {
+                            SelectedPointEditTools.Edit -> showEditDialog = selectedPoint
+                            SelectedPointEditTools.Remove -> {
 
+                                selectedPoint?.let { point ->
+                                    val index = points.indexOfFirst { it.id == point.id }
+                                    if (index >= 0) {
+                                        applyChange {
+                                            points.removeAt(index)
+                                        }
+                                    }
+                                    selectedPoint = null
+                                }
+                            }
 
-                CircleIconButton(
-                    icon = Icons.Default.Remove,
-                    contentDescription = stringResource(R.string.remove_point),
-                    tint = MaterialTheme.colorScheme.error,
-                    enabled = aPointIsSelected,
-                    padding = 20.dp
-                ) {
-                    selectedPoint?.let { point ->
-                        val index = points.indexOfFirst { it.id == point.id }
-                        if (index >= 0) {
-                            applyChange {
-                                points.removeAt(index)
+                            SelectedPointEditTools.Duplicate -> {
+                                selectedPoint?.let { oldPoint ->
+                                    val newPoint = oldPoint.copy(
+                                        id = UUID.randomUUID().toString(),
+                                    )
+
+                                    appsViewModel.reloadPointIcon(newPoint)
+
+                                    applyChange {
+                                        points.add(newPoint)
+                                        autoSeparate(
+                                            points,
+                                            nestId,
+                                            circles.find { it.id == newPoint.circleNumber },
+                                            newPoint
+                                        )
+                                    }
+                                    selectedPoint = newPoint
+                                }
                             }
                         }
-                        selectedPoint = null
-                    }
-                }
-
-
-                CircleIconButton(
-                    icon = Icons.Default.ContentCopy,
-                    contentDescription = stringResource(R.string.copy_point),
-                    enabled = aPointIsSelected,
-                    tint = copyColor,
-                    padding = 20.dp
-                ) {
-                    selectedPoint?.let { oldPoint ->
-                        val newPoint = oldPoint.copy(
-                            id = UUID.randomUUID().toString(),
-                        )
-
-                        appsViewModel.reloadPointIcon(newPoint)
-
-                        applyChange {
-                            points.add(newPoint)
-                            autoSeparate(
-                                points,
-                                nestId,
-                                circles.find { it.id == newPoint.circleNumber },
-                                newPoint
-                            )
-                        }
-                        selectedPoint = newPoint
                     }
                 }
 
