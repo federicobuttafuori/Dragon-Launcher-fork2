@@ -17,7 +17,6 @@ foundationLayout = "1.10.5"
 datastore = "1.2.1"
 appcompat = "1.7.1"
 biometric = "1.1.0"
-glanceAppwidget = "1.1.1"
 timber = "5.0.1"
 runtime = "1.10.5"
 kotlinx-serialization = "1.10.0"
@@ -49,7 +48,6 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 reorderable = { group = "org.burnoutcrew.composereorderable", name = "reorderable", version.ref = "reorderable" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-biometric = { group = "androidx.biometric", name = "biometric", version.ref = "biometric" }
-androidx-glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glanceAppwidget" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 androidx-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
