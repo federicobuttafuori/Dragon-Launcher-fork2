@@ -2,6 +2,7 @@
 
 package org.elnix.dragonlauncher.ui.settings.customization
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,12 +32,16 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.base.ktx.px
 import org.elnix.dragonlauncher.common.R
+import org.elnix.dragonlauncher.common.logging.logD
 import org.elnix.dragonlauncher.common.serializables.CircleNest
+import org.elnix.dragonlauncher.common.serializables.CustomHapticFeedbackSerializable
+import org.elnix.dragonlauncher.common.utils.Constants.Logging.HAPTIC_TAG
 import org.elnix.dragonlauncher.common.utils.UiCircle
 import org.elnix.dragonlauncher.common.utils.UiConstants.DragonShape
-import org.elnix.dragonlauncher.common.utils.vibrate
+import org.elnix.dragonlauncher.common.utils.showToast
 import org.elnix.dragonlauncher.enumsui.NestEditMode
 import org.elnix.dragonlauncher.enumsui.NestEditMode.DRAG
 import org.elnix.dragonlauncher.enumsui.NestEditMode.HAPTIC
@@ -46,7 +52,8 @@ import org.elnix.dragonlauncher.settings.stores.SwipeSettingsStore
 import org.elnix.dragonlauncher.ui.components.generic.ActionRow
 import org.elnix.dragonlauncher.ui.components.settings.asState
 import org.elnix.dragonlauncher.ui.defaultDragDistance
-import org.elnix.dragonlauncher.ui.defaultHapticFeedback
+import org.elnix.dragonlauncher.ui.dialogs.HapticFeedBackEditorButtonWithPlayTest
+import org.elnix.dragonlauncher.ui.dialogs.HapticFeedbackEditor
 import org.elnix.dragonlauncher.ui.helpers.SliderWithLabel
 import org.elnix.dragonlauncher.ui.helpers.SwitchRow
 import org.elnix.dragonlauncher.ui.helpers.nests.circlesSettingsOverlay
@@ -54,16 +61,30 @@ import org.elnix.dragonlauncher.ui.helpers.nests.swipeDefaultParams
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsLazyHeader
 import org.elnix.dragonlauncher.ui.remembers.LocalNests
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun NestEditingScreen(
     nestId: Int?,
     onBack: () -> Unit
 ) {
     val ctx = LocalContext.current
+    val scope = rememberCoroutineScope()
+
     val nests = LocalNests.current
 
     if (nestId == null) return
-    val currentNest = nests.find { it.id == nestId } ?: return
+    val currentNest = nests.find { it.id == nestId } ?: run {
+        // The nest isn't found in the list, create a new one with this id
+        scope.launch {
+            val newList = nests + CircleNest(id = nestId)
+            SwipeSettingsStore.saveNests(ctx, newList)
+
+            ctx.showToast("Saved missing nest!")
+        }
+
+        onBack()
+        return
+    }
 
 
     val angleColor = MaterialTheme.colorScheme.tertiary
@@ -82,11 +103,7 @@ fun NestEditingScreen(
         }
     }
 
-    val hapticState = remember(currentNest.id) {
-        mutableStateMapOf<Int, Int>().apply {
-            putAll(currentNest.haptic)
-        }
-    }
+    var showHapticFeedbackEditor by remember { mutableStateOf<Int?>(null) }
 
     val minAngleState = remember(currentNest.id) {
         mutableStateMapOf<Int, Int>().apply {
@@ -101,7 +118,7 @@ fun NestEditingScreen(
         )
     }
 
-    val circlesPreview = dragDistancesState.map { (id, radius) ->
+    val circlesPreview = dragDistancesState.map { (id, _) ->
         UiCircle(
             id = id,
             radius = (tempRadius ?: subNestDefaultRadius).dp.px
@@ -132,7 +149,9 @@ fun NestEditingScreen(
         }
     }
 
-    fun commitHaptic(state: Map<Int, Int>) {
+    fun commitHaptic(state: Map<Int, CustomHapticFeedbackSerializable>) {
+        logD(HAPTIC_TAG) { "Commiting state: $state" }
+
         pendingNestUpdate = nests.map { nest ->
             if (nest.id == nestId) {
                 nest.copy(haptic = state.toMap())
@@ -154,9 +173,14 @@ fun NestEditingScreen(
     SettingsLazyHeader(
         title = stringResource(R.string.dragging_distance_selection),
         onBack = onBack,
-        helpText = "Help",
+        helpText = stringResource(R.string.edit_nest_help),
+        resetText = stringResource(R.string.reset_nest_text),
         onReset = {
-            pendingNestUpdate = nests.filter { it.id != nestId }
+            // Resets current nest to a new one, with the same id (avoids destroying it)
+            pendingNestUpdate = nests.map {
+                if (it.id == nestId) CircleNest(id = nestId)
+                else it
+            }
         },
 
         content = {
@@ -268,29 +292,12 @@ fun NestEditingScreen(
                         // Keep drag distance state here cause haptic may be empty dues to how it is handled
                         dragDistancesState.toSortedMap().filter { it.key != -1 }
                             .forEach { (index, _) ->
-                                val milliseconds =
-                                    hapticState[index] ?: defaultHapticFeedback(index)
-                                SliderWithLabel(
-                                    label = "${stringResource(R.string.haptic_feedback)}: $index ->",
-                                    value = milliseconds,
-                                    valueRange = 0..300,
-                                    backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-                                    onReset = {
-                                        hapticState[index] = defaultHapticFeedback(index)
-                                        commitHaptic(hapticState)
-                                    },
-                                    onDragStateChange = { isDragging ->
-                                        if (!isDragging) {
-                                            commitHaptic(hapticState)
-                                        }
 
-                                        if (!isDragging && milliseconds > 0) {
-                                            vibrate(ctx, milliseconds.toLong())
-                                        }
-                                    }
-                                ) { newValue ->
-                                    hapticState[index] = newValue
-                                }
+                                HapticFeedBackEditorButtonWithPlayTest(
+                                    customHapticFeedbackSerializable = currentNest.haptic[index],
+                                    titleExt = ": $index ->",
+                                    onClick = { showHapticFeedbackEditor = index },
+                                )
                             }
                     }
 
@@ -364,4 +371,21 @@ fun NestEditingScreen(
             }
         }
     )
+
+
+    if (showHapticFeedbackEditor != null) {
+        val circleIdToEdit = showHapticFeedbackEditor!!
+
+        HapticFeedbackEditor(
+            initial = currentNest.haptic[circleIdToEdit],
+            onDismiss = { showHapticFeedbackEditor = null }
+        ) { newHaptic ->
+            newHaptic?.let {
+                commitHaptic(
+                    state = currentNest.haptic + (circleIdToEdit to it)
+                )
+            }
+            showHapticFeedbackEditor = null
+        }
+    }
 }

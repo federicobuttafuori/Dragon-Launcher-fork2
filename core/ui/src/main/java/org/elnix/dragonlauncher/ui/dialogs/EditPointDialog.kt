@@ -2,6 +2,7 @@
 
 package org.elnix.dragonlauncher.ui.dialogs
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -40,7 +41,6 @@ import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
 import org.elnix.dragonlauncher.common.serializables.defaultSwipePointsValues
 import org.elnix.dragonlauncher.common.utils.UiConstants.DragonShape
-import org.elnix.dragonlauncher.common.utils.colors.adjustBrightness
 import org.elnix.dragonlauncher.common.utils.definedOrNull
 import org.elnix.dragonlauncher.enumsui.SelectedUnselectedViewMode
 import org.elnix.dragonlauncher.enumsui.selectedUnselectedViewName
@@ -51,6 +51,7 @@ import org.elnix.dragonlauncher.ui.colors.ColorPickerRow
 import org.elnix.dragonlauncher.ui.components.PointPreviewCanvas
 import org.elnix.dragonlauncher.ui.components.TextDivider
 import org.elnix.dragonlauncher.ui.components.ValidateCancelButtons
+import org.elnix.dragonlauncher.ui.components.dragon.DragonColumnGroup
 import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
 import org.elnix.dragonlauncher.ui.components.generic.ActionRow
 import org.elnix.dragonlauncher.ui.helpers.ShapeRow
@@ -78,10 +79,8 @@ fun EditPointDialog(
     var showEditActionDialog by remember { mutableStateOf(false) }
     var showShapePickerDialog by remember { mutableStateOf(false) }
     var showSelectedShapePickerDialog by remember { mutableStateOf(false) }
+    var showHapticFeedbackEditor by remember { mutableStateOf(false) }
 
-
-
-    val backgroundSurfaceColor = MaterialTheme.colorScheme.surface.adjustBrightness(0.7f)
 
     val currentActionColor = actionColor(editPoint.action, extraColors)
 
@@ -201,15 +200,7 @@ fun EditPointDialog(
                     }
                 }
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(120.dp)
-                        .clip(DragonShape)
-                        .background(backgroundSurfaceColor)
-                        .padding(10.dp),
-                    verticalArrangement = Arrangement.spacedBy(20.dp)
-                ) {
+                DragonColumnGroup {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -232,7 +223,7 @@ fun EditPointDialog(
                     PointPreviewCanvas(
                         editPoint = editPoint,
                         defaultPoint = defaultPoint,
-                        backgroundSurfaceColor = backgroundSurfaceColor,
+                        backgroundSurfaceColor = MaterialTheme.colorScheme.surfaceVariant,
                         modifier = Modifier.fillMaxWidth(1f)
                     )
                 }
@@ -245,119 +236,110 @@ fun EditPointDialog(
 
                 if (!isDefaultEditing) {
                     item {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(15.dp)
-                        ) {
+                        DragonColumnGroup {
                             Row(
                                 modifier = Modifier
-                                    .weight(1f)
-                                    .clip(DragonShape)
-                                    .background(backgroundSurfaceColor)
-                                    .clickable {
-                                        showEditActionDialog = true
-                                    }
-                                    .padding(12.dp),
+                                    .fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                horizontalArrangement = Arrangement.spacedBy(15.dp)
                             ) {
-                                Text(
-                                    text = label,
-                                    color = actionColor,
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-
-                                Spacer(Modifier.weight(1f))
-                                Icon(
-                                    imageVector = Icons.Default.Edit,
-                                    contentDescription = stringResource(R.string.edit_action),
-                                    tint = MaterialTheme.colorScheme.primary
-                                )
-                            }
-
-
-                            Row(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .clip(DragonShape)
-                                    .background(backgroundSurfaceColor)
-                                    .clickable {
-                                        showEditIconDialog = true
-                                    }
-                                    .padding(12.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(12.dp)
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.edit_icon),
-                                    color = MaterialTheme.colorScheme.onSurface
-                                )
-                                Spacer(Modifier.weight(1f))
-
-                                Icon(
-                                    imageVector = Icons.Default.Edit,
-                                    contentDescription = stringResource(R.string.edit_action),
-                                    tint = MaterialTheme.colorScheme.primary,
-                                )
-                            }
-                        }
-                    }
-
-
-                    item {
-                        TextField(
-                            value = editPoint.customName ?: "",
-                            onValueChange = {
-                                editPoint = editPoint.copy(customName = it)
-                            },
-                            label = { Text(stringResource(R.string.custom_name)) },
-                            trailingIcon = {
-                                if (editPoint.customName != null && editPoint.customName!!.isNotEmpty()) {
-                                    DragonIconButton(
-                                        onClick = {
-                                            editPoint = editPoint.copy(customName = null)
+                                Row(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .clip(DragonShape)
+                                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                                        .clickable {
+                                            showEditActionDialog = true
                                         }
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Default.Restore,
-                                            contentDescription = stringResource(R.string.reset)
-                                        )
-                                    }
+                                        .padding(12.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    Text(
+                                        text = label,
+                                        color = actionColor,
+                                        fontSize = 18.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+
+                                    Spacer(Modifier.weight(1f))
+                                    Icon(
+                                        imageVector = Icons.Default.Edit,
+                                        contentDescription = stringResource(R.string.edit_action),
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
                                 }
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = AppObjectsColors.outlinedTextFieldColors(
-                                removeBorder = true,
-                                backgroundColor = backgroundSurfaceColor
+
+
+                                Row(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .clip(DragonShape)
+                                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                                        .clickable {
+                                            showEditIconDialog = true
+                                        }
+                                        .padding(12.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.edit_icon),
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                    Spacer(Modifier.weight(1f))
+
+                                    Icon(
+                                        imageVector = Icons.Default.Edit,
+                                        contentDescription = stringResource(R.string.edit_action),
+                                        tint = MaterialTheme.colorScheme.primary,
+                                    )
+                                }
+                            }
+
+                            TextField(
+                                value = editPoint.customName ?: "",
+                                onValueChange = {
+                                    editPoint = editPoint.copy(customName = it)
+                                },
+                                label = { Text(stringResource(R.string.custom_name)) },
+                                trailingIcon = {
+                                    if (editPoint.customName != null && editPoint.customName!!.isNotEmpty()) {
+                                        DragonIconButton(
+                                            onClick = {
+                                                editPoint = editPoint.copy(customName = null)
+                                            }
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Restore,
+                                                contentDescription = stringResource(R.string.reset)
+                                            )
+                                        }
+                                    }
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(DragonShape),
+                                colors = AppObjectsColors.outlinedTextFieldColors(
+                                    removeBorder = true,
+                                    backgroundColor = MaterialTheme.colorScheme.surfaceVariant
+                                )
                             )
-                        )
-                    }
 
-
-                    item {
-                        ColorPickerRow(
-                            label = stringResource(R.string.custom_action_color),
-                            currentColor = editPoint.customActionColor?.let { Color(it) }
-                                ?: currentActionColor,
-                            backgroundColor = backgroundSurfaceColor
-                        ) { selectedColor ->
-                            editPoint = editPoint.copy(customActionColor = selectedColor?.toArgb())
+                            ColorPickerRow(
+                                label = stringResource(R.string.custom_action_color),
+                                currentColor = editPoint.customActionColor?.let { Color(it) }
+                                    ?: currentActionColor,
+                                backgroundColor = MaterialTheme.colorScheme.surfaceVariant
+                            ) { selectedColor ->
+                                editPoint = editPoint.copy(customActionColor = selectedColor?.toArgb())
+                            }
                         }
                     }
                 }
 
                 item {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(DragonShape)
-                            .background(backgroundSurfaceColor)
-                            .padding(10.dp),
-                        verticalArrangement = Arrangement.spacedBy(5.dp)
-                    ) {
+                    DragonColumnGroup {
                         SliderWithLabel(
                             label = stringResource(R.string.inner_padding),
                             value = editPoint.innerPadding ?: defaultInnerPadding,
@@ -384,149 +366,129 @@ fun EditPointDialog(
                     ActionRow(
                         actions = SelectedUnselectedViewMode.entries,
                         selectedView = selectedView,
-                        backgroundColorUnselected = backgroundSurfaceColor,
+                        backgroundColorUnselected = MaterialTheme.colorScheme.surfaceVariant,
                         actionName = { selectedUnselectedViewName(ctx, it) },
                     ) { selectedView = it }
                 }
+                item {
 
-                if (selectedView == SelectedUnselectedViewMode.UNSELECTED) {
-                    item {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(DragonShape)
-                                .background(backgroundSurfaceColor)
-                                .padding(10.dp),
-                            verticalArrangement = Arrangement.spacedBy(5.dp)
-                        ) {
-                            SliderWithLabel(
-                                label = stringResource(R.string.border_stroke),
-                                value = editPoint.borderStroke
-                                    ?: defaultBorderStroke,
-                                valueRange = 0f..50f,
-                                color = MaterialTheme.colorScheme.primary,
-                                onReset = {
-                                    editPoint = editPoint.copy(borderStroke = null)
+                    AnimatedContent(selectedView == SelectedUnselectedViewMode.UNSELECTED) { selectedMode ->
+                        DragonColumnGroup {
+                            if (selectedMode) {
+                                SliderWithLabel(
+                                    label = stringResource(R.string.border_stroke),
+                                    value = editPoint.borderStroke
+                                        ?: defaultBorderStroke,
+                                    valueRange = 0f..50f,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    onReset = {
+                                        editPoint = editPoint.copy(borderStroke = null)
+                                    }
+                                ) {
+                                    editPoint = editPoint.copy(borderStroke = it)
                                 }
-                            ) {
-                                editPoint = editPoint.copy(borderStroke = it)
-                            }
 
-                            ColorPickerRow(
-                                label = stringResource(R.string.border_color),
-                                currentColor = editPoint.borderColor?.let { Color(it) }
-                                    ?: defaultBorderColor
-                            ) { selectedColor ->
-                                editPoint = editPoint.copy(borderColor = selectedColor?.toArgb())
-                            }
-
-                            ColorPickerRow(
-                                label = stringResource(R.string.background_color),
-                                currentColor = editPoint.backgroundColor?.let { Color(it) }
-                                    ?: defaultBackgroundColor
-                            ) { selectedColor ->
-                                editPoint = editPoint.copy(
-                                    backgroundColor = selectedColor.definedOrNull()
-                                        ?.toArgb()
-                                )
-                            }
-
-                            ShapeRow(
-                                selected = editPoint.borderShape ?: defaultSwipePointsValues.borderShape!!,
-                                onReset = {
-                                    editPoint = editPoint.copy(borderShape = null)
+                                ColorPickerRow(
+                                    label = stringResource(R.string.border_color),
+                                    currentColor = editPoint.borderColor?.let { Color(it) }
+                                        ?: defaultBorderColor
+                                ) { selectedColor ->
+                                    editPoint = editPoint.copy(borderColor = selectedColor?.toArgb())
                                 }
-                            ) { showShapePickerDialog = true }
-                        }
-                    }
-                } else {
 
-                    item {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(DragonShape)
-                                .background(backgroundSurfaceColor)
-                                .padding(10.dp),
-                            verticalArrangement = Arrangement.spacedBy(5.dp)
-                        ) {
-                            SliderWithLabel(
-                                label = stringResource(R.string.border_stroke_selected),
-                                value = editPoint.borderStrokeSelected
-                                    ?: defaultBorderStrokeSelected,
-                                valueRange = 0f..50f,
-                                color = MaterialTheme.colorScheme.primary,
-                                onReset = {
+                                ColorPickerRow(
+                                    label = stringResource(R.string.background_color),
+                                    currentColor = editPoint.backgroundColor?.let { Color(it) }
+                                        ?: defaultBackgroundColor
+                                ) { selectedColor ->
+                                    editPoint = editPoint.copy(
+                                        backgroundColor = selectedColor.definedOrNull()
+                                            ?.toArgb()
+                                    )
+                                }
+
+                                ShapeRow(
+                                    selected = editPoint.borderShape ?: defaultSwipePointsValues.borderShape!!,
+                                    title = stringResource(R.string.edit_border_shape),
+                                    onReset = {
+                                        editPoint = editPoint.copy(borderShape = null)
+                                    }
+                                ) { showShapePickerDialog = true }
+
+                            } else {
+                                SliderWithLabel(
+                                    label = stringResource(R.string.border_stroke_selected),
+                                    value = editPoint.borderStrokeSelected
+                                        ?: defaultBorderStrokeSelected,
+                                    valueRange = 0f..50f,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    onReset = {
+                                        editPoint =
+                                            editPoint.copy(borderStrokeSelected = null)
+                                    }
+                                ) {
+                                    editPoint = editPoint.copy(borderStrokeSelected = it)
+                                }
+
+
+                                ColorPickerRow(
+                                    label = stringResource(R.string.border_color_selected),
+                                    currentColor = editPoint.borderColorSelected?.let { Color(it) }
+                                        ?: defaultBorderColorSelected
+                                ) { selectedColor ->
                                     editPoint =
-                                        editPoint.copy(borderStrokeSelected = null)
+                                        editPoint.copy(borderColorSelected = selectedColor?.toArgb())
                                 }
-                            ) {
-                                editPoint = editPoint.copy(borderStrokeSelected = it)
-                            }
 
 
-                            ColorPickerRow(
-                                label = stringResource(R.string.border_color_selected),
-                                currentColor = editPoint.borderColorSelected?.let { Color(it) }
-                                    ?: defaultBorderColorSelected
-                            ) { selectedColor ->
-                                editPoint =
-                                    editPoint.copy(borderColorSelected = selectedColor?.toArgb())
-                            }
-
-
-                            ColorPickerRow(
-                                label = stringResource(R.string.background_selected),
-                                currentColor = editPoint.backgroundColorSelected?.let { Color(it) }
-                                    ?: defaultBackgroundColorSelected
-                            ) { selectedColor ->
-                                editPoint = editPoint.copy(
-                                    backgroundColorSelected = selectedColor.definedOrNull()
-                                        ?.toArgb()
-                                )
-                            }
-
-                            ShapeRow(
-                                selected = editPoint.borderShapeSelected ?: defaultSwipePointsValues.borderShapeSelected!!,
-                                title = stringResource(R.string.edit_border_shape),
-                                onReset = {
-                                    editPoint = editPoint.copy(borderShapeSelected = null)
+                                ColorPickerRow(
+                                    label = stringResource(R.string.background_selected),
+                                    currentColor = editPoint.backgroundColorSelected?.let { Color(it) }
+                                        ?: defaultBackgroundColorSelected
+                                ) { selectedColor ->
+                                    editPoint = editPoint.copy(
+                                        backgroundColorSelected = selectedColor.definedOrNull()
+                                            ?.toArgb()
+                                    )
                                 }
-                            ) { showSelectedShapePickerDialog = true }
+
+                                ShapeRow(
+                                    selected = editPoint.borderShapeSelected ?: defaultSwipePointsValues.borderShapeSelected!!,
+                                    title = stringResource(R.string.edit_border_shape),
+                                    onReset = {
+                                        editPoint = editPoint.copy(borderShapeSelected = null)
+                                    }
+                                ) { showSelectedShapePickerDialog = true }
+                            }
                         }
                     }
                 }
 
 
+
+
+                // Can not edit the haptic feedback in default mode, has to go to nest settings to edit it circle by circle
                 if (!isDefaultEditing) {
                     item {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(10.dp)
-                                .clip(DragonShape)
-                                .background(backgroundSurfaceColor)
-                                .padding(10.dp),
-                            verticalArrangement = Arrangement.spacedBy(5.dp)
-                        ) {
-                            SliderWithLabel(
-                                value = editPoint.haptic ?: 0,
-                                label = stringResource(R.string.haptic_feedback),
-                                valueRange = 0..1000,
-                                color = MaterialTheme.colorScheme.primary,
-                                onReset = {
-                                    editPoint = editPoint.copy(haptic = null)
-                                }
-                            ) {
-                                editPoint = editPoint.copy(haptic = it)
-                            }
+                        DragonColumnGroup {
+                            HapticFeedBackEditorButtonWithPlayTest(
+                                customHapticFeedbackSerializable = editPoint.hapticFeedback,
+                                onClick = { showHapticFeedbackEditor = true },
+                            )
                         }
+                    }
+                } else {
+                    item {
+                        Text(stringResource(R.string.you_can_edit_haptic_feedback_on_nest_settings))
                     }
                 }
             }
         },
         containerColor = MaterialTheme.colorScheme.surface
     )
+
+
+    // ── Dialogs ─────────────────────────────────────────
 
     if (showEditIconDialog) {
         IconEditorDialog(
@@ -558,8 +520,6 @@ fun EditPointDialog(
             onDismiss = { showShapePickerDialog = false }
         ) {
             editPoint = editPoint.copy(borderShape = it)
-
-
             showShapePickerDialog = false
         }
     }
@@ -570,9 +530,18 @@ fun EditPointDialog(
             onDismiss = { showSelectedShapePickerDialog = false }
         ) {
             editPoint = editPoint.copy(borderShapeSelected = it)
-
-
             showSelectedShapePickerDialog = false
+        }
+    }
+
+
+    if (showHapticFeedbackEditor) {
+        HapticFeedbackEditor(
+            initial = editPoint.hapticFeedback,
+            onDismiss = { showHapticFeedbackEditor = false }
+        ) { newHaptic ->
+            editPoint = editPoint.copy(hapticFeedback = newHaptic)
+            showHapticFeedbackEditor = false
         }
     }
 }

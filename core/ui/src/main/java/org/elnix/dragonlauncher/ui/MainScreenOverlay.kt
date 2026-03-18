@@ -36,11 +36,12 @@ import androidx.compose.ui.unit.sp
 import org.elnix.dragonlauncher.base.theme.LocalExtraColors
 import org.elnix.dragonlauncher.common.logging.logI
 import org.elnix.dragonlauncher.common.serializables.CircleNest
+import org.elnix.dragonlauncher.common.serializables.CustomHapticFeedbackSerializable
 import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.NESTS_TAG
 import org.elnix.dragonlauncher.common.utils.UiCircle
 import org.elnix.dragonlauncher.common.utils.circles.computePointPosition
-import org.elnix.dragonlauncher.common.utils.vibrate
+import org.elnix.dragonlauncher.common.utils.performCustomHaptic
 import org.elnix.dragonlauncher.settings.stores.AngleLineSettingsStore
 import org.elnix.dragonlauncher.settings.stores.BehaviorSettingsStore
 import org.elnix.dragonlauncher.settings.stores.DebugSettingsStore
@@ -78,6 +79,7 @@ fun MainScreenOverlay(
         val angle0to360: Double,
         val angleDeg: Double
     )
+
     val ctx = LocalContext.current
     val nests = LocalNests.current
     val points = LocalPoints.current
@@ -261,10 +263,10 @@ fun MainScreenOverlay(
 
     LaunchedEffect(hoveredPoint?.id) {
         hoveredPoint?.let { point ->
-            (point.haptic ?: haptics[targetCircle]
-            ?: defaultHapticFeedback(targetCircle)).let { milliseconds ->
-                if (milliseconds > 0 && !disableHapticFeedback) {
-                    vibrate(ctx, milliseconds.toLong())
+            if (!disableHapticFeedback) {
+                (point.hapticFeedback ?: haptics[targetCircle]
+                ?: defaultHapticFeedback(targetCircle)).let { customHaptic ->
+                    performCustomHaptic(ctx, customHaptic)
                 }
             }
         }
@@ -550,8 +552,13 @@ fun MainScreenOverlay(
 }
 
 
-fun defaultHapticFeedback(id: Int): Int = when (id) {
-    -1 -> 5 // Cancel Zone, small feedback
-    0 -> 20  // First circle 20ms
-    else -> 20 + 20 * id // others: add 20ms each
-}
+fun defaultHapticFeedback(id: Int): CustomHapticFeedbackSerializable = CustomHapticFeedbackSerializable(
+    listOf(
+        true to
+                when (id) {
+                    -1 -> 5 // Cancel Zone, small feedback
+                    0 -> 20  // First circle 20ms
+                    else -> 20 + 20 * id // others: add 20ms each
+                }
+    )
+)

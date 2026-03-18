@@ -55,7 +55,6 @@ fun SettingsLazyHeader(
     resetText: String? = stringResource(R.string.reset_settings_in_this_tab),
     reorderState: ReorderableLazyListState? = null,
     listState: LazyListState? = null,
-    banner: @Composable (() -> Unit)? = null,
     titleContent: (LazyListScope.() -> Unit)? = null,
     bottomContent: (LazyListScope.() -> Unit)? = null,
     content: @Composable (ColumnScope.() -> Unit)? = null,
@@ -80,8 +79,6 @@ fun SettingsLazyHeader(
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.safeDrawing.exclude(WindowInsets.ime))
     ) {
-
-        if (banner != null) { banner() }
 
         Column (
             modifier = Modifier

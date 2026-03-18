@@ -37,7 +37,7 @@ data class CircleNest(
     /**
      * Haptic feedback, as default for the points in  the circle, separated from the point system
      */
-    @SerialName("haptic") val haptic: Map<Int, Int> = emptyMap(),
+    @SerialName("hapticFeedback") val haptic: Map<Int, CustomHapticFeedbackSerializable> = emptyMap(),
 
     /**
      * How far you have to be close to the closest point to activate it. If set to 0, the value is infinite

@@ -1543,7 +1543,7 @@ fun SettingsScreen(
                             SelectedPointEditTools.Remove -> {
 
                                 selectedPoint?.let { point ->
-                                    val index = points.indexOfFirst { it.id == point.id }
+                                    val index = points.indexOfFirst { p -> p.id == point.id }
                                     if (index >= 0) {
                                         applyChange {
                                             points.removeAt(index)
@@ -1582,8 +1582,6 @@ fun SettingsScreen(
                 MultiSelectConnectedButtonColumn(
                     entries = AddRemoveCircleTools.entries,
                     showLabel = false,
-
-                    isEnabled = { true },
                     isChecked = { true }
                 ) { entry ->
                     scope.launch {

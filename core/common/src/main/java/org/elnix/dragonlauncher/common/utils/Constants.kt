@@ -201,6 +201,7 @@ object Constants {
         val FONT_PROVIDER = LogTag("FontsProvider")
         val SAMSUNG_INTEGRATION_TAG = LogTag("SamsungIntegration")
         val EXTENSION_MANAGER_TAG = LogTag("ExtensionManager")
+        val HAPTIC_TAG = LogTag("HapticDebug")
     }
 
     /*  ─────────────  Links  ─────────────  */

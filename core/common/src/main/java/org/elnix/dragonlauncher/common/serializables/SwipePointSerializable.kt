@@ -69,9 +69,15 @@ data class SwipePointSerializable(
     @SerializedName("m")
     val opacity: Float? = null,
 
-    /** Enables haptic feedback when the swipe point is activated. */
-    @SerializedName("n")
-    val haptic: Int? = null,
+    /**
+     * Fully customizable haptic feedback generator.
+     * Stores the setting in a map of [Boolean] to [Int].
+     * when the boolean is true, it indicates a vibration, and when off a pause.
+     * the [Int] value is the duration of the vibration
+     */
+    // No Serialized name, as it was the previous version, and it's a new setting
+    val hapticFeedback: CustomHapticFeedbackSerializable? = null,
+
 
     /** Optional user-defined display name (labels, accessibility, debug UI). */
     @SerializedName("o")
@@ -97,17 +103,18 @@ data class SwipePointSerializable(
      * Shape of the border icon, default is a circle
      */
     @SerializedName("borderShape")
-    val borderShape: IconShape? = IconShape.Circle,
+    val borderShape: IconShape? = null,
 
     /**
      * Shape of the selected border icon, default is a circle
      */
     @SerializedName("borderShapeSelected")
-    val borderShapeSelected: IconShape? = IconShape.Circle
+    val borderShapeSelected: IconShape? = null
 ) {
-    override fun toString(): String {
-        return "action: $action | nestId: $nestId | angle: $angleDeg | circleNumber: $circleNumber"
-    }
+
+    fun toShortString(): String =
+        "action: $action | nestId: $nestId | angle: $angleDeg | circleNumber: $circleNumber"
+
 }
 
 

@@ -98,6 +98,7 @@ import org.elnix.dragonlauncher.settings.stores.PrivateSettingsStore
 import org.elnix.dragonlauncher.settings.stores.StatusBarJsonSettingsStore
 import org.elnix.dragonlauncher.settings.stores.StatusBarSettingsStore
 import org.elnix.dragonlauncher.settings.stores.SwipeSettingsStore
+import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
 import org.elnix.dragonlauncher.settings.stores.WellbeingSettingsStore
 import org.elnix.dragonlauncher.ui.actions.AppLaunchException
 import org.elnix.dragonlauncher.ui.actions.launchAppDirectly
@@ -122,6 +123,7 @@ import org.elnix.dragonlauncher.ui.remembers.LocalAngleLineObject
 import org.elnix.dragonlauncher.ui.remembers.LocalAppLifecycleViewModel
 import org.elnix.dragonlauncher.ui.remembers.LocalAppsViewModel
 import org.elnix.dragonlauncher.ui.remembers.LocalBackupViewModel
+import org.elnix.dragonlauncher.ui.remembers.LocalCuseCustomColorChannels
 import org.elnix.dragonlauncher.ui.remembers.LocalDefaultPoint
 import org.elnix.dragonlauncher.ui.remembers.LocalEndLineObject
 import org.elnix.dragonlauncher.ui.remembers.LocalIconShape
@@ -687,6 +689,7 @@ fun MainAppUi(
         logW(ANGLE_LINE_TAG) { "Error decoding endLineObject" }
     }
 
+    val useCustomColorChannels by UiSettingsStore.useCustomColorChannels.asState()
     /**
      * Main Composition local provider, I just for everything I can here to avoid having to import them everywhere
      * I know that I should carefully review what global locals I add, but until now it worked to I'll keep it that way until I notice lag
@@ -704,6 +707,8 @@ fun MainAppUi(
         LocalAngleLineObject provides angleLineObject,
         LocalStartLineObject provides startLineObject,
         LocalEndLineObject provides endLineObject,
+
+        LocalCuseCustomColorChannels provides useCustomColorChannels
     ) {
         Scaffold(
             topBar = {
@@ -947,8 +952,10 @@ fun MainAppUi(
             val errorMessage = res.message
 
             // Reload the whole viewModel data after restore
-            scope.launch(Dispatchers.IO) {
-                appsViewModel.loadAll()
+            LaunchedEffect(res) {
+                scope.launch(Dispatchers.IO) {
+                    appsViewModel.loadAll()
+                }
             }
 
             UserValidation(

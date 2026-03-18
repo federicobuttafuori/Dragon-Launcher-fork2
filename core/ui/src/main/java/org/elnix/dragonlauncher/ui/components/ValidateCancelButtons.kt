@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.elnix.dragonlauncher.common.R
+import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
 
 @Composable
 fun ValidateCancelButtons(
@@ -25,8 +26,6 @@ fun ValidateCancelButtons(
     validateColor: Color = MaterialTheme.colorScheme.onPrimary,
     validateContainerColor: Color = MaterialTheme.colorScheme.primary,
     cancelText: String = stringResource(R.string.cancel),
-    cancelColor: Color = MaterialTheme.colorScheme.error,
-    cancelContainerColor: Color = MaterialTheme.colorScheme.surface,
     validateEnabled: Boolean = true,
     onCancel: (() -> Unit)? = null,
     onValidate: () -> Unit
@@ -40,10 +39,7 @@ fun ValidateCancelButtons(
         if (onCancel != null) {
             TextButton(
                 onClick = onCancel,
-                colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = cancelContainerColor,
-                    contentColor = cancelColor
-                ),
+                colors = AppObjectsColors.cancelButtonColors(),
                 shape = CircleShape,
                 modifier = Modifier.weight(1f)
             ) {
