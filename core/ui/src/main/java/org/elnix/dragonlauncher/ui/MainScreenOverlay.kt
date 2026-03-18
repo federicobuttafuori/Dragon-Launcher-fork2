@@ -365,20 +365,6 @@ fun MainScreenOverlay(
             }
         }
 
-//        val colorAction = if (hoveredPoint != null) actionColor(hoveredPoint!!.action, extraColors) else Color.Unspecified
-
-
-//        val filteredPoints = points.filter {
-//            it.nestId == nestId && (
-//                when {
-//                    showAllActionsOnCurrentNest -> true
-//                    showAllActionsOnCurrentCircle -> it.circleNumber == targetCircle
-//                    showAppLaunchPreview -> it.id == hoveredPoint?.id
-//                    else -> false
-//                }
-//            )
-//        }
-
         val drawParams = swipeDefaultParams(points = points)
 
 
@@ -421,28 +407,6 @@ fun MainScreenOverlay(
 
                     // same circle radii as SettingsScreen
                     val radius = dragRadii[targetCircle]!!.toFloat()
-
-                    // if you choose to draw every action, they are drawn here, excepted for
-                    // the selected one, that is always drawn last to prevent overlapping issues,
-                    // even though it shouldn't happen due to my separatePoints functions
-//                    if (showAllActionsOnCurrentCircle) {
-//                        points.filter { it.nestId == nestId && it.circleNumber == targetCircle && it != point }
-//                            .forEach { p ->
-//                                val localCenter = computePointPosition(
-//                                    point = p,
-//                                    radius = radius,
-//                                    center = start
-//                                )
-//                                actionsInCircle(
-//                                    selected = false,
-//                                    point = p,
-//                                    drawParams = drawParams,
-//                                    center = localCenter,
-//                                    depth = 1
-//                                )
-//                            }
-//                    }
-
 
                     // compute point position relative to origin
                     // Depends on whether the line snaps or not to the closest point
