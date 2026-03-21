@@ -113,16 +113,11 @@ fun DebugTab(
                     navController.navigate(SETTINGS.SETTINGS_JSON)
                 }
 
-                DragonButton(
-                    onClick = {
-                        scope.launch {
-                            PrivateSettingsStore.hasSeenWelcome.set(ctx, false)
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(text = "Show welcome screen")
-                }
+                SettingsSwitchRow(
+                    setting = PrivateSettingsStore.hasSeenWelcome,
+                    title = "Has seen welcome",
+                    description = "Disabling that shows the welcome screen"
+                )
 
                 DragonButton(
                     onClick = {

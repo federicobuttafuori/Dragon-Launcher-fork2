@@ -58,7 +58,7 @@ fun WelcomeScreen(
     onEnterSettings: () -> Unit,
     onEnterApp: () -> Unit
 ) {
-    val pagerState = rememberPagerState(pageCount = { 5 })
+    val pagerState = rememberPagerState(pageCount = { 6 })
     val scope = rememberCoroutineScope()
     val ctx = LocalContext.current
 
@@ -178,9 +178,9 @@ fun WelcomeScreen(
 
                     1 -> WelcomePagePrivacy()
                     2 -> WelcomePageTutorial()
-//                    3 -> WelcomePageTheme()
                     3 -> WelcomePageLauncher()
-                    4 -> WelcomePageFinish(
+                    4 -> WelcomePageBackup()
+                    5 -> WelcomePageFinish(
                         onEnterSettings = {
                             setHasSeen()
                             onEnterSettings()

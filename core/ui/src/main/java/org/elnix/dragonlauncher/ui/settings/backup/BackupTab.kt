@@ -200,9 +200,7 @@ fun BackupTab(onBack: () -> Unit) {
     }
 
 
-    // ───────────────────────────────────────
-    // UI
-    // ───────────────────────────────────────
+    // ──────── UI ───────────────────────────────────────
     SettingsLazyHeader(
         title = ctx.getString(R.string.backup_restore),
         onBack = onBack,
@@ -234,7 +232,7 @@ fun BackupTab(onBack: () -> Unit) {
         item {
             SettingsSwitchRow(
                 setting = BackupSettingsStore.autoBackupEnabled,
-                title = ctx.getString(R.string.automatic_backups),
+                title = stringResource(R.string.automatic_backups),
                 description = stringResource(R.string.auto_backup_desc)
             ) {
                 // If the user disabled the backup, also remove the uri

@@ -928,4 +928,6 @@
     <string name="rotation_start_angle_desc">I guess it\'s clear enough...</string>
     <string name="rotation_per_second">Rotations/second</string>
     <string name="rotation_per_second_desc">How many turns on itself it does in one second</string>
+    <string name="enable_backup">Enable backup</string>
+    <string name="choose_a_auto_backup_file">Choose a auto backup file</string>
 </resources>
