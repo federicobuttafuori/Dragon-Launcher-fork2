@@ -67,7 +67,7 @@ import org.elnix.dragonlauncher.ui.components.burger.BurgerAction
 import org.elnix.dragonlauncher.ui.components.burger.BurgerListAction
 import org.elnix.dragonlauncher.ui.components.settings.asState
 import org.elnix.dragonlauncher.ui.components.settings.asStateNull
-import org.elnix.dragonlauncher.ui.helpers.HoldToActivateArc3
+import org.elnix.dragonlauncher.ui.helpers.HoldToActivateArc
 import org.elnix.dragonlauncher.ui.helpers.WallpaperDim
 import org.elnix.dragonlauncher.ui.remembers.LocalAppsViewModel
 import org.elnix.dragonlauncher.ui.remembers.LocalFloatingAppsViewModel
@@ -353,7 +353,7 @@ fun MainScreen(
             onLaunch = { launchAction(it) }
         )
 
-        HoldToActivateArc3(
+        HoldToActivateArc(
             center = hold.centerProvider(),
             progress = hold.progressProvider(),
             rgbLoading = rgbLoading,

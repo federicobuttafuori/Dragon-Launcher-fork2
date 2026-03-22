@@ -37,7 +37,7 @@ import org.elnix.dragonlauncher.ui.components.dragon.DragonColumnGroup
 import org.elnix.dragonlauncher.ui.components.settings.SettingsSlider
 import org.elnix.dragonlauncher.ui.components.settings.SettingsSwitchRow
 import org.elnix.dragonlauncher.ui.components.settings.asState
-import org.elnix.dragonlauncher.ui.helpers.HoldToActivateArc3
+import org.elnix.dragonlauncher.ui.helpers.HoldToActivateArc
 import org.elnix.dragonlauncher.ui.helpers.customobjects.EditCustomObjectBlock
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsLazyHeader
 import org.elnix.dragonlauncher.ui.remembers.LocalHoldCustomObject
@@ -106,7 +106,7 @@ fun HoldToActivateArcTab(onBack: () -> Unit) {
                     )
 
 
-                    HoldToActivateArc3(
+                    HoldToActivateArc(
                         center = center,
                         progress = progress.value,
                         rgbLoading = rgbLoading,
@@ -176,7 +176,7 @@ fun HoldToActivateArcTab(onBack: () -> Unit) {
                     setting = HoldToActivateArcSettingsStore.rotationPerSecond,
                     title = stringResource(R.string.rotation_per_second),
                     description = stringResource(R.string.rotation_per_second_desc),
-                    valueRange = 0f..3f
+                    valueRange = 0f..5f
                 )
 
                 SettingsSwitchRow(

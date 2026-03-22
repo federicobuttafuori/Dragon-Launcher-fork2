@@ -61,6 +61,6 @@ object HoldToActivateArcSettingsStore : MapSettingsStore() {
         key = "rotationPerSecond",
         dataStoreName = dataStoreName,
         default = 0f,
-        allowedRange = 0f..3f
+        allowedRange = 0f..5f
     )
 }
