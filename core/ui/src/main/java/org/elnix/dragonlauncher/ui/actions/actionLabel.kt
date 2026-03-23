@@ -10,6 +10,7 @@ import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.common.utils.PackageManagerCompat
 import org.elnix.dragonlauncher.common.utils.getFilePathFromUri
 import org.elnix.dragonlauncher.enumsui.routeName
+import org.elnix.dragonlauncher.ui.remembers.LocalNests
 
 @Composable
 fun actionLabel(
@@ -17,6 +18,8 @@ fun actionLabel(
     customLabel: String? = null
 ): String {
     val ctx = LocalContext.current
+    val nests = LocalNests.current
+
     val pm = ctx.packageManager
     val packageManagerCompat = PackageManagerCompat(pm, ctx)
 
@@ -85,7 +88,13 @@ fun actionLabel(
 
             SwipeActionSerializable.OpenRecentApps -> stringResource(R.string.recent_apps)
 
-            is SwipeActionSerializable.OpenCircleNest -> stringResource(R.string.open_nest_circle)
+            is SwipeActionSerializable.OpenCircleNest -> {
+                nests
+                    .find { it.id == action.nestId }
+                    ?.name
+                    ?: stringResource(R.string.open_nest_circle)
+            }
+
             SwipeActionSerializable.GoParentNest -> stringResource(R.string.go_parent_nest)
             is SwipeActionSerializable.OpenWidget -> stringResource(R.string.widgets)
             SwipeActionSerializable.None -> ""

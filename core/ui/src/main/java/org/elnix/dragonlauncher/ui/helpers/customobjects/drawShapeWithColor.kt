@@ -67,21 +67,14 @@ fun DrawScope.shapeToPath(
         density = this
     )
 
+    // Reuse a single Path instead of allocating two
     val path = when (outline) {
-        is Outline.Rectangle -> {
-            Path().apply { addRect(outline.rect) }
-        }
-
-        is Outline.Rounded -> {
-            Path().apply { addRoundRect(outline.roundRect) }
-        }
-
+        is Outline.Rectangle -> Path().apply { addRect(outline.rect) }
+        is Outline.Rounded -> Path().apply { addRoundRect(outline.roundRect) }
         is Outline.Generic -> outline.path
     }
 
-    val translatedPath = Path().apply {
-        addPath(path)
+    return path.apply {
         translate(center - Offset(size.width / 2, size.height / 2))
     }
-    return translatedPath
 }

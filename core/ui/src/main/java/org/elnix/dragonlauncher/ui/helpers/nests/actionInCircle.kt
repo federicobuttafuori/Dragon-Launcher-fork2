@@ -101,7 +101,6 @@ fun DrawScope.actionsInCircle(
         point.borderShape ?: defaultPoint.borderShape
     } ?: IconShape.Circle
 
-    val borderShape = borderIconShape.resolveShape()
 
 
     // Prevent overloading since the drawing is recursive
@@ -116,8 +115,12 @@ fun DrawScope.actionsInCircle(
             val iconSizeF = borderRadii * 2f
             val iconSize = Size(iconSizeF, iconSizeF)
 
-            val translatedPath = shapeToPath(borderShape, iconSize, center)
 
+            val borderShape = borderIconShape.resolveShape()
+
+            val translatedPath = drawParams.drawPathCache.getOrCompute(borderIconShape, iconSize, center) {
+                shapeToPath(borderShape, iconSize, center)
+            }
 
 
             // 1. Erases the color, instead of putting it, that lets the wallpaper pass through

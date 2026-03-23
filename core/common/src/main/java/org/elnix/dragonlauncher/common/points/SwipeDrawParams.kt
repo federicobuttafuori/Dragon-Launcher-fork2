@@ -20,4 +20,5 @@ data class SwipeDrawParams(
     val maxDepth: Int,
     val iconShape: IconShape,
     val subNestDefaultRadius: Float,
+    val drawPathCache: DrawPathCache
 )

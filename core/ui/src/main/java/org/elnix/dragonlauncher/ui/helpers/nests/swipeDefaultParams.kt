@@ -1,13 +1,16 @@
 package org.elnix.dragonlauncher.ui.helpers.nests
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import org.elnix.dragonlauncher.base.ktx.px
 import org.elnix.dragonlauncher.base.theme.LocalExtraColors
+import org.elnix.dragonlauncher.common.points.DrawPathCache
 import org.elnix.dragonlauncher.common.points.SwipeDrawParams
 import org.elnix.dragonlauncher.common.serializables.CircleNest
 import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
@@ -49,6 +52,12 @@ fun swipeDefaultParams(
 
     val subNestDefaultRadius by SwipeMapSettingsStore.subNestDefaultRadius.asState()
 
+    val drawPathCache = remember { DrawPathCache(points.size) }
+
+    LaunchedEffect(points.size) {
+        drawPathCache.updateMaxCacheSize(points.size)
+    }
+
     return SwipeDrawParams(
         nests = nests,
         points = points,
@@ -61,5 +70,6 @@ fun swipeDefaultParams(
         maxDepth = maxNestsDepth,
         iconShape = iconShape,
         subNestDefaultRadius = subNestDefaultRadius.dp.px,
+        drawPathCache = drawPathCache
     )
 }
