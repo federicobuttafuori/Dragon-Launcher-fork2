@@ -24,28 +24,7 @@ fun DrawScope.drawShapeWithColor(
     strokeWidth: Float,
     erase: Boolean = false
 ) {
-    val outline = shape.createOutline(
-        size = size,
-        layoutDirection = LayoutDirection.Ltr,
-        density = this
-    )
-
-    val path = when (outline) {
-        is Outline.Rectangle -> {
-            Path().apply { addRect(outline.rect) }
-        }
-
-        is Outline.Rounded -> {
-            Path().apply { addRoundRect(outline.roundRect) }
-        }
-
-        is Outline.Generic -> outline.path
-    }
-
-    val translatedPath = Path().apply {
-        addPath(path)
-        translate(center - Offset(size.width / 2, size.height / 2))
-    }
+    val translatedPath = shapeToPath(shape, size, center)
 
     logD(ANGLE_LINE_TAG) { "erase: $erase, strokeWidth: $strokeWidth" }
 
@@ -75,4 +54,34 @@ fun DrawScope.drawShapeWithColor(
                 Fill
         )
     }
+}
+
+fun DrawScope.shapeToPath(
+    shape: Shape,
+    size: Size,
+    center: Offset
+): Path {
+    val outline = shape.createOutline(
+        size = size,
+        layoutDirection = LayoutDirection.Ltr,
+        density = this
+    )
+
+    val path = when (outline) {
+        is Outline.Rectangle -> {
+            Path().apply { addRect(outline.rect) }
+        }
+
+        is Outline.Rounded -> {
+            Path().apply { addRoundRect(outline.roundRect) }
+        }
+
+        is Outline.Generic -> outline.path
+    }
+
+    val translatedPath = Path().apply {
+        addPath(path)
+        translate(center - Offset(size.width / 2, size.height / 2))
+    }
+    return translatedPath
 }

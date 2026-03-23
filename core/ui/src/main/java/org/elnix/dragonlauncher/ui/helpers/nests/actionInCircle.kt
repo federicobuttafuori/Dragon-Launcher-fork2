@@ -5,11 +5,9 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.Outline
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -24,6 +22,7 @@ import org.elnix.dragonlauncher.common.utils.ImageUtils.loadDrawableResAsBitmap
 import org.elnix.dragonlauncher.common.utils.UiCircle
 import org.elnix.dragonlauncher.common.utils.resolveShape
 import org.elnix.dragonlauncher.ui.actions.actionColor
+import org.elnix.dragonlauncher.ui.helpers.customobjects.shapeToPath
 
 
 fun DrawScope.actionsInCircle(
@@ -69,7 +68,6 @@ fun DrawScope.actionsInCircle(
     val intSize = IntSize(iconSize, iconSize)
 
 
-
     /*  ─────────────  Stroke computation  ─────────────  */
     val borderStroke = if (selected) {
         point.borderStrokeSelected ?: defaultPoint.borderStrokeSelected ?: 8f
@@ -78,7 +76,7 @@ fun DrawScope.actionsInCircle(
     }
 
     /*  ─────────────  Foreground / background colors computation  ─────────────  */
-        val borderColor = if (selected) {
+    val borderColor = if (selected) {
         point.borderColorSelected?.let { Color(it) }
             ?: defaultPoint.borderColorSelected?.let { Color(it) }
     } else {
@@ -111,61 +109,43 @@ fun DrawScope.actionsInCircle(
 
         if (action !is SwipeActionSerializable.OpenCircleNest || point.customIcon != null) {
 
-            /* ───────────── Erases the circle in the point ───────────── */
 
             // if no background color provided, erases the background
             val eraseBg = backgroundColor == Color.Transparent && !preventBgErasing
 
-            // Erases the color, instead of putting it, that lets the wallpaper pass through
-            drawCircle(
+            val iconSizeF = borderRadii * 2f
+            val iconSize = Size(iconSizeF, iconSizeF)
+
+            val translatedPath = shapeToPath(borderShape, iconSize, center)
+
+
+
+            // 1. Erases the color, instead of putting it, that lets the wallpaper pass through
+            drawPath(
+                path = translatedPath,
                 color = Color.Transparent,
-                radius = borderRadii,
-                center = center,
+                style = Fill,
                 blendMode = BlendMode.Clear
             )
 
-            // If requested to not erase the bg, draw it (this avoids the more tinted bg when using a half transparent bg color
+            // 2. If requested to not erase the bg, draw it (this avoids the more tinted bg when using a half transparent bg color
             if (!eraseBg) {
-                drawCircle(
+                drawPath(
+                    path = translatedPath,
                     color = backgroundColor,
-                    radius = borderRadii,
-                    center = center
+                    style = Fill
                 )
             }
 
+            // 3. Draws the border
+            if (borderStroke > 0f) {
+                if (borderColor.alpha != 0f) {
 
-            /* ───────────── Draws the border (custom shape) ───────────── */
-
-            val iconSizeF = borderRadii * 2f
-
-
-            val outline = borderShape.createOutline(
-                size = Size(iconSizeF, iconSizeF),
-                layoutDirection = layoutDirection,
-                density = this
-            )
-
-            val path = when (outline) {
-                is Outline.Rectangle -> Path().apply { addRect(outline.rect) }
-                is Outline.Rounded -> Path().apply { addRoundRect(outline.roundRect) }
-                is Outline.Generic -> outline.path
-            }
-
-            /* ───────────── Move drawing to icon position ───────────── */
-            translate(
-                left = center.x - borderRadii,
-                top = center.y - borderRadii
-            ) {
-
-                if (borderStroke > 0f) {
-                    if (borderColor.alpha != 0f) {
-
-                        drawPath(
-                            path = path,
-                            color = borderColor,
-                            style = Stroke(width = borderStroke)
-                        )
-                    }
+                    drawPath(
+                        path = translatedPath,
+                        color = borderColor,
+                        style = Stroke(width = borderStroke)
+                    )
                 }
             }
 
@@ -174,7 +154,7 @@ fun DrawScope.actionsInCircle(
             val colorAction = actionColor(point.action, extraColors)
 
 
-
+            // 4. Draw icon in center
             if (icon != null) {
                 drawImage(
                     image = icon,
