@@ -100,8 +100,9 @@ fun EditCustomObjectBlock(
         if (properties.allowRotationCustomization) {
             SliderWithLabel(
                 label = stringResource(R.string.rotation),
+                description = stringResource(R.string.minus_one_means_random),
                 value = tempRotation ?: default.rotation!!,
-                valueRange = 0..360,
+                valueRange = -1..360, // -1 means random rotation
                 backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
                 onReset = {
                     tempRotation = null

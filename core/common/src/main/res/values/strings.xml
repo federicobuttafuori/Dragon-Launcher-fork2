@@ -931,4 +931,5 @@
     <string name="enable_backup">Enable backup</string>
     <string name="choose_a_auto_backup_file">Choose a auto backup file</string>
     <string name="show_sub_nest_size_slider">Show sub-nests size slider</string>
+    <string name="minus_one_means_random">-1 means random on start</string>
 </resources>

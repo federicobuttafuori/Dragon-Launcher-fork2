@@ -39,8 +39,10 @@ import org.elnix.dragonlauncher.common.serializables.CustomHapticFeedbackSeriali
 import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.NESTS_TAG
 import org.elnix.dragonlauncher.common.utils.UiCircle
+import org.elnix.dragonlauncher.common.utils.UiConstants
 import org.elnix.dragonlauncher.common.utils.circles.computePointPosition
 import org.elnix.dragonlauncher.common.utils.performCustomHaptic
+import org.elnix.dragonlauncher.common.utils.resolveShape
 import org.elnix.dragonlauncher.settings.stores.AngleLineSettingsStore
 import org.elnix.dragonlauncher.settings.stores.BehaviorSettingsStore
 import org.elnix.dragonlauncher.settings.stores.DebugSettingsStore
@@ -64,6 +66,14 @@ import kotlin.math.atan2
 import kotlin.math.hypot
 
 
+// Data class to hold geometric calculations
+data class DragData(
+    val dist: Float,
+    val angle0to360: Float,
+    val angleDeg: Float
+)
+
+
 @Composable
 fun MainScreenOverlay(
     start: Offset?,
@@ -71,14 +81,6 @@ fun MainScreenOverlay(
     nestId: Int,
     onLaunch: ((SwipePointSerializable) -> Unit)?
 ) {
-    // Data class to hold geometric calculations
-    data class DragData(
-        val dx: Float,
-        val dy: Float,
-        val dist: Float,
-        val angle0to360: Float,
-        val angleDeg: Float
-    )
 
     val ctx = LocalContext.current
     val nests = LocalNests.current
@@ -137,19 +139,14 @@ fun MainScreenOverlay(
 
                 sweepState.onAngleChanged(angleDegVal.toFloat())
 
-
-//                val angle360 = if (angleDegVal < 0) angleDegVal + 360 else angleDegVal
-
-                DragData(dxVal, dyVal, distVal, sweepState.angle360(), sweepState.sweepAngle())
+                DragData(distVal, sweepState.angle360(), sweepState.sweepAngle())
             } else {
                 sweepState.reset()
-                DragData(0f, 0f, 0f, 0f, 0f)
+                DragData(0f, 0f, 0f)
             }
         }
     }
 
-    val dx = dragData.dx
-    val dy = dragData.dy
     val dist = dragData.dist
     val angle360 = dragData.angle0to360
     val sweepAngle = dragData.angleDeg
@@ -269,6 +266,32 @@ fun MainScreenOverlay(
         }
     }
 
+    val pickedRememberShapeAngle = remember(isDragging) {
+        (angleLineObject.shape ?: UiConstants.defaultAngleCustomObject.shape).resolveShape()
+    }
+    val pickedRememberRotationAngle = remember(isDragging) {
+        angleLineObject.rotation
+            ?.takeIf { it != -1 }
+            ?: (0..360).random()
+    }
+
+    val pickedRememberShapeStart = remember(isDragging) {
+        (startObject.shape ?: UiConstants.defaultStartCustomObject.shape).resolveShape()
+    }
+    val pickedRememberRotationStart = remember(isDragging) {
+        startObject.rotation
+            ?.takeIf { it != -1 }
+            ?: (0..360).random()
+    }
+
+    val pickedRememberShapeEnd = remember(isDragging) {
+        (endObject.shape ?: UiConstants.defaultEndCustomObject.shape).resolveShape()
+    }
+    val pickedRememberRotationEnd = remember(isDragging) {
+        endObject.rotation
+            ?.takeIf { it != -1 }
+            ?: (0..360).random()
+    }
 
     val circles: SnapshotStateList<UiCircle> = remember { mutableStateListOf() }
 
@@ -313,10 +336,6 @@ fun MainScreenOverlay(
                 Text(
                     text = "current = ${current?.let { "%.1f, %.1f".format(it.x, it.y) } ?: "—"}",
                     color = Color.White, fontSize = 12.sp)
-                Text(
-                    text = "dx = %.1f   dy = %.1f".format(dx, dy),
-                    color = Color.White, fontSize = 12.sp
-                )
                 Text(
                     text = "dist = %.1f".format(dist),
                     color = Color.White, fontSize = 12.sp
@@ -372,21 +391,25 @@ fun MainScreenOverlay(
                     actionLine(
                         start = start,
                         end = current,
-
+                        sweepAngle = sweepAngle,
+                        lineColor = lineColor,
                         order = order,
-
                         showLineObjectPreview = showLineObjectPreview,
                         showAngleLineObjectPreview = showAngleLineObjectPreview,
                         showStartObjectPreview = showStartObjectPreview,
                         showEndObjectPreview = showEndObjectPreview,
-
+                        pickedRememberShapeAngle = pickedRememberShapeAngle,
+                        pickedRememberRotationAngle = pickedRememberRotationAngle,
+                        pickedRememberRotationStart = pickedRememberRotationStart,
+                        pickedRememberShapeStart = pickedRememberShapeStart,
+                        pickedRememberRotationEnd = pickedRememberRotationEnd,
+                        pickedRememberShapeEnd = pickedRememberShapeEnd,
                         lineCustomObject = lineObject,
                         angleLineCustomObject = angleLineObject,
                         startCustomObject = startObject,
-                        endCustomObject = endObject,
+                        endCustomObject = endObject
 
-                        sweepAngle = sweepAngle,
-                        lineColor = lineColor
+
                     )
                 }
 
@@ -408,21 +431,23 @@ fun MainScreenOverlay(
                         actionLine(
                             start = start,
                             end = end,
-
+                            sweepAngle = sweepAngle,
+                            lineColor = lineColor,
                             order = order,
-
                             showLineObjectPreview = showLineObjectPreview,
                             showAngleLineObjectPreview = showAngleLineObjectPreview,
                             showStartObjectPreview = showStartObjectPreview,
                             showEndObjectPreview = showEndObjectPreview,
-
+                            pickedRememberShapeAngle = pickedRememberShapeAngle,
+                            pickedRememberRotationAngle = pickedRememberRotationAngle,
+                            pickedRememberRotationStart = pickedRememberRotationStart,
+                            pickedRememberShapeStart = pickedRememberShapeStart,
+                            pickedRememberRotationEnd = pickedRememberRotationEnd,
+                            pickedRememberShapeEnd = pickedRememberShapeEnd,
                             lineCustomObject = lineObject,
                             angleLineCustomObject = angleLineObject,
                             startCustomObject = startObject,
-                            endCustomObject = endObject,
-
-                            sweepAngle = sweepAngle,
-                            lineColor = lineColor
+                            endCustomObject = endObject
                         )
                     }
 

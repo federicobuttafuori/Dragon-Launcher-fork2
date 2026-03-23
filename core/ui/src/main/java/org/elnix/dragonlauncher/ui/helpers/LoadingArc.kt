@@ -69,11 +69,19 @@ fun HoldToActivateArc(
     val shape = customObjectSerializable.shape ?: UiConstants.defaultHoldCustomObject.shape
     val radius = (customObjectSerializable.size ?: UiConstants.defaultHoldCustomObject.size!!).dp
     val strokeWidth = (customObjectSerializable.stroke ?: UiConstants.defaultHoldCustomObject.stroke!!).dp
-    val rotationAngleStart = customObjectSerializable.rotation ?: UiConstants.defaultHoldCustomObject.rotation!!
     val glowRadius = customObjectSerializable.glow?.radius?.dp?.toPixels() ?: 0f
     val glowColor = customObjectSerializable.glow?.color
 
-    val resolvedShape: Shape = shape.resolveShape()
+    // Remembers for each new click the random or not rotation it applies (if -1)
+    val rotationAngleStart = remember(center) {
+        (customObjectSerializable.rotation ?: UiConstants.defaultHoldCustomObject.rotation!!)
+            .takeIf { it != -1 }
+            ?: (0..360).random()
+    }
+
+
+    // Remembers the shape for each new click, but keeps the same when holding
+    val resolvedShape: Shape = remember(center) { shape.resolveShape() }
 
     val infiniteTransition = rememberInfiniteTransition(label = "infinite")
 

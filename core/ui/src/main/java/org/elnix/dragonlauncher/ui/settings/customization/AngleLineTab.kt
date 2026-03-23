@@ -41,6 +41,7 @@ import org.elnix.dragonlauncher.common.serializables.CustomObjectBlockProperties
 import org.elnix.dragonlauncher.common.serializables.CustomObjectSerializable
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.ANGLE_LINE_TAG
 import org.elnix.dragonlauncher.common.utils.UiConstants
+import org.elnix.dragonlauncher.common.utils.resolveShape
 import org.elnix.dragonlauncher.settings.stores.AngleLineSettingsStore
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
 import org.elnix.dragonlauncher.ui.components.ExpandableSection
@@ -157,30 +158,33 @@ fun AngleLineTab(onBack: () -> Unit) {
     val sweep = sweepState.sweepAngle()
 
 
-
-    fun saveLine(newObject: CustomObjectSerializable) {
-        scope.launch {
-            AngleLineSettingsStore.lineJson.set(ctx, json.encodeToString(CustomObjectSerializable.serializer(), newObject))
-        }
+    val pickedRememberShapeAngle = remember(mutableAngleLineObject.shape) {
+        (mutableAngleLineObject.shape ?: UiConstants.defaultAngleCustomObject.shape).resolveShape()
+    }
+    val pickedRememberRotationAngle = remember(mutableAngleLineObject.rotation) {
+        mutableAngleLineObject.rotation
+            ?.takeIf { it != -1 }
+            ?: (0..360).random()
     }
 
-    fun saveAngleLine(newObject: CustomObjectSerializable) {
-        scope.launch {
-            AngleLineSettingsStore.angleLineJson.set(ctx, json.encodeToString(CustomObjectSerializable.serializer(), newObject))
-        }
+    val pickedRememberShapeStart = remember(mutableStartObject.shape) {
+        (mutableStartObject.shape ?: UiConstants.defaultStartCustomObject.shape).resolveShape()
+    }
+    val pickedRememberRotationStart = remember(mutableStartObject.rotation) {
+        mutableStartObject.rotation
+            ?.takeIf { it != -1 }
+            ?: (0..360).random()
     }
 
-    fun saveStart(newObject: CustomObjectSerializable) {
-        scope.launch {
-            AngleLineSettingsStore.startLineJson.set(ctx, json.encodeToString(CustomObjectSerializable.serializer(), newObject))
-        }
+    val pickedRememberShapeEnd = remember(mutableEndObject.shape) {
+        (mutableEndObject.shape ?: UiConstants.defaultEndCustomObject.shape).resolveShape()
+    }
+    val pickedRememberRotationEnd = remember(mutableEndObject.rotation) {
+        mutableEndObject.rotation
+            ?.takeIf { it != -1 }
+            ?: (0..360).random()
     }
 
-    fun saveEnd(newObject: CustomObjectSerializable) {
-        scope.launch {
-            AngleLineSettingsStore.endLineJson.set(ctx, json.encodeToString(CustomObjectSerializable.serializer(), newObject))
-        }
-    }
 
     fun saveAll() {
         scope.launch {
@@ -256,21 +260,24 @@ fun AngleLineTab(onBack: () -> Unit) {
                         actionLine(
                             start = start,
                             end = dummyEnd,
-
+                            sweepAngle = sweep,
+                            lineColor = lineColor,
                             order = order,
-
                             showLineObjectPreview = showLineObjectPreview,
                             showAngleLineObjectPreview = showAngleLineObjectPreview,
                             showStartObjectPreview = showStartObjectPreview,
                             showEndObjectPreview = showEndObjectPreview,
-
+                            pickedRememberShapeAngle = pickedRememberShapeAngle,
+                            pickedRememberRotationAngle = pickedRememberRotationAngle,
+                            pickedRememberRotationStart = pickedRememberRotationStart,
+                            pickedRememberShapeStart = pickedRememberShapeStart,
+                            pickedRememberRotationEnd = pickedRememberRotationEnd,
+                            pickedRememberShapeEnd = pickedRememberShapeEnd,
                             lineCustomObject = mutableLineObject,
                             angleLineCustomObject = mutableAngleLineObject,
                             startCustomObject = mutableStartObject,
-                            endCustomObject = mutableEndObject,
-                            sweepAngle = sweep,
+                            endCustomObject = mutableEndObject
 
-                            lineColor = lineColor
                         )
                     }
                 }

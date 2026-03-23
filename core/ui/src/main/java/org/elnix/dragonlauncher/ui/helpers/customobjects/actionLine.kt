@@ -7,12 +7,12 @@ import androidx.compose.ui.graphics.Matrix
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathMeasure
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.unit.dp
 import org.elnix.dragonlauncher.common.serializables.CustomObjectSerializable
 import org.elnix.dragonlauncher.common.utils.UiConstants
-import org.elnix.dragonlauncher.common.utils.resolveShape
 import org.elnix.dragonlauncher.enumsui.AngleLineObjects
 import org.elnix.dragonlauncher.enumsui.AngleLineObjects.Angle
 import org.elnix.dragonlauncher.enumsui.AngleLineObjects.End
@@ -25,6 +25,8 @@ import kotlin.math.abs
 fun DrawScope.actionLine(
     start: Offset,
     end: Offset,
+    sweepAngle: Float,
+    lineColor: Color,
 
     order: List<AngleLineObjects>,
 
@@ -33,12 +35,19 @@ fun DrawScope.actionLine(
     showStartObjectPreview: Boolean,
     showEndObjectPreview: Boolean,
 
+    pickedRememberShapeAngle: Shape,
+    pickedRememberRotationStart: Int,
+
+    pickedRememberShapeStart: Shape,
+    pickedRememberRotationEnd: Int,
+
+    pickedRememberShapeEnd: Shape,
+    pickedRememberRotationAngle: Int,
+
     lineCustomObject: CustomObjectSerializable,
     angleLineCustomObject: CustomObjectSerializable,
     startCustomObject: CustomObjectSerializable,
-    endCustomObject: CustomObjectSerializable,
-    sweepAngle: Float,
-    lineColor: Color
+    endCustomObject: CustomObjectSerializable
 ) {
 
     order.forEach { drawObject ->
@@ -53,6 +62,7 @@ fun DrawScope.actionLine(
                     )
                 }
             }
+
             Angle -> {
                 // The "do you hate it?" thing in settings
                 if (showAngleLineObjectPreview) {
@@ -60,27 +70,35 @@ fun DrawScope.actionLine(
                         center = start,
                         sweepAngle = sweepAngle,
                         lineColor = lineColor,
-                        angleLineCustomObject = angleLineCustomObject
+                        angleLineCustomObject = angleLineCustomObject,
+                        rotation = pickedRememberRotationAngle,
+                        shape = pickedRememberShapeAngle
                     )
                 }
             }
+
             Start -> {
                 if (showStartObjectPreview) {
                     customObject(
                         customObject = startCustomObject,
                         default = UiConstants.defaultStartCustomObject,
                         angleColor = lineColor,
-                        center = start
+                        center = start,
+                        rotation = pickedRememberRotationStart,
+                        shape = pickedRememberShapeStart
                     )
                 }
             }
+
             End -> {
                 if (showEndObjectPreview) {
                     customObject(
                         customObject = endCustomObject,
                         default = UiConstants.defaultEndCustomObject,
                         angleColor = lineColor,
-                        center = end
+                        center = end,
+                        rotation = pickedRememberRotationEnd,
+                        shape = pickedRememberShapeEnd
                     )
                 }
             }
@@ -139,12 +157,14 @@ private fun DrawScope.angleObject(
     center: Offset,
     sweepAngle: Float,
     lineColor: Color,
+    rotation: Int,
+    shape: Shape,
     angleLineCustomObject: CustomObjectSerializable,
 ) {
     val strokeWidth = (angleLineCustomObject.stroke ?: UiConstants.defaultAngleCustomObject.stroke!!).dp.toPx()
     if (strokeWidth <= 0f) return
 
-    val shape = (angleLineCustomObject.shape ?: UiConstants.defaultAngleCustomObject.shape!!).resolveShape()
+//    val shape = (angleLineCustomObject.shape ?: UiConstants.defaultAngleCustomObject.shape!!).resolveShape()
 
     val radius = (angleLineCustomObject.size ?: UiConstants.defaultAngleCustomObject.size!!).dp.toPx() / 2
     val diameterPx = radius * 2
@@ -183,7 +203,6 @@ private fun DrawScope.angleObject(
         pathMeasurer.getSegment(pathMeasurer.length * (1f - progress), pathMeasurer.length, destinationPath)
     }
 
-    val rotation = angleLineCustomObject.rotation ?: UiConstants.defaultAngleCustomObject.rotation!!
 
     withTransform({
         rotate(degrees = rotation.toFloat(), pivot = center)
