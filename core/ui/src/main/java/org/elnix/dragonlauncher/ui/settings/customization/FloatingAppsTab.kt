@@ -67,9 +67,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.base.ktx.toDp
-import org.elnix.dragonlauncher.common.serializables.FloatingAppObject
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.logging.logD
+import org.elnix.dragonlauncher.common.serializables.FloatingAppObject
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.WIDGET_TAG
 import org.elnix.dragonlauncher.common.utils.UiConstants.DragonShape
@@ -405,7 +405,6 @@ fun FloatingAppsTab(
         NestManagementDialog(
             onDismissRequest = { showNestPickerDialog = false },
             title = stringResource(R.string.pick_a_nest),
-            canCopyId = false,
             onDelete = null,
             onNewNest = null,
             onNameChange = null

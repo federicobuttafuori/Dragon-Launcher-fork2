@@ -1,14 +1,11 @@
 package org.elnix.dragonlauncher.ui.helpers
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.interaction.FocusInteraction
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -102,12 +99,12 @@ private fun SliderWithLabelInternal(
 ) {
     val displayColor = color.semiTransparentIfDisabled(enabled)
 
-    val interactionSource = remember { MutableInteractionSource() }
+//    val interactionSource = remember { MutableInteractionSource() }
     val focusManager = LocalFocusManager.current
 
 
     var editingText by remember { mutableStateOf(valueText) }
-    var isEditing by remember { mutableStateOf(false) }
+//    var isEditing by remember { mutableStateOf(false) }
 
 
     // Edit the visual value whenever the real value changes to keep consistency
@@ -120,26 +117,28 @@ private fun SliderWithLabelInternal(
     }
 
 
-    // If the user presses back when editing, the value is commited (I use that because I do back to quit the slider label thing
-    BackHandler(isEditing) {
-        editValue()
-    }
+//    // If the user presses back when editing, the value is commited (I use that because I do back to quit the slider label thing
+//    BackHandler(isEditing) {
+//        editValue()
+//    }
 
-    // Observe focus via InteractionSource
-    LaunchedEffect(interactionSource) {
-        interactionSource.interactions.collect { interaction ->
-            when (interaction) {
-                is FocusInteraction.Focus -> {
-                    isEditing = true
-                }
+//    // Observe focus via InteractionSource
+//    LaunchedEffect(interactionSource) {
+//        interactionSource.interactions.collect { interaction ->
+//            when (interaction) {
+//                is FocusInteraction.Focus -> {
+//                    isEditing = true
+//                }
+//
+//                is FocusInteraction.Unfocus -> {
+//                    commitEditText(editingText, valueRange, onDragStateChange, onChange)
+//                    isEditing = false
+//                }
+//            }
+//        }
+//    }
 
-                is FocusInteraction.Unfocus -> {
-                    commitEditText(editingText, valueRange, onDragStateChange, onChange)
-                    isEditing = false
-                }
-            }
-        }
-    }
+    var isEditing by remember { mutableStateOf(false) }
 
 
     Column(
@@ -178,10 +177,9 @@ private fun SliderWithLabelInternal(
                 EditValueTextField(
                     value = editingText,
                     onValueChange = { editingText = it },
-                    isEditing = isEditing,
                     enabled = allowTextEditValue,
-                    interactionSource = interactionSource,
                     backgroundColor = backgroundColor,
+                    onFocusChange = { isEditing = it },
                     onDone = ::editValue
                 )
             }

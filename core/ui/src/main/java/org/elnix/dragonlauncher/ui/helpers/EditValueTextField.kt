@@ -1,6 +1,8 @@
 package org.elnix.dragonlauncher.ui.helpers
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Animatable
+import androidx.compose.foundation.interaction.FocusInteraction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -10,8 +12,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -29,13 +34,38 @@ import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
 fun EditValueTextField(
     value: String,
     onValueChange: (String) -> Unit,
-    isEditing: Boolean,
     enabled: Boolean = true,
-    interactionSource: MutableInteractionSource? = null,
     backgroundColor: Color,
+    onFocusChange: ((Boolean) -> Unit)? = null,
     onDone: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
+    val interactionSource = remember { MutableInteractionSource() }
+
+    var isEditing by remember { mutableStateOf(false) }
+
+    // If the user presses back when editing, the value is commited (I use that because I do back to quit the slider label thing)
+    BackHandler(isEditing) {
+        onDone()
+    }
+
+    // Observe focus via InteractionSource
+    LaunchedEffect(interactionSource) {
+        interactionSource.interactions.collect { interaction ->
+            when (interaction) {
+                is FocusInteraction.Focus -> {
+                    isEditing = true
+                }
+
+                is FocusInteraction.Unfocus -> {
+                    onDone()
+                    isEditing = false
+                }
+            }
+        }
+    }
+
+
     val shapeRound = remember {
         Animatable(
             initialValue = UiConstants.CIRCLE_SHAPE_CORNER_DP.value,
@@ -44,6 +74,7 @@ fun EditValueTextField(
 
     // Animate to dragon shape on focus change
     LaunchedEffect(isEditing) {
+        onFocusChange?.invoke(isEditing)
         scope.launch {
 
             shapeRound.animateTo(

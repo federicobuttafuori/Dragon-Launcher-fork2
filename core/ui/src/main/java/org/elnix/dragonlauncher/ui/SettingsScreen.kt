@@ -12,8 +12,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.interaction.FocusInteraction
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -69,7 +67,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -161,11 +158,6 @@ fun SettingsScreen(
     val ctx = LocalContext.current
     val defaultPoint = LocalDefaultPoint.current
     val extraColors = LocalExtraColors.current
-
-    // For the editing angle
-    val focusManager = LocalFocusManager.current
-    val interactionSource = remember { MutableInteractionSource() }
-
 
     val appsViewModel = LocalAppsViewModel.current
 
@@ -1432,37 +1424,19 @@ fun SettingsScreen(
                             ctx.showToast("Failed to set value: $e")
                             logE(SWIPE_TAG, e) { "Failed to set value for point via text field" }
                         }
-
-                        focusManager.clearFocus()
                     }
 
                     var isEditing by remember { mutableStateOf(false) }
 
-                    // Observe focus via InteractionSource
-                    LaunchedEffect(interactionSource) {
-                        interactionSource.interactions.collect { interaction ->
-                            when (interaction) {
-                                is FocusInteraction.Focus -> {
-                                    isEditing = true
-                                }
-
-                                is FocusInteraction.Unfocus -> {
-                                    commitEditTExt()
-                                    isEditing = false
-                                }
-                            }
-                        }
-                    }
 
                     Spacer(Modifier.width(ButtonGroupDefaults.ConnectedSpaceBetween))
                     AnimatedVisibility(aPointIsSelected) {
                         EditValueTextField(
                             value = angleText,
                             onValueChange = { angleText = it },
-                            isEditing = isEditing,
                             enabled = aPointIsSelected,
-                            interactionSource = interactionSource,
                             backgroundColor = MaterialTheme.colorScheme.primary,
+                            onFocusChange = { isEditing = it },
                             onDone = ::commitEditTExt
                         )
                     }
@@ -1748,16 +1722,20 @@ fun SettingsScreen(
 
     if (showNestManagementDialog) {
         NestManagementDialog(
-            onDismissRequest = { showNestManagementDialog = false }, onNewNest = ::addNewNest,
+            onDismissRequest = { showNestManagementDialog = false },
+            onNewNest = ::addNewNest,
             nests = nests,
-            onNameChange = null /*{ id, newName ->
+            onNameChange = { id, newName ->
                 applyChange {
-                    pendingNestUpdate = nests.map {
-                        if (it.id == id) it.copy(name = newName)
-                        else it
+                    val index = nests.indexOfFirst { it.id == id }
+
+                    if (index != -1) {
+                        nests[index] = nests[index].copy(
+                            name = newName
+                        )
                     }
                 }
-            }*/,
+            },
             onDelete = { nestToDelete ->
                 applyChange {
                     // Delete nest, leave points on it for now

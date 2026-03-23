@@ -37,12 +37,12 @@ import androidx.compose.ui.geometry.center
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.CircleNest
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
 import org.elnix.dragonlauncher.common.utils.UiConstants.DragonShape
-import org.elnix.dragonlauncher.common.utils.colors.adjustBrightness
 import org.elnix.dragonlauncher.common.utils.copyToClipboard
 import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
 import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
@@ -54,7 +54,6 @@ import org.elnix.dragonlauncher.ui.remembers.LocalNests
 fun NestManagementDialog(
     onDismissRequest: () -> Unit,
     title: String? = null,
-    canCopyId: Boolean = true,
     nests:  List<CircleNest>? = null,
     onNewNest: (() -> Unit)? = null,
     onNameChange: ((id: Int, name: String) -> Unit)?,
@@ -111,7 +110,6 @@ fun NestManagementDialog(
                     NestManagementItem(
                         nest = nest,
                         nests = nests,
-                        canCopyId = canCopyId,
                         onNameChange = onNameChange,
                         onDelete = onDelete,
                         onSelect = { onSelect?.invoke(nest) }
@@ -128,17 +126,15 @@ fun NestManagementDialog(
 private fun NestManagementItem(
     nest: CircleNest,
     nests: List<CircleNest>?,
-    canCopyId: Boolean,
     onNameChange: ((id: Int, name: String) -> Unit)?,
     onDelete: ((id: Int) -> Unit)?,
     onSelect: (() -> Unit)? = null
 ) {
     val ctx = LocalContext.current
 
-    val surfaceColorDraw = MaterialTheme.colorScheme.surface.adjustBrightness(0.5f)
 
     val drawParams = swipeDefaultParams(
-        backgroundColor = surfaceColorDraw,
+        backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
         nests = nests
     )
 
@@ -155,9 +151,9 @@ private fun NestManagementItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
+            .height(120.dp)
             .clip(DragonShape)
-            .background(surfaceColorDraw)
+            .background(MaterialTheme.colorScheme.surfaceVariant)
             .clickable { onSelect?.invoke() }
             .padding(5.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -180,15 +176,14 @@ private fun NestManagementItem(
         }
 
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(10.dp)
+            modifier = Modifier.weight(1f)
         ) {
 
             Row(
                 modifier = Modifier
                     .height(IntrinsicSize.Min)
-                    .clickable(canCopyId) {
+                    .clip(DragonShape)
+                    .clickable {
                         ctx.copyToClipboard(nest.id.toString())
                     },
                 verticalAlignment = Alignment.CenterVertically,
@@ -196,17 +191,19 @@ private fun NestManagementItem(
             ) {
                 Text(
                     text = "ID: ${nest.id}",
-                    color = MaterialTheme.colorScheme.onSurface.copy(0.9f)
+                    color = MaterialTheme.colorScheme.onSurface.copy(0.9f),
+                    fontSize = 10.sp
                 )
 
                 Icon(
                     imageVector = Icons.Default.ContentCopy,
                     contentDescription = stringResource(R.string.copy_id),
-                    modifier = Modifier.size(18.dp)
+                    modifier = Modifier.size(10.dp)
                 )
             }
 
             if (onNameChange != null) {
+
                 TextField(
                     value = tempCustomName,
                     onValueChange = {
@@ -219,13 +216,10 @@ private fun NestManagementItem(
                             color = MaterialTheme.colorScheme.onSurface
                         )
                     },
-                    colors = AppObjectsColors.outlinedTextFieldColors(
-                        backgroundColor = surfaceColorDraw,
-                        onBackgroundColor = MaterialTheme.colorScheme.onSurface,
-                        removeBorder = true
-                    ),
+                    colors = AppObjectsColors.outlinedTextFieldColors(removeBorder = true),
                     singleLine = true,
                     modifier = Modifier
+                        .clip(DragonShape)
                         .weight(1f)
                 )
             }
