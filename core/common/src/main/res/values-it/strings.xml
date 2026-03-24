@@ -30,4 +30,5 @@
     <string name="circle_color">Colore Cerchio</string>
     <string name="launch_app_color">Colore Avvia Applicazione</string>
     <string name="control_panel_color">Colore Pannello Di Controllo</string>
+    <string name="show_sub_nest_size_slider">Mostra slider sotto-raggruppamenti</string>
 </resources>
