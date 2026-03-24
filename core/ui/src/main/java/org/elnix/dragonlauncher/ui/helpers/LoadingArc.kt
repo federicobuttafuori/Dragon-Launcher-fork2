@@ -27,7 +27,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import org.elnix.dragonlauncher.base.ktx.toPixels
+import org.elnix.dragonlauncher.base.ktx.px
 import org.elnix.dragonlauncher.common.serializables.CustomObjectSerializable
 import org.elnix.dragonlauncher.common.utils.UiConstants
 import org.elnix.dragonlauncher.common.utils.resolveShape
@@ -69,7 +69,7 @@ fun HoldToActivateArc(
     val shape = customObjectSerializable.shape ?: UiConstants.defaultHoldCustomObject.shape
     val radius = (customObjectSerializable.size ?: UiConstants.defaultHoldCustomObject.size!!).dp
     val strokeWidth = (customObjectSerializable.stroke ?: UiConstants.defaultHoldCustomObject.stroke!!).dp
-    val glowRadius = customObjectSerializable.glow?.radius?.dp?.toPixels() ?: 0f
+    val glowRadius = customObjectSerializable.glow?.radius?.dp?.px ?: 0f
     val glowColor = customObjectSerializable.glow?.color
 
     // Remembers for each new click the random or not rotation it applies (if -1)

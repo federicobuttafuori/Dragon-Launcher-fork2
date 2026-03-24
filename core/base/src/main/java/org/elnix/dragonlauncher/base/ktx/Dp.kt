@@ -5,11 +5,13 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 
-@Composable
-fun Dp.toPixels(): Float {
-    return value * LocalDensity.current.density
-}
-
+/**
+ * Returns this dp value converted to raw pixels for the current screen density.
+ *
+ * This is a composable-only property that multiplies the underlying dp value by
+ * the current density from [LocalDensity], making it convenient to use dp-based
+ * dimensions with APIs that expect pixel values.
+ */
 inline val Dp.px: Float
     @Composable
     get() = value * LocalDensity.current.density
