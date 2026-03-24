@@ -132,6 +132,8 @@ fun MainScreen(
         onSettings = {
             showDropDownMenuSettings = true
             tempStartPos = start
+            start = null
+            current = null
         },
         holdDelay = holdDelayBeforeStartingLongClickSettings.toLong(),
         loadDuration = longCLickSettingsDuration.toLong(),

@@ -537,6 +537,7 @@ fun MainAppUi(
         launchAction(
             dummySwipePoint(action)
         )
+        goMainScreen()
     }
 
 
