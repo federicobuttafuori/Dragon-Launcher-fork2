@@ -189,7 +189,10 @@ fun DrawerToolbarsOrderDialog(
                                         contentDescription = null
                                     )
 
-                                    Text(stringResource(item.resId))
+                                    Text(
+                                        text = stringResource(item.resId),
+                                        modifier = Modifier.weight(1f)
+                                    )
                                 }
 
                                 Spacer(Modifier.weight(1f))
