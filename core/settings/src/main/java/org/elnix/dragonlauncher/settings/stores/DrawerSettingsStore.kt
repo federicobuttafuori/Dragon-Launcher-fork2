@@ -2,121 +2,124 @@ package org.elnix.dragonlauncher.settings.stores
 
 import org.elnix.dragonlauncher.common.serializables.IconShape
 import org.elnix.dragonlauncher.enumsui.DrawerActions
+import org.elnix.dragonlauncher.enumsui.DrawerToolbar
 import org.elnix.dragonlauncher.settings.DataStoreName
-import org.elnix.dragonlauncher.settings.Settings
+import org.elnix.dragonlauncher.settings.Settings.boolean
+import org.elnix.dragonlauncher.settings.Settings.enum
+import org.elnix.dragonlauncher.settings.Settings.float
+import org.elnix.dragonlauncher.settings.Settings.int
+import org.elnix.dragonlauncher.settings.Settings.shape
+import org.elnix.dragonlauncher.settings.Settings.string
+import org.elnix.dragonlauncher.settings.Settings.stringSet
 import org.elnix.dragonlauncher.settings.bases.BaseSettingObject
 import org.elnix.dragonlauncher.settings.bases.MapSettingsStore
+
 
 object DrawerSettingsStore : MapSettingsStore() {
     override val name: String = "Drawer"
     override val dataStoreName = DataStoreName.DRAWER
 
-    val autoOpenSingleMatch = Settings.boolean(
+    val autoOpenSingleMatch = boolean(
         key = "autoOpenSingleMatch",
         dataStoreName = dataStoreName,
         default = true
     )
-    val disableAutoLaunchOnSpaceFirstChar = Settings.boolean(
+    val disableAutoLaunchOnSpaceFirstChar = boolean(
         key = "disableAutoLaunchOnSpaceFirstChar",
         dataStoreName = dataStoreName,
         default = true
     )
 
 
-    val showAppIconsInDrawer = Settings.boolean(
+    val showAppIconsInDrawer = boolean(
         key = "showAppIconsInDrawer",
         dataStoreName = dataStoreName,
         default = true
     )
 
-    val showAppLabelInDrawer = Settings.boolean(
+    val showAppLabelInDrawer = boolean(
         key = "showAppLabelInDrawer",
         dataStoreName = dataStoreName,
         default = true
     )
 
-    val searchBarBottom = Settings.boolean(
-        key = "searchBarBottom",
-        dataStoreName = dataStoreName,
-        default = true
-    )
-
-    val autoShowKeyboardOnDrawer = Settings.boolean(
+    val autoShowKeyboardOnDrawer = boolean(
         key = "autoShowKeyboardOnDrawer",
         dataStoreName = dataStoreName,
         default = true
     )
 
-    val tapEmptySpaceAction = Settings.enum(
+    val tapEmptySpaceAction = enum(
         key = "tabEmptySpaceToRaiseKeyboard",
         dataStoreName = dataStoreName,
         default = DrawerActions.CLOSE,
-        enumClass = DrawerActions::class.java    )
+        enumClass = DrawerActions::class.java
+    )
 
-    val gridSize = Settings.int(
+    val gridSize = int(
         key = "gridSize",
         dataStoreName = dataStoreName,
         default = 6,
         allowedRange = 1..15
     )
 
-    val initialPage = Settings.int(
+    val initialPage = int(
         key = "initialPage",
         dataStoreName = dataStoreName,
         default = 0,
         allowedRange = 0..Int.MAX_VALUE
     )
 
-    val leftDrawerAction = Settings.enum(
+    val leftDrawerAction = enum(
         key = "leftDrawerAction",
         dataStoreName = dataStoreName,
         default = DrawerActions.DISABLED,
         enumClass = DrawerActions::class.java
     )
 
-    val rightDrawerAction = Settings.enum(
+    val rightDrawerAction = enum(
         key = "rightDrawerAction",
         dataStoreName = dataStoreName,
         default = DrawerActions.DISABLED,
         enumClass = DrawerActions::class.java
     )
 
-    val leftDrawerWidth = Settings.float(
+    val leftDrawerWidth = float(
         key = "leftDrawerWidth",
         dataStoreName = dataStoreName,
         default = 0f,
         allowedRange = 0f..1f
     )
 
-    val rightDrawerWidth = Settings.float(
+    val rightDrawerWidth = float(
         key = "rightDrawerWidth",
         dataStoreName = dataStoreName,
         default = 0f,
         allowedRange = 0f..1f
     )
 
-    val drawerEnterAction = Settings.enum(
+    val drawerEnterAction = enum(
         key = "drawerEnterAction",
         dataStoreName = dataStoreName,
         default = DrawerActions.CLEAR,
         enumClass = DrawerActions::class.java
     )
 
-    val drawerHomeAction = Settings.enum(
+    val drawerHomeAction = enum(
         key = "drawerHomeAction",
         dataStoreName = dataStoreName,
         default = DrawerActions.CLOSE,
         enumClass = DrawerActions::class.java
     )
 
-    val scrollDownDrawerAction = Settings.enum(
+    val scrollDownDrawerAction = enum(
         key = "scrollDownDrawerAction",
         dataStoreName = dataStoreName,
         default = DrawerActions.CLOSE,
         enumClass = DrawerActions::class.java
     )
 
-    val scrollUpDrawerAction = Settings.enum(
+    val scrollUpDrawerAction = enum(
         key = "scrollUpDrawerAction",
         dataStoreName = dataStoreName,
         default = DrawerActions.CLOSE_KB,
@@ -124,48 +127,48 @@ object DrawerSettingsStore : MapSettingsStore() {
     )
 
 
-    val backDrawerAction = Settings.enum(
+    val backDrawerAction = enum(
         key = "backDrawerAction",
         dataStoreName = dataStoreName,
         default = DrawerActions.CLOSE,
         enumClass = DrawerActions::class.java
     )
 
-    val iconsShape = Settings.shape(
+    val iconsShape = shape(
         key = "iconsShape",
         dataStoreName = dataStoreName,
         default = IconShape.PlatformDefault
     )
 
 
-    val iconsSpacingHorizontal = Settings.int(
-        key = "iconsSpacingHorizontal",
+    val iconsSpacingHorizontal = int(
+        key = "iconsSpacingHorizontal²",
         dataStoreName = dataStoreName,
         default = 8,
         allowedRange = 0..50
     )
 
 
-    val iconsSpacingVertical = Settings.int(
+    val iconsSpacingVertical = int(
         key = "iconsSpacingVertical",
         dataStoreName = dataStoreName,
         default = 8,
         allowedRange = 0..50
     )
-    val maxIconSize = Settings.int(
+    val maxIconSize = int(
         key = "maxIconSize",
         dataStoreName = dataStoreName,
         default = 96,
         allowedRange = 0..200
     )
 
-    val useCategory = Settings.boolean(
+    val useCategory = boolean(
         key = "useCategory",
         dataStoreName = dataStoreName,
         default = false
     )
 
-    val categoryGridWidth = Settings.int(
+    val categoryGridWidth = int(
         key = "categoryGridWidth",
         dataStoreName = dataStoreName,
         default = 3,
@@ -173,28 +176,35 @@ object DrawerSettingsStore : MapSettingsStore() {
     )
 
 
-    val categoryGridCells = Settings.int(
+    val categoryGridCells = int(
         key = "categoryGridCells",
         dataStoreName = dataStoreName,
         default = 3,
         allowedRange = 2..5
     )
 
-    val showCategoryName = Settings.boolean(
+    val showCategoryName = boolean(
         key = "showCategoryName",
         dataStoreName = dataStoreName,
         default = true
     )
 
+    val showSearchBar = boolean(
+        key = "showSearchBar",
+        dataStoreName = dataStoreName,
+        default = true
+    )
+
+
     /* ───────────── Recently Used Apps ───────────── */
 
-    val showRecentlyUsedApps = Settings.boolean(
+    val showRecentlyUsedApps = boolean(
         key = "showRecentlyUsedApps",
         dataStoreName = dataStoreName,
         default = false
     )
 
-    val recentlyUsedAppsCount = Settings.int(
+    val recentlyUsedAppsCount = int(
         key = "recentlyUsedAppsCount",
         dataStoreName = dataStoreName,
         default = 5,
@@ -202,7 +212,7 @@ object DrawerSettingsStore : MapSettingsStore() {
     )
 
 
-    val recentlyUsedPackages = Settings.stringSet(
+    val recentlyUsedPackages = stringSet(
         key = "recentlyUsedPackagesSet",
         dataStoreName = dataStoreName,
         default = emptySet()
@@ -211,43 +221,53 @@ object DrawerSettingsStore : MapSettingsStore() {
 
     /*  ─────────────  Drawer pull down settings  ─────────────  */
 
-    val pullDownAnimations = Settings.boolean(
+    val pullDownAnimations = boolean(
         key = "pullDownAnimations",
         dataStoreName = dataStoreName,
         default = true
     )
 
-    val pullDownWallPaperDimFade = Settings.boolean(
+    val pullDownWallPaperDimFade = boolean(
         key = "pullDownWallPaperDim",
         dataStoreName = dataStoreName,
         default = true
     )
 
-    val pullDownIconFade = Settings.boolean(
+    val pullDownIconFade = boolean(
         key = "pullDownIconFade",
         dataStoreName = dataStoreName,
         default = true
     )
 
-    val pullDownScaleIn = Settings.boolean(
+    val pullDownScaleIn = boolean(
         key = "pullDownScaleIn",
         dataStoreName = dataStoreName,
         default = true
     )
 
-    val drawerEnterExitAnimations = Settings.boolean(
+    val drawerEnterExitAnimations = boolean(
         key = "drawerEnterExitAnimations",
         dataStoreName = dataStoreName,
         default = true
     )
 
-    override val ALL: List<BaseSettingObject<*,*>>
+
+    /**
+     * The order of the search bar / recently used in drawer
+     */
+    val toolbarsOrder = string(
+        key = "toolbarsOrder",
+        dataStoreName = dataStoreName,
+        default = DrawerToolbar.entries.joinToString(",") { it.toString() }
+    )
+
+
+    override val ALL: List<BaseSettingObject<*, *>>
         get() = listOf(
             this.autoOpenSingleMatch,
             this.disableAutoLaunchOnSpaceFirstChar,
             this.showAppIconsInDrawer,
             this.showAppLabelInDrawer,
-            this.searchBarBottom,
             this.autoShowKeyboardOnDrawer,
             this.tapEmptySpaceAction,
             this.gridSize,
@@ -265,6 +285,7 @@ object DrawerSettingsStore : MapSettingsStore() {
             this.iconsSpacingHorizontal,
             this.maxIconSize,
             this.useCategory,
+            this.showSearchBar,
             this.showRecentlyUsedApps,
             this.recentlyUsedAppsCount,
             this.recentlyUsedPackages,
@@ -276,6 +297,7 @@ object DrawerSettingsStore : MapSettingsStore() {
             this.pullDownWallPaperDimFade,
             this.pullDownIconFade,
             this.pullDownScaleIn,
-            this.drawerEnterExitAnimations
+            this.drawerEnterExitAnimations,
+            this.toolbarsOrder
         )
 }

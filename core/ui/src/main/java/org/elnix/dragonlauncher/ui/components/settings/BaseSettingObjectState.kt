@@ -1,6 +1,7 @@
 package org.elnix.dragonlauncher.ui.components.settings
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -56,7 +57,11 @@ operator fun <T, R> BaseSettingObject<T, R>.invoke(value: T?) {
     val ctx = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    scope.launch {
-        set(ctx, value)
+    LaunchedEffect(Unit) {
+        scope.launch {
+            set(ctx, value)
+        }
     }
+
+    return
 }

@@ -12,6 +12,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -94,6 +95,8 @@ import org.elnix.dragonlauncher.enumsui.DrawerActions.OPEN_FIRST_APP
 import org.elnix.dragonlauncher.enumsui.DrawerActions.OPEN_KB
 import org.elnix.dragonlauncher.enumsui.DrawerActions.SEARCH_WEB
 import org.elnix.dragonlauncher.enumsui.DrawerActions.TOGGLE_KB
+import org.elnix.dragonlauncher.enumsui.DrawerToolbar
+import org.elnix.dragonlauncher.enumsui.height
 import org.elnix.dragonlauncher.enumsui.isUsed
 import org.elnix.dragonlauncher.settings.stores.DrawerSettingsStore
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
@@ -126,7 +129,7 @@ fun AppDrawerScreen(
     showLabels: Boolean,
     autoShowKeyboard: Boolean,
     gridSize: Int,
-    searchBarBottom: Boolean,
+    drawerToolbarsOrder: List<DrawerToolbar>,
     leftAction: DrawerActions,
     leftWeight: Float,
     rightAction: DrawerActions,
@@ -167,6 +170,9 @@ fun AppDrawerScreen(
     val drawerHomeAction by DrawerSettingsStore.drawerHomeAction.asState()
     val drawerScrollDownAction by DrawerSettingsStore.scrollDownDrawerAction.asState()
     val drawerScrollUpAction by DrawerSettingsStore.scrollUpDrawerAction.asState()
+
+
+    val showSearchBar by DrawerSettingsStore.showSearchBar.asState()
 
 
     /* ───────────── Recently Used Apps ───────────── */
@@ -302,8 +308,15 @@ fun AppDrawerScreen(
         launchDrawerAction(drawerBackAction)
     }
 
-    val topPadding = if (!searchBarBottom) 60.dp else 0.dp
-    val bottomPadding = if (searchBarBottom) 60.dp else 0.dp
+
+    // Computes the position of the spacer in the toolbars list, and deduce 2 lists:
+    // one with the elements that come before, and one with those that come after
+    val spacerIndex = drawerToolbarsOrder.indexOf(DrawerToolbar.Spacer).takeIf { it != -1 } ?: 0
+    val beforeSpacer = drawerToolbarsOrder.subList(0, spacerIndex)
+    val afterSpacer = drawerToolbarsOrder.subList(spacerIndex + 1, drawerToolbarsOrder.size)
+
+    val topPadding = beforeSpacer.sumOf { it.height }.dp
+    val bottomPadding = afterSpacer.sumOf { it.height }.dp
 
 
     /* ───────────── Pull Down System ───────────── */
@@ -322,8 +335,8 @@ fun AppDrawerScreen(
     var pullOffset by remember { mutableFloatStateOf(0f) }
 
     /**
-     * Of..1f, used for animations
-     * 1f is at the threshold
+     * `Of..1f`, used for animations
+     * `1f` is at the threshold
      */
     val pullProgress = 1 - (pullOffset / thresholdPx).coerceAtMost(1f)
 
@@ -485,28 +498,6 @@ fun AppDrawerScreen(
                 }
 
                 Column(modifier = Modifier.weight(1f)) {
-                    /* ───────────── Recently Used Apps section ───────────── */
-                    AnimatedVisibility(showRecentlyUsedApps && searchQuery.isBlank() && recentApps.isNotEmpty()) {
-
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(5.dp)
-                                .settingsGroup(border = false)
-                        ) {
-                            AppGrid(
-                                apps = recentApps,
-                                gridSize = gridSize,
-                                txtColor = MaterialTheme.colorScheme.onBackground,
-                                showIcons = showIcons,
-                                showLabels = showLabels,
-                                fillMaxSize = false,
-                                onLongClick = { dialogApp = it }
-                            ) {
-                                onLaunchAction(it.action)
-                            }
-                        }
-                    }
 
                     HorizontalPager(
                         state = pagerState,
@@ -635,56 +626,92 @@ fun AppDrawerScreen(
             }
         }
 
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .imePadding(),
-            contentAlignment = if (searchBarBottom) Alignment.BottomCenter else Alignment.TopCenter
+                .imePadding()
         ) {
 
-            AppDrawerSearch(
-                searchQuery = searchQuery,
-                trailingIcon = {
-                    Box {
-                        Icon(
-                            imageVector = Icons.Default.MoreVert,
-                            contentDescription = stringResource(R.string.more),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.shapedClickable { showMoreMenu = true }
-                        )
+            drawerToolbarsOrder.forEach { toolbar ->
+                when (toolbar) {
+                    DrawerToolbar.Spacer -> Spacer(Modifier.weight(1f))
 
-                        DragonDropDownMenu(
-                            expanded = showMoreMenu,
-                            onDismissRequest = { showMoreMenu = false }
-                        ) {
-                            BurgerListAction(
-                                listOf(
-                                    BurgerAction(
-                                        onClick = {
-                                            onLaunchAction(
-                                                SwipeActionSerializable.OpenDragonLauncherSettings(
-                                                    SETTINGS.DRAWER
-                                                )
-                                            )
-                                        },
-                                        content = {
-                                            Icon(
-                                                imageVector = Icons.Default.Settings,
-                                                contentDescription = null
-                                            )
-                                            Text(stringResource(R.string.drawer_settings))
-                                        }
-                                    )
-                                )
-                            )
+                    DrawerToolbar.RecentlyUsed -> {
+                        /* ───────────── Recently Used Apps section ───────────── */
+                        AnimatedVisibility(showRecentlyUsedApps && searchQuery.isBlank() && recentApps.isNotEmpty()) {
+
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(5.dp)
+                                    .settingsGroup(border = false)
+                            ) {
+                                AppGrid(
+                                    apps = recentApps,
+                                    gridSize = gridSize,
+                                    txtColor = MaterialTheme.colorScheme.onBackground,
+                                    showIcons = showIcons,
+                                    showLabels = showLabels,
+                                    fillMaxSize = false,
+                                    onLongClick = { dialogApp = it }
+                                ) {
+                                    onLaunchAction(it.action)
+                                }
+                            }
                         }
                     }
-                },
-                onSearchChanged = { searchQuery = it },
-                modifier = Modifier.focusRequester(focusRequester),
-                onEnterPressed = { launchDrawerAction(drawerEnterAction) },
-                onFocusStateChanged = { isSearchFocused = it }
-            )
+
+                    DrawerToolbar.SearchBar -> {
+                        AnimatedVisibility(showSearchBar) {
+                            AppDrawerSearch(
+                                searchQuery = searchQuery,
+                                trailingIcon = {
+                                    Box {
+                                        Icon(
+                                            imageVector = Icons.Default.MoreVert,
+                                            contentDescription = stringResource(R.string.more),
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            modifier = Modifier.shapedClickable { showMoreMenu = true }
+                                        )
+
+                                        DragonDropDownMenu(
+                                            expanded = showMoreMenu,
+                                            onDismissRequest = { showMoreMenu = false }
+                                        ) {
+                                            BurgerListAction(
+                                                listOf(
+                                                    BurgerAction(
+                                                        onClick = {
+                                                            onLaunchAction(
+                                                                SwipeActionSerializable.OpenDragonLauncherSettings(
+                                                                    SETTINGS.DRAWER
+                                                                )
+                                                            )
+                                                        },
+                                                        content = {
+                                                            Icon(
+                                                                imageVector = Icons.Default.Settings,
+                                                                contentDescription = null
+                                                            )
+                                                            Text(stringResource(R.string.drawer_settings))
+                                                        }
+                                                    )
+                                                )
+                                            )
+                                        }
+                                    }
+                                },
+                                onSearchChanged = { searchQuery = it },
+                                modifier = Modifier.focusRequester(focusRequester),
+                                onEnterPressed = { launchDrawerAction(drawerEnterAction) },
+                                onFocusStateChanged = { isSearchFocused = it }
+                            )
+                        }
+
+                    }
+                }
+            }
+
         }
     }
 

@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.logging.logD
+import org.elnix.dragonlauncher.common.utils.Constants.Logging.DRAWER_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.SHAPES_TAG
 import org.elnix.dragonlauncher.common.utils.semiTransparentIfDisabled
 import org.elnix.dragonlauncher.enumsui.DrawerActions
@@ -52,9 +53,11 @@ import org.elnix.dragonlauncher.ui.components.settings.DrawerActionSelector
 import org.elnix.dragonlauncher.ui.components.settings.SettingsSlider
 import org.elnix.dragonlauncher.ui.components.settings.SettingsSwitchRow
 import org.elnix.dragonlauncher.ui.components.settings.asState
+import org.elnix.dragonlauncher.ui.dialogs.DrawerToolbarsOrderDialog
 import org.elnix.dragonlauncher.ui.dialogs.ShapePickerDialog
 import org.elnix.dragonlauncher.ui.helpers.GridSizeSlider
 import org.elnix.dragonlauncher.ui.helpers.ShapeRow
+import org.elnix.dragonlauncher.ui.helpers.settings.SettingsItem
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsLazyHeader
 import org.elnix.dragonlauncher.ui.remembers.rememberExpandableSection
 
@@ -93,6 +96,8 @@ fun DrawerTab(
 
     var leftWeight by remember { mutableFloatStateOf(leftDrawerWidth) }
     var rightWeight by remember { mutableFloatStateOf(rightDrawerWidth) }
+
+    var showToolbarsOrderDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(leftDrawerWidth, rightDrawerWidth) {
         leftWeight = leftDrawerWidth
@@ -142,12 +147,6 @@ fun DrawerTab(
                 )
 
                 SettingsSwitchRow(
-                    setting = DrawerSettingsStore.searchBarBottom,
-                    title = stringResource(R.string.search_bar_bottom),
-                    description = stringResource(R.string.search_bar_bottom_desc),
-                )
-
-                SettingsSwitchRow(
                     setting = DrawerSettingsStore.drawerEnterExitAnimations,
                     title = stringResource(R.string.drawer_enter_exit_animations),
                     description = stringResource(R.string.drawer_enter_exit_animations_desc),
@@ -175,13 +174,12 @@ fun DrawerTab(
                     description = stringResource(R.string.pull_down_scale_in_desc)
                 )
 
-                SettingsSwitchRow(
-                    setting = DrawerSettingsStore.pullDownIconFade,
-                    enabled = false,
-                    title = stringResource(R.string.pull_down_icon_fade),
-                    description = stringResource(R.string.not_implemented)
+//                SettingsSwitchRow(
+//                    setting = DrawerSettingsStore.pullDownIconFade,
+//                    enabled = false,
+//                    title = stringResource(R.string.pull_down_icon_fade),
 //                    description = stringResource(R.string.pull_down_icon_fade_desc)
-                )
+//                )
             }
         }
 
@@ -208,6 +206,12 @@ fun DrawerTab(
         }
 
         item { TextDivider(stringResource(R.string.appearance)) }
+
+        item {
+            SettingsItem(
+                title = stringResource(R.string.toolbars_order)
+            ) { showToolbarsOrderDialog = true }
+        }
 
         item {
             SettingsSwitchRow(
@@ -463,6 +467,22 @@ fun DrawerTab(
                 DrawerSettingsStore.iconsShape.set(ctx, it)
                 showShapePickerDialog = false
             }
+        }
+    }
+
+
+    if (showToolbarsOrderDialog) {
+        DrawerToolbarsOrderDialog(
+            onDismiss = { showToolbarsOrderDialog = false }
+        ) { newList ->
+
+            logD(DRAWER_TAG) { "Saving newList: $newList, encoded = ${newList.joinToString(",") { it.toString() }}" }
+
+            scope.launch {
+                DrawerSettingsStore.toolbarsOrder.set(ctx, newList.joinToString(",") { it.toString() })
+            }
+
+            showToolbarsOrderDialog = false
         }
     }
 }

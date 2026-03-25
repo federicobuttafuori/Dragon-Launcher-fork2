@@ -87,6 +87,7 @@ import org.elnix.dragonlauncher.common.utils.isDefaultLauncher
 import org.elnix.dragonlauncher.common.utils.loadChangelogs
 import org.elnix.dragonlauncher.common.utils.openUrl
 import org.elnix.dragonlauncher.common.utils.showToast
+import org.elnix.dragonlauncher.enumsui.DrawerToolbar
 import org.elnix.dragonlauncher.enumsui.LockMethod
 import org.elnix.dragonlauncher.settings.stores.AngleLineSettingsStore
 import org.elnix.dragonlauncher.settings.stores.BackupSettingsStore
@@ -218,7 +219,24 @@ fun MainAppUi(
     val showAppLabelsInDrawer by DrawerSettingsStore.showAppLabelInDrawer.asState()
     val autoShowKeyboardOnDrawer by DrawerSettingsStore.autoShowKeyboardOnDrawer.asState()
     val gridSize by DrawerSettingsStore.gridSize.asState()
-    val searchBarBottom by DrawerSettingsStore.searchBarBottom.asState()
+
+//    val searchBarBottom by DrawerSettingsStore.searchBarBottom.asState()
+    val selectedToolbarItemsStringSet by DrawerSettingsStore.toolbarsOrder.asState()
+    val selectedToolbarItems by remember {
+        derivedStateOf {
+            try {
+                selectedToolbarItemsStringSet.split(',').map {
+                    DrawerToolbar.valueOf(it)
+                }
+            } catch (e: Exception) {
+                logE(Constants.Logging.DRAWER_TAG, e) { "Unable to decode drawerToolbars order, using default value" }
+                DrawerToolbar.entries
+            }
+        }
+    }
+
+
+
     val drawerEnterExitAnimations by DrawerSettingsStore.drawerEnterExitAnimations.asState()
 
 
@@ -537,7 +555,6 @@ fun MainAppUi(
         launchAction(
             dummySwipePoint(action)
         )
-        goMainScreen()
     }
 
 
@@ -782,7 +799,7 @@ fun MainAppUi(
                         onRegisterHomeHandler = { handler ->
                             drawerHomeHandler = handler
                         },
-                        searchBarBottom = searchBarBottom,
+                        drawerToolbarsOrder = selectedToolbarItems,
                         leftAction = leftDrawerAction,
                         leftWeight = leftDrawerWidth,
                         rightAction = rightDrawerAction,
