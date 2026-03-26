@@ -146,7 +146,7 @@ import org.elnix.dragonlauncher.ui.settings.customization.BehaviorTab
 import org.elnix.dragonlauncher.ui.settings.customization.ColorSelectorTab
 import org.elnix.dragonlauncher.ui.settings.customization.DrawerTab
 import org.elnix.dragonlauncher.ui.settings.customization.FloatingAppsTab
-import org.elnix.dragonlauncher.ui.settings.customization.FontPickerScreen
+import org.elnix.dragonlauncher.ui.settings.customization.FontTab
 import org.elnix.dragonlauncher.ui.settings.customization.HoldToActivateArcTab
 import org.elnix.dragonlauncher.ui.settings.customization.IconPackTab
 import org.elnix.dragonlauncher.ui.settings.customization.NestEditingScreen
@@ -874,7 +874,7 @@ fun MainAppUi(
                     noAnimComposable(SETTINGS.BACKUP) { BackupTab(::goAdvSettingsRoot) }
                     noAnimComposable(SETTINGS.CHANGELOGS) { ChangelogsScreen(::goAdvSettingsRoot) }
                     noAnimComposable(SETTINGS.EXTENSIONS) { ExtensionsTab(::goAdvSettingsRoot) }
-                    noAnimComposable(SETTINGS.FONTS) { FontPickerScreen(::goAppearance) }
+                    noAnimComposable(SETTINGS.FONTS) { FontTab(::goAppearance) }
                     noAnimComposable(SETTINGS.HOLD_TO_ACTIVATE_ARC) { HoldToActivateArcTab(::goAppearance) }
 
                     noAnimComposable(SETTINGS.WELLBEING) { WellbeingTab(::goAdvSettingsRoot) }

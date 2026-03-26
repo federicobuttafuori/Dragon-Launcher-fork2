@@ -231,4 +231,10 @@ object Constants {
         const val DRAWER_DRAG_DOWN_THRESHOLD = 50
         const val DRAWER_MAX_DRAG_DOWN = 70
     }
+
+    object Extensions {
+        const val INTERNET_PROXY_EXTENSION_PGK = "org.elnix.dragonlauncher.proxy"
+        const val AUTO_UPDATE_EXTENSION_PKG = "org.elnix.dragonlauncher.autoupdate"
+        const val FONT_EXTENSION_PKG = "org.elnix.dragonlauncher.fonts"
+    }
 }

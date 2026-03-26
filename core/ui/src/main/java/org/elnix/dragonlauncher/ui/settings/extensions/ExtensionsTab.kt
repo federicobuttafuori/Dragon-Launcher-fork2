@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,20 +19,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.ExtensionModel
 import org.elnix.dragonlauncher.common.utils.loadExtensionRegistry
-import org.elnix.dragonlauncher.common.utils.showToast
 import org.elnix.dragonlauncher.services.ExtensionManager
 import org.elnix.dragonlauncher.ui.components.ExpandableSection
 import org.elnix.dragonlauncher.ui.components.dragon.DragonButton
 import org.elnix.dragonlauncher.ui.components.dragon.DragonColumnGroup
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsLazyHeader
 import org.elnix.dragonlauncher.ui.remembers.rememberExpandableSection
-import java.util.Locale
 
 @Composable
 fun ExtensionsTab(
@@ -60,7 +58,7 @@ fun ExtensionsTab(
         if (isLoading) {
             item {
                 Text(
-                    text = "Loading...",
+                    text = stringResource(R.string.loading),
                     modifier = Modifier.padding(16.dp),
                     style = MaterialTheme.typography.bodyMedium
                 )
@@ -125,7 +123,7 @@ private fun ManualInstallSection() {
 @Composable
 private fun ExtensionItem(extension: ExtensionModel) {
     val context = LocalContext.current
-    val currentLanguage = Locale.getDefault().language
+    val currentLanguage = LocalLocale.current.platformLocale.language
     val description = extension.description[currentLanguage] ?: extension.description["en"] ?: ""
     
     var isInstalled by remember { mutableStateOf(false) }
@@ -183,7 +181,7 @@ private fun ExtensionItem(extension: ExtensionModel) {
                             } else {
                                 // Try showing app info instead if no launcher intent
                                 val infoIntent = android.content.Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                                    .apply { data = android.net.Uri.parse("package:$pkg") }
+                                    .apply { data = "package:$pkg".toUri() }
                                 context.startActivity(infoIntent)
                             }
                         }
@@ -200,7 +198,7 @@ private fun ExtensionItem(extension: ExtensionModel) {
                             // Uninstall logic (via Intent)
                             val pkg = extension.packageName ?: extension.id
                             val intent = android.content.Intent(android.content.Intent.ACTION_DELETE)
-                                .apply { data = android.net.Uri.parse("package:$pkg") }
+                                .apply { data = "package:$pkg".toUri() }
                             context.startActivity(intent)
                         }
                     },

@@ -920,12 +920,12 @@
     <string name="steps">Steps</string>
     <string name="you_can_edit_haptic_feedback_on_nest_settings">You can edit haptic feedback on nest settings</string>
     <string name="edit_nest_help">Customize the size of the nest, the dragging distances, the haptic feedbacks, and other useful settings</string>
-    <string name="reset_nest_text">Reset this nest to it\'s default state? you\'ll loose all custom values you changed!</string>
+    <string name="reset_nest_text">Reset this nest to it\'s default state? you\'ll lose all custom values you changed!</string>
     <string name="use_custom_color_channels">Use custom color channels</string>
     <string name="use_custom_color_channels_desc">Override the default color channels used for the material objects, such as switches, to use mine</string>
     <string name="hold_settings_help">The settings related to the arc that spawns when you hold for long enough on the  main screen, You cannot fully disable it, otherwise, you could loose the last door that can lead you to settings, if you did shit, and so be forced to reset the app.</string>
     <string name="rotation_start_angle">Rotation start angle</string>
-    <string name="rotation_start_angle_desc">I guess it\'s clear enough...</string>
+    <string name="rotation_start_angle_desc">I guess it\'s clear enough…</string>
     <string name="rotation_per_second">Rotations/second</string>
     <string name="rotation_per_second_desc">How many turns on itself it does in one second</string>
     <string name="enable_backup">Enable backup</string>
@@ -934,4 +934,5 @@
     <string name="minus_one_means_random">-1 means random on start</string>
     <string name="search_bar">Search Bar</string>
     <string name="toolbars_order">Toolbars order</string>
+    <string name="loading">Loading…</string>
 </resources>

@@ -49,6 +49,12 @@
     <uses-permission android:name="org.elnix.dragonlauncher.permission.READ_SETTINGS" />
     <uses-permission android:name="org.elnix.dragonlauncher.permission.WRITE_SETTINGS" />
 
+    <permission
+        android:name="org.elnix.dragonlauncher.permission.ACCESS_FONTS"
+        android:protectionLevel="normal" />
+    <uses-permission android:name="org.elnix.dragonlauncher.permission.ACCESS_FONTS" />
+
+
     <queries>
         <!-- Pour que le Launcher puisse trouver le provider de polices de l'extension -->
         <provider android:authorities="org.elnix.dragonlauncher.fonts.provider" />
