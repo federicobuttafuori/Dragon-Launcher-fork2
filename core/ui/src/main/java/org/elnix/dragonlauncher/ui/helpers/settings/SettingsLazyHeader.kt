@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
@@ -78,25 +79,25 @@ fun SettingsLazyHeader(
             .windowInsetsPadding(WindowInsets.safeDrawing.exclude(WindowInsets.ime))
     ) {
 
-        Column (
+        Column(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .imePadding(),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-           Column (
+            Column(
                 modifier = Modifier
                     .fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                   SettingsTitle(
-                        title = title,
-                        otherIcons = otherIcons,
-                        helpIcon = { showHelpDialog = true },
-                        resetIcon = if (onReset != null) {
-                            { showResetDialog = true }
-                        } else null,
-                    ) { onBack() }
+                SettingsTitle(
+                    title = title,
+                    otherIcons = otherIcons,
+                    helpIcon = { showHelpDialog = true },
+                    resetIcon = if (onReset != null) {
+                        { showResetDialog = true }
+                    } else null,
+                ) { onBack() }
 
 
                 if (titleContent != null) titleContent()
@@ -115,6 +116,16 @@ fun SettingsLazyHeader(
                     state = reorderState?.listState ?: listState ?: rememberLazyListState()
                 ) {
                     lazyContent()
+
+                    if (bottomContent != null) {
+                        item {
+                            Spacer(Modifier.weight(1f))
+                        }
+                        item {
+                            bottomContent()
+                        }
+                    }
+
                 }
             } else {
                 Column(
@@ -133,10 +144,13 @@ fun SettingsLazyHeader(
                         },
                 ) {
                     content!!()
+
+                    if (bottomContent != null) {
+                        Spacer(Modifier.weight(1f))
+                        bottomContent()
+                    }
                 }
             }
-
-            if (bottomContent != null) bottomContent()
         }
     }
 
