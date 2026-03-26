@@ -81,35 +81,33 @@ fun SettingsDebugTab(
         resetText = null,
         listState = listState,
         titleContent = {
-            item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(5.dp)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+
+                Button(
+                    onClick = { showStoresDialog = true }
                 ) {
+                    Text("Select visibles stores")
+                }
 
-                    Button(
-                        onClick = { showStoresDialog = true }
-                    ) {
-                        Text("Select visibles stores")
-                    }
+                Spacer(Modifier.weight(1f))
+                DragonIconButton(
+                    onClick = { settingsJson?.let { ctx.copyToClipboard(it.toString(2)) } }
+                ) {
+                    Icon(Icons.Default.ContentCopy, null)
+                }
 
-                    Spacer(Modifier.weight(1f))
-                    DragonIconButton(
-                        onClick = { settingsJson?.let { ctx.copyToClipboard(it.toString(2)) } }
-                    ) {
-                        Icon(Icons.Default.ContentCopy, null)
-                    }
-
-                    DragonIconButton(
-                        onClick = { loadSettings() }
-                    ) {
-                        Icon(Icons.Default.Loop, null)
-                    }
+                DragonIconButton(
+                    onClick = { loadSettings() }
+                ) {
+                    Icon(Icons.Default.Loop, null)
                 }
             }
         },
         content = {
-            LazyColumn{
+            LazyColumn {
                 items(jsonLines) { line ->
                     SelectionContainer {
                         Text(

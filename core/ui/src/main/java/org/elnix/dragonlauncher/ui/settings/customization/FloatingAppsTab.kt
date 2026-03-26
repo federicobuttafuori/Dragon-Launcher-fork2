@@ -96,7 +96,6 @@ fun FloatingAppsTab(
     onResetWidgetSize: (id: Int, widgetId: Int) -> Unit,
     onRemoveWidget: (FloatingAppObject) -> Unit
 ) {
-    val ctx = LocalContext.current
     val showStatusBar = LocalShowStatusBar.current
 
     val floatingAppsViewModel = LocalFloatingAppsViewModel.current
@@ -133,13 +132,12 @@ fun FloatingAppsTab(
     val isRealFullscreen = systemInsets.calculateTopPadding() == 0.dp
 
 
-
     /** ───────────────────────────────────────────────────────────────── */
 
 
     Column {
 
-        AnimatedVisibility (showStatusBar && isRealFullscreen) {
+        AnimatedVisibility(showStatusBar && isRealFullscreen) {
             StatusBar(null)
         }
 
@@ -150,6 +148,119 @@ fun FloatingAppsTab(
             onReset = {
                 scope.launch {
                     floatingAppsViewModel.resetAllFloatingApps()
+                }
+            },
+            bottomContent = {
+                /* ───────────── Bottom controls ───────────── */
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    UpDownButton(
+                        upIcon = Icons.Default.Add,
+                        downIcon = Icons.Default.AccountCircle,
+                        color = MaterialTheme.colorScheme.primary,
+                        contentDescriptionUp = stringResource(R.string.add_widget),
+                        contentDescriptionDown = stringResource(R.string.pick_a_nest),
+                        padding = 16.dp,
+                        onClickUp = { showAddDialog = true },
+                        onClickDown = { showNestPickerDialog = true }
+                    )
+
+                    UpDownButton(
+                        upIcon = Icons.Default.CenterFocusStrong,
+                        downIcon = Icons.Default.Restore,
+                        color = MaterialTheme.colorScheme.primary,
+                        contentDescriptionUp = stringResource(R.string.center_selected_widget),
+                        contentDescriptionDown = stringResource(R.string.reset_widget),
+                        upEnabled = isSelected,
+                        downEnabled = isSelected,
+                        padding = 16.dp,
+                        onClickUp = {
+                            selected?.let { floatingAppsViewModel.centerFloatingApp(it.id) }
+
+                        },
+                        onClickDown = {
+                            selected?.let {
+                                if (it.action is SwipeActionSerializable.OpenWidget) {
+                                    onResetWidgetSize(it.id, (it.action as SwipeActionSerializable.OpenWidget).widgetId)
+                                } else {
+                                    floatingAppsViewModel.resetFloatingAppSize(it.id)
+                                }
+                            }
+                        }
+                    )
+
+                    UpDownButton(
+                        upIcon = Icons.Default.ArrowUpward,
+                        downIcon = Icons.Default.ArrowDownward,
+                        color = MaterialTheme.colorScheme.secondary,
+                        contentDescriptionUp = stringResource(R.string.select_previous_widget),
+                        contentDescriptionDown = stringResource(R.string.select_next_widget),
+                        upEnabled = true,
+                        downEnabled = true,
+                        padding = 16.dp,
+                        onClickUp = {
+                            if (floatingApps.isNotEmpty()) {
+                                val idx = floatingApps.indexOfFirst { it == selected }
+                                val next = if (idx <= 0) floatingApps.last() else floatingApps[idx - 1]
+                                selected = next
+                            }
+                        },
+                        onClickDown = {
+                            if (floatingApps.isNotEmpty()) {
+                                val idx = floatingApps.indexOfFirst { it == selected }
+                                val next = if (idx == -1 || idx == floatingApps.lastIndex) floatingApps.first() else floatingApps[idx + 1]
+                                selected = next
+                            }
+                        }
+                    )
+
+                    val upDownEnabled = isSelected && floatingApps.size > 1
+
+                    UpDownButton(
+                        upIcon = Icons.Default.MoveUp,
+                        downIcon = Icons.Default.MoveDown,
+                        color = MaterialTheme.colorScheme.tertiary,
+                        contentDescriptionUp = stringResource(R.string.move_selected_widget_up),
+                        contentDescriptionDown = stringResource(R.string.move_selected_widget_down),
+                        upEnabled = upDownEnabled,
+                        downEnabled = upDownEnabled,
+                        padding = 16.dp,
+                        onClickUp = {
+                            selected?.let { floatingAppsViewModel.moveFloatingAppDown(it.id) }
+                        },
+                        onClickDown = {
+                            selected?.let { floatingAppsViewModel.moveFloatingAppUp(it.id) }
+                        }
+                    )
+
+                    UpDownButton(
+                        upIcon = if (snapMove) Icons.Default.GridOn else Icons.Default.GridOff,
+                        downIcon = if (snapResize) Icons.Default.FormatSize else Icons.Default.FormatClear,
+                        color = MaterialTheme.colorScheme.primary,
+                        contentDescriptionUp = stringResource(R.string.enable_grid),
+                        contentDescriptionDown = stringResource(R.string.enable_scale_snap),
+                        upEnabled = true,
+                        downEnabled = true,
+                        padding = 16.dp,
+                        onClickUp = { snapMove = !snapMove },
+                        onClickDown = { snapResize = !snapResize }
+                    )
+
+                    // Delete selected widget
+                    CircleIconButton(
+                        icon = Icons.Default.Remove,
+                        contentDescription = stringResource(R.string.delete_widget),
+                        tint = MaterialTheme.colorScheme.error,
+                        enabled = isSelected,
+                        padding = 16.dp
+                    ) {
+                        selected?.let { removeWidget(it) }
+                    }
                 }
             },
             content = {
@@ -170,7 +281,16 @@ fun FloatingAppsTab(
     /**
      * Draw the grid of snapping that fills the entire screen
      */
-    Box(Modifier.fillMaxSize()) {
+    Box(
+        Modifier
+            .fillMaxSize()
+            .graphicsLayer {
+                scaleX = 0.85f
+                scaleY = 0.85f
+            }
+            .border(1.dp, MaterialTheme.colorScheme.primary, DragonShape)
+
+    ) {
 
         if (snapMove) {
             Canvas(
@@ -206,157 +326,42 @@ fun FloatingAppsTab(
         }
 
 
-
         /* ---------------- Widget canvas ---------------- */
-
         floatingApps
             .filter { it.nestId == nestId }
             .sortedBy { it.id == selected?.id } // Selected is always displayed first for easier click access
             .forEach { floatingApp ->
                 key(floatingApp.id, nestId) {
-                DraggableFloatingApp(
-                    floatingAppsViewModel = floatingAppsViewModel,
-                    app = floatingApp,
-                    selected = floatingApp.id == selected?.id,
-                    widgetHostProvider = widgetHostProvider,
-                    onSelect = { selected = floatingApp },
-                    onMove = { dx, dy ->
-                        floatingAppsViewModel.moveFloatingApp(floatingApp.id, dx, dy, false)
-                    },
-                    onRotateEnd = {
-                        floatingAppsViewModel.rotateFloatingApp(floatingApp.id, it, true)
-                    },
-                    onMoveEnd = {
-                        floatingAppsViewModel.moveFloatingApp(floatingApp.id, 0f, 0f, snapMove)
-                    },
-                    onResize = { corner, dx, dy ->
-                        floatingAppsViewModel.resizeFloatingApp(floatingApp.id, corner, dx, dy, false)
-                    },
-                    onResizeEnd = { corner ->
-                        floatingAppsViewModel.resizeFloatingApp(floatingApp.id, corner, 0f, 0f, snapResize)
-                    },
-                    onRemove = { removeWidget(floatingApp) },
-                    onEdit = {
-                        floatingAppsViewModel.editFloatingApp(it)
-                    }
-                )
-            }
-        }
-
-
-        /* ───────────── Bottom controls ───────────── */
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .padding(20.dp),
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            UpDownButton(
-                upIcon = Icons.Default.Add,
-                downIcon = Icons.Default.AccountCircle,
-                color = MaterialTheme.colorScheme.primary,
-                contentDescriptionUp = stringResource(R.string.add_widget),
-                contentDescriptionDown = stringResource(R.string.pick_a_nest),
-                padding = 16.dp,
-                onClickUp = { showAddDialog = true },
-                onClickDown = { showNestPickerDialog = true }
-            )
-
-            UpDownButton(
-                upIcon = Icons.Default.CenterFocusStrong,
-                downIcon = Icons.Default.Restore,
-                color = MaterialTheme.colorScheme.primary,
-                contentDescriptionUp = stringResource(R.string.center_selected_widget),
-                contentDescriptionDown = stringResource(R.string.reset_widget),
-                upEnabled = isSelected,
-                downEnabled = isSelected,
-                padding = 16.dp,
-                onClickUp = {
-                    selected?.let { floatingAppsViewModel.centerFloatingApp(it.id) }
-
-                },
-                onClickDown = {
-                    selected?.let {
-                        if (it.action is SwipeActionSerializable.OpenWidget) {
-                            onResetWidgetSize(it.id, (it.action as SwipeActionSerializable.OpenWidget).widgetId)
-                        } else {
-                            floatingAppsViewModel.resetFloatingAppSize(it.id)
+                    DraggableFloatingApp(
+                        floatingAppsViewModel = floatingAppsViewModel,
+                        app = floatingApp,
+                        selected = floatingApp.id == selected?.id,
+                        widgetHostProvider = widgetHostProvider,
+                        onSelect = { selected = floatingApp },
+                        onMove = { dx, dy ->
+                            floatingAppsViewModel.moveFloatingApp(floatingApp.id, dx, dy, false)
+                        },
+                        onRotateEnd = {
+                            floatingAppsViewModel.rotateFloatingApp(floatingApp.id, it, true)
+                        },
+                        onMoveEnd = {
+                            floatingAppsViewModel.moveFloatingApp(floatingApp.id, 0f, 0f, snapMove)
+                        },
+                        onResize = { corner, dx, dy ->
+                            floatingAppsViewModel.resizeFloatingApp(floatingApp.id, corner, dx, dy, false)
+                        },
+                        onResizeEnd = { corner ->
+                            floatingAppsViewModel.resizeFloatingApp(floatingApp.id, corner, 0f, 0f, snapResize)
+                        },
+                        onRemove = { removeWidget(floatingApp) },
+                        onEdit = {
+                            floatingAppsViewModel.editFloatingApp(it)
                         }
-                    }
+                    )
                 }
-            )
-
-            UpDownButton(
-                upIcon = Icons.Default.ArrowUpward,
-                downIcon = Icons.Default.ArrowDownward,
-                color = MaterialTheme.colorScheme.secondary,
-                contentDescriptionUp = stringResource(R.string.select_previous_widget),
-                contentDescriptionDown = stringResource(R.string.select_next_widget),
-                upEnabled = true,
-                downEnabled = true,
-                padding = 16.dp,
-                onClickUp = {
-                    if (floatingApps.isNotEmpty()) {
-                        val idx = floatingApps.indexOfFirst { it == selected }
-                        val next = if (idx <= 0) floatingApps.last() else floatingApps[idx - 1]
-                        selected = next
-                    }
-                },
-                onClickDown = {
-                    if (floatingApps.isNotEmpty()) {
-                        val idx = floatingApps.indexOfFirst { it == selected }
-                        val next = if (idx == -1 || idx == floatingApps.lastIndex) floatingApps.first() else floatingApps[idx + 1]
-                        selected = next
-                    }
-                }
-            )
-
-            val upDownEnabled = isSelected && floatingApps.size > 1
-
-            UpDownButton(
-                upIcon = Icons.Default.MoveUp,
-                downIcon = Icons.Default.MoveDown,
-                color = MaterialTheme.colorScheme.tertiary,
-                contentDescriptionUp = stringResource(R.string.move_selected_widget_up),
-                contentDescriptionDown = stringResource(R.string.move_selected_widget_down),
-                upEnabled = upDownEnabled,
-                downEnabled = upDownEnabled,
-                padding = 16.dp,
-                onClickUp = {
-                    selected?.let { floatingAppsViewModel.moveFloatingAppDown(it.id) }
-                },
-                onClickDown = {
-                    selected?.let { floatingAppsViewModel.moveFloatingAppUp(it.id) }
-                }
-            )
-
-            UpDownButton(
-                upIcon = if (snapMove) Icons.Default.GridOn else Icons.Default.GridOff,
-                downIcon = if (snapResize) Icons.Default.FormatSize else Icons.Default.FormatClear,
-                color = MaterialTheme.colorScheme.primary,
-                contentDescriptionUp = stringResource(R.string.enable_grid),
-                contentDescriptionDown = stringResource(R.string.enable_scale_snap),
-                upEnabled = true,
-                downEnabled = true,
-                padding = 16.dp,
-                onClickUp = { snapMove = !snapMove },
-                onClickDown = { snapResize = !snapResize }
-            )
-
-            // Delete selected widget
-            CircleIconButton(
-                icon = Icons.Default.Remove,
-                contentDescription = stringResource(R.string.delete_widget),
-                tint = MaterialTheme.colorScheme.error,
-                enabled = isSelected,
-                padding = 16.dp
-            ) {
-                selected?.let { removeWidget(it) }
             }
-        }
     }
+
 
     if (widgetsDebugInfos) {
         Box(
@@ -420,10 +425,6 @@ fun FloatingAppsTab(
 }
 
 
-
-
-
-
 /**
  * Handles all widget interactions: drag to move, resize handles, tap/long-press.
  * Resize handles provide visual-only resize feedback by compensating position changes internally.
@@ -465,7 +466,7 @@ private fun DraggableFloatingApp(
     val x = (app.x * widthPixels).toInt()
     val y = (app.y * heightPixels).toInt()
 
-    val width =  app.spanX * cellSizePx
+    val width = app.spanX * cellSizePx
     val height = app.spanY * cellSizePx
 
 
@@ -616,7 +617,6 @@ private fun DraggableFloatingApp(
                         }
                     }
             )
-
 
 
             // ------------------------------------------

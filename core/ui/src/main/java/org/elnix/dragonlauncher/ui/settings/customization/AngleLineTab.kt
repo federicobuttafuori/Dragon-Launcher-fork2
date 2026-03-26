@@ -138,7 +138,7 @@ fun AngleLineTab(onBack: () -> Unit) {
     var hasAlreadyBeenPlaced by remember { mutableStateOf(false) }
 
 
-    var start by remember { mutableStateOf(Offset(0f,0f)) }
+    var start by remember { mutableStateOf(Offset(0f, 0f)) }
 
     val dx = dummyEnd.x - start.x
     val dy = dummyEnd.y - start.y
@@ -211,75 +211,73 @@ fun AngleLineTab(onBack: () -> Unit) {
         scrollableContent = true,
         titleContent = {
 
-            item {
-                /**
-                 * Preview of the line
-                 */
-                Box(
-                    modifier = Modifier
-                        .settingsGroup()
-                        .aspectRatio(1f)
-                        .fillMaxWidth()
-                        .onGloballyPositioned { coordinates ->
-                            if (!hasAlreadyBeenPlaced) {
-                                val rect = coordinates.boundsInRoot()
-                                val rectSize = (rect.height * density.density).toInt() / 2
+            /**
+             * Preview of the line
+             */
+            Box(
+                modifier = Modifier
+                    .settingsGroup()
+                    .aspectRatio(1f)
+                    .fillMaxWidth()
+                    .onGloballyPositioned { coordinates ->
+                        if (!hasAlreadyBeenPlaced) {
+                            val rect = coordinates.boundsInRoot()
+                            val rectSize = (rect.height * density.density).toInt() / 2
 
-                                dummyEnd = Offset(
-                                    rect.left + (0..rectSize).random(),
-                                    rect.top + (0..rectSize).random()
-                                )
-                                // Prevent the thing to move after first placement
-                                hasAlreadyBeenPlaced = true
-                            }
+                            dummyEnd = Offset(
+                                rect.left + (0..rectSize).random(),
+                                rect.top + (0..rectSize).random()
+                            )
+                            // Prevent the thing to move after first placement
+                            hasAlreadyBeenPlaced = true
                         }
-                        .pointerInput(Unit) {
-                            detectDragGestures { change, _ ->
-                                // Allow the user to move the end for cleaner preview
-                                dummyEnd = change.position
-                            }
+                    }
+                    .pointerInput(Unit) {
+                        detectDragGestures { change, _ ->
+                            // Allow the user to move the end for cleaner preview
+                            dummyEnd = change.position
+                        }
+                    }
+            ) {
+
+                Text(sweep.toInt().toString())
+
+                Canvas(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .graphicsLayer {
+                            compositingStrategy = CompositingStrategy.Offscreen
                         }
                 ) {
 
-                    Text(sweep.toInt().toString())
+                    start = Offset(size.width / 2f, size.height / 2f)
 
-                    Canvas(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .graphicsLayer {
-                                compositingStrategy = CompositingStrategy.Offscreen
-                            }
-                    ) {
+                    val lineColor =
+                        if (rgbLine) Color.hsv(sweepState.angle360(), 1f, 1f)
+                        else extraColors.angleLine
 
-                        start = Offset(size.width / 2f, size.height / 2f)
+                    actionLine(
+                        start = start,
+                        end = dummyEnd,
+                        sweepAngle = sweep,
+                        lineColor = lineColor,
+                        order = order,
+                        showLineObjectPreview = showLineObjectPreview,
+                        showAngleLineObjectPreview = showAngleLineObjectPreview,
+                        showStartObjectPreview = showStartObjectPreview,
+                        showEndObjectPreview = showEndObjectPreview,
+                        pickedRememberShapeAngle = pickedRememberShapeAngle,
+                        pickedRememberRotationAngle = pickedRememberRotationAngle,
+                        pickedRememberRotationStart = pickedRememberRotationStart,
+                        pickedRememberShapeStart = pickedRememberShapeStart,
+                        pickedRememberRotationEnd = pickedRememberRotationEnd,
+                        pickedRememberShapeEnd = pickedRememberShapeEnd,
+                        lineCustomObject = mutableLineObject,
+                        angleLineCustomObject = mutableAngleLineObject,
+                        startCustomObject = mutableStartObject,
+                        endCustomObject = mutableEndObject
 
-                        val lineColor =
-                            if (rgbLine) Color.hsv(sweepState.angle360(), 1f, 1f)
-                            else extraColors.angleLine
-
-                        actionLine(
-                            start = start,
-                            end = dummyEnd,
-                            sweepAngle = sweep,
-                            lineColor = lineColor,
-                            order = order,
-                            showLineObjectPreview = showLineObjectPreview,
-                            showAngleLineObjectPreview = showAngleLineObjectPreview,
-                            showStartObjectPreview = showStartObjectPreview,
-                            showEndObjectPreview = showEndObjectPreview,
-                            pickedRememberShapeAngle = pickedRememberShapeAngle,
-                            pickedRememberRotationAngle = pickedRememberRotationAngle,
-                            pickedRememberRotationStart = pickedRememberRotationStart,
-                            pickedRememberShapeStart = pickedRememberShapeStart,
-                            pickedRememberRotationEnd = pickedRememberRotationEnd,
-                            pickedRememberShapeEnd = pickedRememberShapeEnd,
-                            lineCustomObject = mutableLineObject,
-                            angleLineCustomObject = mutableAngleLineObject,
-                            startCustomObject = mutableStartObject,
-                            endCustomObject = mutableEndObject
-
-                        )
-                    }
+                    )
                 }
             }
         },

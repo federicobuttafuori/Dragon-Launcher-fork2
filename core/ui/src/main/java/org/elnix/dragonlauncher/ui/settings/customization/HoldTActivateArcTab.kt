@@ -90,33 +90,31 @@ fun HoldToActivateArcTab(onBack: () -> Unit) {
             }
         },
         titleContent = {
-            item {
-                var boxSize by remember { mutableStateOf(IntSize.Zero) }
+            var boxSize by remember { mutableStateOf(IntSize.Zero) }
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(1f)
-                        .onSizeChanged { boxSize = it },
-                    contentAlignment = Alignment.Center
-                ) {
-                    val center = Offset(
-                        x = boxSize.width / 2f,
-                        y = boxSize.height / 2f - 15f
-                    )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f)
+                    .onSizeChanged { boxSize = it },
+                contentAlignment = Alignment.Center
+            ) {
+                val center = Offset(
+                    x = boxSize.width / 2f,
+                    y = boxSize.height / 2f - 15f
+                )
 
 
-                    HoldToActivateArc(
-                        center = center,
-                        progress = progress.value,
-                        rgbLoading = rgbLoading,
-                        rotationsPerSecond = rotationPerSecond,
-                        customObjectSerializable = mutableHoldObject,
-                        showHoldTolerance = if (showToleranceOnMainScreen) {
-                            { holdToActivateSettingsTolerance }
-                        } else null
-                    )
-                }
+                HoldToActivateArc(
+                    center = center,
+                    progress = progress.value,
+                    rgbLoading = rgbLoading,
+                    rotationsPerSecond = rotationPerSecond,
+                    customObjectSerializable = mutableHoldObject,
+                    showHoldTolerance = if (showToleranceOnMainScreen) {
+                        { holdToActivateSettingsTolerance }
+                    } else null
+                )
             }
         },
         scrollableContent = true,

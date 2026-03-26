@@ -5,12 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -55,8 +53,8 @@ fun SettingsLazyHeader(
     resetText: String? = stringResource(R.string.reset_settings_in_this_tab),
     reorderState: ReorderableLazyListState? = null,
     listState: LazyListState? = null,
-    titleContent: (LazyListScope.() -> Unit)? = null,
-    bottomContent: (LazyListScope.() -> Unit)? = null,
+    titleContent: @Composable (ColumnScope.() -> Unit)? = null,
+    bottomContent: @Composable (ColumnScope.() -> Unit)? = null,
     content: @Composable (ColumnScope.() -> Unit)? = null,
     scrollableContent: Boolean = false,
     lazyContent: (LazyListScope.() -> Unit)? = null
@@ -86,13 +84,12 @@ fun SettingsLazyHeader(
                 .imePadding(),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            LazyColumn (
+           Column (
                 modifier = Modifier
                     .fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                item {
-                    SettingsTitle(
+                   SettingsTitle(
                         title = title,
                         otherIcons = otherIcons,
                         helpIcon = { showHelpDialog = true },
@@ -100,7 +97,7 @@ fun SettingsLazyHeader(
                             { showResetDialog = true }
                         } else null,
                     ) { onBack() }
-                }
+
 
                 if (titleContent != null) titleContent()
             }
@@ -139,17 +136,7 @@ fun SettingsLazyHeader(
                 }
             }
 
-            bottomContent?.let {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    it()
-                }
-                Spacer(Modifier.height(400.dp))
-            }
+            if (bottomContent != null) bottomContent()
         }
     }
 

@@ -66,17 +66,15 @@ fun IconPackTab(
             }
         },
         titleContent = {
-            item {
-                if (showPreview) {
-                    Box(Modifier.height(80.dp)) {
-                        AppGrid(
-                            apps = apps.shuffled().take(6),
-                            txtColor = MaterialTheme.colorScheme.onBackground,
-                            gridSize = 6,
-                            showIcons = true,
-                            showLabels = false
-                        ) { }
-                    }
+            if (showPreview) {
+                Box(Modifier.height(80.dp)) {
+                    AppGrid(
+                        apps = apps.shuffled().take(6),
+                        txtColor = MaterialTheme.colorScheme.onBackground,
+                        gridSize = 6,
+                        showIcons = true,
+                        showLabels = false
+                    ) { }
                 }
             }
         }
