@@ -57,7 +57,7 @@ fun GradientColorPicker(
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        // ──- Gradient + Hue selectors ──-
+        // ── Gradient + Hue selectors ─────────────────────────────────────────
         Row(
             modifier = Modifier
                 .fillMaxWidth()

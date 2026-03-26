@@ -38,7 +38,7 @@ class FloatingAppsViewModel(
         loadFloatingApps()
     }
 
-    /* ────────────────────────────- Public API ────────────────────────────- */
+    /* ───────────────────────────── Public API ───────────────────────────── */
 
     fun addFloatingApp(action: SwipeActionSerializable, info: AppWidgetProviderInfo? = null, nestId: Int) {
 
@@ -257,7 +257,7 @@ class FloatingAppsViewModel(
     }
 
 
-    /* ────────────────────────────- Internal ────────────────────────────- */
+    /* ───────────────────────────── Internal ───────────────────────────── */
 
     private fun persist() {
         viewModelScope.launch {

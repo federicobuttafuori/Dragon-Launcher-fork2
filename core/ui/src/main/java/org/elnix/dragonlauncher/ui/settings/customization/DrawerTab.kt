@@ -339,7 +339,7 @@ fun DrawerTab(
             ) {
 
                 if (leftActionNotDisabled) {
-                    // LEFT PANEL ──────────────────────────────────────────────────────────-
+                    // LEFT PANEL ───────────────────────────────────────────────────────────
                     Box(
                         modifier = Modifier
                             .fillMaxHeight()

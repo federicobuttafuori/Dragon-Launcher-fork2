@@ -172,7 +172,7 @@ class DigitalPauseActivity : ComponentActivity() {
     }
 }
 
-// ──- Couleurs et Styles ──-
+// ─── Couleurs et Styles ───
 private val ZenPurple = Color(0xFF6C5CE7)
 private val ZenTeal = Color(0xFF00CEC9)
 private val DeepBgTop = Color(0xFF0F2027)
@@ -238,13 +238,13 @@ fun DigitalPauseScreen(
                 .padding(24.dp)
         ) {
 
-            // ──- LOTUS ──-
+            // ─── LOTUS ───
             AnimatedLotus(
                 modifier = Modifier.size(220.dp),
                 isPulsing = !countdownFinished
             )
 
-            // ──- TIMER ──-
+            // ─── TIMER ───
             Spacer(modifier = Modifier.height(32.dp))
 
             AnimatedVisibility(
@@ -268,7 +268,7 @@ fun DigitalPauseScreen(
                 }
             }
 
-            // ──- FINAL CHOICE ──-
+            // ─── FINAL CHOICE ───
             AnimatedVisibility(
                 visible = showChoice,
                 enter = fadeIn(tween(600)) + slideInVertically { it / 4 },
