@@ -22,15 +22,22 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,7 +54,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import org.elnix.dragonlauncher.common.R
+import org.elnix.dragonlauncher.common.serializables.AppModel
 import org.elnix.dragonlauncher.common.utils.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.remembers.LocalAppsViewModel
 import org.elnix.dragonlauncher.ui.widgets.LauncherWidgetHolder
 
 @Composable
@@ -56,13 +65,36 @@ fun WidgetPickerDialog(
     onDismiss: () -> Unit
 ) {
     val ctx = LocalContext.current
+    val appsViewModel = LocalAppsViewModel.current
+
+    val apps by appsViewModel.allApps.collectAsState()
+
     val appWidgetManager = remember { AppWidgetManager.getInstance(ctx) }
     val launcherWidgetHolder = remember(ctx) { LauncherWidgetHolder.getInstance(ctx) }
 
     var widgets by remember { mutableStateOf<List<AppWidgetProviderInfo>>(emptyList()) }
+    var searchQuery by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
         widgets = appWidgetManager.installedProviders
+    }
+
+    val filteredWidgets = remember(searchQuery, widgets) {
+        val pm = ctx.packageManager
+        if (searchQuery.isEmpty()) {
+            widgets
+        } else {
+            widgets.filter { provider ->
+                val widgetLabel = provider.loadLabel(pm)
+                val appLabel = try {
+                    apps.find { it.packageName == provider.provider.packageName }?.name ?: ""
+                } catch (_: Exception) {
+                    ""
+                }
+                widgetLabel.contains(searchQuery, ignoreCase = true) ||
+                        appLabel.contains(searchQuery, ignoreCase = true)
+            }
+        }
     }
 
     Dialog(
@@ -79,17 +111,60 @@ fun WidgetPickerDialog(
                 Text(
                     stringResource(R.string.add_widget),
                     style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier.padding(bottom = 8.dp)
                 )
 
-                LazyColumn {
-                    items(widgets) { provider ->
-                        WidgetItem(
-                            provider = provider,
-                            launcherWidgetHolder = launcherWidgetHolder,
-                            onBindCustomWidget = onBindCustomWidget,
-                            onDismiss = onDismiss
+                OutlinedTextField(
+                    value = searchQuery,
+                    onValueChange = { searchQuery = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    placeholder = { Text(stringResource(R.string.search_widgets)) },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Default.Search,
+                            contentDescription = null,
+                            modifier = Modifier.size(20.dp)
                         )
+                    },
+                    trailingIcon = {
+                        if (searchQuery.isNotEmpty()) {
+                            IconButton(onClick = { searchQuery = "" }) {
+                                Icon(
+                                    Icons.Default.Close,
+                                    contentDescription = "Clear",
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            }
+                        }
+                    },
+                    singleLine = true,
+                    shape = DragonShape
+                )
+
+                if (filteredWidgets.isEmpty() && searchQuery.isNotEmpty()) {
+                    Box(
+                        modifier = Modifier.fillMaxWidth().padding(32.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            stringResource(R.string.no_search_match),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                } else {
+                    LazyColumn {
+                        items(filteredWidgets) { provider ->
+                            WidgetItem(
+                                provider = provider,
+                                launcherWidgetHolder = launcherWidgetHolder,
+                                apps = apps,
+                                onBindCustomWidget = onBindCustomWidget,
+                                onDismiss = onDismiss
+                            )
+                        }
                     }
                 }
             }
@@ -101,6 +176,7 @@ fun WidgetPickerDialog(
 private fun WidgetItem(
     provider: AppWidgetProviderInfo,
     launcherWidgetHolder: LauncherWidgetHolder,
+    apps: List<AppModel>,
     onBindCustomWidget: (Int, ComponentName) -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -132,11 +208,24 @@ private fun WidgetItem(
 
             Spacer(modifier = Modifier.width(16.dp))
             Column {
+                val appLabel = try {
+                    apps.find { it.packageName == provider.provider.packageName }?.name ?: ""
+                } catch (_: Exception) {
+                    ""
+                }
+
                 Text(
                     text = provider.loadLabel(ctx.packageManager),
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold
                 )
+                if (appLabel.isNotEmpty()) {
+                    Text(
+                        text = appLabel,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
                 Text(
                     text = "${provider.minWidth / density.density}x${provider.minHeight / density.density} cells",
                     style = MaterialTheme.typography.bodyMedium,

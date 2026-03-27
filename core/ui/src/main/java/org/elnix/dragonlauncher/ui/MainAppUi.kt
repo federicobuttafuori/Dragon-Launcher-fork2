@@ -886,13 +886,17 @@ fun MainAppUi(
                         )
                     }
 
-                    noAnimComposable(SETTINGS.WIDGETS_FLOATING_APPS) {
+                    noAnimComposable(
+                        route = "${SETTINGS.WIDGETS_FLOATING_APPS}?nestId={nestId}",
+                        arguments = listOf(navArgument("nestId") { type = NavType.IntType; defaultValue = 0 })
+                    ) { backStack ->
                         FloatingAppsTab(
                             widgetHostProvider = widgetHostProvider,
                             onBack = ::goAppearance,
                             onLaunchSystemWidgetPicker = ::launchWidgetsPicker,
                             onResetWidgetSize = onResetWidgetSize,
-                            onRemoveWidget = onRemoveFloatingApp
+                            onRemoveWidget = onRemoveFloatingApp,
+                            initialNestId = backStack.arguments?.getInt("nestId") ?: 0
                         )
                     }
 

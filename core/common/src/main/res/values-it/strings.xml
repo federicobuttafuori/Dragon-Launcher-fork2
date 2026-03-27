@@ -31,4 +31,5 @@
     <string name="launch_app_color">Colore Avvia Applicazione</string>
     <string name="control_panel_color">Colore Pannello Di Controllo</string>
     <string name="show_sub_nest_size_slider">Mostra slider sotto-raggruppamenti</string>
+    <string name="precision_mode_active">Modalità di Precisione</string>
 </resources>

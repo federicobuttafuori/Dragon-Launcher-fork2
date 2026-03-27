@@ -134,6 +134,8 @@
     <string name="delete_workspace">Delete Workspace</string>
     <string name="are_you_sure_to_delete_workspace">Are you sure to delete workspace</string>
     <string name="search_apps">Search Apps</string>
+    <string name="search_widgets">Search widgets…</string>
+    <string name="precision_mode_active">Precision Mode</string>
     <string name="remove_from_workspace">Remove From Workspace</string>
     <string name="add_to_workspace">Add To Workspace</string>
     <string name="change_app_icon">Change App Icon</string>

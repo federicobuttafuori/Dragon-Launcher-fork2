@@ -406,7 +406,7 @@ fun MainScreen(
                         BurgerAction(
                             onClick = {
                                 showDropDownMenuSettings = false
-                                onSettings(SETTINGS.WIDGETS_FLOATING_APPS)
+                                onSettings("${SETTINGS.WIDGETS_FLOATING_APPS}?nestId=$nestId")
                             }
                         ) {
                             Icon(

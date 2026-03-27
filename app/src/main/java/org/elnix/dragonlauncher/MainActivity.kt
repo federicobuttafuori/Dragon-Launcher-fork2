@@ -230,6 +230,7 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
                     info = info,
                     nestId = pendingAddNestId ?: 0
                 )
+                pendingAddNestId = null
             }
         } else {
             logD(WIDGET_TAG) { "DRAGON_FLOW: No configuration needed, adding widget" }
@@ -242,9 +243,8 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
                 info = info,
                 nestId = pendingAddNestId ?: 0
             )
+            pendingAddNestId = null
         }
-
-        pendingAddNestId = null
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -273,6 +273,7 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
                 widgetHolder.deleteAppWidgetId(widgetId)
             }
             pendingConfigWidgetId = -1
+            pendingAddNestId = null
         }
     }
 
