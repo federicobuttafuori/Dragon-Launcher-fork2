@@ -409,7 +409,7 @@ fun MainScreen(onLaunchAction: (SwipePointSerializable) -> Unit) {
                                 contentDescription = null
                             )
                             Text(
-                                stringResource(R.string.widgets_floating_apps),
+                                stringResource(R.string.widgets),
                             )
                         },
                         BurgerAction(

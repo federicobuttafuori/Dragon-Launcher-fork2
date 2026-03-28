@@ -81,7 +81,6 @@ fun MainScreenOverlay(
     nestId: Int,
     onLaunch: ((SwipePointSerializable) -> Unit)?
 ) {
-
     val ctx = LocalContext.current
     val nests = LocalNests.current
     val points = LocalPoints.current
