@@ -958,4 +958,6 @@
     <string name="enable_snap_move">Enable snap move</string>
     <string name="cell_size">Cell Size</string>
     <string name="cell_size_help">The size of the grid that is used to snap widgets sizes</string>
+    <string name="off_screen_timeout">Off-screen timeout (s)</string>
+    <string name="off_screen_timeout_desc">How long the app waits before returning to home screen when you\'re in another screen. Doesn\'t apply to some specified screens, such as backup (because you pick a file). -1 means no return</string>
 </resources>

@@ -29,7 +29,8 @@ object BehaviorSettingsStore : MapSettingsStore() {
             this.superWarningModeSound,
             this.metalPipesSound,
             this.alarmSound,
-            this.vibrateOnError
+            this.vibrateOnError,
+            this.offScreenTimeout
         )
 
     val backAction = Settings.swipeAction(
@@ -146,5 +147,13 @@ object BehaviorSettingsStore : MapSettingsStore() {
         key = "promptForShortcutsWhenAddingApp",
         dataStoreName = dataStoreName,
         default = false
+    )
+
+
+    val offScreenTimeout = Settings.int(
+        key = "offScreenTimeout",
+        dataStoreName = dataStoreName,
+        default = 10,
+        allowedRange = -1..60
     )
 }

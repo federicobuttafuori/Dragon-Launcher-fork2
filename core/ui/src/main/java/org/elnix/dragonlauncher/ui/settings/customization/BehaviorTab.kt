@@ -167,6 +167,13 @@ fun BehaviorTab(
                         }
                     }
                 }
+
+                SettingsSlider(
+                    setting = BehaviorSettingsStore.offScreenTimeout,
+                    title = stringResource(R.string.off_screen_timeout),
+                    description = stringResource(R.string.off_screen_timeout_desc),
+                    valueRange = -1..60
+                )
             }
         }
 

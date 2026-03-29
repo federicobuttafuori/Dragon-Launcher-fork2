@@ -95,6 +95,8 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
     companion object {
         private var GLOBAL_APPWIDGET_HOST: AppWidgetHost? = null
         private const val REQUEST_WIDGET_CONFIG = 1001
+
+        private var offScreenTimeout: Int? = null
     }
 
 
@@ -413,12 +415,6 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
             // Used internally by the app view model
             appsViewModel.cacheDensity(LocalDensity.current)
 
-            // Launch full viewmodel after first frame for performance
-            // LaunchedEffect(Unit) {
-            //     yield()
-            //     appsViewModel.loadAll()
-            // }
-
             // May be used in the future for some quit action / operation
             // DoubleBackToExit()
 
@@ -436,8 +432,6 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
                         if (locked) {
                             appsViewModel.setPrivateSpaceLocked()
                         } else { // Set it available
-//                            appsViewModel.setPrivateSpaceAvailable()
-
                             scope.launch(Dispatchers.IO) {
                                 appsViewModel.unlockAndReloadPrivateSpace()
                             }
@@ -458,6 +452,12 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
             val fullscreen by UiSettingsStore.fullScreen.asState()
             val hasInitialized by PrivateSettingsStore.hasInitialized.asStateNull()
             val samsungPreferSecureFolder by PrivateSettingsStore.samsungPreferSecureFolder.asState()
+
+
+            val offScreenTimeout by BehaviorSettingsStore.offScreenTimeout.asState()
+            LaunchedEffect(offScreenTimeout) {
+                Companion.offScreenTimeout = offScreenTimeout
+            }
 
 
             LaunchedEffect(Unit) {
@@ -617,15 +617,22 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
 
         /* ──────────────── Returns back to home if outside for too long ─────────────────── */
 
-        val currentRoute = navControllerHolder.value
-            ?.currentBackStackEntry
-            ?.destination
-            ?.route
+        val offScreenUserTimeout = offScreenTimeout?.takeIf { it != -1 }
 
-        // If user was outside > 10s, and not in the ignored list
-        if (appLifecycleViewModel.resume(10_000) && currentRoute !in ignoredReturnRoutes) {
-            navControllerHolder.value?.navigate(ROUTES.MAIN) {
-                popUpTo(0) { inclusive = true }
+        if (offScreenUserTimeout != null) {
+            val currentRoute = navControllerHolder.value
+                ?.currentBackStackEntry
+                ?.destination
+                ?.route
+
+
+            val isInIgnoredRoutes = currentRoute in ignoredReturnRoutes
+            val userHasExceededTimeout = appLifecycleViewModel.isTimeoutExceeded(offScreenUserTimeout)
+
+            if (!isInIgnoredRoutes && userHasExceededTimeout) {
+                navControllerHolder.value?.navigate(ROUTES.MAIN) {
+                    popUpTo(0) { inclusive = true }
+                }
             }
         }
     }
