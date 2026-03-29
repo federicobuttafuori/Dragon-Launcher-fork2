@@ -188,6 +188,13 @@ object UiSettingsStore : MapSettingsStore() {
         default = ""
     )
 
+    val cellSizeDp = Settings.int(
+        key = "cellSizeDp",
+        dataStoreName = dataStoreName,
+        default = 30,
+        allowedRange = 1..100
+    )
+
     // unsing explicit this to avoid other stores that have the same name keys to be imported by mistake
     override val ALL: List<BaseSettingObject<*, *>> = listOf(
         this.rgbLoading,
@@ -215,6 +222,7 @@ object UiSettingsStore : MapSettingsStore() {
         this.maxNestsDepth,
         this.useCustomColorChannels,
         this.chargingAnimation,
-        this.mainScreenLayers
+        this.mainScreenLayers,
+        this.cellSizeDp
     )
 }

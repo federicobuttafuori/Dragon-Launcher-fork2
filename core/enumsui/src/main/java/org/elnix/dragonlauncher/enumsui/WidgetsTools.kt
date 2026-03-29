@@ -14,15 +14,18 @@ import androidx.compose.material.icons.filled.MoveDown
 import androidx.compose.material.icons.filled.MoveUp
 import androidx.compose.material.icons.filled.RemoveCircle
 import androidx.compose.material.icons.filled.Restore
+import androidx.compose.material.icons.filled.Rotate90DegreesCcw
+import androidx.compose.material.icons.filled.Rotate90DegreesCw
 import androidx.compose.ui.graphics.vector.ImageVector
 import org.elnix.dragonlauncher.common.R
 
-enum class WidgetsToolsAddRemove(
+enum class WidgetsToolsAddNestRemove(
     override val resId: Int?,
     override val iconEnabled: ImageVector,
     override val iconDisabled: ImageVector?
 ) : ToggleButtonOption {
     Add(R.string.add_widget, Icons.Default.Add, null),
+    Nests(R.string.pick_a_nest, Icons.Default.AccountCircle, null),
     Remove(R.string.delete_widget, Icons.Default.RemoveCircle, null)
 }
 
@@ -56,12 +59,12 @@ enum class WidgetsToolsMoveUpDown(
     MoveDown(R.string.move_selected_widget_down, Icons.Default.MoveDown, null)
 }
 
-enum class WidgetsToolsGridScaleNest(
+enum class WidgetsToolsSnapping(
     override val resId: Int?,
     override val iconEnabled: ImageVector,
     override val iconDisabled: ImageVector?
 ) : ToggleButtonOption {
-    Grid(R.string.enable_grid, Icons.Default.GridOn, Icons.Default.GridOff),
-    Scale(R.string.enable_scale_snap, Icons.Default.FormatSize, Icons.Default.FormatClear),
-    Nests(R.string.pick_a_nest, Icons.Default.AccountCircle, null)
+    SnapGrid(R.string.enable_snap_move, Icons.Default.GridOn, Icons.Default.GridOff),
+    SnapResize(R.string.enable_scale_snap, Icons.Default.FormatSize, Icons.Default.FormatClear),
+    SnapRotation(R.string.snap_rotation, Icons.Default.Rotate90DegreesCw, Icons.Default.Rotate90DegreesCcw),
 }

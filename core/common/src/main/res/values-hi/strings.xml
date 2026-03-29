@@ -333,7 +333,6 @@
     <string name="select_next_widget">अगला विजेट चुनें</string>
     <string name="move_selected_widget_up">चयनित विजेट को ऊपर ले जाएँ</string>
     <string name="move_selected_widget_down">चयनित विजेट को नीचे ले जाएँ</string>
-    <string name="enable_grid">ग्रिड सक्षम करें</string>
     <string name="enable_scale_snap">स्केल स्नैप सक्षम करें</string>
     <string name="add_circle">वृत्त जोड़ें</string>
     <string name="remove_circle">सर्कल हटाएं</string>

@@ -333,7 +333,6 @@
     <string name="select_next_widget">Wählen Sie Nächstes Widget</string>
     <string name="move_selected_widget_up">Ausgewähltes Widget nach oben verschieben</string>
     <string name="move_selected_widget_down">Ausgewähltes Widget nach unten verschieben</string>
-    <string name="enable_grid">Raster aktivieren</string>
     <string name="enable_scale_snap">Skalenfang aktivieren</string>
     <string name="add_circle">Kreis hinzufügen</string>
     <string name="remove_circle">Kreis entfernen</string>

@@ -2,7 +2,6 @@
 
 package org.elnix.dragonlauncher.ui.settings.customization
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -28,6 +27,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.LinearScale
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.HorizontalDivider
@@ -79,12 +79,13 @@ import org.elnix.dragonlauncher.common.undoredo.UndoRedoManager
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.WIDGET_TAG
 import org.elnix.dragonlauncher.common.utils.UiConstants.DragonShape
 import org.elnix.dragonlauncher.enumsui.UndRedoEditTools
-import org.elnix.dragonlauncher.enumsui.WidgetsToolsAddRemove
+import org.elnix.dragonlauncher.enumsui.WidgetsToolsAddNestRemove
 import org.elnix.dragonlauncher.enumsui.WidgetsToolsCenterReset
-import org.elnix.dragonlauncher.enumsui.WidgetsToolsGridScaleNest
 import org.elnix.dragonlauncher.enumsui.WidgetsToolsMoveUpDown
+import org.elnix.dragonlauncher.enumsui.WidgetsToolsSnapping
 import org.elnix.dragonlauncher.enumsui.WidgetsToolsUpDown
 import org.elnix.dragonlauncher.models.FloatingAppsViewModel
+import org.elnix.dragonlauncher.models.FloatingAppsViewModel.ResizeCorner
 import org.elnix.dragonlauncher.settings.stores.DebugSettingsStore
 import org.elnix.dragonlauncher.settings.stores.WidgetsSettingsStore
 import org.elnix.dragonlauncher.ui.components.FloatingAppsHostView
@@ -103,6 +104,7 @@ import org.elnix.dragonlauncher.ui.remembers.LocalFloatingAppsViewModel
 import org.elnix.dragonlauncher.ui.statusbar.StatusBar
 import kotlin.math.atan2
 import kotlin.math.cos
+import kotlin.math.roundToInt
 import kotlin.math.sin
 
 @Composable
@@ -116,7 +118,8 @@ fun FloatingAppsTab(
     val ctx = LocalContext.current
 
     val floatingAppsViewModel = LocalFloatingAppsViewModel.current
-    val cellSizePx = floatingAppsViewModel.cellSizePx
+    val cellSizePx by floatingAppsViewModel.cellSizePx.collectAsState()
+    val cellSizeDp by floatingAppsViewModel.cellSizeDp.collectAsState()
     val scope = rememberCoroutineScope()
 
     val widgetsDebugInfos by DebugSettingsStore.widgetsDebugInfo.asState()
@@ -128,6 +131,7 @@ fun FloatingAppsTab(
 
     var snapMove by remember { mutableStateOf(true) }
     var snapResize by remember { mutableStateOf(true) }
+    var snapRotation by remember { mutableStateOf(true) }
 
     var showScaleDropdown by remember { mutableStateOf(false) }
     var widgetsScale by remember { mutableFloatStateOf(0.80f) }
@@ -136,7 +140,6 @@ fun FloatingAppsTab(
     var showNestPickerDialog by remember { mutableStateOf(false) }
     var nestId by remember { mutableIntStateOf(initialNestId) }
     var isPrecisionModeActive by remember { mutableStateOf(false) }
-
 
 
     /* ───────────────────────────────────────────────────────────────── */
@@ -258,35 +261,47 @@ fun FloatingAppsTab(
                     DraggableFloatingApp(
                         floatingAppsViewModel = floatingAppsViewModel,
                         app = floatingApp,
+                        snapRotation = { snapRotation },
+                        snapMove = { snapMove },
+                        snapResize = { snapResize },
                         selected = floatingApp.id == selected?.id,
-                        onSelect = { selected = floatingApp },
                         onPrecisionModeChange = { isPrecisionModeActive = it },
-                        onMove = { dx, dy ->
-                            // I don't apply to stack on every movement, and so don't save
-                            floatingAppsViewModel.moveFloatingApp(floatingApp.id, dx, dy, false)
-                        },
-                        onRotateEnd = {
-                            applyChange {
-                                floatingAppsViewModel.rotateFloatingApp(floatingApp.id, it, true)
-                            }
-                        },
-                        onMoveEnd = {
-                            // Only save on move end to avoid I/O overhead
-                            applyChange {
-                                floatingAppsViewModel.moveFloatingApp(floatingApp.id, 0f, 0f, snapMove)
-                            }
-                        },
-                        onResize = { corner, dx, dy ->
-                            // Same thing here, don't apply change until fully resized
-                            floatingAppsViewModel.resizeFloatingApp(floatingApp.id, corner, dx, dy, false)
-                        },
-                        onResizeEnd = { corner ->
-                            applyChange {
-                                floatingAppsViewModel.resizeFloatingApp(floatingApp.id, corner, 0f, 0f, snapResize)
-                            }
-                        },
+                        onSelect = { selected = floatingApp },
+
+
+//                        onMove = { dx, dy ->
+//                            // I don't apply to stack on every movement, and so don't save
+//                            floatingAppsViewModel.moveFloatingApp(floatingApp.id, dx, dy, false)
+//                        },
+//                        onMoveEnd = {
+//                            // Only save on move end to avoid I/O overhead
+//                            applyChange {
+//                                floatingAppsViewModel.moveFloatingApp(floatingApp.id, 0f, 0f, snapMove)
+//                            }
+//                        },
+
+//                        onRotateEnd = {
+//                            applyChange {
+//                                // Just apply the change, don't rotate more, as it is already rotated by the real-time thing
+//                                floatingAppsViewModel.rotateFloatingApp(floatingApp.id, it, snapRotation)
+//                            }
+//                        },
+
+
+//                        onResize = { corner, dx, dy ->
+//                            // Same thing here, don't apply change until fully resized
+//                            floatingAppsViewModel.resizeFloatingApp(floatingApp.id, corner, dx, dy, false)
+//                        },
+//                        onResizeEnd = { corner ->
+//                            applyChange {
+//                                floatingAppsViewModel.resizeFloatingApp(floatingApp.id, corner, 0f, 0f, snapResize)
+//                            }
+//                        },
+
                         onEdit = {
                             applyChange {
+                                logD(WIDGET_TAG) { "applyChange\nold widget: $floatingApp\new one: $it" }
+
                                 floatingAppsViewModel.editFloatingApp(it)
                             }
                         }
@@ -305,11 +320,11 @@ fun FloatingAppsTab(
         ) {
             Surface(
                 color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
-                contentColor = MaterialTheme.colorScheme.surface,
                 shape = CircleShape
             ) {
                 Text(
                     text = stringResource(R.string.precision_mode_active),
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                     style = MaterialTheme.typography.bodyMedium
                 )
@@ -352,28 +367,28 @@ fun FloatingAppsTab(
                     modifier = Modifier.horizontalScroll(rememberScrollState())
                 ) {
                     MultiSelectConnectedButtonRow(
-                        entries = WidgetsToolsGridScaleNest.entries,
+                        entries = WidgetsToolsSnapping.entries,
                         showLabel = false,
                         isChecked = {
                             when (it) {
-                                WidgetsToolsGridScaleNest.Grid -> snapMove
-                                WidgetsToolsGridScaleNest.Scale -> snapResize
-                                WidgetsToolsGridScaleNest.Nests -> true
+                                WidgetsToolsSnapping.SnapGrid -> snapMove
+                                WidgetsToolsSnapping.SnapResize -> snapResize
+                                WidgetsToolsSnapping.SnapRotation -> snapRotation
                             }
                         }
                     ) { entry ->
                         scope.launch {
                             when (entry) {
-                                WidgetsToolsGridScaleNest.Grid -> {
+                                WidgetsToolsSnapping.SnapGrid -> {
                                     snapMove = !snapMove
                                 }
 
-                                WidgetsToolsGridScaleNest.Scale -> {
+                                WidgetsToolsSnapping.SnapResize -> {
                                     snapResize = !snapResize
                                 }
 
-                                WidgetsToolsGridScaleNest.Nests -> {
-                                    showNestPickerDialog = true
+                                WidgetsToolsSnapping.SnapRotation -> {
+                                    snapRotation = !snapRotation
                                 }
                             }
                         }
@@ -410,33 +425,38 @@ fun FloatingAppsTab(
                 Row(
                     Modifier
                         .fillMaxWidth()
+                        .horizontalScroll(rememberScrollState())
                         .padding(20.dp),
                     horizontalArrangement = Arrangement.SpaceAround,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     MultiSelectConnectedButtonRow(
-                        entries = WidgetsToolsAddRemove.entries,
+                        entries = WidgetsToolsAddNestRemove.entries,
                         showLabel = false,
                         isChecked = {
                             when (it) {
-                                WidgetsToolsAddRemove.Add -> true
-                                WidgetsToolsAddRemove.Remove -> aWidgetIsSelected
+                                WidgetsToolsAddNestRemove.Add, WidgetsToolsAddNestRemove.Nests  -> true
+                                WidgetsToolsAddNestRemove.Remove -> aWidgetIsSelected
                             }
                         },
                         isEnabled = {
                             when (it) {
-                                WidgetsToolsAddRemove.Add -> true
-                                WidgetsToolsAddRemove.Remove -> aWidgetIsSelected
+                                WidgetsToolsAddNestRemove.Add, WidgetsToolsAddNestRemove.Nests  -> true
+                                WidgetsToolsAddNestRemove.Remove -> aWidgetIsSelected
                             }
                         }
                     ) { entry ->
                         scope.launch {
                             when (entry) {
-                                WidgetsToolsAddRemove.Add -> {
+                                WidgetsToolsAddNestRemove.Add -> {
                                     showAddDialog = true
                                 }
 
-                                WidgetsToolsAddRemove.Remove -> {
+                                WidgetsToolsAddNestRemove.Nests -> {
+                                    showNestPickerDialog = true
+                                }
+
+                                WidgetsToolsAddNestRemove.Remove -> {
                                     selected?.let {
                                         applyChange {
                                             removeWidget(it)
@@ -541,7 +561,6 @@ fun FloatingAppsTab(
                         Column(
                             modifier = Modifier.settingsGroup()
                         ) {
-
                             Text("${stringResource(R.string.widget_number)}: ${floatingApps.size}")
                             Text("${stringResource(R.string.current_nest)}: $nestId")
 
@@ -553,6 +572,18 @@ fun FloatingAppsTab(
                                 valueRange = 0.5f..1f,
                                 onReset = { widgetsScale = 0.85f }
                             ) { widgetsScale = it }
+
+                            SliderWithLabel(
+                                label = stringResource(R.string.cell_size),
+                                description = stringResource(R.string.cell_size_help),
+                                value = cellSizeDp,
+                                valueRange = 1..100,
+                                onReset = {
+                                   floatingAppsViewModel.updateCellSize(null)
+                                },
+                            ) {
+                                floatingAppsViewModel.updateCellSize(it)
+                            }
                         }
                     }
                 }
@@ -626,52 +657,71 @@ fun FloatingAppsTab(
 
 
 /**
- * Handles all widget interactions: drag to move, resize handles, tap/long-press.
- * Resize handles provide visual-only resize feedback by compensating position changes internally.
+ * A fully interactive, self-contained widget overlay that handles all real-time manipulation:
+ * drag to move, corner handles to resize, a rotation handle, and tap/long-press for selection
+ * and precision mode.
  *
- * @param floatingAppsViewModel ViewModel for widget state management
- * @param app Current widget data
- * @param selected True if this widget is currently selected
- * @param onSelect Callback when widget is tapped/selected
- * @param onMove Callback for position drag deltas (dx, dy in pixels)
- * @param onResize Callback for resize drag (corner, dx, dy in pixels)
+ * Position, size and angle are tracked locally as normalized/span state and only committed
+ * to the parent via [onEdit] at drag end, keeping I/O overhead minimal.
+ * Snap variants are provided as lambdas so the caller can toggle them reactively without
+ * restarting pointer inputs.
+ *
+ * Position compensation on resize and move is angle-aware: deltas are rotated through the
+ * widget's current angle so handles behave correctly at any rotation.
+ *
+ * @param floatingAppsViewModel Provides `cellSizePx`, `minSize` and screen dimensions.
+ * @param app Current immutable widget data used as the source of truth on each commit.
+ * @param selected Whether this widget is currently selected, controls handle visibility.
+ * @param snapRotation Returns true if rotation should snap to 15° increments.
+ * @param snapMove Returns true if position should snap to the cell grid.
+ * @param snapResize Returns true if span should snap to whole cell units.
+ * @param onPrecisionModeChange Called when the long-press precision mode toggles on or off.
+ * @param onSelect Called when the widget is tapped or a drag starts on it.
+ * @param onEdit Called at the end of any drag (move, resize, rotate) with the updated [FloatingAppObject].
  */
-@SuppressLint("LocalContextResourcesRead")
 @Composable
 private fun DraggableFloatingApp(
     floatingAppsViewModel: FloatingAppsViewModel,
     app: FloatingAppObject,
     selected: Boolean,
+
+    snapRotation: () -> Boolean,
+    snapMove: () -> Boolean,
+    snapResize: () -> Boolean,
+
     onPrecisionModeChange: (Boolean) -> Unit,
     onSelect: () -> Unit,
-    onMove: (Float, Float) -> Unit,
-    onRotateEnd: (Float) -> Unit,
-    onMoveEnd: (Boolean) -> Unit,
-    onResize: (FloatingAppsViewModel.ResizeCorner, Float, Float) -> Unit,
-    onResizeEnd: (FloatingAppsViewModel.ResizeCorner) -> Unit,
     onEdit: (FloatingAppObject) -> Unit
 ) {
-    val ctx = LocalContext.current
     val haptic = LocalHapticFeedback.current
     val borderColor = if (selected) MaterialTheme.colorScheme.primary else Color.Transparent
 
-    val cellSizePx = floatingAppsViewModel.cellSizePx
-
-    val dm = ctx.resources.displayMetrics
+    val cellSizePx by floatingAppsViewModel.cellSizePx.collectAsState()
+    val minSize = floatingAppsViewModel.minSize
+    val dm = floatingAppsViewModel.dm
 
     val widthPixels = dm.widthPixels
     val heightPixels = dm.heightPixels
 
-    val x = (app.x * widthPixels).toInt()
-    val y = (app.y * heightPixels).toInt()
+    val snapScaleX = cellSizePx / widthPixels
+    val snapScaleY = cellSizePx / heightPixels
 
-    val width = app.spanX * cellSizePx
-    val height = app.spanY * cellSizePx
+    var widgetCenter by remember(selected) { mutableStateOf(Offset.Zero) }
+    var handleCoordinates by remember(selected) { mutableStateOf<LayoutCoordinates?>(null) }
 
-
-    var widgetCenter by remember { mutableStateOf(Offset.Zero) }
-    var handleCoordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
     var widgetAngle by remember(app.angle) { mutableFloatStateOf(app.angle) }
+
+    var widgetX by remember(app.x) { mutableFloatStateOf(app.x) }
+    var widgetY by remember(app.y) { mutableFloatStateOf(app.y) }
+    var rawWidgetX by remember(app.x) { mutableFloatStateOf(app.x) }
+    var rawWidgetY by remember(app.y) { mutableFloatStateOf(app.y) }
+
+    var widgetWidth by remember(app.spanX) { mutableFloatStateOf(app.spanX) }
+    var widgetHeight by remember(app.spanY) { mutableFloatStateOf(app.spanY) }
+    var rawWidgetWidth by remember(app.spanX) { mutableFloatStateOf(app.spanX) }
+    var rawWidgetHeight by remember(app.spanY) { mutableFloatStateOf(app.spanY) }
+
+
     var isPrecisionMode by remember { mutableStateOf(false) }
     var showEditPopup by remember { mutableStateOf(false) }
     var showShapeEditor by remember { mutableStateOf(false) }
@@ -680,17 +730,77 @@ private fun DraggableFloatingApp(
         onPrecisionModeChange(isPrecisionMode)
     }
 
+
+    fun commitChange() {
+        onEdit(
+            app.copy(
+                spanX = widgetWidth,
+                spanY = widgetHeight,
+                x = widgetX,
+                y = widgetY,
+                angle = widgetAngle
+            )
+        )
+    }
+
+    fun resizeFloatingApp(corner: ResizeCorner, dxPx: Float, dyPx: Float) {
+        val deltaSpanX = dxPx / cellSizePx
+        val deltaSpanY = dyPx / cellSizePx
+        val deltaPosX = dxPx / widthPixels
+        val deltaPosY = dyPx / heightPixels
+
+        val angleRad = Math.toRadians(widgetAngle.toDouble())
+        val cos = cos(angleRad).toFloat()
+        val sin = sin(angleRad).toFloat()
+
+        var localDeltaX = 0f
+        var localDeltaY = 0f
+
+
+        when (corner) {
+            ResizeCorner.Left -> {
+                rawWidgetWidth = (rawWidgetWidth - deltaSpanX).coerceAtLeast(minSize)
+                localDeltaX = deltaPosX
+            }
+            ResizeCorner.Right -> {
+                rawWidgetWidth = (rawWidgetWidth + deltaSpanX).coerceAtLeast(minSize)
+            }
+            ResizeCorner.Top -> {
+                rawWidgetHeight = (rawWidgetHeight - deltaSpanY).coerceAtLeast(minSize)
+                localDeltaY = deltaPosY
+            }
+            ResizeCorner.Bottom -> {
+                rawWidgetHeight = (rawWidgetHeight + deltaSpanY).coerceAtLeast(minSize)
+            }
+        }
+
+        val worldDeltaX = (localDeltaX * cos - localDeltaY * sin)
+        val worldDeltaY = (localDeltaX * sin + localDeltaY * cos)
+
+        widgetX += worldDeltaX
+        widgetY += worldDeltaY
+
+        widgetWidth = if (snapResize()) {
+            rawWidgetWidth.roundToInt().toFloat().coerceAtLeast(minSize)
+        } else rawWidgetWidth
+
+        widgetHeight = if (snapResize()) {
+            rawWidgetHeight.roundToInt().toFloat().coerceAtLeast(minSize)
+        } else rawWidgetHeight
+    }
+
+
     Box(
         modifier = Modifier
             .offset {
                 IntOffset(
-                    x = x,
-                    y = y
+                    x = (widgetX * widthPixels).toInt(),
+                    y = (widgetY * heightPixels).toInt()
                 )
             }
             .size(
-                width = width.toDp,
-                height = height.toDp
+                width = (widgetWidth * cellSizePx).toDp,
+                height = (widgetHeight * cellSizePx).toDp
             )
             // Used to compute the widget position for rotation computing
             .onGloballyPositioned { coordinates ->
@@ -703,6 +813,7 @@ private fun DraggableFloatingApp(
             .graphicsLayer {
                 rotationZ = widgetAngle
                 transformOrigin = TransformOrigin.Center
+                clip = false
             }
             .border(
                 width = if (selected) 2.dp else 0.dp,
@@ -739,9 +850,13 @@ private fun DraggableFloatingApp(
                         }
                     )
                 }
-                .pointerInput(app.id) {
+                .pointerInput(app.id, app.angle, app.x, app.y) {
                     detectDragGestures(
-                        onDragStart = { onSelect() },
+                        onDragStart = {
+                            onSelect()
+                            rawWidgetX = widgetX
+                            rawWidgetY = widgetY
+                        },
                         onDrag = { change, dragAmount ->
 
                             val angleRad = Math.toRadians(widgetAngle.toDouble())
@@ -755,11 +870,24 @@ private fun DraggableFloatingApp(
                             val worldDx = (amountX * cos - amountY * sin).toFloat()
                             val worldDy = (amountX * sin + amountY * cos).toFloat()
 
+
+                            rawWidgetX += worldDx / widthPixels
+                            rawWidgetY += worldDy / heightPixels
+
+                            val isSnapMove = snapMove() && !isPrecisionMode
+
+                            widgetX = if (isSnapMove) {
+                                (rawWidgetX / snapScaleX).roundToInt() * snapScaleX
+                            } else rawWidgetX
+
+                            widgetY = if (isSnapMove) {
+                                (rawWidgetY / snapScaleY).roundToInt() * snapScaleY
+                            } else rawWidgetY
+
                             change.consume()
-                            onMove(worldDx, worldDy)
                         },
                         onDragEnd = {
-                            onMoveEnd(isPrecisionMode)
+                            commitChange()
                             isPrecisionMode = false
                         },
                         onDragCancel = {
@@ -775,14 +903,13 @@ private fun DraggableFloatingApp(
             Box(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .offset(y = (-40).dp)
-                    .size(32.dp)
+                    .offset(y = (-50).dp)
+                    .size(40.dp)
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.secondary)
                     .onGloballyPositioned {
                         handleCoordinates = it
                     }
-                    .pointerInput(app.id) {
+                    .pointerInput(app.id, app.angle) {
 
                         var dragStartFingerAngle: Float? = null
                         var dragStartWidgetAngle = 0f
@@ -802,12 +929,13 @@ private fun DraggableFloatingApp(
                                     )
                                 ).toFloat()
 
+                                // Initialize here to prevent the widget rotated to do one billion rotations a second
                                 dragStartWidgetAngle = widgetAngle
                             },
 
                             onDragEnd = {
                                 dragStartFingerAngle = null
-                                onRotateEnd(widgetAngle)
+                                commitChange()
                             },
 
                             onDragCancel = {
@@ -834,13 +962,24 @@ private fun DraggableFloatingApp(
                                 if (delta > 180f) delta -= 360f
                                 if (delta < -180f) delta += 360f
 
-                                widgetAngle = dragStartWidgetAngle + delta
+                                val newAngle = dragStartWidgetAngle + delta
+
+                                widgetAngle = if (snapRotation()) {
+                                    (newAngle / 15f).roundToInt() * 15f
+                                } else newAngle
                             }
 
                             change.consume()
                         }
-                    }
-            )
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Refresh,
+                    contentDescription = stringResource(R.string.rotation),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
 
 
             // ──────────────────────────────────────────
@@ -858,14 +997,12 @@ private fun DraggableFloatingApp(
                     .size(dotSize + hitboxPadding * 2)
                     .clip(CircleShape)
                     .background(Color.Transparent)
-                    .pointerInput(FloatingAppsViewModel.ResizeCorner.Top) {
+                    .pointerInput(ResizeCorner.Top, app.spanX, app.spanY) {
                         detectDragGestures(
-                            onDragEnd = {
-                                onResizeEnd(FloatingAppsViewModel.ResizeCorner.Top)
-                            }
+                            onDragEnd = ::commitChange
                         ) { change, dragAmount ->
                             change.consume()
-                            onResize(FloatingAppsViewModel.ResizeCorner.Top, 0f, dragAmount.y)
+                            resizeFloatingApp(ResizeCorner.Top, 0f, dragAmount.y)
                         }
                     }
             ) {
@@ -885,14 +1022,12 @@ private fun DraggableFloatingApp(
                     .size(dotSize + hitboxPadding * 2)
                     .clip(CircleShape)
                     .background(Color.Transparent)
-                    .pointerInput(FloatingAppsViewModel.ResizeCorner.Bottom) {
+                    .pointerInput(ResizeCorner.Bottom, app.spanX, app.spanY) {
                         detectDragGestures(
-                            onDragEnd = {
-                                onResizeEnd(FloatingAppsViewModel.ResizeCorner.Bottom)
-                            }
+                            onDragEnd = ::commitChange
                         ) { change, dragAmount ->
                             change.consume()
-                            onResize(FloatingAppsViewModel.ResizeCorner.Bottom, 0f, dragAmount.y)
+                            resizeFloatingApp(ResizeCorner.Bottom, 0f, dragAmount.y)
                         }
                     }
             ) {
@@ -912,14 +1047,12 @@ private fun DraggableFloatingApp(
                     .size(dotSize + hitboxPadding * 2)
                     .clip(CircleShape)
                     .background(Color.Transparent)
-                    .pointerInput(FloatingAppsViewModel.ResizeCorner.Left) {
+                    .pointerInput(ResizeCorner.Left, app.spanX, app.spanY) {
                         detectDragGestures(
-                            onDragEnd = {
-                                onResizeEnd(FloatingAppsViewModel.ResizeCorner.Left)
-                            }
+                            onDragEnd = ::commitChange
                         ) { change, dragAmount ->
                             change.consume()
-                            onResize(FloatingAppsViewModel.ResizeCorner.Left, dragAmount.x, 0f)
+                            resizeFloatingApp(ResizeCorner.Left, dragAmount.x, 0f)
                         }
                     }
             ) {
@@ -939,14 +1072,12 @@ private fun DraggableFloatingApp(
                     .size(dotSize + hitboxPadding * 2)
                     .clip(CircleShape)
                     .background(Color.Transparent)
-                    .pointerInput(FloatingAppsViewModel.ResizeCorner.Right) {
+                    .pointerInput(ResizeCorner.Right, app.spanX, app.spanY) {
                         detectDragGestures(
-                            onDragEnd = {
-                                onResizeEnd(FloatingAppsViewModel.ResizeCorner.Right)
-                            }
+                            onDragEnd = ::commitChange
                         ) { change, dragAmount ->
                             change.consume()
-                            onResize(FloatingAppsViewModel.ResizeCorner.Right, dragAmount.x, 0f)
+                            resizeFloatingApp(ResizeCorner.Right, dragAmount.x, 0f)
                         }
                     }
             ) {

@@ -156,7 +156,7 @@ fun MainScreen(onLaunchAction: (SwipePointSerializable) -> Unit) {
 
     val dm = ctx.resources.displayMetrics
     val density = LocalDensity.current
-    val cellSizePx = floatingAppsViewModel.cellSizePx
+    val cellSizePx by floatingAppsViewModel.cellSizePx.collectAsState()
 
     val appIconOverlaySize by UiSettingsStore.appIconOverlaySize.asState()
 

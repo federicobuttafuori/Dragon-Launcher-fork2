@@ -55,7 +55,7 @@ fun FloatingAppsHostView(
 
         // Apply size options when span changes
         DisposableEffect(floatingAppObject.spanX, floatingAppObject.spanY) {
-            val widthDp = (floatingAppObject.spanX * cellSizePx / density).toInt()
+            val widthDp =  (floatingAppObject.spanX * cellSizePx / density).toInt()
             val heightDp = (floatingAppObject.spanY * cellSizePx / density).toInt()
 
             val options = Bundle().apply {

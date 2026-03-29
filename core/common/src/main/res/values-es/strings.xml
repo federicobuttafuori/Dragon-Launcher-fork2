@@ -333,7 +333,6 @@
     <string name="select_next_widget">Seleccione el siguiente widget</string>
     <string name="move_selected_widget_up">Mover el widget seleccionado hacia arriba</string>
     <string name="move_selected_widget_down">Mover el widget seleccionado hacia abajo</string>
-    <string name="enable_grid">Habilitar cuadrícula</string>
     <string name="enable_scale_snap">Habilitar ajuste de escala</string>
     <string name="add_circle">Agregar círculo</string>
     <string name="remove_circle">Quitar círculo</string>

@@ -333,7 +333,6 @@
     <string name="select_next_widget">Sélectionnez le widget suivant</string>
     <string name="move_selected_widget_up">Déplacer le widget sélectionné vers le haut</string>
     <string name="move_selected_widget_down">Déplacer le widget sélectionné vers le bas</string>
-    <string name="enable_grid">Activer la grille</string>
     <string name="enable_scale_snap">Activer l\'accrochage à l\'échelle</string>
     <string name="add_circle">Ajouter un cercle</string>
     <string name="remove_circle">Supprimer le cercle</string>

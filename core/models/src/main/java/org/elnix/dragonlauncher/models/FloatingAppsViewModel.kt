@@ -3,18 +3,22 @@ package org.elnix.dragonlauncher.models
 import android.annotation.SuppressLint
 import android.app.Application
 import android.appwidget.AppWidgetProviderInfo
-import androidx.compose.ui.unit.dp
+import android.util.DisplayMetrics
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.serializables.FloatingAppObject
 import org.elnix.dragonlauncher.common.serializables.FloatingAppsJson
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.settings.stores.LegacyFloatingAppsSettingsStore
+import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
 import org.elnix.dragonlauncher.settings.stores.WidgetsSettingsStore
-import kotlin.math.roundToInt
 import kotlin.random.Random
 
 class FloatingAppsViewModel(
@@ -29,15 +33,24 @@ class FloatingAppsViewModel(
 
 
 
-    private val dm = ctx.resources.displayMetrics
-
-    val cellSizePx = (30.dp * dm.density).value
+    val dm: DisplayMetrics = ctx.resources.displayMetrics
+    private val _cellSizeDp = MutableStateFlow(30)
+    val cellSizeDp: StateFlow<Int> = _cellSizeDp.asStateFlow()
+    val cellSizePx: StateFlow<Float> = _cellSizeDp.map { it * dm.density }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = _cellSizeDp.value * dm.density
+    )
     private val screenWidth = dm.widthPixels.toFloat()
     private val screenHeight = dm.heightPixels.toFloat()
-    private val minSize = 1.5f
+    val minSize = 1.5f
 
     init {
         loadFloatingApps()
+
+        viewModelScope.launch {
+            _cellSizeDp.value = UiSettingsStore.cellSizeDp.get(ctx)
+        }
     }
 
     /* ───────────────────────────── Public API ───────────────────────────── */
@@ -65,45 +78,6 @@ class FloatingAppsViewModel(
         viewModelScope.launch {
             _floatingApps.value = _floatingApps.value.filterNot { it.id == id }
             onDeleteId(id)
-        }
-    }
-
-
-    fun moveFloatingApp(
-        appId: Int,
-        dxPx: Float,
-        dyPx: Float,
-        snap: Boolean,
-        snapScale: Float = cellSizePx
-    ) {
-
-        updateApp(appId) { app ->
-            var newX = app.x + dxPx / screenWidth
-            var newY = app.y + dyPx / screenHeight
-
-            if (snap) {
-                val snapX = snapScale / screenWidth
-                val snapY = snapScale / screenHeight
-                newX = (newX / snapX).roundToInt() * snapX
-                newY = (newY / snapY).roundToInt() * snapY
-            }
-
-            app.copy(
-                x = newX,
-                y = newY
-            )
-        }
-    }
-
-
-    fun rotateFloatingApp(id: Int, newAngle: Float, snap: Boolean) {
-        updateApp(id) { app ->
-
-            val snapped = if (snap) {
-                (newAngle / 15f).roundToInt() * 15f
-            } else newAngle
-
-            app.copy(angle = snapped)
         }
     }
 
@@ -135,8 +109,8 @@ class FloatingAppsViewModel(
     fun centerFloatingApp(appId: Int) {
 
         updateApp(appId) { app ->
-            val floatingAppWidthPx = app.spanX * cellSizePx
-            val floatingAppHeightPx = app.spanY * cellSizePx
+            val floatingAppWidthPx = app.spanX * cellSizePx.value
+            val floatingAppHeightPx = app.spanY * cellSizePx.value
 
             val centerXPx = (screenWidth - floatingAppWidthPx) / 2f
             val centerYPx = (screenHeight - floatingAppHeightPx) / 2f
@@ -155,76 +129,6 @@ class FloatingAppsViewModel(
                 spanX = calculateSpanX(info?.minWidth?.toFloat()),
                 spanY = calculateSpanY(info?.minHeight?.toFloat()),
                 angle = 0f
-            )
-        }
-    }
-
-    /**
-     * Resizes a floatingApp while compensating position to maintain visual anchor point.
-     * Left/Top resize moves position opposite to drag direction so visual edge stays fixed.
-     * Optionally snaps the floatingApp's span to a given scale.
-     *
-     * @param appId ID of floatingApp to resize
-     * @param corner Resize corner/handle being dragged
-     * @param dxPx Horizontal drag delta in pixels
-     * @param dyPx Vertical drag delta in pixels
-     * @param snap If true, snap the floatingApp's width/height to multiples of snapScale
-     * @param snapScale Scale in pixels for snapping (default 10px)
-     */
-    fun resizeFloatingApp(
-        appId: Int,
-        corner: ResizeCorner,
-        dxPx: Float,
-        dyPx: Float,
-        snap: Boolean,
-        snapScale: Float = cellSizePx
-    ) {
-        updateApp(appId) { app ->
-
-            val deltaSpanX = dxPx / cellSizePx
-            val deltaSpanY = dyPx / cellSizePx
-            val deltaPosX = dxPx / screenWidth
-            val deltaPosY = dyPx / screenHeight
-
-            var newSpanX = app.spanX
-            var newSpanY = app.spanY
-            var posDeltaX = 0f
-            var posDeltaY = 0f
-
-            when (corner) {
-                ResizeCorner.Left -> {
-                    newSpanX = (app.spanX - deltaSpanX).coerceAtLeast(minSize)
-                    posDeltaX = deltaPosX  // Compensate position to keep left edge fixed
-                }
-
-                ResizeCorner.Right -> {
-                    newSpanX = (app.spanX + deltaSpanX).coerceAtLeast(minSize)
-                    // Right edge extends naturally
-                }
-
-                ResizeCorner.Top -> {
-                    newSpanY = (app.spanY - deltaSpanY).coerceAtLeast(minSize)
-                    posDeltaY = deltaPosY  // Compensate position to keep top edge fixed
-                }
-
-                ResizeCorner.Bottom -> {
-                    newSpanY = (app.spanY + deltaSpanY).coerceAtLeast(minSize)
-                    // Bottom edge extends naturally
-                }
-            }
-
-            if (snap) {
-                val snapX = snapScale / cellSizePx
-                val snapY = snapScale / cellSizePx
-                newSpanX = (newSpanX / snapX).roundToInt() * snapX
-                newSpanY = (newSpanY / snapY).roundToInt() * snapY
-            }
-
-            app.copy(
-                spanX = newSpanX,
-                spanY = newSpanY,
-                x = app.x + posDeltaX,
-                y = app.y + posDeltaY
             )
         }
     }
@@ -254,6 +158,18 @@ class FloatingAppsViewModel(
 
         viewModelScope.launch {
             WidgetsSettingsStore.resetAll(ctx)
+        }
+    }
+
+    fun updateCellSize(newCellSize: Int?) {
+        newCellSize?.let {
+            _cellSizeDp.value = newCellSize.coerceAtLeast(1)
+        } ?: run {
+            _cellSizeDp.value = 30
+        }
+
+        viewModelScope.launch {
+            UiSettingsStore.cellSizeDp.set(ctx, newCellSize)
         }
     }
 
