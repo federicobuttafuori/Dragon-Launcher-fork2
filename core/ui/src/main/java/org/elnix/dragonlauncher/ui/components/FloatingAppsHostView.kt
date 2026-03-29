@@ -6,13 +6,16 @@ import android.appwidget.AppWidgetManager
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.center
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -21,8 +24,12 @@ import androidx.compose.ui.viewinterop.AndroidView
 import org.elnix.dragonlauncher.common.serializables.FloatingAppObject
 import org.elnix.dragonlauncher.common.serializables.IconShape
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
+import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
 import org.elnix.dragonlauncher.common.utils.resolveShape
 import org.elnix.dragonlauncher.ui.actions.ActionIcon
+import org.elnix.dragonlauncher.ui.helpers.nests.actionsInCircle
+import org.elnix.dragonlauncher.ui.helpers.nests.swipeDefaultParams
+import org.elnix.dragonlauncher.ui.modifiers.conditional
 import org.elnix.dragonlauncher.ui.widgets.LauncherWidgetHolder
 import kotlin.math.min
 
@@ -55,7 +62,7 @@ fun FloatingAppsHostView(
 
         // Apply size options when span changes
         DisposableEffect(floatingAppObject.spanX, floatingAppObject.spanY) {
-            val widthDp =  (floatingAppObject.spanX * cellSizePx / density).toInt()
+            val widthDp = (floatingAppObject.spanX * cellSizePx / density).toInt()
             val heightDp = (floatingAppObject.spanY * cellSizePx / density).toInt()
 
             val options = Bundle().apply {
@@ -96,17 +103,49 @@ fun FloatingAppsHostView(
             }
         )
     } else {
-        val size = min((floatingAppObject.spanX * cellSizePx), (floatingAppObject.spanY * cellSizePx)).toInt()
+        val sizePx = min((floatingAppObject.spanX * cellSizePx), (floatingAppObject.spanY * cellSizePx)).toInt()
 
-        ActionIcon(
-            action = floatingAppObject.action,
-            modifier = modifier
-                .fillMaxSize()
-                .clip(floatingAppObject.shape.resolveShape(default = IconShape.Square))
-                .let { mod ->
-                    if (blockTouches) { mod } else { mod.clickable{ onLaunchAction() } }
-                },
-            size = size
-        )
+        if (floatingAppObject.action !is SwipeActionSerializable.OpenCircleNest) {
+            ActionIcon(
+                action = floatingAppObject.action,
+                modifier = modifier
+                    .fillMaxSize()
+                    .clip(floatingAppObject.shape.resolveShape(default = IconShape.Square))
+                    .conditional(!blockTouches) {
+                        clickable { onLaunchAction() }
+                    },
+                size = sizePx
+            )
+        } else {
+
+            val sizeDp = with(LocalDensity.current) { sizePx.toDp() }
+            val drawParams = swipeDefaultParams()
+
+            val editPoint = SwipePointSerializable(
+                circleNumber = 0,
+                angleDeg = 0.0,
+                action = SwipeActionSerializable.OpenCircleNest((floatingAppObject.action as SwipeActionSerializable.OpenCircleNest).nestId),
+                id = ""
+            )
+
+            Canvas(
+                modifier = modifier
+                    .size(sizeDp)
+                    .clip(floatingAppObject.shape.resolveShape(default = IconShape.Square))
+                    .conditional(!blockTouches) {
+                        clickable { onLaunchAction() }
+                    },
+            ) {
+                val center = this.size.center
+
+                actionsInCircle(
+                    selected = false,
+                    point = editPoint,
+                    center = center,
+                    depth = 1,
+                    drawParams = drawParams
+                )
+            }
+        }
     }
 }
