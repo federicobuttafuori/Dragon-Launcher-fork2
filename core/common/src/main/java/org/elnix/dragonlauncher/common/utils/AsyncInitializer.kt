@@ -16,12 +16,12 @@ object AsyncInitializer {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val _isInitialized = MutableStateFlow(false)
 
-    fun init(context: Context) {
+    fun init(ctx: Context) {
         scope.launch {
             val startTime = System.currentTimeMillis()
 
             // 1. Logging (Critical but fast)
-            DragonLogManager.init(context)
+            DragonLogManager.init(ctx)
             Timber.d("AsyncInitializer: DragonLogManager initialized")
 
             // 2. Add other non-critical heavy initializations here

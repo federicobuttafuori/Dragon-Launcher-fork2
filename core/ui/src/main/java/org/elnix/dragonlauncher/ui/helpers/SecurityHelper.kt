@@ -64,8 +64,8 @@ object SecurityHelper {
     /**
      * Checks if device unlock (biometric or device credentials) is available.
      */
-    fun isDeviceUnlockAvailable(context: Context): Boolean {
-        val biometricManager = BiometricManager.from(context)
+    fun isDeviceUnlockAvailable(ctx: Context): Boolean {
+        val biometricManager = BiometricManager.from(ctx)
 
         logD(SECURITY_HELPER) { "Checking device unlock availability, SDK=${Build.VERSION.SDK_INT}" }
 
@@ -89,7 +89,7 @@ object SecurityHelper {
         if (canAuthWeak == BiometricManager.BIOMETRIC_SUCCESS) return true
 
         // Final fallback: check if a screen lock (PIN/pattern/password) is set
-        val keyguardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+        val keyguardManager = ctx.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
         val isDeviceSecure = keyguardManager.isDeviceSecure
         logD(SECURITY_HELPER) { "KeyguardManager.isDeviceSecure = $isDeviceSecure" }
         return isDeviceSecure

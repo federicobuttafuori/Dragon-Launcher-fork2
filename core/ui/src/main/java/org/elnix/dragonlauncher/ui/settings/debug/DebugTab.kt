@@ -162,6 +162,16 @@ fun DebugTab(
                 ) {
                     Text(text = "Edit ALL app overrides \uD83D\uDE08")
                 }
+
+                DragonButton(
+                    onClick = {
+                        @Suppress("DIVISION_BY_ZERO")
+                        val a = 5 / 0
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "What is 5 / 0? \uD83E\uDD2F")
+                }
             }
         }
 

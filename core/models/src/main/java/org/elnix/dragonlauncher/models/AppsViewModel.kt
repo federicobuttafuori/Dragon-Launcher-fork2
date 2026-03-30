@@ -651,11 +651,7 @@ class AppsViewModel(
     }
 
 
-    private val _density = MutableStateFlow<Density?>(null)
-
-    fun cacheDensity(density: Density) {
-        _density.value = density
-    }
+    private val _density = Density(ctx.resources.displayMetrics.density)
 
     private val _iconShape = MutableStateFlow<IconShape?>(null)
 
@@ -708,8 +704,8 @@ class AppsViewModel(
             base = base,
             icon = customIcon,
             sizePx = sizePx,
-            density = _density.value!!,
-            iconShape = _iconShape.value!!,
+            density = _density,
+            iconShape = _iconShape.value ?: IconShape.Circle,
         )
     }
 
@@ -750,7 +746,7 @@ class AppsViewModel(
         )
 
         // Convert dp to pixels and enforce a minimum touch-safe size.
-        val sizePx = (resolvedSizeDp * _density.value!!.density)
+        val sizePx = (resolvedSizeDp * _density.density)
             .toInt()
             .coerceAtLeast(48)
 

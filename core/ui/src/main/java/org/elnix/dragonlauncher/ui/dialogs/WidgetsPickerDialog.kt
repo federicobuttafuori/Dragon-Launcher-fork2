@@ -275,7 +275,7 @@ private fun WidgetPreviewImage(
 @SuppressLint("UseCompatLoadingForDrawables")
 fun loadWidgetPreview(
     provider: AppWidgetProviderInfo,
-    context: Context
+    ctx: Context
 ): Bitmap? {
     try {
         val widgetPackage = provider.provider.packageName
@@ -291,7 +291,7 @@ fun loadWidgetPreview(
 
         if (provider.previewImage == 0) return null
 
-        val widgetContext = context.createPackageContext(widgetPackage, 0)
+        val widgetContext = ctx.createPackageContext(widgetPackage, 0)
         val widgetResources = widgetContext.resources
 
         // Try to load via direct access first (fastest)

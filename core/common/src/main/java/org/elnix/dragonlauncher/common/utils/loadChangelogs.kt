@@ -9,11 +9,11 @@ import java.util.Date
 import java.util.Locale
 
 suspend fun loadChangelogs(
-    context: Context,
+    ctx: Context,
     currentVersionCode: Int
 ): List<Update> = withContext(Dispatchers.IO) {
 
-    val am = context.assets
+    val am = ctx.assets
     val changelogDir = "changelogs"
     val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
 

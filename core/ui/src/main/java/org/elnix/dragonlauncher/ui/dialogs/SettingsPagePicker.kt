@@ -18,9 +18,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.elnix.dragonlauncher.common.R
+import org.elnix.dragonlauncher.common.utils.UiConstants.DragonShape
 import org.elnix.dragonlauncher.enumsui.routeName
 import org.elnix.dragonlauncher.enumsui.settingsRoutes
-import org.elnix.dragonlauncher.common.utils.UiConstants.DragonShape
 
 @Composable
 fun SettingsPagePicker(
@@ -34,7 +34,6 @@ fun SettingsPagePicker(
         onDismissRequest = onDismissRequest,
         alignment = Alignment.Center,
         scroll = false,
-        confirmButton = {},
         title = {
             Text(
                 text = stringResource(R.string.pick_a_settings_screen),

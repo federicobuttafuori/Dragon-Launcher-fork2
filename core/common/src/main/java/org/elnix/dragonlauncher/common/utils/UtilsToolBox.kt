@@ -79,10 +79,10 @@ fun detectSystemLauncher(ctx: Context): String? {
 
 
 
-fun hasUsageStatsPermission(context: Context): Boolean {
-    val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+fun hasUsageStatsPermission(ctx: Context): Boolean {
+    val appOps = ctx.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
     val uid = Process.myUid()
-    val pkg = context.packageName
+    val pkg = ctx.packageName
 
     val mode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         appOps.unsafeCheckOpNoThrow(
@@ -100,4 +100,13 @@ fun hasUsageStatsPermission(context: Context): Boolean {
     }
 
     return mode == AppOpsManager.MODE_ALLOWED
+}
+
+
+
+fun restartApp(ctx: Context) {
+    val intent = ctx.packageManager.getLaunchIntentForPackage(ctx.packageName)?.apply {
+        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+    } ?: return
+    ctx.startActivity(intent)
 }

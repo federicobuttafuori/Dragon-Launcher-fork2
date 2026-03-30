@@ -9,11 +9,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.graphics.createBitmap
 
-class WallpaperHelper(private val context: Context) {
+class WallpaperHelper(private val ctx: Context) {
 
     fun setWallpaper(bitmap: Bitmap, flags: Int = WallpaperManager.FLAG_SYSTEM): Boolean {
         return try {
-            val wallpaperManager = WallpaperManager.getInstance(context)
+            val wallpaperManager = WallpaperManager.getInstance(ctx)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 if (flags and WallpaperManager.FLAG_SYSTEM != 0) {

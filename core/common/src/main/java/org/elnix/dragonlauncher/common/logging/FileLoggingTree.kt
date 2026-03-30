@@ -16,9 +16,9 @@ import java.util.Date
 import java.util.Locale
 import java.util.concurrent.ConcurrentLinkedQueue
 
-class FileLoggingTree(context: Context) : Timber.Tree() {
+class FileLoggingTree(ctx: Context) : Timber.Tree() {
 
-    private val logDir = File(context.filesDir, "logs").apply { if (!exists()) mkdirs() }
+    private val logDir = File(ctx.filesDir, "logs").apply { if (!exists()) mkdirs() }
     private val logQueue = ConcurrentLinkedQueue<String>()
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private var currentSessionFile: File? = null
@@ -39,13 +39,13 @@ class FileLoggingTree(context: Context) : Timber.Tree() {
 
     private fun cleanOldLogs() {
         val files = logDir.listFiles()?.filter { it.name.startsWith("dragon_logs_") } ?: return
-        if (files.size > 5) { // Garder seulement les 5 derniers fichiers
+        if (files.size > 5) {
             files.sortedBy { it.lastModified() }.dropLast(5).forEach { it.delete() }
         }
     }
 
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-        if (priority < Log.INFO) return // Ignorer les logs trop verbeux en fichier
+        if (priority < Log.INFO) return
 
         val timestamp = dateFormatter.format(Date())
         val priorityStr = when (priority) {

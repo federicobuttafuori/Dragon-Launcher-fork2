@@ -67,7 +67,6 @@ fun NestManagementDialog(
         onDismissRequest = onDismissRequest,
         alignment = Alignment.Center,
         scroll = false,
-        confirmButton = {},
         title = {
             Text(
                 text = title ?: stringResource(R.string.manage_nests),

@@ -204,6 +204,7 @@ object Constants {
         val HAPTIC_TAG = LogTag("HapticDebug")
         val WELCOME_TAG = LogTag("WelcomeDebug")
         val MAIN_SCREEN_LAYERS_TAG = LogTag("MainScreenLayersTag")
+        val CRASH_TAG = LogTag("CrashDebug")
     }
 
     /*  ─────────────  Links  ─────────────  */

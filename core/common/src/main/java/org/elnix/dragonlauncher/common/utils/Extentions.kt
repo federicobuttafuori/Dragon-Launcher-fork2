@@ -154,7 +154,7 @@ fun Context.openSearch(query: String) {
 }
 
 //@SuppressLint("WrongConstant")
-fun expandQuickActionsDrawer(context: Context) {
+fun expandQuickActionsDrawer(ctx: Context) {
     try {
         //  (Android 12+)
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -164,7 +164,7 @@ fun expandQuickActionsDrawer(context: Context) {
 //        }
 
         // Fall back -> reflection for older versions
-        val statusBarService = context.getSystemService("statusbar")
+        val statusBarService = ctx.getSystemService("statusbar")
         val statusBarManager = Class.forName("android.app.StatusBarManager")
         val method = statusBarManager.getMethod("expandNotificationsPanel")
         method.invoke(statusBarService)
@@ -172,7 +172,7 @@ fun expandQuickActionsDrawer(context: Context) {
         // If all else fails, try to use the notification intent
         try {
             val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
-            context.startActivity(intent)
+            ctx.startActivity(intent)
         } catch (e2: Exception) {
             e2.printStackTrace()
         }

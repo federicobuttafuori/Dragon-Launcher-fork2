@@ -137,10 +137,7 @@ fun IconPickerListDialog(
                     LoadingIndicator()
                 }
             }
-        },
-        confirmButton = {},
-        containerColor = MaterialTheme.colorScheme.surface,
-        shape = DragonShape
+        }
     )
 }
 

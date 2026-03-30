@@ -156,13 +156,10 @@ fun <T> ActionSelector(
     onDismiss: () -> Unit,
 ) {
     val textColor = MaterialTheme.colorScheme.onSurface
-    val surfaceColor = MaterialTheme.colorScheme.surface
 
     if (visible) {
         CustomAlertDialog(
-            onDismissRequest = { onDismiss() },
-            confirmButton = {},
-            dismissButton = {},
+            onDismissRequest = onDismiss,
             title = {
                 if (label != null) {
                     Text(
@@ -206,9 +203,7 @@ fun <T> ActionSelector(
                         }
                     }
                 }
-            },
-            containerColor = surfaceColor,
-            shape = DragonShape
+            }
         )
     }
 }

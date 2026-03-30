@@ -21,7 +21,7 @@ import java.lang.ref.WeakReference
  * A robust wrapper for AppWidgetHost, inspired by Lawnchair's LauncherWidgetHolder.
  * Provides better lifecycle management and view recycling.
  */
-class LauncherWidgetHolder(private val context: Context) : DefaultLifecycleObserver {
+class LauncherWidgetHolder(private val ctx: Context) : DefaultLifecycleObserver {
 
     companion object {
         private const val HOST_ID = 1024
@@ -30,21 +30,21 @@ class LauncherWidgetHolder(private val context: Context) : DefaultLifecycleObser
         @Volatile
         private var instance: LauncherWidgetHolder? = null
 
-        fun getInstance(context: Context): LauncherWidgetHolder {
+        fun getInstance(ctx: Context): LauncherWidgetHolder {
             return instance ?: synchronized(this) {
-                instance ?: LauncherWidgetHolder(context.applicationContext).also { instance = it }
+                instance ?: LauncherWidgetHolder(ctx.applicationContext).also { instance = it }
             }
         }
     }
 
-    private val appWidgetManager = AppWidgetManager.getInstance(context)
-    private val appWidgetHost = object : AppWidgetHost(context, HOST_ID) {
+    private val appWidgetManager = AppWidgetManager.getInstance(ctx)
+    private val appWidgetHost = object : AppWidgetHost(ctx, HOST_ID) {
         override fun onCreateView(
-            context: Context,
+            ctx: Context,
             appWidgetId: Int,
             appWidget: AppWidgetProviderInfo?
         ): AppWidgetHostView {
-            return DragonAppWidgetHostView(context)
+            return DragonAppWidgetHostView(ctx)
         }
     }
 
@@ -108,7 +108,7 @@ class LauncherWidgetHolder(private val context: Context) : DefaultLifecycleObser
 
     fun createView(appWidgetId: Int, info: AppWidgetProviderInfo): AppWidgetHostView {
         logD(WIDGET_TAG) { "DRAGON_WIDGET: Creating view for ID $appWidgetId (Provider: ${info.provider})" }
-        val view = appWidgetHost.createView(context, appWidgetId, info)
+        val view = appWidgetHost.createView(ctx, appWidgetId, info)
         views.put(appWidgetId, WeakReference(view))
         return view
     }
@@ -126,7 +126,7 @@ class LauncherWidgetHolder(private val context: Context) : DefaultLifecycleObser
     /**
      * Custom AppWidgetHostView that handles common launcher requirements.
      */
-    class DragonAppWidgetHostView(context: Context) : AppWidgetHostView(context) {
+    class DragonAppWidgetHostView(ctx: Context) : AppWidgetHostView(ctx) {
         override fun getErrorView(): android.view.View {
             // Can be customized to show a "Lawnchair-style" error layout
             return super.getErrorView()

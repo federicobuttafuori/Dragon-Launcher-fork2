@@ -63,7 +63,7 @@
     </queries>
 
     <application
-        android:name=".MyApplication"
+        android:name=".DragonLauncherApplication"
         android:localeConfig="@xml/locales_config"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"

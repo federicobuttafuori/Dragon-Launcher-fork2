@@ -80,14 +80,25 @@ object PrivateSettingsStore : MapSettingsStore() {
         allowedRange = 0..6,
     )
 
+
+
+    val lastCrashStackTrace = Settings.string(
+        key = "lastCrashStackTrace",
+        dataStoreName = dataStoreName,
+        default = ""
+    )
+
     override val ALL: List<BaseSettingObject<*,*>> = listOf(
         this.hasSeenWelcome,
         this.hasInitialized,
         this.showSetDefaultLauncherBanner,
         this.lastSeenVersionCodeWhatsNew,
+        this.lastSeenVersionCodeGoogleLockdownWarning,
         this.lockPinHash,
         this.lockMethod,
         this.samsungPreferSecureFolder,
-        this.lastBackupTime
+        this.lastBackupTime,
+        this.welcomeScreenTempPage,
+        this.lastCrashStackTrace
     )
 }

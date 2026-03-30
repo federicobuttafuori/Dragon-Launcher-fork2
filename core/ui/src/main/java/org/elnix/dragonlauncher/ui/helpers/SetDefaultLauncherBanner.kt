@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.settings.stores.PrivateSettingsStore
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
 import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
 
 
@@ -46,13 +45,13 @@ fun SetDefaultLauncherBanner() {
             color = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.weight(1f)
         )
+
         DragonIconButton(
             onClick = {
                 scope.launch { PrivateSettingsStore.showSetDefaultLauncherBanner.set(ctx, false) }
             },
             imageVector = Icons.Default.Close,
-            contentDescription = stringResource(R.string.close),
-            colors = AppObjectsColors.errorIconButtonColors()
+            contentDescription = stringResource(R.string.close)
         )
     }
 }

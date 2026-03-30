@@ -61,6 +61,7 @@ import org.elnix.dragonlauncher.ui.helpers.settings.SettingItemWithExternalOpen
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsItem
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
 import org.elnix.dragonlauncher.ui.remembers.LocalBackupViewModel
+import org.elnix.dragonlauncher.ui.remembers.rememberSettingsExportLauncher
 import org.elnix.dragonlauncher.ui.remembers.rememberSettingsImportLauncher
 import org.json.JSONObject
 
@@ -69,9 +70,9 @@ import org.json.JSONObject
 @Composable
 fun BackupTab(onBack: () -> Unit) {
     val ctx = LocalContext.current
+    val scope = rememberCoroutineScope()
     val backupViewModel = LocalBackupViewModel.current
 
-    val scope = rememberCoroutineScope()
 
     val autoBackupEnabled by BackupSettingsStore.autoBackupEnabled.asState()
     val autoBackupUriString by BackupSettingsStore.autoBackupUri.asState()
@@ -94,68 +95,10 @@ fun BackupTab(onBack: () -> Unit) {
     var showImportDialog by remember { mutableStateOf(false) }
     var showExportDialog by remember { mutableStateOf(false) }
 
-    // ───────────────────────────────────────
-    // SETTINGS EXPORT LAUNCHER
-    // ───────────────────────────────────────
-    val settingsExportLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
-            if (uri == null) {
-                backupViewModel.setResult(
-                    BackupResult(
-                        export = true,
-                        error = true,
-                        title = ctx.getString(R.string.export_cancelled)
-                    )
-                )
-                return@rememberLauncherForActivityResult
-            }
 
-            scope.launch {
-                try {
-                    SettingsBackupManager.exportSettings(ctx, uri, selectedStoresForExport)
-                    backupViewModel.setResult(
-                        BackupResult(
-                            export = true,
-                            error = false,
-                            title = ctx.getString(R.string.export_successful)
-                        )
-                    )
-                } catch (e: Exception) {
-                    backupViewModel.setResult(
-                        BackupResult(
-                            export = true,
-                            error = true,
-                            title = ctx.getString(R.string.export_failed),
-                            message = e.message ?: ""
-                        )
-                    )
-                }
-            }
-        }
-
+    val settingsExportLauncher = rememberSettingsExportLauncher(selectedStoresForExport)
 
     val settingsImportLauncher = rememberSettingsImportLauncher(
-        ctx = ctx,
-        scope = scope,
-        onCancel = {
-            backupViewModel.setResult(
-                BackupResult(
-                    export = false,
-                    error = true,
-                    title = ctx.getString(R.string.import_cancelled)
-                )
-            )
-        },
-        onError = { msg ->
-            backupViewModel.setResult(
-                BackupResult(
-                    export = false,
-                    error = true,
-                    title = ctx.getString(R.string.import_failed),
-                    message = msg
-                )
-            )
-        },
         onJsonReady = { json ->
             importJson = json
             showImportDialog = true

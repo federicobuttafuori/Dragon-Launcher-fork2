@@ -785,7 +785,7 @@ fun FontRow(
     }
 }
 
-fun fontNameToFont(name: String, context: Context? = null): FontFamily {
+fun fontNameToFont(name: String, ctx: Context? = null): FontFamily {
     val cleanName = name.substringBefore(" (")
     val base = when (cleanName) {
         "Serif" -> FontFamily.Serif
@@ -796,9 +796,9 @@ fun fontNameToFont(name: String, context: Context? = null): FontFamily {
         else -> null
     }
     if (base != null) return base
-    if (context != null) {
+    if (ctx != null) {
         try {
-            val extDir = File(context.getExternalFilesDir(null), "fonts")
+            val extDir = File(ctx.getExternalFilesDir(null), "fonts")
             val ttf = File(extDir, "$cleanName.ttf")
             val otf = File(extDir, "$cleanName.otf")
             val fontFile = when {

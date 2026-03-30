@@ -427,8 +427,7 @@ fun IconEditorDialog(
                     ) { showShapePickerDialog = true }
                 }
             }
-        },
-        containerColor = MaterialTheme.colorScheme.surface
+        }
     )
 
     if (showIconPackPicker) {

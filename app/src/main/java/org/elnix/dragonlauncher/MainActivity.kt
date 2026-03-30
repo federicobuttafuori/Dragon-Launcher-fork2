@@ -25,8 +25,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -41,6 +41,7 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.yield
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.logging.logD
@@ -49,6 +50,7 @@ import org.elnix.dragonlauncher.common.logging.logI
 import org.elnix.dragonlauncher.common.logging.logW
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
+import org.elnix.dragonlauncher.common.utils.AsyncInitializer
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.FONT_RECEIVER_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.PRIVATE_SPACE_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.STARTUP_TAG
@@ -73,6 +75,7 @@ import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
 import org.elnix.dragonlauncher.ui.MainAppUi
 import org.elnix.dragonlauncher.ui.components.settings.asState
 import org.elnix.dragonlauncher.ui.components.settings.asStateNull
+import org.elnix.dragonlauncher.ui.dialogs.CrashDialog
 import org.elnix.dragonlauncher.ui.remembers.LocalAppLifecycleViewModel
 import org.elnix.dragonlauncher.ui.remembers.LocalAppsViewModel
 import org.elnix.dragonlauncher.ui.remembers.LocalBackupViewModel
@@ -359,7 +362,7 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
         logI(STARTUP_TAG) { "MainActivity.onCreate started" }
 
         // Initialize logging & other background tasks asynchronously
-        org.elnix.dragonlauncher.common.utils.AsyncInitializer.init(this)
+        AsyncInitializer.init(this)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerReceiver(packageReceiver, filter, RECEIVER_EXPORTED)
@@ -384,11 +387,10 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
             logI(STARTUP_TAG) {
                 "First frame rendered in ${System.currentTimeMillis() - startTime}ms. Starting AppsViewModel.loadAll()."
             }
-            (applicationContext as MyApplication).appsViewModel.loadAll()
+            (applicationContext as DragonLauncherApplication).appsViewModel.loadAll()
             logI(STARTUP_TAG) {
                 "AppsViewModel.loadAll() finished at ${System.currentTimeMillis() - startTime}ms total."
             }
-
 
 
             // All stores excepted private, cause it triggers updates constantly since it updates the last backup time
@@ -402,6 +404,12 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
             }
         }
 
+
+        var lastStackTrace by mutableStateOf(runBlocking {
+            PrivateSettingsStore.lastCrashStackTrace.getOrNull(this@MainActivity)
+        })
+
+
         setContent {
             val ctx = LocalContext.current
 
@@ -409,11 +417,8 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
             val lifecycleOwner = LocalLifecycleOwner.current
 
             val appsViewModel = remember(ctx) {
-                (ctx.applicationContext as MyApplication).appsViewModel
+                (ctx.applicationContext as DragonLauncherApplication).appsViewModel
             }
-
-            // Used internally by the app view model
-            appsViewModel.cacheDensity(LocalDensity.current)
 
             // May be used in the future for some quit action / operation
             // DoubleBackToExit()
@@ -472,14 +477,14 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
 
                     logI(PRIVATE_SPACE_TAG) { "Loading Samsung preference: $samsungPreferSecureFolder" }
                     val useSecureFolder = SamsungWorkspaceIntegration.resolveUseSecureFolder(
-                        context = ctx,
+                        ctx = ctx,
                         preferenceEnabled = samsungPreferSecureFolder
                     )
                     logI(PRIVATE_SPACE_TAG) { "Using system: ${if (useSecureFolder) "Secure Folder" else "Private Space"}" }
 
                     if (useSecureFolder) {
                         SamsungWorkspaceIntegration.openSecureFolder(
-                            context = ctx,
+                            ctx = ctx,
                             onFallback = openPrivateSpace
                         )
                     } else {
@@ -550,26 +555,38 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
                 navControllerHolder.value = navController
 
 
-                CompositionLocalProvider(
-                    LocalAppsViewModel provides appsViewModel,
-                    LocalAppLifecycleViewModel provides appLifecycleViewModel,
-                    LocalBackupViewModel provides backupViewModel,
-                    LocalFloatingAppsViewModel provides floatingAppsViewModel
-                ) {
-                    MainAppUi(
-                        navController = navController,
-                        onBindCustomWidget = { widgetId, provider, nestId ->
-                            pendingAddNestId = nestId
-                            (ctx as MainActivity).bindWidgetFromCustomPicker(widgetId, provider)
-                        },
-                        onResetWidgetSize = { id, widgetId ->
-                            val info = appWidgetManager.getAppWidgetInfo(widgetId)
-                            floatingAppsViewModel.resetFloatingAppSize(id, info)
-                        },
-                        onRemoveFloatingApp = { floatingAppObject ->
-                            floatingAppsViewModel.removeFloatingApp(floatingAppObject.id) {
-                                (ctx as MainActivity).deleteWidget(it)
+                if (lastStackTrace.isNullOrBlank()) {
+                    CompositionLocalProvider(
+                        LocalBackupViewModel provides backupViewModel,
+                        LocalAppsViewModel provides appsViewModel,
+                        LocalAppLifecycleViewModel provides appLifecycleViewModel,
+                        LocalFloatingAppsViewModel provides floatingAppsViewModel
+                    ) {
+                        MainAppUi(
+                            navController = navController,
+                            onBindCustomWidget = { widgetId, provider, nestId ->
+                                pendingAddNestId = nestId
+                                (ctx as MainActivity).bindWidgetFromCustomPicker(widgetId, provider)
+                            },
+                            onResetWidgetSize = { id, widgetId ->
+                                val info = appWidgetManager.getAppWidgetInfo(widgetId)
+                                floatingAppsViewModel.resetFloatingAppSize(id, info)
+                            },
+                            onRemoveFloatingApp = { floatingAppObject ->
+                                floatingAppsViewModel.removeFloatingApp(floatingAppObject.id) {
+                                    (ctx as MainActivity).deleteWidget(it)
+                                }
                             }
+                        )
+                    }
+                } else {
+                    CrashDialog(
+                        stackTrace = lastStackTrace ?: "Unable to recover last stackTrace",
+                        onDismiss = {
+                            scope.launch {
+                                PrivateSettingsStore.lastCrashStackTrace.reset(ctx)
+                            }
+                            lastStackTrace = null
                         }
                     )
                 }

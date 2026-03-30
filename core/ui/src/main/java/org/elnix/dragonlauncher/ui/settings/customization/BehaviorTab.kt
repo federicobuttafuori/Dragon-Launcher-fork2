@@ -584,16 +584,15 @@ fun BehaviorTab(
                         }
                     }
                 }
-            },
-            confirmButton = {}
+            }
         )
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-private fun openSystemLanguageSettings(context: Context) {
+private fun openSystemLanguageSettings(ctx: Context) {
     val intent = Intent(Settings.ACTION_APP_LOCALE_SETTINGS).apply {
-        data = Uri.fromParts("package", context.packageName, null)
+        data = Uri.fromParts("package", ctx.packageName, null)
     }
-    context.startActivity(intent)
+    ctx.startActivity(intent)
 }

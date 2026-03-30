@@ -477,8 +477,7 @@ fun EditPointDialog(
                     }
                 }
             }
-        },
-        containerColor = MaterialTheme.colorScheme.surface
+        }
     )
 
 

@@ -65,7 +65,7 @@ fun ChargingAnimation(
         }
 
         val receiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
+            override fun onReceive(ctx: Context?, intent: Intent?) {
                 scope.launch {
                     update(intent, false)
                 }

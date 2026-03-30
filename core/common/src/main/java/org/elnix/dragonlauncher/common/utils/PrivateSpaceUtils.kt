@@ -33,12 +33,12 @@ object PrivateSpaceUtils {
      * Returns null if Private Space is not available or not set up.
      */
     @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
-    fun getPrivateSpaceUserHandle(context: Context): UserHandle? {
+    fun getPrivateSpaceUserHandle(ctx: Context): UserHandle? {
         if (!isPrivateSpaceSupported()) return null
 
         try {
-            val userManager = context.getSystemService(Context.USER_SERVICE) as UserManager
-            val launcherApps = context.getSystemService(LauncherApps::class.java) ?: return null
+            val userManager = ctx.getSystemService(Context.USER_SERVICE) as UserManager
+            val launcherApps = ctx.getSystemService(LauncherApps::class.java) ?: return null
 
             val userProfiles = userManager.userProfiles
 
@@ -69,11 +69,11 @@ object PrivateSpaceUtils {
      * Returns null if Private Space is not available.
      */
     @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
-    fun isPrivateSpaceLocked(context: Context): Boolean? {
-        val privateUserHandle = getPrivateSpaceUserHandle(context) ?: return null
+    fun isPrivateSpaceLocked(ctx: Context): Boolean? {
+        val privateUserHandle = getPrivateSpaceUserHandle(ctx) ?: return null
 
         try {
-            val userManager = context.getSystemService(Context.USER_SERVICE) as UserManager
+            val userManager = ctx.getSystemService(Context.USER_SERVICE) as UserManager
             val isLocked = userManager.isQuietModeEnabled(privateUserHandle)
             logD(PRIVATE_SPACE_UTILS) { "Private Space locked status: $isLocked" }
             return isLocked

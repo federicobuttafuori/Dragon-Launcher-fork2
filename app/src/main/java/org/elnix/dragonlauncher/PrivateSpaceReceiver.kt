@@ -33,7 +33,7 @@ class PrivateSpaceReceiver : BroadcastReceiver() {
         }
 
         val pendingResult = goAsync()
-        val app = context.applicationContext as? MyApplication
+        val app = context.applicationContext as? DragonLauncherApplication
         if (app == null) {
             pendingResult.finish()
             return

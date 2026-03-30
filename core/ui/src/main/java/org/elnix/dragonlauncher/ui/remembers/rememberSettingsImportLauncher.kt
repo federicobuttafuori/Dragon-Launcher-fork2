@@ -1,28 +1,45 @@
 package org.elnix.dragonlauncher.ui.remembers
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
-import kotlinx.coroutines.CoroutineScope
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.logging.logD
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.BACKUP_TAG
+import org.elnix.dragonlauncher.models.BackupResult
 import org.json.JSONObject
 
 @Composable
 fun rememberSettingsImportLauncher(
-    ctx: Context,
-    scope: CoroutineScope,
-    onCancel: () -> Unit,
-    onError: (String) -> Unit,
     onJsonReady: (JSONObject) -> Unit
 ): ManagedActivityResultLauncher<Array<String>, Uri?> {
+    val ctx = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val backupViewModel = LocalBackupViewModel.current
+
+    val importCancelledText = stringResource(R.string.import_cancelled)
+    val importFailedText = stringResource(R.string.import_failed)
+
+
+    fun onError(msg: String) {
+        backupViewModel.setResult(
+            BackupResult(
+                export = false,
+                error = true,
+                title = importFailedText,
+                message = msg
+            )
+        )
+    }
 
     return rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocument()
@@ -31,7 +48,14 @@ fun rememberSettingsImportLauncher(
         logD(BACKUP_TAG) { "File picked: $uri" }
 
         if (uri == null) {
-            onCancel()
+            backupViewModel.setResult(
+                BackupResult(
+                    export = false,
+                    error = true,
+                    title = importCancelledText
+                )
+            )
+
             return@rememberLauncherForActivityResult
         }
 
@@ -58,7 +82,7 @@ fun rememberSettingsImportLauncher(
                 onJsonReady(JSONObject(jsonString))
 
             } catch (e: Exception) {
-                onError("Failed to read backup file")
+                onError("Failed to read backup file: $e")
             }
         }
     }

@@ -409,8 +409,7 @@ fun HapticFeedbackEditor(
                     }
                 }
             }
-        },
-        containerColor = MaterialTheme.colorScheme.surface
+        }
     )
 }
 

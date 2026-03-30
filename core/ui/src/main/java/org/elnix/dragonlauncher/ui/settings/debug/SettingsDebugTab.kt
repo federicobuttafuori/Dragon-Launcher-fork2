@@ -2,16 +2,11 @@
 
 package org.elnix.dragonlauncher.ui.settings.debug
 
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Loop
@@ -26,13 +21,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.utils.copyToClipboard
 import org.elnix.dragonlauncher.settings.allStores
 import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
 import org.elnix.dragonlauncher.ui.dialogs.ExportSettingsDialog
+import org.elnix.dragonlauncher.ui.helpers.MonospaceScrollableText
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
 import org.json.JSONObject
 
@@ -106,20 +101,7 @@ fun SettingsDebugTab(
             }
         },
         content = {
-            LazyColumn {
-                items(jsonLines) { line ->
-                    SelectionContainer {
-                        Text(
-                            text = line,
-                            softWrap = false,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .horizontalScroll(rememberScrollState()),
-                            fontFamily = FontFamily.Monospace
-                        )
-                    }
-                }
-            }
+            MonospaceScrollableText(jsonLines)
         }
     )
     if (showStoresDialog) {

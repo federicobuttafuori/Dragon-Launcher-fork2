@@ -42,7 +42,7 @@ class PackageReceiver : BroadcastReceiver() {
             logI(BROADCAST_TAG) { "Got intent: $intent, action! $action, pkg: $packageName" }
             if (packageName != context.packageName) {
                 try {
-                    val app = context.applicationContext as MyApplication
+                    val app = context.applicationContext as DragonLauncherApplication
                     scope.launch {
                         app.appsViewModel.reloadApps()
 

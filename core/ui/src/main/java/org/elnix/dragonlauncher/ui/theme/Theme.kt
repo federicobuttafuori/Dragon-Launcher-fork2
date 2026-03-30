@@ -24,9 +24,10 @@ import org.elnix.dragonlauncher.enumsui.DefaultThemes.SYSTEM
 import org.elnix.dragonlauncher.settings.stores.ColorModesSettingsStore
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
 import org.elnix.dragonlauncher.ui.components.settings.asState
-import org.elnix.dragonlauncher.ui.settings.customization.fontNameToFont
+import org.elnix.dragonlauncher.ui.remembers.LocalUseCustomColorChannels
 import org.elnix.dragonlauncher.ui.remembers.rememberCustomColorScheme
 import org.elnix.dragonlauncher.ui.remembers.rememberExtraColors
+import org.elnix.dragonlauncher.ui.settings.customization.fontNameToFont
 
 
 @Composable
@@ -75,6 +76,8 @@ fun DragonLauncherTheme(
     val dynamicColor by ColorModesSettingsStore.dynamicColor.asState()
     val defaultTheme by ColorModesSettingsStore.defaultTheme.asState()
     val globalFontName by UiSettingsStore.globalFont.asState()
+    val useCustomColorChannels by UiSettingsStore.useCustomColorChannels.asState()
+
 
     val colorScheme = getDefaultColorScheme(defaultTheme, dynamicColor)
     val extraColors = rememberExtraColors()
@@ -102,6 +105,7 @@ fun DragonLauncherTheme(
 
     CompositionLocalProvider(
         LocalExtraColors provides extraColors,
+        LocalUseCustomColorChannels provides useCustomColorChannels,
     ) {
         MaterialTheme(
             colorScheme = colorScheme,

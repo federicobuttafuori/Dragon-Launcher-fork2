@@ -55,12 +55,12 @@ class DragonNotificationListenerService : NotificationListenerService() {
         /**
          * Returns true if the notification listener permission has been granted for this app.
          */
-        fun isPermissionGranted(context: Context): Boolean {
+        fun isPermissionGranted(ctx: Context): Boolean {
             val flat = Settings.Secure.getString(
-                context.contentResolver,
+                ctx.contentResolver,
                 "enabled_notification_listeners"
             ) ?: return false
-            val cn = ComponentName(context, DragonNotificationListenerService::class.java)
+            val cn = ComponentName(ctx, DragonNotificationListenerService::class.java)
             return flat.split(":").any { ComponentName.unflattenFromString(it) == cn }
         }
 
@@ -68,8 +68,8 @@ class DragonNotificationListenerService : NotificationListenerService() {
          * Opens the system Notification Access settings screen where the user can grant
          * or revoke the notification listener permission for this app.
          */
-        fun openNotificationSettings(context: Context) {
-            context.startActivity(
+        fun openNotificationSettings(ctx: Context) {
+            ctx.startActivity(
                 Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             )

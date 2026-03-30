@@ -166,7 +166,6 @@ fun ColorPickerRow(
                     showPicker = false
                 }
             },
-            containerColor = backgroundColor,
             alignment = Alignment.Center
         )
     }

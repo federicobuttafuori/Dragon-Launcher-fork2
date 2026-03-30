@@ -104,27 +104,6 @@ fun WelcomeScreen(
     var showImportDialog by remember { mutableStateOf(false) }
 
     val settingsImportLauncher = rememberSettingsImportLauncher(
-        ctx = ctx,
-        scope = scope,
-        onCancel = {
-            backupViewModel.setResult(
-                BackupResult(
-                    export = false,
-                    error = true,
-                    title = ctx.getString(R.string.import_cancelled)
-                )
-            )
-        },
-        onError = { msg ->
-            backupViewModel.setResult(
-                BackupResult(
-                    export = false,
-                    error = true,
-                    title = ctx.getString(R.string.import_failed),
-                    message = msg
-                )
-            )
-        },
         onJsonReady = { json ->
             importJson = json
             showImportDialog = true

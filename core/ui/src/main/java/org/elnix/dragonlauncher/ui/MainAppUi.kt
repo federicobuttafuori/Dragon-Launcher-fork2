@@ -98,7 +98,6 @@ import org.elnix.dragonlauncher.settings.stores.HoldToActivateArcSettingsStore
 import org.elnix.dragonlauncher.settings.stores.PrivateSettingsStore
 import org.elnix.dragonlauncher.settings.stores.StatusBarJsonSettingsStore
 import org.elnix.dragonlauncher.settings.stores.SwipeSettingsStore
-import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
 import org.elnix.dragonlauncher.settings.stores.WellbeingSettingsStore
 import org.elnix.dragonlauncher.ui.actions.AppLaunchException
 import org.elnix.dragonlauncher.ui.actions.launchAppDirectly
@@ -136,7 +135,6 @@ import org.elnix.dragonlauncher.ui.remembers.LocalNests
 import org.elnix.dragonlauncher.ui.remembers.LocalPoints
 import org.elnix.dragonlauncher.ui.remembers.LocalStartLineObject
 import org.elnix.dragonlauncher.ui.remembers.LocalStatusBarElements
-import org.elnix.dragonlauncher.ui.remembers.LocalUseCustomColorChannels
 import org.elnix.dragonlauncher.ui.remembers.rememberDecodedObject
 import org.elnix.dragonlauncher.ui.settings.PermissionsTab
 import org.elnix.dragonlauncher.ui.settings.backup.BackupTab
@@ -714,9 +712,7 @@ fun MainAppUi(
         logW(ANGLE_LINE_TAG) { "Error decoding endLineObject" }
     }
 
-    val useCustomColorChannels by UiSettingsStore.useCustomColorChannels.asState()
     val layersOrder by rememberMainScreenLayerOrder()
-
 
     /**
      * Main Composition local provider, I just for everything I can here to avoid having to import them everywhere
@@ -737,7 +733,6 @@ fun MainAppUi(
         LocalEndLineObject provides endLineObject,
         LocalHoldCustomObject provides holdCustomObject,
 
-        LocalUseCustomColorChannels provides useCustomColorChannels,
         LocalMainScreenLayers provides layersOrder
     ) {
         Scaffold(

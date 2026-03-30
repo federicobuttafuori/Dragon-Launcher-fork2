@@ -45,7 +45,6 @@ fun ThemeJsonPopup(
                     }
                 }
             }
-        },
-        confirmButton = {}
+        }
     )
 }

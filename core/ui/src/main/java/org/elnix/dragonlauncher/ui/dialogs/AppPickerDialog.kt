@@ -444,9 +444,6 @@ fun AppPickerDialog(
                     }
                 }
             }
-        },
-        confirmButton = {},
-        containerColor = MaterialTheme.colorScheme.surface,
-        shape = DragonShape
+        }
     )
 }

@@ -24,7 +24,7 @@ class PrivateSpaceUnlockActivity : AppCompatActivity() {
 
             val ctx = LocalContext.current
             val appsViewModel = remember(ctx) {
-                (ctx.applicationContext as MyApplication).appsViewModel
+                (ctx.applicationContext as DragonLauncherApplication).appsViewModel
             }
 
             DragonLauncherTheme {

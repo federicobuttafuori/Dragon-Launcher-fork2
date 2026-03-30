@@ -962,4 +962,7 @@
     <string name="off_screen_timeout_desc">How long the app waits before returning to home screen when you\'re in another screen. Doesn\'t apply to some specified screens, such as backup (because you pick a file). -1 means no return</string>
     <string name="paste">Paste</string>
     <string name="refresh">Refresh</string>
+    <string name="crash">App Crashed!</string>
+    <string name="crash_message">Crash message:</string>
+    <string name="access_app">Access app (you may experience crash again)</string>
 </resources>

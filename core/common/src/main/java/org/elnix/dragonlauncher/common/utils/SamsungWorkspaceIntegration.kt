@@ -28,18 +28,18 @@ object SamsungWorkspaceIntegration {
         return isSamsung
     }
 
-    fun isSecureFolderAvailable(context: Context): Boolean {
+    fun isSecureFolderAvailable(ctx: Context): Boolean {
         logD(SAMSUNG_INTEGRATION_TAG) { "Checking if Secure Folder is available..." }
 
         val hasSecureFolder = try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                context.packageManager.getPackageInfo(
+                ctx.packageManager.getPackageInfo(
                     SECURE_FOLDER_PACKAGE,
                     PackageManager.PackageInfoFlags.of(0)
                 )
             } else {
                 @Suppress("DEPRECATION")
-                context.packageManager.getPackageInfo(SECURE_FOLDER_PACKAGE, 0)
+                ctx.packageManager.getPackageInfo(SECURE_FOLDER_PACKAGE, 0)
             }
             true
         } catch (_: Exception) {
@@ -51,13 +51,13 @@ object SamsungWorkspaceIntegration {
     }
 
     fun resolveUseSecureFolder(
-        context: Context,
+        ctx: Context,
         preferenceEnabled: Boolean
     ): Boolean {
         val isSamsung = isSamsungDevice()
         if (!isSamsung) return false
 
-        val hasSecureFolder = isSecureFolderAvailable(context)
+        val hasSecureFolder = isSecureFolderAvailable(ctx)
         if (preferenceEnabled && !hasSecureFolder) {
             logW(SAMSUNG_INTEGRATION_TAG) { "Secure Folder unavailable, falling back to Private Space" }
         }
@@ -66,7 +66,7 @@ object SamsungWorkspaceIntegration {
     }
 
     fun openSecureFolder(
-        context: Context,
+        ctx: Context,
         onFallback: () -> Unit
     ) {
         try {
@@ -74,7 +74,7 @@ object SamsungWorkspaceIntegration {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 setPackage(SECURE_FOLDER_PACKAGE)
             }
-            context.startActivity(intent)
+            ctx.startActivity(intent)
             logI(SAMSUNG_INTEGRATION_TAG) { "Opened Secure Folder" }
         } catch (e: Exception) {
             logE(SAMSUNG_INTEGRATION_TAG, e) { "Failed to launch Secure Folder" }
