@@ -20,13 +20,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import org.elnix.dragonlauncher.common.serializables.StatusBarSerializable
 import org.elnix.dragonlauncher.common.serializables.dummyAppModel
+import org.elnix.dragonlauncher.common.utils.resolveShape
 import org.elnix.dragonlauncher.services.DragonNotificationListenerService
+import org.elnix.dragonlauncher.ui.remembers.LocalIconShape
 import org.elnix.dragonlauncher.ui.remembers.LocalIcons
 
 @Composable
@@ -76,7 +79,7 @@ fun StatusBarNotifications(
                 Image(
                     bitmap = bitmap,
                     contentDescription = pkg,
-                    modifier = Modifier.size(18.dp)
+                    modifier = Modifier.size(18.dp).clip(LocalIconShape.current.resolveShape())
                 )
             } else {
                 Icon(
