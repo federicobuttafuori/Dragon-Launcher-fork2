@@ -705,7 +705,7 @@ class AppsViewModel(
             icon = customIcon,
             sizePx = sizePx,
             density = _density,
-            iconShape = _iconShape.value ?: IconShape.Circle,
+            iconShape = _iconShape.value ?: IconShape.PlatformDefault,
         )
     }
 
