@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
@@ -26,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -62,6 +64,16 @@ fun NestManagementDialog(
 ) {
     val nests = nests ?: LocalNests.current
 
+
+    var hasClickedNewNest by remember { mutableStateOf(false) }
+    val listState = rememberLazyListState()
+    LaunchedEffect(nests.size) {
+        if (hasClickedNewNest) {
+            listState.animateScrollToItem(nests.size)
+            hasClickedNewNest = false
+        }
+    }
+
     CustomAlertDialog(
         modifier = Modifier.padding(15.dp),
         onDismissRequest = onDismissRequest,
@@ -76,7 +88,8 @@ fun NestManagementDialog(
         text = {
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(5.dp),
-                modifier = Modifier.heightIn(max = 700.dp)
+                modifier = Modifier.heightIn(max = 700.dp),
+                state = listState
             ) {
                 if (onNewNest != null) {
                     item {
@@ -84,7 +97,10 @@ fun NestManagementDialog(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(CircleShape)
-                                .clickable { onNewNest() }
+                                .clickable {
+                                    hasClickedNewNest = true
+                                    onNewNest()
+                                }
                                 .padding(5.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
