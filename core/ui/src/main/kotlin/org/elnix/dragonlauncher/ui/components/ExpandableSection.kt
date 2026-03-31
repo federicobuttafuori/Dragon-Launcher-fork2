@@ -12,7 +12,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -23,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.elnix.dragonlauncher.common.R
+import org.elnix.dragonlauncher.ui.helpers.text.AutoResizeableText
 import org.elnix.dragonlauncher.ui.modifiers.conditional
 import org.elnix.dragonlauncher.ui.modifiers.settingsGroup
 import org.elnix.dragonlauncher.ui.remembers.ExpandableSectionState
@@ -92,7 +92,10 @@ fun ExpandableSection(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(state.title)
+            AutoResizeableText(
+                state.title,
+                modifier = Modifier.weight(1f)
+            )
 
             Icon(
                 imageVector = Icons.Default.ChevronRight,
