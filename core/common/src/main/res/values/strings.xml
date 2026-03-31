@@ -972,7 +972,6 @@
     <string name="toggle_bluetooth">Toggle Bluetooth</string>
     <string name="toggle_mobile_data">Toggle Mobile Data</string>
     <string name="toggle_wifi">Toggle wifi</string>
-    <string name="long_click_hint">💡 Long press to display tooltip!</string>
     <string name="adb_command_without_adb">Adb command without \"adb\"</string>
     <string name="shizuku_bt_cmd_method">Method</string>
     <string name="shizuku_bt_cmd_cmd">Works on some Android 11+, not guaranteed across all OEMs</string>
@@ -985,4 +984,5 @@
     <string name="pick_a">Pick a</string>
     <string name="command">command</string>
     <string name="show_toast">Show toast</string>
+    <string name="show_tooltips">Show Tooltips</string>
 </resources>

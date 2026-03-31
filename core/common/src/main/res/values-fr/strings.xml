@@ -148,7 +148,7 @@
     <string name="reset_app_icon">Réinitialiser l’icône de l’application</string>
     <string name="home">Accueil</string>
     <string name="edit_point">Point de modification</string>
-    <string name="choose_action">Choisir l’action</string>
+    <string name="choose_action">Choisissez une action</string>
     <string name="automatic_backups">Sauvegardes automatiques</string>
     <string name="change">Changement</string>
     <string name="remove">Retirer</string>

@@ -195,6 +195,12 @@ object UiSettingsStore : MapSettingsStore() {
         allowedRange = 1..100
     )
 
+    val showTooltipsOnAddPointDialog = Settings.boolean(
+        key = "showTooltipsOnAddPointDialog",
+        dataStoreName = dataStoreName,
+        default = true,
+    )
+
     // unsing explicit this to avoid other stores that have the same name keys to be imported by mistake
     override val ALL: List<BaseSettingObject<*, *>> = listOf(
         this.rgbLoading,
@@ -223,6 +229,7 @@ object UiSettingsStore : MapSettingsStore() {
         this.useCustomColorChannels,
         this.chargingAnimation,
         this.mainScreenLayers,
-        this.cellSizeDp
+        this.cellSizeDp,
+        this.showTooltipsOnAddPointDialog
     )
 }

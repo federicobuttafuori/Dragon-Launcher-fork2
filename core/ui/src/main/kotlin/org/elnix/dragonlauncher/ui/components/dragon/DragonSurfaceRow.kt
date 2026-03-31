@@ -59,3 +59,21 @@ fun DragonSurfaceRow(
         content = content
     )
 }
+
+
+
+@Composable
+fun DragonSurfaceRow(
+    modifier: Modifier = Modifier,
+    content: @Composable RowScope.() -> Unit
+) {
+    Row(
+        modifier = modifier
+            .clip(DragonShape)
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .padding(horizontal = 16.dp, vertical = 14.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        content = content
+    )
+}
