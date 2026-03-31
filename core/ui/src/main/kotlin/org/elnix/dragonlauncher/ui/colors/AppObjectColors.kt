@@ -30,33 +30,35 @@ object AppObjectsColors {
 
     @Composable
     fun switchColors(): SwitchColors {
-        val colors = MaterialTheme.colorScheme
         return if (LocalUseCustomColorChannels.current) {
-            SwitchDefaults.colors(
-                checkedThumbColor = colors.outline,
-                checkedTrackColor = colors.primary,
-                checkedBorderColor = Color.Transparent,
-                uncheckedThumbColor = colors.outline.alphaMultiplier(0.7f),
-                uncheckedTrackColor = colors.background,
-                uncheckedBorderColor = Color.Transparent,
-                disabledCheckedThumbColor = colors.outline.alphaMultiplier(0.5f),
-                disabledCheckedTrackColor = colors.primary.alphaMultiplier(0.5f),
-                disabledCheckedBorderColor = Color.Transparent,
-                disabledUncheckedThumbColor = colors.onSurface.alphaMultiplier(0.5f),
-                disabledUncheckedTrackColor = colors.background,
-                disabledUncheckedBorderColor = Color.Transparent,
-            )
+            with(MaterialTheme.colorScheme) {
+                SwitchDefaults.colors(
+                    checkedThumbColor = outline,
+                    checkedTrackColor = primary,
+                    checkedBorderColor = Color.Transparent,
+                    uncheckedThumbColor = outline.alphaMultiplier(0.7f),
+                    uncheckedTrackColor = background,
+                    uncheckedBorderColor = Color.Transparent,
+                    disabledCheckedThumbColor = outline.alphaMultiplier(0.5f),
+                    disabledCheckedTrackColor = primary.alphaMultiplier(0.5f),
+                    disabledCheckedBorderColor = Color.Transparent,
+                    disabledUncheckedThumbColor = onSurface.alphaMultiplier(0.5f),
+                    disabledUncheckedTrackColor = background,
+                    disabledUncheckedBorderColor = Color.Transparent,
+                )
+            }
         } else SwitchDefaults.colors()
     }
 
     @Composable
     fun buttonColors(containerColor: Color? = null): ButtonColors {
-        val colors = MaterialTheme.colorScheme
         return if (LocalUseCustomColorChannels.current) {
-            ButtonDefaults.buttonColors(
-                containerColor = containerColor ?: colors.primary,
-                contentColor = colors.onPrimary
-            )
+            with(MaterialTheme.colorScheme) {
+                ButtonDefaults.buttonColors(
+                    containerColor = containerColor ?: primary,
+                    contentColor = onPrimary
+                )
+            }
         } else ButtonDefaults.buttonColors()
     }
 
@@ -76,33 +78,35 @@ object AppObjectsColors {
         activeTrackColor: Color? = null,
         backgroundColor: Color? = null
     ): SliderColors {
-        val colors = MaterialTheme.colorScheme
         return if (LocalUseCustomColorChannels.current) {
-            SliderDefaults.colors(
-                thumbColor = activeTrackColor ?: colors.primary,
-                activeTrackColor = activeTrackColor ?: colors.secondary,
-                activeTickColor = activeTrackColor ?: colors.primary,
-                inactiveTrackColor = backgroundColor ?: colors.surface,
-                inactiveTickColor = activeTrackColor ?: colors.primary,
-                disabledThumbColor = colors.primary,
-                disabledActiveTrackColor = backgroundColor ?: colors.onSurface,
-                disabledActiveTickColor = colors.primary,
-            )
+            with(MaterialTheme.colorScheme) {
+                SliderDefaults.colors(
+                    thumbColor = activeTrackColor ?: primary,
+                    activeTrackColor = activeTrackColor ?: secondary,
+                    activeTickColor = activeTrackColor ?: primary,
+                    inactiveTrackColor = backgroundColor ?: surface,
+                    inactiveTickColor = activeTrackColor ?: primary,
+                    disabledThumbColor = primary,
+                    disabledActiveTrackColor = backgroundColor ?: onSurface,
+                    disabledActiveTickColor = primary,
+                )
+            }
         } else SliderDefaults.colors()
     }
 
     @Composable
     fun checkboxColors(): CheckboxColors {
-        val colors = MaterialTheme.colorScheme
         return if (LocalUseCustomColorChannels.current) {
-            CheckboxDefaults.colors(
-                checkedColor = colors.primary,
-                uncheckedColor = colors.outline,
-                checkmarkColor = colors.onPrimary,
-                disabledCheckedColor = colors.primary.alphaMultiplier(0.5f),
-                disabledUncheckedColor = colors.outline.alphaMultiplier(0.5f),
-                disabledIndeterminateColor = colors.onSurface.alphaMultiplier(0.5f),
-            )
+            with(MaterialTheme.colorScheme) {
+                CheckboxDefaults.colors(
+                    checkedColor = primary,
+                    uncheckedColor = outline,
+                    checkmarkColor = onPrimary,
+                    disabledCheckedColor = primary.alphaMultiplier(0.5f),
+                    disabledUncheckedColor = outline.alphaMultiplier(0.5f),
+                    disabledIndeterminateColor = onSurface.alphaMultiplier(0.5f),
+                )
+            }
         } else CheckboxDefaults.colors()
     }
 
@@ -112,75 +116,77 @@ object AppObjectsColors {
         onBackgroundColor: Color? = null,
         removeBorder: Boolean = false
     ): TextFieldColors {
-        val colors = MaterialTheme.colorScheme
         return if (LocalUseCustomColorChannels.current) {
-            OutlinedTextFieldDefaults.colors(
-                focusedTextColor = onBackgroundColor ?: colors.onBackground,
-                unfocusedTextColor = onBackgroundColor ?: colors.onBackground,
-                disabledTextColor = onBackgroundColor ?: colors.onBackground.adjustBrightness(0.5f),
-                errorTextColor = colors.error,
+            with(MaterialTheme.colorScheme) {
+                OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = onBackgroundColor ?: onBackground,
+                    unfocusedTextColor = onBackgroundColor ?: onBackground,
+                    disabledTextColor = onBackgroundColor ?: onBackground.adjustBrightness(0.5f),
+                    errorTextColor = error,
 
-                focusedContainerColor = backgroundColor ?: colors.background,
-                unfocusedContainerColor = backgroundColor ?: colors.background,
-                disabledContainerColor = backgroundColor ?: colors.background,
-                errorContainerColor = backgroundColor ?: colors.background,
+                    focusedContainerColor = backgroundColor ?: background,
+                    unfocusedContainerColor = backgroundColor ?: background,
+                    disabledContainerColor = backgroundColor ?: background,
+                    errorContainerColor = backgroundColor ?: background,
 
-                cursorColor = colors.primary,
-                errorCursorColor = colors.error,
+                    cursorColor = primary,
+                    errorCursorColor = error,
 
-                focusedBorderColor = if (!removeBorder) colors.primary else Color.Transparent,
-                unfocusedBorderColor = if (!removeBorder) colors.outline else Color.Transparent,
-                disabledBorderColor = if (!removeBorder) colors.outline.alphaMultiplier(0.5f) else Color.Transparent,
-                errorBorderColor = if (!removeBorder) colors.error else Color.Transparent,
+                    focusedBorderColor = if (!removeBorder) primary else Color.Transparent,
+                    unfocusedBorderColor = if (!removeBorder) outline else Color.Transparent,
+                    disabledBorderColor = if (!removeBorder) outline.alphaMultiplier(0.5f) else Color.Transparent,
+                    errorBorderColor = if (!removeBorder) error else Color.Transparent,
 
-                focusedLeadingIconColor = colors.primary,
-                unfocusedLeadingIconColor = colors.onSurfaceVariant,
-                disabledLeadingIconColor = colors.surfaceVariant,
-                errorLeadingIconColor = colors.error,
+                    focusedLeadingIconColor = primary,
+                    unfocusedLeadingIconColor = onSurfaceVariant,
+                    disabledLeadingIconColor = surfaceVariant,
+                    errorLeadingIconColor = error,
 
-                focusedTrailingIconColor = colors.primary,
-                unfocusedTrailingIconColor = colors.onSurfaceVariant,
-                disabledTrailingIconColor = colors.surfaceVariant,
-                errorTrailingIconColor = colors.error,
+                    focusedTrailingIconColor = primary,
+                    unfocusedTrailingIconColor = onSurfaceVariant,
+                    disabledTrailingIconColor = surfaceVariant,
+                    errorTrailingIconColor = error,
 
-                focusedLabelColor = colors.primary,
-                unfocusedLabelColor = colors.outline,
-                disabledLabelColor = colors.outline.alphaMultiplier(0.5f),
-                errorLabelColor = colors.error,
+                    focusedLabelColor = primary,
+                    unfocusedLabelColor = outline,
+                    disabledLabelColor = outline.alphaMultiplier(0.5f),
+                    errorLabelColor = error,
 
-                focusedPlaceholderColor = colors.outline.alphaMultiplier(0.8f),
-                unfocusedPlaceholderColor = colors.outline.alphaMultiplier(0.5f),
-                disabledPlaceholderColor = colors.outline.alphaMultiplier(0.3f),
-                errorPlaceholderColor = colors.error,
+                    focusedPlaceholderColor = outline.alphaMultiplier(0.8f),
+                    unfocusedPlaceholderColor = outline.alphaMultiplier(0.5f),
+                    disabledPlaceholderColor = outline.alphaMultiplier(0.3f),
+                    errorPlaceholderColor = error,
 
-                focusedSupportingTextColor = colors.onSurfaceVariant,
-                unfocusedSupportingTextColor = colors.onSurfaceVariant,
-                disabledSupportingTextColor = colors.surfaceVariant,
-                errorSupportingTextColor = colors.error,
+                    focusedSupportingTextColor = onSurfaceVariant,
+                    unfocusedSupportingTextColor = onSurfaceVariant,
+                    disabledSupportingTextColor = surfaceVariant,
+                    errorSupportingTextColor = error,
 
-                focusedPrefixColor = colors.onSurfaceVariant,
-                unfocusedPrefixColor = colors.onSurfaceVariant,
-                disabledPrefixColor = colors.surfaceVariant,
-                errorPrefixColor = colors.error,
+                    focusedPrefixColor = onSurfaceVariant,
+                    unfocusedPrefixColor = onSurfaceVariant,
+                    disabledPrefixColor = surfaceVariant,
+                    errorPrefixColor = error,
 
-                focusedSuffixColor = colors.onSurfaceVariant,
-                unfocusedSuffixColor = colors.onSurfaceVariant,
-                disabledSuffixColor = colors.surfaceVariant,
-                errorSuffixColor = colors.error
-            )
+                    focusedSuffixColor = onSurfaceVariant,
+                    unfocusedSuffixColor = onSurfaceVariant,
+                    disabledSuffixColor = surfaceVariant,
+                    errorSuffixColor = error
+                )
+            }
         } else OutlinedTextFieldDefaults.colors()
     }
 
     @Composable
     fun radioButtonColors(): RadioButtonColors {
-        val colors = MaterialTheme.colorScheme
         return if (LocalUseCustomColorChannels.current) {
-            RadioButtonDefaults.colors(
-                selectedColor = colors.primary,
-                unselectedColor = colors.onSurface,
-                disabledSelectedColor = colors.primary.alphaMultiplier(0.5f),
-                disabledUnselectedColor = colors.onSurface.alphaMultiplier(0.5f)
-            )
+            with(MaterialTheme.colorScheme) {
+                RadioButtonDefaults.colors(
+                    selectedColor = primary,
+                    unselectedColor = onSurface,
+                    disabledSelectedColor = primary.alphaMultiplier(0.5f),
+                    disabledUnselectedColor = onSurface.alphaMultiplier(0.5f)
+                )
+            }
         } else RadioButtonDefaults.colors()
     }
 
@@ -189,41 +195,44 @@ object AppObjectsColors {
         backgroundColor: Color? = null,
         contentColor: Color? = null
     ): IconButtonColors {
-        val colors = MaterialTheme.colorScheme
         return if (LocalUseCustomColorChannels.current) {
-            IconButtonDefaults.iconButtonColors(
-                containerColor = backgroundColor ?: colors.surface,
-                contentColor = contentColor ?: colors.primary,
-                disabledContainerColor = backgroundColor?.alphaMultiplier(0.5f) ?: colors.surface.alphaMultiplier(0.5f),
-                disabledContentColor = contentColor?.alphaMultiplier(0.5f) ?: colors.onSurface.alphaMultiplier(0.5f)
-            )
+            with(MaterialTheme.colorScheme) {
+                IconButtonDefaults.iconButtonColors(
+                    containerColor = backgroundColor ?: surface,
+                    contentColor = contentColor ?: primary,
+                    disabledContainerColor = backgroundColor?.alphaMultiplier(0.5f) ?: surface.alphaMultiplier(0.5f),
+                    disabledContentColor = contentColor?.alphaMultiplier(0.5f) ?: onSurface.alphaMultiplier(0.5f)
+                )
+            }
         } else IconButtonDefaults.iconButtonColors()
     }
 
 
     @Composable
     fun errorIconButtonColors(): IconButtonColors {
-        val colors = MaterialTheme.colorScheme
         return if (LocalUseCustomColorChannels.current) {
-            IconButtonDefaults.iconButtonColors(
-                containerColor = colors.errorContainer,
-                contentColor = colors.error,
-                disabledContainerColor = colors.errorContainer.alphaMultiplier(0.5f),
-                disabledContentColor = colors.error.alphaMultiplier(0.5f)
-            )
+            with(MaterialTheme.colorScheme) {
+                IconButtonDefaults.iconButtonColors(
+                    containerColor = errorContainer,
+                    contentColor = error,
+                    disabledContainerColor = errorContainer.alphaMultiplier(0.5f),
+                    disabledContentColor = error.alphaMultiplier(0.5f)
+                )
+            }
         } else IconButtonDefaults.iconButtonColors()
     }
 
     @Composable
     fun cardColors(): CardColors {
-        val colors = MaterialTheme.colorScheme
         return if (LocalUseCustomColorChannels.current) {
-            CardDefaults.cardColors(
-                colors.surface,
-                colors.onSurface,
-                colors.surface.alphaMultiplier(0.5f),
-                colors.onSurface.alphaMultiplier(0.5f),
-            )
+            with(MaterialTheme.colorScheme) {
+                CardDefaults.cardColors(
+                    surface,
+                    onSurface,
+                    surface.alphaMultiplier(0.5f),
+                    onSurface.alphaMultiplier(0.5f),
+                )
+            }
         } else CardDefaults.cardColors()
     }
 
