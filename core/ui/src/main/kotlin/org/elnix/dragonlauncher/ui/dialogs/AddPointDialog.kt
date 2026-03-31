@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,12 +17,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.base.theme.LocalExtraColors
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.logging.logD
@@ -47,11 +50,15 @@ import org.elnix.dragonlauncher.common.utils.UiConstants.DragonShape
 import org.elnix.dragonlauncher.common.utils.WifiADBCommands
 import org.elnix.dragonlauncher.settings.stores.BehaviorSettingsStore
 import org.elnix.dragonlauncher.settings.stores.DrawerSettingsStore
+import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
 import org.elnix.dragonlauncher.ui.actions.ActionIcon
 import org.elnix.dragonlauncher.ui.actions.actionColor
 import org.elnix.dragonlauncher.ui.actions.actionLabel
+import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
+import org.elnix.dragonlauncher.ui.components.dragon.DragonSurfaceRow
 import org.elnix.dragonlauncher.ui.components.dragon.DragonTooltip
 import org.elnix.dragonlauncher.ui.components.settings.asState
+import org.elnix.dragonlauncher.ui.helpers.text.AutoResizeableText
 
 @Suppress("AssignedValueIsNeverRead")
 @Composable
@@ -67,6 +74,7 @@ fun AddPointDialog(
     val ctx = LocalContext.current
     val pm = ctx.packageManager
     val packageManagerCompat = PackageManagerCompat(pm, ctx)
+    val scope = rememberCoroutineScope()
 
     var showAppPicker by remember { mutableStateOf(false) }
     var showUrlInput by remember { mutableStateOf(false) }
@@ -85,6 +93,7 @@ fun AddPointDialog(
     val showIcons by DrawerSettingsStore.showAppIconsInDrawer.asState()
     val showLabels by DrawerSettingsStore.showAppLabelInDrawer.asState()
     val promptForShortcuts by BehaviorSettingsStore.promptForShortcutsWhenAddingApp.asState()
+    val showTooltipsOnAddPointDialog by UiSettingsStore.showTooltipsOnAddPointDialog.asState(false)
 
 
     var selectedApp by remember { mutableStateOf<AppModel?>(null) }
@@ -106,19 +115,27 @@ fun AddPointDialog(
         modifier = Modifier.padding(16.dp),
         onDismissRequest = onDismiss,
         confirmButton = {},
-        title = { Text(stringResource(R.string.choose_action)) },
+        title = {
+            DragonSurfaceRow(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(stringResource(R.string.choose_action))
+                DragonIconButton(
+                    onClick = {
+                        scope.launch {
+                            UiSettingsStore.showTooltipsOnAddPointDialog.set(ctx, !showTooltipsOnAddPointDialog)
+                        }
+                    },
+                    imageVector = if (showTooltipsOnAddPointDialog) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                    contentDescription = stringResource(R.string.show_tooltips)
+                )
+            }
+        },
         text = {
             Column(
                 verticalArrangement = Arrangement.spacedBy(5.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-                Text(
-                    text = stringResource(R.string.long_click_hint),
-                    style = MaterialTheme.typography.bodySmall,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                )
 
                 if (actions.any { it is SwipeActionSerializable.LaunchApp }) {
 
@@ -154,7 +171,7 @@ fun AddPointDialog(
 
                 LazyVerticalGrid(
                     modifier = Modifier.clip(DragonShape),
-                    columns = GridCells.Fixed(3),
+                    columns = GridCells.Fixed(if (showTooltipsOnAddPointDialog) 1 else 3),
                     verticalArrangement = Arrangement.spacedBy(5.dp),
                     horizontalArrangement = Arrangement.spacedBy(5.dp)
                 ) {
@@ -162,6 +179,7 @@ fun AddPointDialog(
                     items(actions.filterNot { it is SwipeActionSerializable.LaunchApp }) { action ->
                         AddPointColumn(
                             action = action,
+                            showText = { showTooltipsOnAddPointDialog },
                             onSelected = {
                                 when (action) {
                                     is SwipeActionSerializable.LaunchShortcut -> {
@@ -402,6 +420,7 @@ fun AddPointDialog(
 @Composable
 private fun AddPointColumn(
     action: SwipeActionSerializable,
+    showText: () -> Boolean,
     onSelected: () -> Unit
 ) {
     val extraColors = LocalExtraColors.current
@@ -416,6 +435,7 @@ private fun AddPointColumn(
         }
 
         is SwipeActionSerializable.OpenUrl -> stringResource(R.string.open_url)
+        is SwipeActionSerializable.RunAdbCommand -> stringResource(R.string.run_adb_command)
         is SwipeActionSerializable.OpenFile -> stringResource(R.string.open_file)
         is SwipeActionSerializable.OpenCircleNest -> stringResource(R.string.open_nest_circle)
         else -> actionLabel(action)
@@ -424,7 +444,7 @@ private fun AddPointColumn(
     val color = actionColor(action, extraColors)
 
     DragonTooltip(name) {
-        Box(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(DragonShape)
@@ -432,13 +452,22 @@ private fun AddPointColumn(
                 .border(1.dp, color, DragonShape)
                 .clickable { onSelected() }
                 .padding(12.dp),
-            contentAlignment = Alignment.Center
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             ActionIcon(
                 action = action,
                 modifier = Modifier.size(30.dp),
                 showLaunchAppVectorGrid = true
             )
+
+            if (showText()) {
+                Spacer(Modifier.width(5.dp))
+                AutoResizeableText(
+                    name,
+                    maxLines = 2
+                )
+            }
         }
     }
 }

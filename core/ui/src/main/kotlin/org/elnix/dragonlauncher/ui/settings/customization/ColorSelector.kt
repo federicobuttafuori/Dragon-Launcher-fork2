@@ -23,6 +23,7 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Colorize
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Restore
 import androidx.compose.material.icons.filled.SelectAll
@@ -75,6 +76,7 @@ import org.elnix.dragonlauncher.ui.colors.ColorPickerRow
 import org.elnix.dragonlauncher.ui.components.ExpandableSection
 import org.elnix.dragonlauncher.ui.components.burger.BurgerAction
 import org.elnix.dragonlauncher.ui.components.burger.BurgerListAction
+import org.elnix.dragonlauncher.ui.components.dragon.DragonButton
 import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
 import org.elnix.dragonlauncher.ui.components.generic.ActionRow
 import org.elnix.dragonlauncher.ui.components.settings.SettingsColorPicker
@@ -537,30 +539,14 @@ fun ColorSelectorTab(
             )
         }
 
-        if (defaultTheme == CUSTOM) {
-            item {
-                if (colorTestMode) {
-                    Button(
-                        onClick = { showExitTestValidation = true },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = AppObjectsColors.buttonColors()
-                    ) {
-                        Text(stringResource(R.string.exit_test_mode))
-                    }
-                } else {
-                    Button(
-                        onClick = {
-                            scope.launch {
-                                ColorSettingsStore.backupColors(ctx)
-                                ColorModesSettingsStore.colorTestMode.set(ctx, true)
-                                onBack() // Go back to main screen
-                            }
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = AppObjectsColors.buttonColors()
-                    ) {
-                        Text(stringResource(R.string.test_colors))
-                    }
+        item {
+            if (colorTestMode) {
+                DragonButton(
+                    onClick = { showExitTestValidation = true },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = AppObjectsColors.buttonColors()
+                ) {
+                    Text(stringResource(R.string.exit_test_mode))
                 }
             }
         }
@@ -628,6 +614,18 @@ fun ColorSelectorTab(
                                     ) {
                                         Icon(Icons.Default.SelectAll, null)
                                         Text(stringResource(R.string.make_all_colors_identical))
+                                    },
+                                    BurgerAction(
+                                        onClick = {
+                                            scope.launch {
+                                                ColorSettingsStore.backupColors(ctx)
+                                                ColorModesSettingsStore.colorTestMode.set(ctx, true)
+                                                onBack() // Go back to main screen
+                                            }
+                                        }
+                                    ) {
+                                        Icon(Icons.Default.Colorize, null)
+                                        Text(stringResource(R.string.test_colors))
                                     }
                                 )
                             )
