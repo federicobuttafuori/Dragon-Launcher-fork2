@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Process
 import androidx.compose.runtime.Composable
+import kotlinx.coroutines.delay
 import org.elnix.dragonlauncher.common.utils.Constants.PackageNameLists.systemLaunchers
 import java.time.LocalDate
 import java.time.LocalTime
@@ -109,4 +110,8 @@ fun restartApp(ctx: Context) {
         addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
     } ?: return
     ctx.startActivity(intent)
+}
+
+suspend fun waitASec() {
+    delay(1000L)
 }

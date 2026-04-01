@@ -1,6 +1,7 @@
 package org.elnix.dragonlauncher.ui.helpers
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,7 +22,9 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,9 +39,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.AppCategory
 import org.elnix.dragonlauncher.common.serializables.AppModel
+import org.elnix.dragonlauncher.common.utils.waitASec
 import org.elnix.dragonlauncher.settings.stores.DrawerSettingsStore
 import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
 import org.elnix.dragonlauncher.ui.components.settings.asState
@@ -47,6 +52,7 @@ import org.elnix.dragonlauncher.ui.drawer.AppItemHorizontal
 import org.elnix.dragonlauncher.ui.modifiers.shapedClickable
 import kotlin.math.min
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AppGrid(
     apps: List<AppModel>,
@@ -124,24 +130,44 @@ fun AppGrid(
 
     when {
         visibleApps.isEmpty() -> {
-            Box(
-                modifier = modifier,
-                contentAlignment = Alignment.Center
+            LazyColumn(
+                modifier = modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                state = listState ?: rememberLazyListState()
             ) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(15.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = stringResource(R.string.no_apps),
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-
-                    if (onReload != null) {
-                        DragonIconButton(
-                            onClick = onReload, imageVector = Icons.Default.Refresh,
-                            contentDescription = stringResource(R.string.reload_apps)
+                item {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(15.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = stringResource(R.string.no_apps),
+                            color = MaterialTheme.colorScheme.onBackground
                         )
+
+                        var isLoading by remember { mutableStateOf(false) }
+
+                        if (onReload != null) {
+                            Crossfade(isLoading) { showLoadingIcon ->
+                                if (showLoadingIcon) {
+                                    LoadingIndicator()
+                                    LaunchedEffect(Unit) {
+                                        waitASec()
+                                        isLoading = false
+                                    }
+                                } else {
+                                    DragonIconButton(
+                                        onClick = {
+                                            onReload()
+                                            isLoading = true
+                                        }, imageVector = Icons.Default.Refresh,
+                                        contentDescription = stringResource(R.string.reload_apps)
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -363,6 +389,28 @@ private fun AppDefinedGrid(
                     appIndex++
                 }
             }
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun WithFakeLoadingAnimation(
+    loadingDurationMillis: Long = 500L,
+    onClick: () -> Unit,
+    content: @Composable () -> Unit
+) {
+    val isLoading by remember { mutableStateOf(false) }
+
+    Crossfade(isLoading) { showLoadingIcon ->
+        if (showLoadingIcon) {
+            LoadingIndicator()
+            LaunchedEffect(Unit) {
+                delay(loadingDurationMillis)
+            }
+        } else {
+            content()
         }
     }
 }
