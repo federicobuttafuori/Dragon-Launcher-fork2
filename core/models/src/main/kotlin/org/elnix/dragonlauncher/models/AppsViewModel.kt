@@ -190,6 +190,11 @@ class AppsViewModel(
     /* ───────────── Recently Used Apps ───────────── */
     private val _recentlyUsedPackages = MutableStateFlow<List<String>>(emptyList())
 
+    init {
+        scope.launch {
+            _selectedWorkspaceId.value = DrawerSettingsStore.lastWorkspaceUsed.get(ctx)
+        }
+    }
 
     /**
      * Loads everything the AppViewModel needs
@@ -1180,6 +1185,10 @@ class AppsViewModel(
 
     fun selectWorkspace(id: String) {
         _selectedWorkspaceId.value = id
+
+        scope.launch {
+            DrawerSettingsStore.lastWorkspaceUsed.set(ctx, id)
+        }
     }
 
     /* ───────────── Recently Used Apps ───────────── */

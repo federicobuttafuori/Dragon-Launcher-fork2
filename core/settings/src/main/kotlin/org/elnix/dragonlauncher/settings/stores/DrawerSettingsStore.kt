@@ -63,11 +63,10 @@ object DrawerSettingsStore : MapSettingsStore() {
         allowedRange = 1..15
     )
 
-    val initialPage = int(
-        key = "initialPage",
+    val lastWorkspaceUsed = string(
+        key = "lastWorkspaceUsed",
         dataStoreName = dataStoreName,
-        default = 0,
-        allowedRange = 0..Int.MAX_VALUE
+        default = "",
     )
 
     val leftDrawerAction = enum(
@@ -271,7 +270,7 @@ object DrawerSettingsStore : MapSettingsStore() {
             this.autoShowKeyboardOnDrawer,
             this.tapEmptySpaceAction,
             this.gridSize,
-            this.initialPage,
+            this.lastWorkspaceUsed,
             this.leftDrawerAction,
             this.rightDrawerAction,
             this.leftDrawerWidth,
