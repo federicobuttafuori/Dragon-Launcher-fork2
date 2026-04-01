@@ -252,7 +252,8 @@ class AppsViewModel(
                 getOnlyRemoved -> list.filter { it.iconCacheKey in removed }
                 else -> {
                     val base = when (workspace.type) {
-                        WorkspaceType.ALL, WorkspaceType.CUSTOM -> list
+                        WorkspaceType.ALL, -> list
+                        WorkspaceType.CUSTOM -> emptyList()
                         WorkspaceType.USER -> list.filter { !it.isWorkProfile && !it.isPrivateProfile && it.isLaunchable == true }
                         WorkspaceType.SYSTEM -> list.filter { it.isSystem }
                         WorkspaceType.WORK -> list.filter { it.isWorkProfile && it.isLaunchable == true }
