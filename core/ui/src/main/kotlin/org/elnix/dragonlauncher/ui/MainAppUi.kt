@@ -592,7 +592,7 @@ fun MainAppUi(
         }
     }
 
-    fun launchApp(action: SwipeActionSerializable) {
+    fun launchAction(action: SwipeActionSerializable) {
         launchAction(
             dummySwipePoint(action)
         )
@@ -612,7 +612,7 @@ fun MainAppUi(
                 }
 
                 ROUTES.MAIN -> {
-                    launchApp(homeAction)
+                    launchAction(homeAction)
                 }
 
                 else -> {
@@ -848,7 +848,10 @@ fun MainAppUi(
                         leftWeight = leftDrawerWidth,
                         rightAction = rightDrawerAction,
                         rightWeight = rightDrawerWidth,
-                        onLaunchAction = ::launchApp,
+                        onLaunchAction = {
+                            launchAction(it)
+                            popBackMainScreen()
+                        },
                         onClose = ::popBackMainScreen
                     )
                 }
@@ -879,7 +882,7 @@ fun MainAppUi(
                         )
                     }
 
-                    settingComposable(SETTINGS.ADVANCED_ROOT) { AdvancedSettingsScreen(::launchApp) { popBackToSettingsRoot() } }
+                    settingComposable(SETTINGS.ADVANCED_ROOT) { AdvancedSettingsScreen(::launchAction) { popBackToSettingsRoot() } }
 
                     // All the nested settings screens
                     settingComposable(SETTINGS.APPEARANCE) { AppearanceTab(::popBackToAdvSettingsRoot) }
@@ -950,7 +953,7 @@ fun MainAppUi(
                             gridSize = gridSize,
                             workspaceId = backStack.arguments!!.getString("id")!!,
                             onBack = { navController.popBackStack() },
-                            onLaunchAction = ::launchApp
+                            onLaunchAction = ::launchAction
                         )
                     }
                 }
@@ -1009,7 +1012,7 @@ fun MainAppUi(
             ShizukuUnavailableDialog(
                 onDismiss = { showShizukuUnavailableDialog = false },
                 onConfirm = {
-                    if (isShizukuInstalled) launchApp(SwipeActionSerializable.LaunchApp(SHIZUKU_PACKAGE_NAME, false, 0))
+                    if (isShizukuInstalled) launchAction(SwipeActionSerializable.LaunchApp(SHIZUKU_PACKAGE_NAME, false, 0))
                     else ctx.openUrl(
                         url = URL_SHIZUKU_SITE
                     )
