@@ -786,12 +786,12 @@
     <string name="debug_mode_already_enabled">Le mode Débogage est déjà activé</string>
     <string name="not_supported_in_this_android_version">Non pris en charge dans cette version Android</string>
     <string name="please_enable_accessibility_services_to_use_that_feature">Veuillez activer le service d’accessibilité pour utiliser cette fonctionnalité</string>
-    <string name="permission_tab_help">Gérez ici les permissions et accès système pour Dragon Launcher.</string>
+    <string name="permission_tab_help">Gérez ici les permissions et accès système pour Dragon Launcher</string>
     <string name="special_system_access">Accès système spéciaux</string>
     <string name="notification_access">Accès aux notifications</string>
     <string name="notification_access_desc">Permet d\'afficher les badges de notification sur les icônes.</string>
     <string name="install_from_unknown_source_permission">Installation d\'applications (APK)</string>
-    <string name="install_from_unknown_source_permission_desc">Nécessaire pour installer les extensions téléchargées.</string>
+    <string name="install_from_unknown_source_permission_desc">Nécessaire pour installer les extensions téléchargées</string>
     <string name="accessibility_service">Service d\'accessibilité</string>
     <string name="accessibility_service_desc">Utilisé pour étendre le panneau de notifications via des gestes.</string>
     <string name="usage_access">Accès aux statistiques d\'utilisation</string>
@@ -831,4 +831,22 @@
     <string name="lucky_desc">Contributeur majeur (Bien-être numérique et rappels)</string>
     <string name="version_copied_to_clipboard">Version copiée dans le presse-papiers</string>
     <string name="free_move_dragged_point">Un déplacement libre a permis de marquer un point</string>
+    <string name="snap_points">Accroche les points aux angles</string>
+    <string name="show_circle">Afficher le cercle</string>
+    <string name="undo">Annuler</string>
+    <string name="undo_all">Tout annuler</string>
+    <string name="redo">Refaire</string>
+    <string name="redo_all">Tout refaire</string>
+    <string name="move_point_clockwise">Tourner le point dans le sens horaire</string>
+    <string name="move_point_anticlockwise">Tourner le point dans le sens antihoraire</string>
+    <string name="show_nest_preview">Afficher la previsualisation du nid</string>
+    <string name="general">Général</string>
+    <string name="action">Action</string>
+    <string name="icon">Icône</string>
+    <string name="shapes">Formes</string>
+    <string name="reset_default_point">Réinitialiser le point par defaut</string>
+    <string name="reset_point">Réinitialiser le point</string>
+    <string name="reset_default_point_desc">Cela réinitialisera les paramètres de point par défaut, ce qui signifie, tous les points qui ne remplacent pas les paramètres</string>
+    <string name="reset_point_desc">Cela réinitialisera le point courant à ses valeurs par défaut. Après cela, il utilisera les valeurs de point par défaut pour chacune de ses entrées non spécifiques (taille, bordures...)</string>
+    <string name="default_point_help_text">Modifier les valeurs que tous les points prennent par défaut, vous pouvez remplacer manuellement chacune de ces valeurs par point</string>
 </resources>
