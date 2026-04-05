@@ -2,26 +2,28 @@
 agp = "9.1.0"
 androidImageCropper = "4.7.0"
 gson = "2.13.2"
-kotlin = "2.3.10"
+kotlin = "2.3.20"
 coreKtx = "1.18.0"
 lifecycleRuntimeKtx = "2.10.0"
 activityCompose = "1.13.0"
-composeBom = "2026.03.00"
+composeBom = "2026.03.01"
 material = "1.13.0"
-material3 = "1.5.0-alpha15"
+material3 = "1.5.0-alpha16"
 navigationCompose = "2.9.7"
 reorderable = "3.0.0"
-ui = "1.10.5"
-uiGraphics = "1.10.5"
-foundationLayout = "1.10.5"
+ui = "1.10.6"
+uiGraphics = "1.10.6"
+foundationLayout = "1.10.6"
 datastore = "1.2.1"
 appcompat = "1.7.1"
 biometric = "1.1.0"
 timber = "5.0.1"
-runtime = "1.10.5"
+runtime = "1.10.6"
 kotlinx-serialization = "1.10.0"
-shizuku = "13.1.0"
 shapeindicators = "2.1.0"
+
+#noinspection NewerVersionAvailable
+shizuku = "13.1.0" # Don't update this (deprecated usage in newer versions)
 
 [libraries]
 android-image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "androidImageCropper" }
@@ -46,7 +48,6 @@ androidx-material-icons-extended = { module = "androidx.compose.material:materia
 material = { module = "com.google.android.material:material", version.ref = "material" }
 material3 = { module = "androidx.compose.material3:material3" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
-#reorderable = { group = "org.burnoutcrew.composereorderable", name = "reorderable", version.ref = "reorderable" }
 reorderable = { module = "sh.calvin.reorderable:reorderable", version.ref = "reorderable" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-biometric = { group = "androidx.biometric", name = "biometric", version.ref = "biometric" }
