@@ -3,8 +3,10 @@ package org.elnix.dragonlauncher.ui.components
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 
 @Composable
 fun RowScope.Spacer() {
@@ -14,4 +16,14 @@ fun RowScope.Spacer() {
 @Composable
 fun ColumnScope.Spacer() {
     Spacer(Modifier.weight(1f))
+}
+
+@Composable
+fun RowScope.Spacer(width: Dp) {
+    Spacer(Modifier.width(width))
+}
+
+@Composable
+fun ColumnScope.Spacer(width: Dp) {
+    Spacer(Modifier.width(width))
 }
