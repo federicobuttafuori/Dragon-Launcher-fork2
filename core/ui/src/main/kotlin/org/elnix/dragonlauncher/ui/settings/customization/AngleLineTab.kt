@@ -82,7 +82,6 @@ fun AngleLineTab(onBack: () -> Unit) {
     var showOrderDialog by remember { mutableStateOf(false) }
 
     val json = Json {
-        prettyPrint = true
         serializersModule = SerializersModule {
             contextual(Color::class, ColorSerializer)
         }
