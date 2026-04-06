@@ -860,8 +860,8 @@ fun MainAppUi(
                         rightAction = rightDrawerAction,
                         rightWeight = rightDrawerWidth,
                         onLaunchAction = {
-                            launchAction(it)
                             popBackMainScreen()
+                            launchAction(it)
                         },
                         onClose = ::popBackMainScreen
                     )
