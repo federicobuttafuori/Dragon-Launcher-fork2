@@ -30,9 +30,9 @@ inline fun Modifier.conditional(
     if (condition) this.block() else this
 
 /**
- * Conditionally appends either [other] or [fallback] to this [Modifier].
+ * Conditionally appends either [block] or [fallback] to this [Modifier].
  *
- * - If [condition] is true, [other] is appended.
+ * - If [condition] is true, [block] is appended.
  * - If false, [fallback] is appended.
  *
  * Order is preserved:
