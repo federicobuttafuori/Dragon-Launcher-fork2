@@ -66,6 +66,6 @@ object HoldToActivateArcSettingsStore : MapSettingsStore() {
     val holdMenuEntries = Settings.stringList(
         key = "holdMenuEntries",
         dataStoreName = dataStoreName,
-        default = listOf()
+        default = listOf(SETTINGS.ROOT, SETTINGS.WALLPAPER, SETTINGS.WIDGETS_FLOATING_APPS)
     )
 }
