@@ -875,7 +875,8 @@ class AppsViewModel(
     ) {
         scope.launch(Dispatchers.Default) {
             points.forEach { p ->
-                val id = p.id
+                @Suppress("USELESS_ELVIS")
+                val id = p.id ?: return@forEach // Cause it crashed someone's app after corrupted loading
                 if (iconCache.get(id) != null && !override) return@forEach
 
                 reloadPointIcon(p)
