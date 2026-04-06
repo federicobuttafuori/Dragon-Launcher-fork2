@@ -3,7 +3,7 @@ package org.elnix.dragonlauncher.ui.remembers
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import org.elnix.dragonlauncher.common.logging.logD
+import org.elnix.dragonlauncher.logging.logD
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.COLORS_TAG
 import org.elnix.dragonlauncher.common.utils.colors.toHexWithAlpha
 import org.elnix.dragonlauncher.common.utils.definedOrNull

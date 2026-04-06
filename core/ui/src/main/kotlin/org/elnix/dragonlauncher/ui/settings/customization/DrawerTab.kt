@@ -39,13 +39,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.common.logging.logD
+import org.elnix.dragonlauncher.logging.logD
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.DRAWER_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.SHAPES_TAG
 import org.elnix.dragonlauncher.common.utils.semiTransparentIfDisabled
 import org.elnix.dragonlauncher.enumsui.DrawerActions
 import org.elnix.dragonlauncher.enumsui.drawerActionIcon
-import org.elnix.dragonlauncher.models.AppsViewModel
 import org.elnix.dragonlauncher.settings.stores.DrawerSettingsStore
 import org.elnix.dragonlauncher.ui.components.ExpandableSection
 import org.elnix.dragonlauncher.ui.components.TextDivider

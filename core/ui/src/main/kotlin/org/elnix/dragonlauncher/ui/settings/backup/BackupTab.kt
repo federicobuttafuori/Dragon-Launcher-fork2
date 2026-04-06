@@ -37,8 +37,8 @@ import androidx.core.net.toUri
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.common.logging.logD
-import org.elnix.dragonlauncher.common.logging.logE
+import org.elnix.dragonlauncher.logging.logD
+import org.elnix.dragonlauncher.logging.logE
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.BACKUP_TAG
 import org.elnix.dragonlauncher.common.utils.formatDateTime
 import org.elnix.dragonlauncher.common.utils.getFilePathFromUri

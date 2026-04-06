@@ -58,9 +58,9 @@ import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.common.logging.DragonLogManager
-import org.elnix.dragonlauncher.common.logging.logD
-import org.elnix.dragonlauncher.common.logging.logE
+import org.elnix.dragonlauncher.logging.DragonLogManager
+import org.elnix.dragonlauncher.logging.logD
+import org.elnix.dragonlauncher.logging.logE
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.LOGS_TAG
 import org.elnix.dragonlauncher.common.utils.copyToClipboard
 import org.elnix.dragonlauncher.common.utils.detectSystemLauncher

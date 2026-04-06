@@ -25,8 +25,8 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.Color
 import androidx.core.net.toUri
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.common.logging.logD
-import org.elnix.dragonlauncher.common.logging.logE
+import org.elnix.dragonlauncher.logging.logD
+import org.elnix.dragonlauncher.logging.logE
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.STATUS_BAR_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.TAG
 import java.text.SimpleDateFormat

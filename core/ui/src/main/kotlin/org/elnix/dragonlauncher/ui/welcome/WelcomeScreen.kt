@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -45,7 +44,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import `in`.hridayan.shapeindicators.ShapeIndicatorRow
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.common.logging.logD
+import org.elnix.dragonlauncher.logging.logD
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.WELCOME_TAG
 import org.elnix.dragonlauncher.models.BackupResult
 import org.elnix.dragonlauncher.settings.DataStoreName

@@ -6,7 +6,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import org.elnix.dragonlauncher.common.logging.logI
+import org.elnix.dragonlauncher.logging.logI
 import org.elnix.dragonlauncher.common.serializables.CircleNest
 import org.elnix.dragonlauncher.common.serializables.SwipeJson
 import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable

@@ -33,14 +33,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.elnix.dragonlauncher.base.theme.LocalExtraColors
-import org.elnix.dragonlauncher.common.logging.logI
-import org.elnix.dragonlauncher.common.logging.logV
+import org.elnix.dragonlauncher.logging.logI
+import org.elnix.dragonlauncher.logging.logV
 import org.elnix.dragonlauncher.common.serializables.CircleNest
 import org.elnix.dragonlauncher.common.serializables.CustomHapticFeedbackSerializable
 import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.NESTS_TAG
 import org.elnix.dragonlauncher.common.utils.UiCircle
-import org.elnix.dragonlauncher.ui.UiConstants
 import org.elnix.dragonlauncher.common.utils.circles.computePointPosition
 import org.elnix.dragonlauncher.common.utils.performCustomHaptic
 import org.elnix.dragonlauncher.common.utils.resolveShape

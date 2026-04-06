@@ -57,7 +57,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.common.logging.logE
+import org.elnix.dragonlauncher.logging.logE
 import org.elnix.dragonlauncher.common.serializables.MainScreenLayer
 import org.elnix.dragonlauncher.common.serializables.StatusBarJson
 import org.elnix.dragonlauncher.common.serializables.StatusBarSerializable

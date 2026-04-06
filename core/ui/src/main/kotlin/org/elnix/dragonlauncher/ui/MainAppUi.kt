@@ -60,9 +60,6 @@ import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.common.logging.logD
-import org.elnix.dragonlauncher.common.logging.logE
-import org.elnix.dragonlauncher.common.logging.logW
 import org.elnix.dragonlauncher.common.navigaton.EDIT_SCREENS
 import org.elnix.dragonlauncher.common.navigaton.ROUTES
 import org.elnix.dragonlauncher.common.navigaton.SETTINGS
@@ -94,6 +91,9 @@ import org.elnix.dragonlauncher.common.utils.openUrl
 import org.elnix.dragonlauncher.common.utils.showToast
 import org.elnix.dragonlauncher.enumsui.DrawerToolbar
 import org.elnix.dragonlauncher.enumsui.LockMethod
+import org.elnix.dragonlauncher.logging.logD
+import org.elnix.dragonlauncher.logging.logE
+import org.elnix.dragonlauncher.logging.logW
 import org.elnix.dragonlauncher.settings.stores.AngleLineSettingsStore
 import org.elnix.dragonlauncher.settings.stores.BackupSettingsStore
 import org.elnix.dragonlauncher.settings.stores.BehaviorSettingsStore

@@ -11,10 +11,10 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import com.google.gson.reflect.TypeToken
-import org.elnix.dragonlauncher.common.logging.logE
-import org.elnix.dragonlauncher.common.logging.logW
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.SWIPE_TAG
 import org.elnix.dragonlauncher.common.navigaton.SETTINGS
+import org.elnix.dragonlauncher.logging.logE
+import org.elnix.dragonlauncher.logging.logW
 import java.lang.reflect.Type
 
 

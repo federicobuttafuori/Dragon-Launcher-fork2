@@ -8,7 +8,7 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
-import org.elnix.dragonlauncher.common.logging.logI
+import org.elnix.dragonlauncher.logging.logI
 import org.elnix.dragonlauncher.common.serializables.IconShape
 import org.elnix.dragonlauncher.common.serializables.IconShapeGson
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable

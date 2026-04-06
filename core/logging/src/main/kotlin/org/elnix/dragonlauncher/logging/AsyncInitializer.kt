@@ -1,4 +1,4 @@
-package org.elnix.dragonlauncher.common.utils
+package org.elnix.dragonlauncher.logging
 
 import android.content.Context
 import kotlinx.coroutines.CoroutineScope
@@ -6,7 +6,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import org.elnix.dragonlauncher.common.logging.DragonLogManager
 import timber.log.Timber
 
 /**

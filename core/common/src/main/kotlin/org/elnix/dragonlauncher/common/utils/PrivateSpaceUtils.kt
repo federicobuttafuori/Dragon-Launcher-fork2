@@ -8,10 +8,10 @@ import android.os.UserHandle
 import android.os.UserManager
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.RequiresApi
-import org.elnix.dragonlauncher.common.logging.logD
-import org.elnix.dragonlauncher.common.logging.logE
-import org.elnix.dragonlauncher.common.logging.logI
-import org.elnix.dragonlauncher.common.logging.logW
+import org.elnix.dragonlauncher.logging.logD
+import org.elnix.dragonlauncher.logging.logE
+import org.elnix.dragonlauncher.logging.logI
+import org.elnix.dragonlauncher.logging.logW
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.PRIVATE_SPACE_UTILS
 
 /**

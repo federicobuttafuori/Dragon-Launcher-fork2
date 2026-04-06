@@ -1,10 +1,9 @@
 package org.elnix.dragonlauncher.common.serializables
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.elnix.dragonlauncher.common.logging.logD
-import org.elnix.dragonlauncher.common.logging.logE
+import org.elnix.dragonlauncher.logging.logD
+import org.elnix.dragonlauncher.logging.logE
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.STATUS_BAR_TAG
 import org.elnix.dragonlauncher.common.utils.isBlankJson
 

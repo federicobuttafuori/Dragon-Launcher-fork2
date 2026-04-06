@@ -14,7 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.delay
-import org.elnix.dragonlauncher.common.logging.logW
+import org.elnix.dragonlauncher.logging.logW
 import org.elnix.dragonlauncher.common.serializables.StatusBarSerializable
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.STATUS_BAR_TAG

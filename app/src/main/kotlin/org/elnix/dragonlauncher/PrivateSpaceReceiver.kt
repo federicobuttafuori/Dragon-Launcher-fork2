@@ -7,9 +7,9 @@ import android.os.Build
 import android.os.UserHandle
 import androidx.annotation.RequiresApi
 import kotlinx.coroutines.launch
-import org.elnix.dragonlauncher.common.logging.logD
-import org.elnix.dragonlauncher.common.logging.logE
-import org.elnix.dragonlauncher.common.logging.logI
+import org.elnix.dragonlauncher.logging.logD
+import org.elnix.dragonlauncher.logging.logE
+import org.elnix.dragonlauncher.logging.logI
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.PRIVATE_SPACE_TAG
 import org.elnix.dragonlauncher.common.utils.PrivateSpaceUtils
 

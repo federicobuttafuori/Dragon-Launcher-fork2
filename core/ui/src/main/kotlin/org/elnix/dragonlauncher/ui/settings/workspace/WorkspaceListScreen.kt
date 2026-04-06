@@ -33,9 +33,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.common.logging.logD
-import org.elnix.dragonlauncher.common.logging.logI
-import org.elnix.dragonlauncher.common.logging.logW
+import org.elnix.dragonlauncher.logging.logD
+import org.elnix.dragonlauncher.logging.logI
+import org.elnix.dragonlauncher.logging.logW
 import org.elnix.dragonlauncher.common.serializables.Workspace
 import org.elnix.dragonlauncher.common.serializables.WorkspaceType
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.SAMSUNG_INTEGRATION_TAG

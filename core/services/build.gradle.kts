@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
+    implementation(project(":core:logging"))
     implementation(project(":core:common"))
     implementation(project(":core:settings"))
 }

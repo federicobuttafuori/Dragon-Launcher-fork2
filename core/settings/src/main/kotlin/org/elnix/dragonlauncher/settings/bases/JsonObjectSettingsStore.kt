@@ -1,8 +1,8 @@
 package org.elnix.dragonlauncher.settings.bases
 
 import android.content.Context
-import org.elnix.dragonlauncher.common.logging.logE
-import org.elnix.dragonlauncher.common.logging.logI
+import org.elnix.dragonlauncher.logging.logE
+import org.elnix.dragonlauncher.logging.logI
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.BACKUP_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.WORKSPACES_TAG
 import org.json.JSONException

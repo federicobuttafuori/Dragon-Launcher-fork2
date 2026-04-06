@@ -75,8 +75,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.common.logging.logD
-import org.elnix.dragonlauncher.common.logging.logE
+import org.elnix.dragonlauncher.logging.logD
+import org.elnix.dragonlauncher.logging.logE
 import org.elnix.dragonlauncher.common.utils.Constants
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.FONT_PROVIDER
 import org.elnix.dragonlauncher.ui.UiConstants.DragonShape

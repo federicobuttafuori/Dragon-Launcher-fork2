@@ -1,12 +1,14 @@
-package org.elnix.dragonlauncher.common.logging
+package org.elnix.dragonlauncher.logging
 
+import android.content.Context
 import timber.log.Timber
+import java.io.File
 
 object DragonLogManager {
     private var isLoggingEnabled = false
     private var fileTree: FileLoggingTree? = null
 
-    fun init(ctx: android.content.Context) {
+    fun init(ctx: Context) {
         Timber.plant(Timber.DebugTree())
 
         // Initialisation de l'arbre pour les fichiers
@@ -34,7 +36,7 @@ object DragonLogManager {
         }
     }
 
-    fun getAllLogFiles(): List<java.io.File> {
+    fun getAllLogFiles(): List<File> {
         return fileTree?.getAllLogFiles() ?: emptyList()
     }
 
@@ -42,7 +44,7 @@ object DragonLogManager {
         fileTree?.clearAllLogs()
     }
 
-    fun readLogFile(file: java.io.File): String {
+    fun readLogFile(file: File): String {
         return try {
             file.readText()
         } catch (e: Exception) {
@@ -50,7 +52,7 @@ object DragonLogManager {
         }
     }
 
-    fun deleteLogFile(file: java.io.File) {
+    fun deleteLogFile(file: File) {
         try {
             file.delete()
         } catch (e: Exception) {

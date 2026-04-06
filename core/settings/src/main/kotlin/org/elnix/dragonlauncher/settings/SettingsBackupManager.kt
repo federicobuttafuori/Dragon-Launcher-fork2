@@ -5,10 +5,10 @@ import android.net.Uri
 import androidx.core.net.toUri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.elnix.dragonlauncher.common.logging.logD
-import org.elnix.dragonlauncher.common.logging.logE
-import org.elnix.dragonlauncher.common.logging.logI
-import org.elnix.dragonlauncher.common.logging.logW
+import org.elnix.dragonlauncher.logging.logD
+import org.elnix.dragonlauncher.logging.logE
+import org.elnix.dragonlauncher.logging.logI
+import org.elnix.dragonlauncher.logging.logW
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.BACKUP_TAG
 import org.elnix.dragonlauncher.common.utils.getFilePathFromUri
 import org.elnix.dragonlauncher.common.utils.hasUriReadWritePermission

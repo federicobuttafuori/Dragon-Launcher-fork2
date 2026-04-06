@@ -1,4 +1,4 @@
-package org.elnix.dragonlauncher.common.logging
+package org.elnix.dragonlauncher.logging
 
 import android.content.Context
 import android.util.Log

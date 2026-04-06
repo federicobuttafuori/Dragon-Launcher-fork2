@@ -37,7 +37,7 @@ import androidx.core.graphics.createBitmap
 import androidx.core.graphics.scale
 import androidx.core.graphics.withSave
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.common.logging.logE
+import org.elnix.dragonlauncher.logging.logE
 import org.elnix.dragonlauncher.common.serializables.CustomIconSerializable
 import org.elnix.dragonlauncher.common.serializables.IconShape
 import org.elnix.dragonlauncher.common.serializables.IconType

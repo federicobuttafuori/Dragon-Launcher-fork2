@@ -35,7 +35,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import org.elnix.dragonlauncher.base.theme.LocalExtraColors
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.common.logging.logE
+import org.elnix.dragonlauncher.logging.logE
 import org.elnix.dragonlauncher.common.serializables.ColorSerializer
 import org.elnix.dragonlauncher.common.serializables.CustomObjectBlockProperties
 import org.elnix.dragonlauncher.common.serializables.CustomObjectSerializable

@@ -70,7 +70,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import org.elnix.dragonlauncher.base.ktx.toDp
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.common.logging.logD
+import org.elnix.dragonlauncher.logging.logD
 import org.elnix.dragonlauncher.common.serializables.FloatingAppObject
 import org.elnix.dragonlauncher.common.serializables.FloatingAppsJson
 import org.elnix.dragonlauncher.common.serializables.IconShape

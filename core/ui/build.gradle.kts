@@ -85,6 +85,7 @@ dependencies {
     implementation(project(":core:models"))
     implementation(project(":core:common"))
     implementation(project(":core:enumsui"))
+    implementation(project(":core:logging"))
     implementation(project(":core:services"))
     implementation(project(":core:settings"))
     implementation(libs.androidx.runtime)

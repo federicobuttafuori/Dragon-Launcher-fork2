@@ -58,7 +58,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.common.logging.logW
+import org.elnix.dragonlauncher.logging.logW
 import org.elnix.dragonlauncher.common.serializables.AppModel
 import org.elnix.dragonlauncher.common.serializables.WorkspaceType
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.PRIVATE_SPACE_TAG

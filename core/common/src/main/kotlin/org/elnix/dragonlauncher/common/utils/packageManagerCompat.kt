@@ -15,9 +15,9 @@ import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.core.content.ContextCompat
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.common.logging.logD
-import org.elnix.dragonlauncher.common.logging.logE
-import org.elnix.dragonlauncher.common.logging.logI
+import org.elnix.dragonlauncher.logging.logD
+import org.elnix.dragonlauncher.logging.logE
+import org.elnix.dragonlauncher.logging.logI
 import org.elnix.dragonlauncher.common.serializables.AppModel
 import org.elnix.dragonlauncher.common.serializables.mapAppToSection
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.APPS_TAG

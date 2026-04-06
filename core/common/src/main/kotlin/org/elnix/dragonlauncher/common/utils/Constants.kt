@@ -1,11 +1,9 @@
 package org.elnix.dragonlauncher.common.utils
 
-import org.elnix.dragonlauncher.common.logging.LogTag
+import org.elnix.dragonlauncher.logging.LogTag
 import org.elnix.dragonlauncher.common.navigaton.ROUTES
 import org.elnix.dragonlauncher.common.navigaton.SETTINGS
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
-
-const val obtainiumPackageName = "dev.imranr.obtainium.fdroid"
 
 
 object Constants {

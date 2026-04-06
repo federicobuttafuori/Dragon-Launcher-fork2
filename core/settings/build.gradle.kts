@@ -55,6 +55,7 @@ dependencies {
 
     implementation(libs.androidx.ui.graphics)
 
+    implementation(project(":core:logging"))
     implementation(project(":core:common"))
     implementation(project(":core:enumsui"))
 }

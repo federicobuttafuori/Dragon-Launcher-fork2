@@ -180,13 +180,15 @@ dependencies {
     implementation(libs.android.image.cropper)
     implementation(libs.material)
 
+
     implementation(project(":core:ui"))
     implementation(project(":core:base"))
-    implementation(project(":core:enumsui"))
     implementation(project(":core:common"))
-    implementation(project(":core:settings"))
-    implementation(project(":core:shizuku"))
     implementation(project(":core:models"))
+    implementation(project(":core:enumsui"))
+    implementation(project(":core:shizuku"))
+    implementation(project(":core:logging"))
+    implementation(project(":core:settings"))
 }
 
 

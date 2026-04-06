@@ -7,9 +7,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.core.net.toUri
-import org.elnix.dragonlauncher.common.logging.logD
-import org.elnix.dragonlauncher.common.logging.logE
-import org.elnix.dragonlauncher.common.logging.logW
+import org.elnix.dragonlauncher.logging.logD
+import org.elnix.dragonlauncher.logging.logE
+import org.elnix.dragonlauncher.logging.logW
 import org.elnix.dragonlauncher.common.serializables.ExtensionModel
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.EXTENSION_MANAGER_TAG
 import org.elnix.dragonlauncher.common.utils.PackageManagerCompat

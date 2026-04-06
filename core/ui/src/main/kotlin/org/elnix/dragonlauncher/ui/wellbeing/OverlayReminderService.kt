@@ -31,9 +31,9 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.common.logging.logD
-import org.elnix.dragonlauncher.common.logging.logE
-import org.elnix.dragonlauncher.common.logging.logW
+import org.elnix.dragonlauncher.logging.logD
+import org.elnix.dragonlauncher.logging.logE
+import org.elnix.dragonlauncher.logging.logW
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.OVERLAY_REMINDER_TAG
 import org.elnix.dragonlauncher.settings.stores.WellbeingSettingsStore
 

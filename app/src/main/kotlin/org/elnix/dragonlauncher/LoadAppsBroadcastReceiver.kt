@@ -10,8 +10,8 @@ import androidx.core.app.NotificationCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.elnix.dragonlauncher.common.logging.logE
-import org.elnix.dragonlauncher.common.logging.logI
+import org.elnix.dragonlauncher.logging.logE
+import org.elnix.dragonlauncher.logging.logI
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.BROADCAST_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.TAG
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore

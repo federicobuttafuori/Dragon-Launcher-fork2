@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import org.elnix.dragonlauncher.common.logging.logD
-import org.elnix.dragonlauncher.common.logging.logE
-import org.elnix.dragonlauncher.common.logging.logW
+import org.elnix.dragonlauncher.logging.logD
+import org.elnix.dragonlauncher.logging.logE
+import org.elnix.dragonlauncher.logging.logW
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.SHIZUKU_TAG
 import org.elnix.dragonlauncher.common.utils.OutputLine
 import rikka.shizuku.Shizuku

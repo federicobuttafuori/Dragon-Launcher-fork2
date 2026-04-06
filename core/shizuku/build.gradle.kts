@@ -55,5 +55,6 @@ dependencies {
     implementation(libs.shizuku.api)
     implementation(libs.shizuku.provider)
 
+    implementation(project(":core:logging"))
     implementation(project(":core:common"))
 }

@@ -33,7 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.common.logging.logE
+import org.elnix.dragonlauncher.logging.logE
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.ANGLE_LINE_TAG
 import org.elnix.dragonlauncher.enumsui.AngleLineObjects
 import org.elnix.dragonlauncher.enumsui.label

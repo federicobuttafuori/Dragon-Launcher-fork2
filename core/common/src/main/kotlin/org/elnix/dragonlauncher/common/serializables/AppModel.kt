@@ -3,8 +3,8 @@ package org.elnix.dragonlauncher.common.serializables
 import android.content.pm.ApplicationInfo
 import androidx.compose.runtime.Immutable
 import com.google.gson.annotations.SerializedName
-import org.elnix.dragonlauncher.common.logging.logE
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.WORKSPACES_TAG
+import org.elnix.dragonlauncher.logging.logE
 
 @Immutable
 data class AppModel(

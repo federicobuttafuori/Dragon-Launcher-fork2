@@ -77,7 +77,7 @@ import kotlinx.coroutines.yield
 import org.elnix.dragonlauncher.base.ktx.px
 import org.elnix.dragonlauncher.base.ktx.toDp
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.common.logging.logD
+import org.elnix.dragonlauncher.logging.logD
 import org.elnix.dragonlauncher.common.navigaton.SETTINGS
 import org.elnix.dragonlauncher.common.serializables.AppModel
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable

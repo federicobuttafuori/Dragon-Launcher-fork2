@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.base.ktx.px
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.common.logging.logD
+import org.elnix.dragonlauncher.logging.logD
 import org.elnix.dragonlauncher.common.serializables.CircleNest
 import org.elnix.dragonlauncher.common.serializables.CustomHapticFeedbackSerializable
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.HAPTIC_TAG

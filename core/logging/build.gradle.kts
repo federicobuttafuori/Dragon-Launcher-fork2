@@ -2,7 +2,6 @@ import com.android.build.api.dsl.LibraryExtension
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.compose)
 }
 
 kotlin {
@@ -10,7 +9,7 @@ kotlin {
 }
 
 extensions.configure<LibraryExtension> {
-    namespace = "org.elnix.dragonlauncher.enumsui"
+    namespace = "org.elnix.dragonlauncher.logging"
     compileSdk {
         version = release(36)
     }
@@ -42,23 +41,9 @@ extensions.configure<LibraryExtension> {
         }
     }
 
-    buildTypes {
-        debug {}
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    buildFeatures {
-        compose = true
     }
 }
 
@@ -67,12 +52,5 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
-    /* Composable, icons and stringResource in enums */
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.material.icons.extended)
-
-
-    implementation(project(":core:logging"))
-    implementation(project(":core:common"))
+    implementation(libs.timber)
 }

@@ -9,8 +9,8 @@ import android.os.UserManager
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.net.toUri
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.common.logging.logD
-import org.elnix.dragonlauncher.common.logging.logE
+import org.elnix.dragonlauncher.logging.logD
+import org.elnix.dragonlauncher.logging.logE
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.APP_LAUNCH_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.TAG
