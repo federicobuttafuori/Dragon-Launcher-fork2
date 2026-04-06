@@ -519,7 +519,7 @@ fun Color.alphaMultiplier(multiplier: Float): Color =
  * @return this color, or a version with its alpha halved when disabled
  */
 fun Color.semiTransparentIfDisabled(enabled: Boolean): Color =
-    alphaMultiplier(if (enabled) 1f else 0.5f)
+    if (enabled) this else alphaMultiplier(0.5f)
 
 
 /**
