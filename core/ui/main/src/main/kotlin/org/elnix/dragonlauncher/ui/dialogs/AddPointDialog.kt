@@ -50,13 +50,13 @@ import org.elnix.dragonlauncher.logging.logD
 import org.elnix.dragonlauncher.settings.stores.BehaviorSettingsStore
 import org.elnix.dragonlauncher.settings.stores.DrawerSettingsStore
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import org.elnix.dragonlauncher.ui.actions.ActionIcon
 import org.elnix.dragonlauncher.ui.actions.actionColor
 import org.elnix.dragonlauncher.ui.actions.actionLabel
-import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
-import org.elnix.dragonlauncher.ui.components.dragon.DragonRow
-import org.elnix.dragonlauncher.ui.components.dragon.DragonTooltip
+import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
+import org.elnix.dragonlauncher.ui.dragon.components.DragonRow
+import org.elnix.dragonlauncher.ui.dragon.components.DragonTooltip
 import org.elnix.dragonlauncher.ui.base.asState
 import org.elnix.dragonlauncher.ui.dragon.text.AutoResizeableText
 import org.elnix.dragonlauncher.ui.composition.LocalShowLabelsInAddPointDialog

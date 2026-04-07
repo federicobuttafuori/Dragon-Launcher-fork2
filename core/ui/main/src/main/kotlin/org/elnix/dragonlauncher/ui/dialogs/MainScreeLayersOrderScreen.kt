@@ -45,8 +45,8 @@ import org.elnix.dragonlauncher.common.serializables.enabled
 import org.elnix.dragonlauncher.common.serializables.label
 import org.elnix.dragonlauncher.common.utils.isNotBlankJson
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
-import org.elnix.dragonlauncher.ui.components.dragon.DragonColumnGroup
+import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.dragon.components.DragonColumnGroup
 import org.elnix.dragonlauncher.ui.base.asState
 import org.elnix.dragonlauncher.ui.helpers.SliderWithLabel
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold

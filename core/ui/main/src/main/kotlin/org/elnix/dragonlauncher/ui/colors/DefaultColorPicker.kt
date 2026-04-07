@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import org.elnix.dragonlauncher.ui.modifiers.shapedClickable
+import org.elnix.dragonlauncher.ui.base.modifiers.shapedClickable
 
 @Composable
 fun DefaultColorPicker(

@@ -66,7 +66,7 @@ import org.elnix.dragonlauncher.common.utils.resolveShape
 import org.elnix.dragonlauncher.common.utils.vibrate
 import org.elnix.dragonlauncher.settings.stores.BehaviorSettingsStore
 import org.elnix.dragonlauncher.ui.base.asState
-import org.elnix.dragonlauncher.ui.modifiers.shapedClickable
+import org.elnix.dragonlauncher.ui.base.modifiers.shapedClickable
 
 /**
  * Dialog for entering a PIN to unlock settings.

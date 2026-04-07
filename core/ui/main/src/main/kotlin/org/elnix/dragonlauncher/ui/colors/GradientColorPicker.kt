@@ -33,7 +33,7 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import android.graphics.Color as AndroidColor
 
 

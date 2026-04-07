@@ -18,8 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import org.elnix.dragonlauncher.base.ColorUtils.semiTransparentIfDisabled
-import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
-import org.elnix.dragonlauncher.ui.components.dragon.DragonRow
+import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
+import org.elnix.dragonlauncher.ui.dragon.components.DragonRow
 import org.elnix.dragonlauncher.ui.dragon.text.TextWithDescription
 
 @Composable

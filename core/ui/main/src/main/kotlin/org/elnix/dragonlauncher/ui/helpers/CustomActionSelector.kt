@@ -33,8 +33,8 @@ import org.elnix.dragonlauncher.base.ColorUtils.semiTransparentIfDisabled
 import org.elnix.dragonlauncher.ui.actions.ActionIcon
 import org.elnix.dragonlauncher.ui.actions.actionColor
 import org.elnix.dragonlauncher.ui.actions.actionLabel
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
-import org.elnix.dragonlauncher.ui.components.dragon.DragonRow
+import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.dragon.components.DragonRow
 import org.elnix.dragonlauncher.ui.dialogs.AddPointDialog
 
 

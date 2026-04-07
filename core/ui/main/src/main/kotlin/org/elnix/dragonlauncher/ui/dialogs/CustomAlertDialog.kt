@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 
 
 @Composable

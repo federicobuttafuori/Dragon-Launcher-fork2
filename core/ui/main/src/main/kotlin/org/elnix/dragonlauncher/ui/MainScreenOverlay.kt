@@ -47,6 +47,7 @@ import org.elnix.dragonlauncher.settings.stores.AngleLineSettingsStore
 import org.elnix.dragonlauncher.settings.stores.BehaviorSettingsStore
 import org.elnix.dragonlauncher.settings.stores.DebugSettingsStore
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
+import org.elnix.dragonlauncher.ui.base.UiConstants
 import org.elnix.dragonlauncher.ui.components.AppPreviewTitle
 import org.elnix.dragonlauncher.ui.base.asState
 import org.elnix.dragonlauncher.ui.dialogs.rememberLineObjectsOrder

@@ -87,10 +87,10 @@ import org.elnix.dragonlauncher.models.FloatingAppsViewModel
 import org.elnix.dragonlauncher.models.FloatingAppsViewModel.ResizeCorner
 import org.elnix.dragonlauncher.settings.stores.DebugSettingsStore
 import org.elnix.dragonlauncher.settings.stores.WidgetsSettingsStore
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import org.elnix.dragonlauncher.ui.components.FloatingAppsHostView
-import org.elnix.dragonlauncher.ui.components.dragon.DragonColumnGroup
-import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
+import org.elnix.dragonlauncher.ui.dragon.components.DragonColumnGroup
+import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
 import org.elnix.dragonlauncher.ui.components.generic.MultiSelectConnectedButtonColumn
 import org.elnix.dragonlauncher.ui.components.generic.MultiSelectConnectedButtonRow
 import org.elnix.dragonlauncher.ui.base.asState
@@ -100,7 +100,7 @@ import org.elnix.dragonlauncher.ui.dialogs.ShapePickerDialog
 import org.elnix.dragonlauncher.ui.helpers.SliderWithLabel
 import org.elnix.dragonlauncher.ui.helpers.SmallShapeRow
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
-import org.elnix.dragonlauncher.ui.modifiers.settingsGroup
+import org.elnix.dragonlauncher.ui.base.modifiers.settingsGroup
 import org.elnix.dragonlauncher.ui.composition.LocalFloatingAppsViewModel
 import org.elnix.dragonlauncher.ui.statusbar.StatusBar
 import kotlin.math.atan2

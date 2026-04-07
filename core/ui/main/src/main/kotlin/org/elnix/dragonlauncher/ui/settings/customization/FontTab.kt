@@ -83,9 +83,9 @@ import org.elnix.dragonlauncher.logging.logE
 import org.elnix.dragonlauncher.services.ExtensionManager
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
 import org.elnix.dragonlauncher.theme.fontNameToFont
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import org.elnix.dragonlauncher.ui.base.asState
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
+import org.elnix.dragonlauncher.theme.AppObjectsColors
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
 import java.io.File
 import java.io.FileOutputStream

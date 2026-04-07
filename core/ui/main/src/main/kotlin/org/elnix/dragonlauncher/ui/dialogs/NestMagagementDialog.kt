@@ -44,10 +44,10 @@ import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.CircleNest
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import org.elnix.dragonlauncher.common.utils.copyToClipboard
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
-import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
+import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
 import org.elnix.dragonlauncher.ui.helpers.nests.actionsInCircle
 import org.elnix.dragonlauncher.ui.remembers.rememberSwipeDefaultParams
 import org.elnix.dragonlauncher.ui.composition.LocalNests

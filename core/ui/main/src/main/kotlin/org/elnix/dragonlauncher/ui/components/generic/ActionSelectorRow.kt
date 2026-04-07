@@ -29,12 +29,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
-import org.elnix.dragonlauncher.ui.components.dragon.DragonRow
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
+import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.dragon.components.DragonRow
 import org.elnix.dragonlauncher.ui.dialogs.CustomAlertDialog
 import org.elnix.dragonlauncher.ui.dragon.text.TextWithDescription
-import org.elnix.dragonlauncher.ui.modifiers.conditional
+import org.elnix.dragonlauncher.ui.base.modifiers.conditional
 
 
 @Composable

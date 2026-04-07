@@ -40,7 +40,7 @@ import org.elnix.dragonlauncher.common.serializables.CircleNest
 import org.elnix.dragonlauncher.common.serializables.CustomHapticFeedbackSerializable
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.HAPTIC_TAG
 import org.elnix.dragonlauncher.common.utils.UiCircle
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import org.elnix.dragonlauncher.common.utils.showToast
 import org.elnix.dragonlauncher.enumsui.NestEditMode
 import org.elnix.dragonlauncher.enumsui.NestEditMode.DRAG

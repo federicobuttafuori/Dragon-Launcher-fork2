@@ -103,8 +103,8 @@ import org.elnix.dragonlauncher.settings.stores.DrawerSettingsStore
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
 import org.elnix.dragonlauncher.ui.components.burger.BurgerAction
 import org.elnix.dragonlauncher.ui.components.burger.BurgerListAction
-import org.elnix.dragonlauncher.ui.components.dragon.DragonDropDownMenu
-import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
+import org.elnix.dragonlauncher.ui.dragon.components.DragonDropDownMenu
+import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
 import org.elnix.dragonlauncher.ui.base.asState
 import org.elnix.dragonlauncher.ui.dialogs.AppAliasesDialog
 import org.elnix.dragonlauncher.ui.dialogs.AppLongPressRow
@@ -113,9 +113,9 @@ import org.elnix.dragonlauncher.ui.dialogs.RenameAppDialog
 import org.elnix.dragonlauncher.ui.helpers.AppDrawerSearch
 import org.elnix.dragonlauncher.ui.helpers.AppGrid
 import org.elnix.dragonlauncher.ui.helpers.WallpaperDim
-import org.elnix.dragonlauncher.ui.modifiers.conditional
-import org.elnix.dragonlauncher.ui.modifiers.settingsGroup
-import org.elnix.dragonlauncher.ui.modifiers.shapedClickable
+import org.elnix.dragonlauncher.ui.base.modifiers.conditional
+import org.elnix.dragonlauncher.ui.base.modifiers.settingsGroup
+import org.elnix.dragonlauncher.ui.base.modifiers.shapedClickable
 import org.elnix.dragonlauncher.ui.composition.LocalAppLifecycleViewModel
 import org.elnix.dragonlauncher.ui.composition.LocalAppsViewModel
 import kotlin.math.abs

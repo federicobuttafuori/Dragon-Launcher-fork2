@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.navigaton.routeResId
 import org.elnix.dragonlauncher.common.navigaton.settingsRoutes
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 
 @Composable
 fun SettingsPagePicker(

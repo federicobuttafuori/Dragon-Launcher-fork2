@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.settings.stores.PrivateSettingsStore
-import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
+import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
 
 
 @Composable

@@ -51,15 +51,16 @@ import org.elnix.dragonlauncher.common.utils.pasteClipboard
 import org.elnix.dragonlauncher.common.utils.showToast
 import org.elnix.dragonlauncher.enumsui.ColorPickerMode
 import org.elnix.dragonlauncher.settings.stores.ColorModesSettingsStore
+import org.elnix.dragonlauncher.theme.AppObjectsColors
 import org.elnix.dragonlauncher.ui.base.asState
-import org.elnix.dragonlauncher.ui.components.ValidateCancelButtons
-import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
-import org.elnix.dragonlauncher.ui.components.dragon.DragonRow
+import org.elnix.dragonlauncher.ui.dragon.components.ValidateCancelButtons
+import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
+import org.elnix.dragonlauncher.ui.dragon.components.DragonRow
 import org.elnix.dragonlauncher.ui.components.generic.MultiSelectConnectedButtonRow
 import org.elnix.dragonlauncher.ui.components.generic.ShowLabels
 import org.elnix.dragonlauncher.ui.dialogs.CustomAlertDialog
 import org.elnix.dragonlauncher.ui.helpers.SliderWithLabel
-import org.elnix.dragonlauncher.ui.modifiers.shapedClickable
+import org.elnix.dragonlauncher.ui.base.modifiers.shapedClickable
 
 @Composable
 fun ColorPickerRow(

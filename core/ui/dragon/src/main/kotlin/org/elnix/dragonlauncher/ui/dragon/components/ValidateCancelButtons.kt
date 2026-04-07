@@ -1,4 +1,4 @@
-package org.elnix.dragonlauncher.ui.components
+package org.elnix.dragonlauncher.ui.dragon.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -15,9 +15,9 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.ui.UiConstants
+import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.base.UiConstants
 import org.elnix.dragonlauncher.ui.base.withHaptic
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
 import org.elnix.dragonlauncher.ui.dragon.text.AutoResizeableText
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)

@@ -67,14 +67,14 @@ import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.AppModel
 import org.elnix.dragonlauncher.common.utils.Constants.PackageNameLists.knownSocialMediaApps
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import org.elnix.dragonlauncher.common.utils.hasUsageStatsPermission
 import org.elnix.dragonlauncher.common.utils.resolveShape
 import org.elnix.dragonlauncher.settings.stores.DrawerSettingsStore
 import org.elnix.dragonlauncher.settings.stores.WellbeingSettingsStore
 import org.elnix.dragonlauncher.ui.actions.appIcon
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
-import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
+import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
 import org.elnix.dragonlauncher.ui.components.settings.SettingsSlider
 import org.elnix.dragonlauncher.ui.components.settings.SettingsSwitchRow
 import org.elnix.dragonlauncher.ui.base.asState
@@ -82,7 +82,7 @@ import org.elnix.dragonlauncher.ui.dialogs.AppPickerDialog
 import org.elnix.dragonlauncher.ui.helpers.SwitchRow
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsItem
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
-import org.elnix.dragonlauncher.ui.modifiers.settingsGroup
+import org.elnix.dragonlauncher.ui.base.modifiers.settingsGroup
 import org.elnix.dragonlauncher.ui.composition.LocalAppsViewModel
 import org.elnix.dragonlauncher.ui.composition.LocalIconShape
 

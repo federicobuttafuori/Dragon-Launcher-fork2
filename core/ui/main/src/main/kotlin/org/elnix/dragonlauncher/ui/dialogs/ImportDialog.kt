@@ -16,8 +16,8 @@ import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.settings.bases.DatastoreProvider
 import org.elnix.dragonlauncher.settings.backupableStores
 import org.elnix.dragonlauncher.settings.bases.BaseSettingsStore
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
-import org.elnix.dragonlauncher.ui.components.ValidateCancelButtons
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.dragon.components.ValidateCancelButtons
 import org.json.JSONObject
 
 @Composable

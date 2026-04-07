@@ -55,13 +55,13 @@ import org.elnix.dragonlauncher.common.serializables.defaultSwipePointsValues
 import org.elnix.dragonlauncher.common.utils.ImageUtils.uriToBase64
 import org.elnix.dragonlauncher.base.ColorUtils.alphaMultiplier
 import org.elnix.dragonlauncher.base.ColorUtils.definedOrNull
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
+import org.elnix.dragonlauncher.theme.AppObjectsColors
 import org.elnix.dragonlauncher.ui.colors.ColorPickerRow
 import org.elnix.dragonlauncher.ui.components.PointPreviewCanvas
 import org.elnix.dragonlauncher.ui.components.TextDivider
-import org.elnix.dragonlauncher.ui.components.ValidateCancelButtons
-import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
+import org.elnix.dragonlauncher.ui.dragon.components.ValidateCancelButtons
+import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
 import org.elnix.dragonlauncher.ui.helpers.ShapeRow
 import org.elnix.dragonlauncher.ui.helpers.SliderWithLabel
 import org.elnix.dragonlauncher.ui.composition.LocalAppsViewModel

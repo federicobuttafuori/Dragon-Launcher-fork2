@@ -36,8 +36,8 @@ import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.IconPackInfo
 import org.elnix.dragonlauncher.common.serializables.dummyAppModel
 import org.elnix.dragonlauncher.ui.components.Spacer
-import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
-import org.elnix.dragonlauncher.ui.components.dragon.DragonRow
+import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
+import org.elnix.dragonlauncher.ui.dragon.components.DragonRow
 import org.elnix.dragonlauncher.ui.dragon.text.TextWithDescription
 import org.elnix.dragonlauncher.ui.composition.LocalIcons
 

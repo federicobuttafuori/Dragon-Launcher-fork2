@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.settings.bases.BaseSettingObject
 import org.elnix.dragonlauncher.ui.base.asState
-import org.elnix.dragonlauncher.ui.dialogs.UserValidation
+import org.elnix.dragonlauncher.ui.dragon.dialogs.UserValidation
 import org.elnix.dragonlauncher.ui.helpers.SwitchRow
 
 @Composable

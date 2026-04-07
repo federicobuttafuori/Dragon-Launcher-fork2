@@ -20,7 +20,7 @@ import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.STATUS_BAR_TAG
 import org.elnix.dragonlauncher.common.utils.openAlarmApp
 import org.elnix.dragonlauncher.common.utils.openCalendar
-import org.elnix.dragonlauncher.ui.modifiers.conditional
+import org.elnix.dragonlauncher.ui.base.modifiers.conditional
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter

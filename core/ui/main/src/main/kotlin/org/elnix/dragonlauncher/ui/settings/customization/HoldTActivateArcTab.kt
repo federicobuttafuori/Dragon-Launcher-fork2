@@ -39,10 +39,10 @@ import org.elnix.dragonlauncher.common.serializables.ColorSerializer
 import org.elnix.dragonlauncher.common.serializables.CustomObjectSerializable
 import org.elnix.dragonlauncher.settings.stores.HoldToActivateArcSettingsStore
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
-import org.elnix.dragonlauncher.ui.UiConstants
+import org.elnix.dragonlauncher.ui.base.UiConstants
 import org.elnix.dragonlauncher.ui.base.withHaptic
-import org.elnix.dragonlauncher.ui.components.dragon.DragonColumnGroup
-import org.elnix.dragonlauncher.ui.components.dragon.ToggleableDragonIconButton
+import org.elnix.dragonlauncher.ui.dragon.components.DragonColumnGroup
+import org.elnix.dragonlauncher.ui.dragon.components.ToggleableDragonIconButton
 import org.elnix.dragonlauncher.ui.components.settings.SettingsSlider
 import org.elnix.dragonlauncher.ui.components.settings.SettingsSwitchRow
 import org.elnix.dragonlauncher.ui.base.asState

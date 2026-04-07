@@ -29,8 +29,8 @@ import org.elnix.dragonlauncher.enumsui.BackupSelectStoresButtons.SELECT_ALL
 import org.elnix.dragonlauncher.settings.bases.DatastoreProvider
 import org.elnix.dragonlauncher.settings.backupableStores
 import org.elnix.dragonlauncher.settings.bases.BaseSettingsStore
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
-import org.elnix.dragonlauncher.ui.components.ValidateCancelButtons
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.dragon.components.ValidateCancelButtons
 import org.elnix.dragonlauncher.ui.components.generic.MultiSelectConnectedButtonRow
 
 @Composable

@@ -12,8 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
-import org.elnix.dragonlauncher.ui.components.ValidateCancelButtons
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.dragon.components.ValidateCancelButtons
 
 @Composable
 fun GoogleLockingWarning(

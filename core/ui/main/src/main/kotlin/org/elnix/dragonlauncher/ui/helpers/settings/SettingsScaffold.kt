@@ -36,8 +36,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.ui.dialogs.UserValidation
-import org.elnix.dragonlauncher.ui.modifiers.conditional
+import org.elnix.dragonlauncher.ui.dragon.dialogs.UserValidation
+import org.elnix.dragonlauncher.ui.base.modifiers.conditional
 
 @OptIn(ExperimentalLayoutApi::class)
 @Suppress("AssignedValueIsNeverRead")

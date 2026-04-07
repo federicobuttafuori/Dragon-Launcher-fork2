@@ -50,7 +50,7 @@ import org.elnix.dragonlauncher.settings.backupableStores
 import org.elnix.dragonlauncher.settings.stores.BackupSettingsStore
 import org.elnix.dragonlauncher.settings.stores.PrivateSettingsStore
 import org.elnix.dragonlauncher.ui.components.TextDivider
-import org.elnix.dragonlauncher.ui.components.dragon.DragonRow
+import org.elnix.dragonlauncher.ui.dragon.components.DragonRow
 import org.elnix.dragonlauncher.ui.components.settings.SettingsSwitchRow
 import org.elnix.dragonlauncher.ui.base.asState
 import org.elnix.dragonlauncher.ui.dialogs.ExportSettingsDialog

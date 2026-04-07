@@ -71,10 +71,10 @@ import org.elnix.dragonlauncher.common.utils.isDefaultLauncher
 import org.elnix.dragonlauncher.common.utils.showToast
 import org.elnix.dragonlauncher.services.ExtensionManager
 import org.elnix.dragonlauncher.settings.stores.DebugSettingsStore
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
-import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
+import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
 import org.elnix.dragonlauncher.ui.components.settings.SettingsSwitchRow
-import org.elnix.dragonlauncher.ui.dialogs.UserValidation
+import org.elnix.dragonlauncher.ui.dragon.dialogs.UserValidation
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
 import java.io.File
 

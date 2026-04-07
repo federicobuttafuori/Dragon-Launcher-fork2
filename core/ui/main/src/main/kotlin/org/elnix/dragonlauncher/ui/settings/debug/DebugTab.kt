@@ -43,9 +43,9 @@ import org.elnix.dragonlauncher.services.SystemControl
 import org.elnix.dragonlauncher.settings.allStores
 import org.elnix.dragonlauncher.settings.stores.DebugSettingsStore
 import org.elnix.dragonlauncher.settings.stores.PrivateSettingsStore
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
+import org.elnix.dragonlauncher.theme.AppObjectsColors
 import org.elnix.dragonlauncher.ui.components.ExpandableSection
-import org.elnix.dragonlauncher.ui.components.dragon.DragonButton
+import org.elnix.dragonlauncher.ui.dragon.components.DragonButton
 import org.elnix.dragonlauncher.ui.components.settings.SettingsSwitchRow
 import org.elnix.dragonlauncher.ui.base.asState
 import org.elnix.dragonlauncher.ui.dialogs.IconEditorDialog

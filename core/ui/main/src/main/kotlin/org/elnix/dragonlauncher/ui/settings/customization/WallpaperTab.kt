@@ -38,8 +38,8 @@ import org.elnix.dragonlauncher.enumsui.WallpaperTarget
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
 import org.elnix.dragonlauncher.ui.base.asState
 import org.elnix.dragonlauncher.ui.colors.ColorPickerRow
-import org.elnix.dragonlauncher.ui.components.dragon.DragonButton
-import org.elnix.dragonlauncher.ui.components.dragon.DragonColumnGroup
+import org.elnix.dragonlauncher.ui.dragon.components.DragonButton
+import org.elnix.dragonlauncher.ui.dragon.components.DragonColumnGroup
 import org.elnix.dragonlauncher.ui.components.generic.ActionSelector
 import org.elnix.dragonlauncher.ui.components.generic.MultiSelectConnectedButtonRow
 import org.elnix.dragonlauncher.ui.components.generic.ShowLabels

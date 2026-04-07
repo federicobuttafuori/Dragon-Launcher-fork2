@@ -14,8 +14,8 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import org.elnix.dragonlauncher.enumsui.ToggleButtonOption
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
-import org.elnix.dragonlauncher.ui.components.dragon.DragonTooltip
+import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.dragon.components.DragonTooltip
 import org.elnix.dragonlauncher.ui.components.internals.connectedBottomButtonShapes
 import org.elnix.dragonlauncher.ui.components.internals.connectedTopButtonShapes
 

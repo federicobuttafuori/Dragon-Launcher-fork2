@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.AppModel
 import org.elnix.dragonlauncher.settings.stores.DrawerSettingsStore
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import org.elnix.dragonlauncher.ui.base.asState
 
 @Composable

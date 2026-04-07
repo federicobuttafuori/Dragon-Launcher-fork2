@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import org.elnix.dragonlauncher.base.ktx.px
 import org.elnix.dragonlauncher.common.serializables.CustomObjectSerializable
 import org.elnix.dragonlauncher.common.utils.resolveShape
-import org.elnix.dragonlauncher.ui.UiConstants
+import org.elnix.dragonlauncher.ui.base.UiConstants
 import org.elnix.dragonlauncher.ui.helpers.customobjects.drawNeonGlowShapePath
 
 private fun DrawScope.holdTolerance(

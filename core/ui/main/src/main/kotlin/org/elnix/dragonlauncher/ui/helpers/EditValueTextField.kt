@@ -26,8 +26,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
-import org.elnix.dragonlauncher.ui.UiConstants
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
+import org.elnix.dragonlauncher.ui.base.UiConstants
+import org.elnix.dragonlauncher.theme.AppObjectsColors
 
 @Composable
 fun EditValueTextField(

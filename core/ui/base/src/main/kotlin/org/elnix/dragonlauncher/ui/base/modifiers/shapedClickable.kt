@@ -1,4 +1,4 @@
-package org.elnix.dragonlauncher.ui.modifiers
+package org.elnix.dragonlauncher.ui.base.modifiers
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.combinedClickable
@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.semantics.Role
-import org.elnix.dragonlauncher.ui.UiConstants
+import org.elnix.dragonlauncher.ui.base.UiConstants
 import org.elnix.dragonlauncher.ui.base.withHaptic
 
 

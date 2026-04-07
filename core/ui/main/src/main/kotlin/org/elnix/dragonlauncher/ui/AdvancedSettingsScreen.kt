@@ -73,7 +73,7 @@ import org.elnix.dragonlauncher.common.utils.showToast
 import org.elnix.dragonlauncher.settings.SettingsStoreRegistry
 import org.elnix.dragonlauncher.settings.stores.DebugSettingsStore
 import org.elnix.dragonlauncher.settings.stores.PrivateSettingsStore
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import org.elnix.dragonlauncher.ui.components.TextDivider
 import org.elnix.dragonlauncher.ui.base.asState
 import org.elnix.dragonlauncher.ui.helpers.settings.ContributorItem

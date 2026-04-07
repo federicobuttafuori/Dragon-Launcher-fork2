@@ -41,7 +41,7 @@ import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.utils.ThemeObject
 import org.elnix.dragonlauncher.settings.DataStoreName
 import org.elnix.dragonlauncher.settings.SettingsBackupManager
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
+import org.elnix.dragonlauncher.theme.AppObjectsColors
 import org.elnix.dragonlauncher.ui.dialogs.ThemeJsonPopup
 import org.json.JSONObject
 

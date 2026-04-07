@@ -29,7 +29,7 @@ import org.elnix.dragonlauncher.common.utils.resolveShape
 import org.elnix.dragonlauncher.ui.actions.ActionIcon
 import org.elnix.dragonlauncher.ui.helpers.nests.actionsInCircle
 import org.elnix.dragonlauncher.ui.remembers.rememberSwipeDefaultParams
-import org.elnix.dragonlauncher.ui.modifiers.conditional
+import org.elnix.dragonlauncher.ui.base.modifiers.conditional
 import org.elnix.dragonlauncher.ui.widgets.LauncherWidgetHolder
 import kotlin.math.min
 

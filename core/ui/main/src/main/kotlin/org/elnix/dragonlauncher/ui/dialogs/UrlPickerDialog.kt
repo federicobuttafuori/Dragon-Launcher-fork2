@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
+import org.elnix.dragonlauncher.theme.AppObjectsColors
 
 @Composable
 fun UrlInputDialog(

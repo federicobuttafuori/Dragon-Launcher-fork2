@@ -1,4 +1,4 @@
-package org.elnix.dragonlauncher.ui.components.dragon
+package org.elnix.dragonlauncher.ui.dragon.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.elnix.dragonlauncher.ui.modifiers.settingsGroup
+import org.elnix.dragonlauncher.ui.base.modifiers.settingsGroup
 
 @Composable
 fun DragonColumnGroup(

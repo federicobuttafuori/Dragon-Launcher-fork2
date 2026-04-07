@@ -1,5 +1,7 @@
 package org.elnix.dragonlauncher.ui.settings.extensions
 
+import android.content.Intent
+import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -29,8 +31,8 @@ import org.elnix.dragonlauncher.common.serializables.ExtensionModel
 import org.elnix.dragonlauncher.common.utils.loadExtensionRegistry
 import org.elnix.dragonlauncher.services.ExtensionManager
 import org.elnix.dragonlauncher.ui.components.ExpandableSection
-import org.elnix.dragonlauncher.ui.components.dragon.DragonButton
-import org.elnix.dragonlauncher.ui.components.dragon.DragonColumnGroup
+import org.elnix.dragonlauncher.ui.dragon.components.DragonButton
+import org.elnix.dragonlauncher.ui.dragon.components.DragonColumnGroup
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
 import org.elnix.dragonlauncher.ui.remembers.rememberExpandableSection
 
@@ -180,7 +182,7 @@ private fun ExtensionItem(extension: ExtensionModel) {
                                 context.startActivity(intent)
                             } else {
                                 // Try showing app info instead if no launcher intent
-                                val infoIntent = android.content.Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                val infoIntent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                                     .apply { data = "package:$pkg".toUri() }
                                 context.startActivity(infoIntent)
                             }
@@ -197,7 +199,7 @@ private fun ExtensionItem(extension: ExtensionModel) {
                         } else {
                             // Uninstall logic (via Intent)
                             val pkg = extension.packageName ?: extension.id
-                            val intent = android.content.Intent(android.content.Intent.ACTION_DELETE)
+                            val intent = Intent(Intent.ACTION_DELETE)
                                 .apply { data = "package:$pkg".toUri() }
                             context.startActivity(intent)
                         }

@@ -39,8 +39,8 @@ import org.elnix.dragonlauncher.enumsui.BackupSelectStoresButtons.DESELECT_ALL
 import org.elnix.dragonlauncher.enumsui.BackupSelectStoresButtons.INVERT
 import org.elnix.dragonlauncher.enumsui.BackupSelectStoresButtons.SELECT_ALL
 import org.elnix.dragonlauncher.settings.stores.HoldToActivateArcSettingsStore
-import org.elnix.dragonlauncher.ui.components.ValidateCancelButtons
-import org.elnix.dragonlauncher.ui.components.dragon.DragonRow
+import org.elnix.dragonlauncher.ui.dragon.components.ValidateCancelButtons
+import org.elnix.dragonlauncher.ui.dragon.components.DragonRow
 import org.elnix.dragonlauncher.ui.components.generic.MultiSelectConnectedButtonRow
 import org.elnix.dragonlauncher.ui.base.asState
 import sh.calvin.reorderable.ReorderableItem

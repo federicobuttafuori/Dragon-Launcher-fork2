@@ -41,7 +41,7 @@ import org.elnix.dragonlauncher.settings.stores.UiSettingsStore.showLaunchingApp
 import org.elnix.dragonlauncher.ui.components.AppPreviewTitle
 import org.elnix.dragonlauncher.ui.components.ExpandableSection
 import org.elnix.dragonlauncher.ui.components.TextDivider
-import org.elnix.dragonlauncher.ui.components.dragon.DragonColumnGroup
+import org.elnix.dragonlauncher.ui.dragon.components.DragonColumnGroup
 import org.elnix.dragonlauncher.ui.components.settings.SettingsSlider
 import org.elnix.dragonlauncher.ui.components.settings.SettingsSwitchRow
 import org.elnix.dragonlauncher.ui.base.asState

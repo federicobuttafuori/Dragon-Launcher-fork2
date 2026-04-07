@@ -1,4 +1,4 @@
-package org.elnix.dragonlauncher.ui.modifiers
+package org.elnix.dragonlauncher.ui.base.modifiers
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -10,7 +10,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.elnix.dragonlauncher.base.ColorUtils.semiTransparentIfDisabled
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 
 
 @Composable

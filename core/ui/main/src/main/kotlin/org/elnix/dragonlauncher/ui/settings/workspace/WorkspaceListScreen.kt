@@ -45,7 +45,7 @@ import org.elnix.dragonlauncher.enumsui.WorkspaceAction
 import org.elnix.dragonlauncher.settings.stores.PrivateSettingsStore
 import org.elnix.dragonlauncher.ui.base.asState
 import org.elnix.dragonlauncher.ui.dialogs.CreateOrEditWorkspaceDialog
-import org.elnix.dragonlauncher.ui.dialogs.UserValidation
+import org.elnix.dragonlauncher.ui.dragon.dialogs.UserValidation
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
 import org.elnix.dragonlauncher.ui.composition.LocalAppsViewModel
 import sh.calvin.reorderable.ReorderableItem

@@ -19,8 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.elnix.dragonlauncher.enumsui.ToggleButtonOption
 import org.elnix.dragonlauncher.ui.base.withHapticParam
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
-import org.elnix.dragonlauncher.ui.components.dragon.DragonTooltip
+import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.dragon.components.DragonTooltip
 
 
 enum class ShowLabels {

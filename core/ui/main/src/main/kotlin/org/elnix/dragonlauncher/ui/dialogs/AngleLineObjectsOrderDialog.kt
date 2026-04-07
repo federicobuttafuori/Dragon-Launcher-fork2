@@ -38,8 +38,8 @@ import org.elnix.dragonlauncher.common.utils.Constants.Logging.ANGLE_LINE_TAG
 import org.elnix.dragonlauncher.enumsui.AngleLineObjects
 import org.elnix.dragonlauncher.enumsui.label
 import org.elnix.dragonlauncher.settings.stores.AngleLineSettingsStore
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
-import org.elnix.dragonlauncher.ui.components.ValidateCancelButtons
+import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.dragon.components.ValidateCancelButtons
 import org.elnix.dragonlauncher.ui.base.asState
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState

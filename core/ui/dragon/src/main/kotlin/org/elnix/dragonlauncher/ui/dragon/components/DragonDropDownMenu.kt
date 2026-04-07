@@ -1,4 +1,4 @@
-package org.elnix.dragonlauncher.ui.components.dragon
+package org.elnix.dragonlauncher.ui.dragon.components
 
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material3.DropdownMenu

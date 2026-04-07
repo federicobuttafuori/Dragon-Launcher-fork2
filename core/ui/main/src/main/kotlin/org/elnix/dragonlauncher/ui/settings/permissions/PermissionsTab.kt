@@ -33,7 +33,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import org.elnix.dragonlauncher.ui.helpers.SwitchRow
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
 

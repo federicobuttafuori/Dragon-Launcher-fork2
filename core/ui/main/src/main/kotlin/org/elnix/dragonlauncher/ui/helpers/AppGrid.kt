@@ -46,11 +46,11 @@ import org.elnix.dragonlauncher.common.serializables.AppCategory
 import org.elnix.dragonlauncher.common.serializables.AppModel
 import org.elnix.dragonlauncher.common.utils.waitASec
 import org.elnix.dragonlauncher.settings.stores.DrawerSettingsStore
-import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
+import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
 import org.elnix.dragonlauncher.ui.base.asState
 import org.elnix.dragonlauncher.ui.drawer.AppItemGrid
 import org.elnix.dragonlauncher.ui.drawer.AppItemHorizontal
-import org.elnix.dragonlauncher.ui.modifiers.shapedClickable
+import org.elnix.dragonlauncher.ui.base.modifiers.shapedClickable
 import kotlin.math.min
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)

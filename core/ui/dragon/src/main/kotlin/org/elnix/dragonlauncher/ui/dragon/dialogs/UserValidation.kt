@@ -1,4 +1,4 @@
-package org.elnix.dragonlauncher.ui.dialogs
+package org.elnix.dragonlauncher.ui.dragon.dialogs
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,9 +32,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.utils.copyToClipboard
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
-import org.elnix.dragonlauncher.ui.components.ValidateCancelButtons
+import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.dragon.components.ValidateCancelButtons
 
 
 @Composable

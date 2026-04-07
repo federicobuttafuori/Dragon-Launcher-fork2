@@ -43,7 +43,7 @@ import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.ICONS_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.PINNED_SHORTCUTS
 import org.elnix.dragonlauncher.common.utils.ImageUtils.loadDrawableAsBitmap
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 
 /**
  * Represents a pinned shortcut with extra metadata for display.

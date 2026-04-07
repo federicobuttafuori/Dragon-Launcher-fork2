@@ -15,8 +15,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
-import org.elnix.dragonlauncher.ui.components.ValidateCancelButtons
+import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.dragon.components.ValidateCancelButtons
 
 @Composable
 fun AdbCommandInputDialog(

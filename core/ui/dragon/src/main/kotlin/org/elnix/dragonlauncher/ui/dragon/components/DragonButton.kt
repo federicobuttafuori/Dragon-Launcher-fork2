@@ -1,4 +1,4 @@
-package org.elnix.dragonlauncher.ui.components.dragon
+package org.elnix.dragonlauncher.ui.dragon.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.RowScope
@@ -14,10 +14,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.ui.UiConstants
+import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.base.UiConstants
 import org.elnix.dragonlauncher.ui.base.withHaptic
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
-import org.elnix.dragonlauncher.ui.dialogs.UserValidation
+import org.elnix.dragonlauncher.ui.dragon.dialogs.UserValidation
 
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)

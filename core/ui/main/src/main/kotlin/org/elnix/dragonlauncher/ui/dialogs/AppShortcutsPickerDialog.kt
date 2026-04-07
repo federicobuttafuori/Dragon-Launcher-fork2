@@ -29,7 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import org.elnix.dragonlauncher.common.serializables.AppModel
 import org.elnix.dragonlauncher.common.utils.ImageUtils.loadDrawableAsBitmap
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import org.elnix.dragonlauncher.ui.actions.appIcon
 import org.elnix.dragonlauncher.common.utils.resolveShape
 import org.elnix.dragonlauncher.ui.composition.LocalIconShape

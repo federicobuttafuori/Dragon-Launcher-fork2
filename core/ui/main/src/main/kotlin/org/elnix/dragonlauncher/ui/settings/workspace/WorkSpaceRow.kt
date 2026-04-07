@@ -29,9 +29,9 @@ import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.Workspace
 import org.elnix.dragonlauncher.common.serializables.WorkspaceType
 import org.elnix.dragonlauncher.enumsui.WorkspaceAction
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
-import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
+import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
 import sh.calvin.reorderable.ReorderableCollectionItemScope
 
 @Composable

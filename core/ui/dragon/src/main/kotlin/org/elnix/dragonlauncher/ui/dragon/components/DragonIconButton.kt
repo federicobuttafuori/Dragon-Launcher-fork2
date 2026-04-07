@@ -1,4 +1,4 @@
-package org.elnix.dragonlauncher.ui.components.dragon
+package org.elnix.dragonlauncher.ui.dragon.components
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -8,8 +8,8 @@ import androidx.compose.material3.IconButtonColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import org.elnix.dragonlauncher.ui.UiConstants
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
+import org.elnix.dragonlauncher.ui.base.UiConstants
+import org.elnix.dragonlauncher.theme.AppObjectsColors
 
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)

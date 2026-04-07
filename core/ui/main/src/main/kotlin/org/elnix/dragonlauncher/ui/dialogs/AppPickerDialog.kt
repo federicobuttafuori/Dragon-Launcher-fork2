@@ -63,13 +63,13 @@ import org.elnix.dragonlauncher.common.serializables.WorkspaceType
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.PRIVATE_SPACE_TAG
 import org.elnix.dragonlauncher.common.utils.PrivateSpaceUtils
 import org.elnix.dragonlauncher.logging.logW
-import org.elnix.dragonlauncher.ui.UiConstants
-import org.elnix.dragonlauncher.ui.UiConstants.DragonShape
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
-import org.elnix.dragonlauncher.ui.components.dragon.DragonIconButton
+import org.elnix.dragonlauncher.ui.base.UiConstants
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
+import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
 import org.elnix.dragonlauncher.ui.helpers.AppDrawerSearch
 import org.elnix.dragonlauncher.ui.helpers.AppGrid
-import org.elnix.dragonlauncher.ui.modifiers.settingsGroup
+import org.elnix.dragonlauncher.ui.base.modifiers.settingsGroup
 import org.elnix.dragonlauncher.ui.composition.LocalAppLifecycleViewModel
 import org.elnix.dragonlauncher.ui.composition.LocalAppsViewModel
 

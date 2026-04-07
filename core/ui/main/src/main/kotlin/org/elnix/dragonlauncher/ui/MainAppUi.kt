@@ -109,6 +109,7 @@ import org.elnix.dragonlauncher.settings.stores.WellbeingSettingsStore
 import org.elnix.dragonlauncher.ui.actions.AppLaunchException
 import org.elnix.dragonlauncher.ui.actions.launchAppDirectly
 import org.elnix.dragonlauncher.ui.actions.launchSwipeAction
+import org.elnix.dragonlauncher.ui.base.UiConstants
 import org.elnix.dragonlauncher.ui.base.asState
 import org.elnix.dragonlauncher.ui.base.asStateNull
 import org.elnix.dragonlauncher.ui.dialogs.FilePickerDialog
@@ -116,7 +117,7 @@ import org.elnix.dragonlauncher.ui.dialogs.GoogleLockingWarning
 import org.elnix.dragonlauncher.ui.dialogs.MainScreeLayersOrderScreen
 import org.elnix.dragonlauncher.ui.dialogs.PinUnlockDialog
 import org.elnix.dragonlauncher.ui.dialogs.ShizukuUnavailableDialog
-import org.elnix.dragonlauncher.ui.dialogs.UserValidation
+import org.elnix.dragonlauncher.ui.dragon.dialogs.UserValidation
 import org.elnix.dragonlauncher.ui.dialogs.WidgetPickerDialog
 import org.elnix.dragonlauncher.ui.dialogs.rememberMainScreenLayerOrder
 import org.elnix.dragonlauncher.ui.drawer.AppDrawerScreen

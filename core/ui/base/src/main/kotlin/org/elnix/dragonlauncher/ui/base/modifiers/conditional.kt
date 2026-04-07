@@ -1,4 +1,4 @@
-package org.elnix.dragonlauncher.ui.modifiers
+package org.elnix.dragonlauncher.ui.base.modifiers
 
 import androidx.compose.ui.Modifier
 

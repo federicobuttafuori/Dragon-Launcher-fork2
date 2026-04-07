@@ -19,8 +19,8 @@ import androidx.core.os.LocaleListCompat
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.settings.stores.LanguageSettingsStore
-import org.elnix.dragonlauncher.ui.colors.AppObjectsColors
-import org.elnix.dragonlauncher.ui.components.dragon.DragonRow
+import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.dragon.components.DragonRow
 import org.elnix.dragonlauncher.ui.base.asState
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
 

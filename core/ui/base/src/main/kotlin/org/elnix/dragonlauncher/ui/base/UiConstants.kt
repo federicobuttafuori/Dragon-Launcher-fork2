@@ -1,4 +1,4 @@
-package org.elnix.dragonlauncher.ui
+package org.elnix.dragonlauncher.ui.base
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonShapes
@@ -16,7 +16,7 @@ object UiConstants {
     val PRESSED_DRAGON_SHAPE_CORNER_DP = 5.dp
 
     val DragonShape = RoundedCornerShape(DRAGON_SHAPE_CORNER_DP)
-    val PressedDragonShape = RoundedCornerShape(PRESSED_DRAGON_SHAPE_CORNER_DP)
+    val PressedDragonShape = androidx.compose.foundation.shape.RoundedCornerShape(PRESSED_DRAGON_SHAPE_CORNER_DP)
 
     @OptIn(ExperimentalMaterial3ExpressiveApi::class)
     fun dragonShapes(): ButtonShapes =
