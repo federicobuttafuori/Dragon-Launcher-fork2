@@ -2,21 +2,22 @@ package org.elnix.dragonlauncher.ui.helpers.nests
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import org.elnix.dragonlauncher.base.ktx.px
 import org.elnix.dragonlauncher.base.theme.LocalExtraColors
-import org.elnix.dragonlauncher.common.points.DrawPathCache
-import org.elnix.dragonlauncher.common.points.SwipeDrawParams
 import org.elnix.dragonlauncher.common.serializables.CircleNest
 import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
 import org.elnix.dragonlauncher.settings.stores.SwipeMapSettingsStore
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
 import org.elnix.dragonlauncher.ui.base.asState
+import org.elnix.dragonlauncher.ui.helpers.nests.points.DrawPathCache
+import org.elnix.dragonlauncher.ui.helpers.nests.points.SwipeDrawParams
 import org.elnix.dragonlauncher.ui.remembers.LocalDefaultPoint
 import org.elnix.dragonlauncher.ui.remembers.LocalIconShape
 import org.elnix.dragonlauncher.ui.remembers.LocalIcons
@@ -34,6 +35,8 @@ fun swipeDefaultParams(
     showCircle: Boolean? = null
 ): SwipeDrawParams {
     val ctx = LocalContext.current
+    val density = LocalDensity.current
+
     val points = points ?: LocalPoints.current
     val defaultPointSettings = LocalDefaultPoint.current
     val nests = nests ?: LocalNests.current
@@ -51,6 +54,9 @@ fun swipeDefaultParams(
     val maxNestsDepth by UiSettingsStore.maxNestsDepth.asState()
 
     val subNestDefaultRadius by SwipeMapSettingsStore.subNestDefaultRadius.asState()
+    val subNestDefaultRadiusPixels by remember(subNestDefaultRadius) {
+        derivedStateOf { subNestDefaultRadius.dp.value * density.density }
+    }
 
     val drawPathCache = remember { DrawPathCache(points.size) }
 
@@ -58,18 +64,37 @@ fun swipeDefaultParams(
         drawPathCache.updateMaxCacheSize(points.size)
     }
 
-    return SwipeDrawParams(
-        nests = nests,
-        points = points,
-        ctx = ctx,
-        defaultPoint = defaultPoint,
-        icons = icons,
-        surfaceColorDraw = surfaceColorDraw,
-        extraColors = extraColors,
-        showCircle = showCircle,
-        maxDepth = maxNestsDepth,
-        iconShape = iconShape,
-        subNestDefaultRadius = subNestDefaultRadius.dp.px,
-        drawPathCache = drawPathCache
-    )
+    return remember(
+        backgroundColor,
+        points,
+        nests,
+        icons,
+        defaultPointSerializable,
+        showCircle,
+        ctx,
+        defaultPointSettings,
+        iconShape,
+        extraColors,
+        surfaceColorDraw,
+        defaultPoint,
+        showCircleSetting,
+        maxNestsDepth,
+        subNestDefaultRadius,
+        drawPathCache
+    ) {
+        SwipeDrawParams(
+            nests = nests,
+            points = points,
+            ctx = ctx,
+            defaultPoint = defaultPoint,
+            icons = icons,
+            surfaceColorDraw = surfaceColorDraw,
+            extraColors = extraColors,
+            showCircle = showCircle,
+            maxDepth = maxNestsDepth,
+            iconShape = iconShape,
+            subNestDefaultRadius = subNestDefaultRadiusPixels,
+            drawPathCache = drawPathCache
+        )
+    }
 }
