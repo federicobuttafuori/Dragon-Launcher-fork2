@@ -432,6 +432,8 @@ fun Context.getVersionCode(): Int =
 fun Context.getVersionName(): String =
     packageManager.getPackageInfo(packageName, 0).versionName ?: "unknown"
 
+fun Context.isBetaVersion(): Boolean =
+    getVersionName().contains("beta")
 
 fun Long.formatDateTime(): String {
     return SimpleDateFormat("MMM dd, yyyy HH:mm:ss", Locale.getDefault())

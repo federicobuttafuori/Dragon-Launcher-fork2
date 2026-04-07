@@ -654,15 +654,11 @@ fun MainAppUi(
         }
     }
 
-
     val showReselectAutoBackupFile =
         autoBackupEnabled &&
                 hasAutoBackupPermission == false &&
                 autoBackupUri != null &&
                 currentRoute != ROUTES.WELCOME
-
-
-
 
 
     val containerColor by animateColorAsState(

@@ -30,11 +30,13 @@ import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.ExtensionModel
 import org.elnix.dragonlauncher.common.utils.loadExtensionRegistry
 import org.elnix.dragonlauncher.services.ExtensionManager
-import org.elnix.dragonlauncher.ui.dragon.expandable.ExpandableSection
+import org.elnix.dragonlauncher.ui.components.BetaVersionType
+import org.elnix.dragonlauncher.ui.components.BetaVersionWarning
 import org.elnix.dragonlauncher.ui.dragon.components.DragonButton
 import org.elnix.dragonlauncher.ui.dragon.components.DragonColumnGroup
-import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
+import org.elnix.dragonlauncher.ui.dragon.expandable.ExpandableSection
 import org.elnix.dragonlauncher.ui.dragon.expandable.rememberExpandableSection
+import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
 
 @Composable
 fun ExtensionsTab(
@@ -57,6 +59,10 @@ fun ExtensionsTab(
         onReset = null,
         resetText = null
     ) {
+        item {
+            BetaVersionWarning(BetaVersionType.Feature)
+        }
+
         if (isLoading) {
             item {
                 Text(

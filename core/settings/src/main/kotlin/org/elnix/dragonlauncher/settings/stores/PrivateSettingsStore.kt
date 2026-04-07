@@ -2,9 +2,9 @@ package org.elnix.dragonlauncher.settings.stores
 
 import org.elnix.dragonlauncher.enumsui.LockMethod
 import org.elnix.dragonlauncher.settings.DataStoreName
-import org.elnix.dragonlauncher.settings.bases.Settings
 import org.elnix.dragonlauncher.settings.bases.BaseSettingObject
 import org.elnix.dragonlauncher.settings.bases.MapSettingsStore
+import org.elnix.dragonlauncher.settings.bases.Settings
 
 object PrivateSettingsStore : MapSettingsStore() {
 
@@ -28,6 +28,13 @@ object PrivateSettingsStore : MapSettingsStore() {
         dataStoreName = dataStoreName,
         default = true
     )
+
+    val hideBetaVersionWarning = Settings.boolean(
+        key = "hideBetaVersionWarning",
+        dataStoreName = dataStoreName,
+        default = false
+    )
+
 
     val lastSeenVersionCodeWhatsNew = Settings.int(
         key = "lastSeenVersionCode",
@@ -92,6 +99,7 @@ object PrivateSettingsStore : MapSettingsStore() {
         this.hasSeenWelcome,
         this.hasInitialized,
         this.showSetDefaultLauncherBanner,
+        this.hideBetaVersionWarning,
         this.lastSeenVersionCodeWhatsNew,
         this.lastSeenVersionCodeGoogleLockdownWarning,
         this.lockPinHash,

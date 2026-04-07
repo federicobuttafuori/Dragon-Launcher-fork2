@@ -53,6 +53,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.elnix.dragonlauncher.base.ColorUtils.alphaMultiplier
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.navigaton.SETTINGS
 import org.elnix.dragonlauncher.common.utils.Constants.URLs.DISCORD_INVITE_LINK
@@ -65,22 +66,24 @@ import org.elnix.dragonlauncher.common.utils.Constants.URLs.GITHUB_REPO_RELEASES
 import org.elnix.dragonlauncher.common.utils.Constants.URLs.MAILTO_LINK
 import org.elnix.dragonlauncher.common.utils.Constants.URLs.REDDIT_LINK
 import org.elnix.dragonlauncher.common.utils.Constants.URLs.WEBLATE_LINK
-import org.elnix.dragonlauncher.base.ColorUtils.alphaMultiplier
 import org.elnix.dragonlauncher.common.utils.copyToClipboard
 import org.elnix.dragonlauncher.common.utils.getVersionCode
+import org.elnix.dragonlauncher.common.utils.isBetaVersion
 import org.elnix.dragonlauncher.common.utils.openUrl
 import org.elnix.dragonlauncher.common.utils.showToast
 import org.elnix.dragonlauncher.settings.SettingsStoreRegistry
 import org.elnix.dragonlauncher.settings.stores.DebugSettingsStore
 import org.elnix.dragonlauncher.settings.stores.PrivateSettingsStore
 import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
-import org.elnix.dragonlauncher.ui.dragon.text.TextDivider
 import org.elnix.dragonlauncher.ui.base.asState
+import org.elnix.dragonlauncher.ui.components.BetaVersionType
+import org.elnix.dragonlauncher.ui.components.BetaVersionWarning
+import org.elnix.dragonlauncher.ui.composition.LocalNavController
+import org.elnix.dragonlauncher.ui.dragon.text.TextDivider
 import org.elnix.dragonlauncher.ui.helpers.settings.ContributorItem
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingItemWithExternalOpen
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsItem
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
-import org.elnix.dragonlauncher.ui.composition.LocalNavController
 
 
 @SuppressLint("LocalContextGetResourceValueCall")
@@ -102,6 +105,12 @@ fun AdvancedSettingsScreen(
     var timesClickedOnVersion by remember { mutableIntStateOf(0) }
 
     val backgroundColor = MaterialTheme.colorScheme.background
+
+
+    val hideBetaVersionWarning by PrivateSettingsStore.hideBetaVersionWarning.asState(true)
+    val showBetaVersionWarning = remember(hideBetaVersionWarning) {
+        ctx.isBetaVersion() && !hideBetaVersionWarning
+    }
 
     SettingsScaffold(
         title = stringResource(R.string.settings),
@@ -127,6 +136,13 @@ fun AdvancedSettingsScreen(
             }
         },
     ) {
+
+        if (showBetaVersionWarning) {
+            item {
+                BetaVersionWarning(BetaVersionType.App)
+            }
+        }
+
         item {
             SettingsItem(
                 title = stringResource(R.string.appearance),

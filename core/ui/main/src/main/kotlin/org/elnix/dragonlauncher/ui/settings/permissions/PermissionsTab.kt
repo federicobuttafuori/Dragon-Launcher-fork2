@@ -34,6 +34,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.components.BetaVersionType
+import org.elnix.dragonlauncher.ui.components.BetaVersionWarning
 import org.elnix.dragonlauncher.ui.dragon.components.SwitchRow
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
 
@@ -98,6 +100,10 @@ fun PermissionsTab(onBack: () -> Unit) {
             helpText = stringResource(R.string.permission_tab_help),
             onReset = null
         ) {
+            item {
+                BetaVersionWarning(BetaVersionType.Feature)
+            }
+            
             item {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
