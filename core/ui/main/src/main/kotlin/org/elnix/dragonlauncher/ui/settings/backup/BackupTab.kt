@@ -114,7 +114,6 @@ fun BackupTab(onBack: () -> Unit) {
     var hasTriggeredManualAutoBackup by remember { mutableStateOf(false) }
 
 
-
     val settingsExportLauncher = rememberSettingsExportLauncher(selectedStoresForExport)
 
     val settingsImportLauncher = rememberSettingsImportLauncher(
@@ -264,28 +263,29 @@ fun BackupTab(onBack: () -> Unit) {
             }
         }
 
-        item { TextDivider(ctx.getString(R.string.auto_backup_stores)) }
+        if (autoBackupEnabled) {
+            item { TextDivider(ctx.getString(R.string.auto_backup_stores)) }
 
+            item {
+                SelectedActionRow(selectedStores, backupableStores.size) { save() }
+            }
 
-        item {
-            SelectedActionRow(selectedStores, backupableStores.size) { save() }
-        }
+            items(selectedStores.entries.toList()) { (datastoreName, isSelected) ->
 
-        items(selectedStores.entries.toList()) { (datastoreName, isSelected) ->
-
-            DragonRow(
-                onClick = {
-                    selectedStores[datastoreName] = !isSelected
-                    save()
+                DragonRow(
+                    onClick = {
+                        selectedStores[datastoreName] = !isSelected
+                        save()
+                    }
+                ) {
+                    Text(
+                        text = backupableStores[datastoreName]!!.name,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Checkbox(checked = isSelected, onCheckedChange = null)
                 }
-            ) {
-                Text(
-                    text = backupableStores[datastoreName]!!.name,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.weight(1f)
-                )
-                Checkbox(checked = isSelected, onCheckedChange = null)
             }
         }
     }
