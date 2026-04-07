@@ -72,8 +72,8 @@ import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
 import org.elnix.dragonlauncher.shizuku.ShellCommandExecutor
 import org.elnix.dragonlauncher.shizuku.ShizukuPermissionHandler
 import org.elnix.dragonlauncher.ui.MainAppUi
-import org.elnix.dragonlauncher.ui.components.settings.asState
-import org.elnix.dragonlauncher.ui.components.settings.asStateNull
+import org.elnix.dragonlauncher.ui.base.asState
+import org.elnix.dragonlauncher.ui.base.asStateNull
 import org.elnix.dragonlauncher.ui.dialogs.CrashScreen
 import org.elnix.dragonlauncher.ui.remembers.LocalAppLifecycleViewModel
 import org.elnix.dragonlauncher.ui.remembers.LocalAppsViewModel

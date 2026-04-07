@@ -1,0 +1,256 @@
+package org.elnix.dragonlauncher.ui.colors
+
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CheckboxColors
+import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.RadioButtonColors
+import androidx.compose.material3.RadioButtonDefaults
+import androidx.compose.material3.SliderColors
+import androidx.compose.material3.SliderDefaults
+import androidx.compose.material3.SwitchColors
+import androidx.compose.material3.SwitchDefaults
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.ToggleButtonColors
+import androidx.compose.material3.ToggleButtonDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import org.elnix.dragonlauncher.common.utils.colors.ColorUtils.alphaMultiplier
+import org.elnix.dragonlauncher.ui.remembers.LocalUseCustomColorChannels
+
+object AppObjectsColors {
+
+    @Composable
+    fun switchColors(): SwitchColors {
+        return if (LocalUseCustomColorChannels.current) {
+            with(MaterialTheme.colorScheme) {
+                SwitchDefaults.colors(
+                    checkedThumbColor = outline,
+                    checkedTrackColor = primary,
+                    checkedBorderColor = Color.Transparent,
+                    uncheckedThumbColor = outline.alphaMultiplier(0.7f),
+                    uncheckedTrackColor = background,
+                    uncheckedBorderColor = Color.Transparent,
+                    disabledCheckedThumbColor = outline.alphaMultiplier(0.5f),
+                    disabledCheckedTrackColor = primary.alphaMultiplier(0.5f),
+                    disabledCheckedBorderColor = Color.Transparent,
+                    disabledUncheckedThumbColor = onSurface.alphaMultiplier(0.5f),
+                    disabledUncheckedTrackColor = background,
+                    disabledUncheckedBorderColor = Color.Transparent,
+                )
+            }
+        } else SwitchDefaults.colors()
+    }
+
+    @Composable
+    fun buttonColors(containerColor: Color? = null): ButtonColors {
+        return if (LocalUseCustomColorChannels.current) {
+            with(MaterialTheme.colorScheme) {
+                ButtonDefaults.buttonColors(
+                    containerColor = containerColor ?: primary,
+                    contentColor = onPrimary
+                )
+            }
+        } else ButtonDefaults.buttonColors()
+    }
+
+    @Composable
+    fun cancelButtonColors(): ButtonColors {
+        return if (LocalUseCustomColorChannels.current) {
+            with(MaterialTheme.colorScheme) {
+                ButtonDefaults.outlinedButtonColors(
+                    containerColor = Color.Transparent,
+                    contentColor = error,
+                    disabledContainerColor = Color.Transparent,
+                    disabledContentColor = error.alphaMultiplier(0.5f)
+                )
+            }
+        } else ButtonDefaults.outlinedButtonColors()
+    }
+
+
+    @Composable
+    fun sliderColors(
+        activeTrackColor: Color? = null,
+        backgroundColor: Color? = null
+    ): SliderColors {
+        return if (LocalUseCustomColorChannels.current) {
+            with(MaterialTheme.colorScheme) {
+                SliderDefaults.colors(
+                    thumbColor = activeTrackColor ?: primary,
+                    activeTrackColor = activeTrackColor ?: secondary,
+                    activeTickColor = activeTrackColor ?: primary,
+                    inactiveTrackColor = backgroundColor ?: surface,
+                    inactiveTickColor = activeTrackColor ?: primary,
+                    disabledThumbColor = primary,
+                    disabledActiveTrackColor = backgroundColor ?: onSurface,
+                    disabledActiveTickColor = primary,
+                )
+            }
+        } else SliderDefaults.colors()
+    }
+
+    @Composable
+    fun checkboxColors(): CheckboxColors {
+        return if (LocalUseCustomColorChannels.current) {
+            with(MaterialTheme.colorScheme) {
+                CheckboxDefaults.colors(
+                    checkedColor = primary,
+                    uncheckedColor = outline,
+                    checkmarkColor = onPrimary,
+                    disabledCheckedColor = primary.alphaMultiplier(0.5f),
+                    disabledUncheckedColor = outline.alphaMultiplier(0.5f),
+                    disabledIndeterminateColor = onSurface.alphaMultiplier(0.5f),
+                )
+            }
+        } else CheckboxDefaults.colors()
+    }
+
+    @Composable
+    fun outlinedTextFieldColors(
+        backgroundColor: Color? = null,
+        onBackgroundColor: Color? = null,
+        removeBorder: Boolean = false
+    ): TextFieldColors {
+        return if (LocalUseCustomColorChannels.current) {
+            with(MaterialTheme.colorScheme) {
+                OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = onBackgroundColor ?: onBackground,
+                    unfocusedTextColor = onBackgroundColor ?: onBackground,
+                    disabledTextColor = onBackgroundColor ?: onBackground.alphaMultiplier(0.5f),
+                    errorTextColor = error,
+
+                    focusedContainerColor = backgroundColor ?: background,
+                    unfocusedContainerColor = backgroundColor ?: background,
+                    disabledContainerColor = backgroundColor ?: background,
+                    errorContainerColor = backgroundColor ?: background,
+
+                    cursorColor = primary,
+                    errorCursorColor = error,
+
+                    focusedBorderColor = if (!removeBorder) primary else Color.Transparent,
+                    unfocusedBorderColor = if (!removeBorder) outline else Color.Transparent,
+                    disabledBorderColor = if (!removeBorder) outline.alphaMultiplier(0.5f) else Color.Transparent,
+                    errorBorderColor = if (!removeBorder) error else Color.Transparent,
+
+                    focusedLeadingIconColor = primary,
+                    unfocusedLeadingIconColor = onSurfaceVariant,
+                    disabledLeadingIconColor = surfaceVariant,
+                    errorLeadingIconColor = error,
+
+                    focusedTrailingIconColor = primary,
+                    unfocusedTrailingIconColor = onSurfaceVariant,
+                    disabledTrailingIconColor = surfaceVariant,
+                    errorTrailingIconColor = error,
+
+                    focusedLabelColor = primary,
+                    unfocusedLabelColor = outline,
+                    disabledLabelColor = outline.alphaMultiplier(0.5f),
+                    errorLabelColor = error,
+
+                    focusedPlaceholderColor = outline.alphaMultiplier(0.8f),
+                    unfocusedPlaceholderColor = outline.alphaMultiplier(0.5f),
+                    disabledPlaceholderColor = outline.alphaMultiplier(0.3f),
+                    errorPlaceholderColor = error,
+
+                    focusedSupportingTextColor = onSurfaceVariant,
+                    unfocusedSupportingTextColor = onSurfaceVariant,
+                    disabledSupportingTextColor = surfaceVariant,
+                    errorSupportingTextColor = error,
+
+                    focusedPrefixColor = onSurfaceVariant,
+                    unfocusedPrefixColor = onSurfaceVariant,
+                    disabledPrefixColor = surfaceVariant,
+                    errorPrefixColor = error,
+
+                    focusedSuffixColor = onSurfaceVariant,
+                    unfocusedSuffixColor = onSurfaceVariant,
+                    disabledSuffixColor = surfaceVariant,
+                    errorSuffixColor = error
+                )
+            }
+        } else OutlinedTextFieldDefaults.colors()
+    }
+
+    @Composable
+    fun radioButtonColors(): RadioButtonColors {
+        return if (LocalUseCustomColorChannels.current) {
+            with(MaterialTheme.colorScheme) {
+                RadioButtonDefaults.colors(
+                    selectedColor = primary,
+                    unselectedColor = onSurface,
+                    disabledSelectedColor = primary.alphaMultiplier(0.5f),
+                    disabledUnselectedColor = onSurface.alphaMultiplier(0.5f)
+                )
+            }
+        } else RadioButtonDefaults.colors()
+    }
+
+    @Composable
+    fun iconButtonColors(
+        backgroundColor: Color? = null,
+        contentColor: Color? = null
+    ): IconButtonColors {
+        return if (LocalUseCustomColorChannels.current) {
+            with(MaterialTheme.colorScheme) {
+                IconButtonDefaults.iconButtonColors(
+                    containerColor = backgroundColor ?: surface,
+                    contentColor = contentColor ?: primary,
+                    disabledContainerColor = backgroundColor?.alphaMultiplier(0.5f) ?: surface.alphaMultiplier(0.5f),
+                    disabledContentColor = contentColor?.alphaMultiplier(0.5f) ?: onSurface.alphaMultiplier(0.5f)
+                )
+            }
+        } else IconButtonDefaults.iconButtonColors()
+    }
+
+
+    @Composable
+    fun errorIconButtonColors(): IconButtonColors {
+        return if (LocalUseCustomColorChannels.current) {
+            with(MaterialTheme.colorScheme) {
+                iconButtonColors().copy(
+                    contentColor = error,
+                    disabledContentColor = error.alphaMultiplier(0.5f)
+                )
+            }
+        } else IconButtonDefaults.iconButtonColors()
+    }
+
+    @Composable
+    fun cardColors(): CardColors {
+        return if (LocalUseCustomColorChannels.current) {
+            with(MaterialTheme.colorScheme) {
+                CardDefaults.cardColors(
+                    surfaceVariant,
+                    onSurfaceVariant,
+                    surfaceVariant.alphaMultiplier(0.5f),
+                    onSurfaceVariant.alphaMultiplier(0.5f),
+                )
+            }
+        } else CardDefaults.cardColors()
+    }
+
+    @OptIn(ExperimentalMaterial3ExpressiveApi::class)
+    @Composable
+    fun toggleButtonColors(): ToggleButtonColors {
+        return if (LocalUseCustomColorChannels.current) {
+            with(MaterialTheme.colorScheme) {
+                ToggleButtonDefaults.toggleButtonColors(
+                    containerColor = primary,
+                    contentColor = onPrimary,
+                    disabledContainerColor = surfaceVariant,
+                    disabledContentColor = onSurfaceVariant,
+                    checkedContainerColor = surface,
+                    checkedContentColor = onSurface
+                )
+            }
+        } else ToggleButtonDefaults.toggleButtonColors()
+    }
+}

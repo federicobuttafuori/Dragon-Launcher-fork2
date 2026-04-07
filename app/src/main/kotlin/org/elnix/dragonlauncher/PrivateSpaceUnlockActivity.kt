@@ -10,7 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.settings.stores.DebugSettingsStore
-import org.elnix.dragonlauncher.ui.components.settings.asState
+import org.elnix.dragonlauncher.ui.base.asState
 import org.elnix.dragonlauncher.ui.helpers.PrivateSpaceStateDebugScreen
 import org.elnix.dragonlauncher.ui.helpers.PrivateSpaceUnlockScreen
 import org.elnix.dragonlauncher.ui.theme.DragonLauncherTheme

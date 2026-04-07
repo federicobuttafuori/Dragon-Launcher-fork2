@@ -1,28 +1,17 @@
 package org.elnix.dragonlauncher.enumsui
 
-import android.content.Context
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.ui.graphics.vector.ImageVector
+import org.elnix.dragonlauncher.common.R
 
 
-enum class WallpaperEditMode {
-    MAIN,
-    DRAWER
-}
-
-fun wallpaperEditModeIcon(mode: WallpaperEditMode) = when (mode) {
-    WallpaperEditMode.MAIN ->
-        Icons.Default.Home
-
-    WallpaperEditMode.DRAWER ->
-        Icons.Default.Apps
-}
-
-fun wallpaperEditModeLabel(ctx: Context, mode: WallpaperEditMode) = when (mode) {
-    WallpaperEditMode.MAIN ->
-        ctx.getString(org.elnix.dragonlauncher.common.R.string.wallpaper_edit_main)
-
-    WallpaperEditMode.DRAWER ->
-        ctx.getString(org.elnix.dragonlauncher.common.R.string.wallpaper_edit_drawer)
+enum class WallpaperEditMode(
+    override val resId: Int?,
+    override val iconEnabled: ImageVector,
+    override val iconDisabled: ImageVector? = null
+) : ToggleButtonOption {
+    Main(R.string.main_screen, Icons.Default.Home),
+    Drawer(R.string.drawer_screen, Icons.Default.Apps)
 }

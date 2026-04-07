@@ -181,7 +181,9 @@ dependencies {
     implementation(libs.material)
 
 
-    implementation(project(":core:ui"))
+    implementation(project(":core:ui:base"))
+    implementation(project(":core:ui:main"))
+
     implementation(project(":core:base"))
     implementation(project(":core:common"))
     implementation(project(":core:models"))
