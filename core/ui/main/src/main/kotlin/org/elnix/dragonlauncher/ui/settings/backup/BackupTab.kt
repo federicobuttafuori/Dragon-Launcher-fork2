@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.FolderOpen
 import androidx.compose.material.icons.filled.Restore
@@ -37,30 +36,30 @@ import androidx.core.net.toUri
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.logging.logD
-import org.elnix.dragonlauncher.logging.logE
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.BACKUP_TAG
 import org.elnix.dragonlauncher.common.utils.formatDateTime
 import org.elnix.dragonlauncher.common.utils.getFilePathFromUri
 import org.elnix.dragonlauncher.common.utils.showToast
+import org.elnix.dragonlauncher.logging.logD
+import org.elnix.dragonlauncher.logging.logE
 import org.elnix.dragonlauncher.models.BackupResult
-import org.elnix.dragonlauncher.settings.bases.DatastoreProvider
 import org.elnix.dragonlauncher.settings.SettingsBackupManager
 import org.elnix.dragonlauncher.settings.backupableStores
+import org.elnix.dragonlauncher.settings.bases.DatastoreProvider
 import org.elnix.dragonlauncher.settings.stores.BackupSettingsStore
 import org.elnix.dragonlauncher.settings.stores.PrivateSettingsStore
-import org.elnix.dragonlauncher.ui.dragon.text.TextDivider
-import org.elnix.dragonlauncher.ui.dragon.components.DragonRow
-import org.elnix.dragonlauncher.ui.components.settings.SettingsSwitchRow
 import org.elnix.dragonlauncher.ui.base.asState
+import org.elnix.dragonlauncher.ui.components.settings.SettingsSwitchRow
+import org.elnix.dragonlauncher.ui.composition.LocalBackupViewModel
 import org.elnix.dragonlauncher.ui.dialogs.ExportSettingsDialog
 import org.elnix.dragonlauncher.ui.dialogs.ImportSettingsDialog
 import org.elnix.dragonlauncher.ui.dialogs.SelectedActionRow
+import org.elnix.dragonlauncher.ui.dragon.components.DragonRow
+import org.elnix.dragonlauncher.ui.dragon.text.TextDivider
 import org.elnix.dragonlauncher.ui.helpers.GradientBigButton
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingItemWithExternalOpen
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsItem
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
-import org.elnix.dragonlauncher.ui.composition.LocalBackupViewModel
 import org.elnix.dragonlauncher.ui.remembers.rememberSettingsExportLauncher
 import org.elnix.dragonlauncher.ui.remembers.rememberSettingsImportLauncher
 import org.json.JSONObject
@@ -258,21 +257,6 @@ fun BackupTab(onBack: () -> Unit) {
                                 ctx.showToast(ctx.getString(R.string.backup_triggered))
                                 delay(1000)
                                 hasTriggeredManualAutoBackup = false
-                            }
-                        }
-                    )
-                }
-
-                item {
-                    SettingsItem(
-                        title = stringResource(R.string.clear_auto_backup),
-                        description = stringResource(R.string.clear_auto_backup_desc),
-                        icon = Icons.Default.Close,
-                        onClick = {
-                            scope.launch {
-                                BackupSettingsStore.autoBackupUri.reset(ctx)
-                                BackupSettingsStore.autoBackupEnabled.reset(ctx)
-                                ctx.showToast(ctx.getString(R.string.auto_backup_cleared))
                             }
                         }
                     )
