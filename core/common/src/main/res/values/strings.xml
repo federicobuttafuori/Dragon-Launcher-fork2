@@ -997,7 +997,7 @@
     <string name="edit_hold_to_activate_elements_desc">Edit the actions that pops up when holding 3 sec. Only 1 mean auto redirect</string>
     <string name="less">Less</string>
     <string name="warning">Warning!</string>
-    <string name="this_is_a_beta_version">This is a beta version, which means it may contain unstable features and many bugs. Please report them if you found any! It really helps my</string>
+    <string name="this_is_a_beta_version">This is a beta version, which means it may contain unstable features and many bugs. Please report them if you found any! It really helps me</string>
     <string name="this_feature_is_in_beta">This feature is in beta, it may break and is not complete, report me any bugs or suggestions to help me improve it!</string>
 
 </resources>
