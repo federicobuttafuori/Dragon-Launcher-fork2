@@ -1,9 +1,9 @@
 package org.elnix.dragonlauncher.common.utils
 
-import org.elnix.dragonlauncher.logging.LogTag
 import org.elnix.dragonlauncher.common.navigaton.ROUTES
 import org.elnix.dragonlauncher.common.navigaton.SETTINGS
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
+import org.elnix.dragonlauncher.logging.LogTag
 
 
 object Constants {
@@ -216,6 +216,7 @@ object Constants {
         val MAIN_SCREEN_LAYERS_TAG = LogTag("MainScreenLayersTag")
         val SHIZUKU_TAG = LogTag("ShizukuDebug")
         val NAVIGATION_TAG = LogTag("NavigationDebug")
+        val THEMES_TAG = LogTag("ThemeDebug")
     }
 
     /*  ─────────────  Links  ─────────────  */

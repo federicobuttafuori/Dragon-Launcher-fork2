@@ -379,7 +379,7 @@ fun HapticFeedbackEditor(
 
                                             DragonIconButton(
                                                 onClick = { entries.removeAt(index) },
-                                                colors = AppObjectsColors.errorIconButtonColors(),
+                                                colors = AppObjectsColors.cancelIconButtonColors(),
                                                 imageVector = Icons.Default.Delete, contentDescription = stringResource(R.string.remove)
                                             )
 

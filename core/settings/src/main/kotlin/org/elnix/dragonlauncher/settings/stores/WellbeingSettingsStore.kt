@@ -1,15 +1,9 @@
 package org.elnix.dragonlauncher.settings.stores
 
-import android.content.Context
-import androidx.datastore.preferences.core.stringPreferencesKey
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import org.elnix.dragonlauncher.settings.DataStoreName
-import org.elnix.dragonlauncher.settings.bases.Settings
 import org.elnix.dragonlauncher.settings.bases.BaseSettingObject
 import org.elnix.dragonlauncher.settings.bases.MapSettingsStore
-import org.elnix.dragonlauncher.settings.resolveDataStore
-import org.json.JSONArray
+import org.elnix.dragonlauncher.settings.bases.Settings
 
 /**
  * Settings store for the Digital Wellbeing feature.
@@ -33,7 +27,8 @@ object WellbeingSettingsStore : MapSettingsStore() {
             this.popupShowSessionTime,
             this.popupShowTodayTime,
             this.popupShowRemainingTime,
-            this.returnToLauncherEnabled
+            this.returnToLauncherEnabled,
+            this.pausedApps
         )
 
     /*  ─────────────  Main toggles  ─────────────  */
@@ -148,56 +143,10 @@ object WellbeingSettingsStore : MapSettingsStore() {
         default = false
     )
 
-    /*  ─────────────  Paused Apps Management  ─────────────  */
 
-    private val pausedAppsKey = stringPreferencesKey("PAUSED_APPS_LIST")
-
-    /**
-     * Flow of the list of paused app package names
-     */
-    fun getPausedAppsFlow(ctx: Context): Flow<Set<String>> {
-        return ctx.resolveDataStore(dataStoreName).data.map { prefs ->
-            val json = prefs[pausedAppsKey] ?: "[]"
-            try {
-                val jsonArray = JSONArray(json)
-                (0 until jsonArray.length()).map { jsonArray.getString(it) }.toSet()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                emptySet()
-            }
-        }
-    }
-
-    /**
-     * Set the list of paused apps
-     */
-    suspend fun setPausedApps(ctx: Context, apps: Set<String>) {
-        ctx.resolveDataStore(dataStoreName).updateData { prefs ->
-            prefs.toMutablePreferences().apply {
-                val jsonArray = JSONArray(apps.toList())
-                this[pausedAppsKey] = jsonArray.toString()
-            }
-        }
-    }
-
-    /**
-     * Add a single app to the paused list
-     */
-    suspend fun addPausedApp(ctx: Context, packageName: String, currentApps: Set<String>) {
-        setPausedApps(ctx, currentApps + packageName)
-    }
-
-    /**
-     * Remove a single app from the paused list
-     */
-    suspend fun removePausedApp(ctx: Context, packageName: String, currentApps: Set<String>) {
-        setPausedApps(ctx, currentApps - packageName)
-    }
-
-    /**
-     * Check if an app is in the paused list
-     */
-    fun isAppPaused(packageName: String, pausedApps: Set<String>): Boolean {
-        return packageName in pausedApps
-    }
+    val pausedApps = Settings.stringSet(
+        key = "PAUSED_APPS_LIST",
+        dataStoreName = dataStoreName,
+        default = emptySet()
+    )
 }

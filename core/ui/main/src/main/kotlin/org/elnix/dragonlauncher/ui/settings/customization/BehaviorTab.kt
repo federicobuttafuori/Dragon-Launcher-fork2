@@ -78,14 +78,18 @@ fun BehaviorTab(onBack: () -> Unit) {
 
 
     // Lock settings state
-    val currentLockMethod by PrivateSettingsStore.lockMethod.asState()
     var showLockMethodPicker by remember { mutableStateOf(false) }
 
     val superWarningState = rememberExpandableSection(stringResource(R.string.super_warning_mode)
-    ) { currentLockMethod != LockMethod.NONE }
+    ) { superWarningModeEnabled }
 
     val forceAppLanguageSelector by DebugSettingsStore.forceAppLanguageSelector.asState()
 
+    val lockDescription = when (lockMethod) {
+        LockMethod.NONE -> stringResource(R.string.lock_none)
+        LockMethod.PIN -> stringResource(R.string.lock_pin)
+        LockMethod.DEVICE_UNLOCK -> stringResource(R.string.lock_device_unlock)
+    }
 
     SettingsScaffold(
         title = stringResource(R.string.behavior),
@@ -113,11 +117,6 @@ fun BehaviorTab(onBack: () -> Unit) {
         }
 
         item {
-            val lockDescription = when (currentLockMethod) {
-                LockMethod.NONE -> stringResource(R.string.lock_none)
-                LockMethod.PIN -> stringResource(R.string.lock_pin)
-                LockMethod.DEVICE_UNLOCK -> stringResource(R.string.lock_device_unlock)
-            }
             SettingsItem(
                 title = stringResource(R.string.lock_method),
                 description = lockDescription,
@@ -359,7 +358,6 @@ fun BehaviorTab(onBack: () -> Unit) {
         }
     }
 
-    // ── Lock method picker dialog ──
     if (showLockMethodPicker) {
         LockMethodDialog { showLockMethodPicker = false }
     }

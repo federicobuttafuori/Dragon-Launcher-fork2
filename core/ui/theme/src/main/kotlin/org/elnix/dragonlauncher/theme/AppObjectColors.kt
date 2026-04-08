@@ -212,12 +212,14 @@ object AppObjectsColors {
 
 
     @Composable
-    fun errorIconButtonColors(): IconButtonColors {
+    fun cancelIconButtonColors(): IconButtonColors {
         return if (LocalUseCustomColorChannels.current) {
             with(MaterialTheme.colorScheme) {
-                iconButtonColors().copy(
-                    contentColor = error,
-                    disabledContentColor = error.alphaMultiplier(0.5f)
+                IconButtonDefaults.iconButtonColors(
+                    contentColor = onError,
+                    containerColor = error,
+                    disabledContentColor = onError.alphaMultiplier(0.5f),
+                    disabledContainerColor = error.alphaMultiplier(0.5f)
                 )
             }
         } else IconButtonDefaults.iconButtonColors()

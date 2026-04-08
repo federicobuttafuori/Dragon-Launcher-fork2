@@ -42,3 +42,9 @@ object ROUTES {
     const val DRAWER = "drawer"
     const val WELCOME = "welcome"
 }
+
+val homeRoutes = listOf(
+    ROUTES.MAIN,
+    ROUTES.DRAWER,
+    ROUTES.WELCOME
+)

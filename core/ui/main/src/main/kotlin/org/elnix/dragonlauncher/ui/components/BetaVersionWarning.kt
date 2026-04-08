@@ -86,10 +86,7 @@ fun BetaVersionWarning(
                         },
                         imageVector = Icons.Default.Close,
                         contentDescription = stringResource(R.string.close),
-                        colors = AppObjectsColors.iconButtonColors(
-                            backgroundColor = MaterialTheme.colorScheme.error,
-                            contentColor = MaterialTheme.colorScheme.onError
-                        )
+                        colors = AppObjectsColors.cancelIconButtonColors()
                     )
                 }
             }

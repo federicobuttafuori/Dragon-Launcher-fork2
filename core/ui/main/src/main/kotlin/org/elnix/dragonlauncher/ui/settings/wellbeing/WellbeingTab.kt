@@ -67,24 +67,24 @@ import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.AppModel
 import org.elnix.dragonlauncher.common.utils.Constants.PackageNameLists.knownSocialMediaApps
-import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import org.elnix.dragonlauncher.common.utils.hasUsageStatsPermission
 import org.elnix.dragonlauncher.common.utils.resolveShape
 import org.elnix.dragonlauncher.settings.stores.DrawerSettingsStore
 import org.elnix.dragonlauncher.settings.stores.WellbeingSettingsStore
-import org.elnix.dragonlauncher.ui.actions.appIcon
 import org.elnix.dragonlauncher.theme.AppObjectsColors
-import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
+import org.elnix.dragonlauncher.ui.actions.appIcon
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.base.asState
+import org.elnix.dragonlauncher.ui.base.modifiers.settingsGroup
 import org.elnix.dragonlauncher.ui.components.settings.SettingsSlider
 import org.elnix.dragonlauncher.ui.components.settings.SettingsSwitchRow
-import org.elnix.dragonlauncher.ui.base.asState
+import org.elnix.dragonlauncher.ui.composition.LocalAppsViewModel
+import org.elnix.dragonlauncher.ui.composition.LocalIconShape
 import org.elnix.dragonlauncher.ui.dialogs.AppPickerDialog
+import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
 import org.elnix.dragonlauncher.ui.dragon.components.SwitchRow
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsItem
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
-import org.elnix.dragonlauncher.ui.base.modifiers.settingsGroup
-import org.elnix.dragonlauncher.ui.composition.LocalAppsViewModel
-import org.elnix.dragonlauncher.ui.composition.LocalIconShape
 
 @Composable
 fun WellbeingTab(onBack: () -> Unit) {
@@ -96,8 +96,7 @@ fun WellbeingTab(onBack: () -> Unit) {
     val socialMediaPauseEnabled by WellbeingSettingsStore.socialMediaPauseEnabled.asState()
     val guiltModeEnabled by WellbeingSettingsStore.guiltModeEnabled.asState()
     val pauseDuration by WellbeingSettingsStore.pauseDurationSeconds.asState()
-    val pausedApps by WellbeingSettingsStore.getPausedAppsFlow(ctx)
-        .collectAsState(initial = emptySet())
+    val pausedApps by WellbeingSettingsStore.pausedApps.asState()
 
     val gridSize by DrawerSettingsStore.gridSize.asState()
     val showIcons by DrawerSettingsStore.showAppIconsInDrawer.asState()
@@ -129,7 +128,6 @@ fun WellbeingTab(onBack: () -> Unit) {
         onReset = {
             scope.launch {
                 WellbeingSettingsStore.resetAll(ctx)
-                WellbeingSettingsStore.setPausedApps(ctx, emptySet())
             }
         }
     ) {
@@ -386,7 +384,7 @@ fun WellbeingTab(onBack: () -> Unit) {
                         val socialApps = knownSocialMediaApps.filter {
                             it in installedPackages
                         }
-                        WellbeingSettingsStore.setPausedApps(ctx, pausedApps + socialApps)
+                        WellbeingSettingsStore.pausedApps.set(ctx, pausedApps + socialApps)
                     }
                 }
             }
@@ -400,7 +398,7 @@ fun WellbeingTab(onBack: () -> Unit) {
                     enabled = socialMediaPauseEnabled
                 ) {
                     scope.launch {
-                        WellbeingSettingsStore.setPausedApps(ctx, emptySet())
+                        WellbeingSettingsStore.pausedApps.reset(ctx)
                     }
                 }
             }
@@ -416,7 +414,7 @@ fun WellbeingTab(onBack: () -> Unit) {
                         app = app,
                         onRemove = {
                             scope.launch {
-                                WellbeingSettingsStore.removePausedApp(ctx, packageName, pausedApps)
+                                WellbeingSettingsStore.pausedApps.set(ctx, pausedApps - packageName)
                             }
                         }
                     )
@@ -464,7 +462,7 @@ fun WellbeingTab(onBack: () -> Unit) {
             onDismiss = { showAppPicker = false },
             onAppSelected = { app ->
                 scope.launch {
-                    WellbeingSettingsStore.addPausedApp(ctx, app.packageName, pausedApps)
+                    WellbeingSettingsStore.pausedApps.set(ctx, pausedApps + app.packageName)
                 }
                 showAppPicker = false
             }
@@ -764,7 +762,7 @@ private fun PausedAppItem(
             onClick = onRemove,
             imageVector = Icons.Default.Close,
             contentDescription = stringResource(R.string.remove),
-            colors = AppObjectsColors.errorIconButtonColors()
+            colors = AppObjectsColors.cancelIconButtonColors()
         )
     }
 }

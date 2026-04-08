@@ -23,8 +23,7 @@ import org.json.JSONObject
  * - backward-compatible imports (unknown keys are ignored)
  * - safe type coercion during restore via `BaseSettingObject.decode`
  */
-abstract class MapSettingsStore :
-    BaseSettingsStore<Map<String, Any?>, JSONObject>() {
+abstract class MapSettingsStore : BaseSettingsStore<Map<String, Any?>, JSONObject>() {
 
     /**
      * Reads all settings from DataStore and returns them as a map.

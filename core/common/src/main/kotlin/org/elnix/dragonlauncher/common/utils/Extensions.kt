@@ -439,6 +439,9 @@ fun Long.formatDateTime(): String {
     return SimpleDateFormat("MMM dd, yyyy HH:mm:ss", Locale.getDefault())
         .format(Date(this))
 }
+fun Context.today(format: String = "MMM dd, yyyy"): String =
+    SimpleDateFormat(format, Locale.getDefault()).format(Date())
+
 
 fun Long.formatDuration(): String {
     return when {

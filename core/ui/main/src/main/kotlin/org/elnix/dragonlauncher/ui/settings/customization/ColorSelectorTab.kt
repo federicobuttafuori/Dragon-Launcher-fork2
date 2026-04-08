@@ -429,6 +429,7 @@ fun ColorSelectorTab(
         onReset = {
             scope.launch {
                 ColorSettingsStore.resetAll(ctx)
+                ColorModesSettingsStore.resetAll(ctx)
             }
         },
         content = {
@@ -538,6 +539,31 @@ fun ColorSelectorTab(
                 description = stringResource(R.string.use_custom_color_channels_desc)
             )
 
+            AnimatedVisibility(selectedDefaultTheme == DARK || selectedDefaultTheme == AMOLED) {
+                SwitchRow(
+                    state = selectedDefaultTheme == AMOLED,
+                    title = stringResource(R.string.amoled_theme),
+                    description = stringResource(R.string.use_pure_black_background)
+                ) {
+                    val theme = if (it) {
+                        AMOLED
+                    } else DARK
+
+                    scope.launch {
+                        ColorModesSettingsStore.defaultTheme.set(ctx, theme)
+                    }
+                }
+            }
+
+            // Only show the dynamic colors switch when in SYSTEM view
+            AnimatedVisibility(selectedDefaultTheme == SYSTEM) {
+                SettingsSwitchRow(
+                    setting = ColorModesSettingsStore.dynamicColor,
+                    title = stringResource(R.string.dynamic_colors),
+                    description = stringResource(R.string.dynamic_colors_desc)
+                )
+            }
+
             AnimatedVisibility(colorTestMode) {
                 DragonButton(
                     onClick = { showExitTestValidation = true },
@@ -625,35 +651,6 @@ fun ColorSelectorTab(
                             }
                         }
                     }
-
-
-
-                    AnimatedVisibility(selectedDefaultTheme == DARK || selectedDefaultTheme == AMOLED) {
-                        SwitchRow(
-                            state = selectedDefaultTheme == AMOLED,
-                            title = stringResource(R.string.amoled_theme),
-                            description = stringResource(R.string.use_pure_black_background)
-                        ) {
-                            val theme = if (it) {
-                                AMOLED
-                            } else DARK
-
-                            scope.launch {
-                                ColorModesSettingsStore.defaultTheme.set(ctx, theme)
-                            }
-                        }
-
-                    }
-
-                    // Only show the dynamic colors switch when in SYSTEM view
-                    AnimatedVisibility(selectedDefaultTheme == SYSTEM) {
-                        SettingsSwitchRow(
-                            setting = ColorModesSettingsStore.dynamicColor,
-                            title = stringResource(R.string.dynamic_colors),
-                            description = stringResource(R.string.dynamic_colors_desc)
-                        )
-                    }
-
 
                     MultiSelectConnectedButtonRow(
                         entries = ColorSelectorModes.entries,

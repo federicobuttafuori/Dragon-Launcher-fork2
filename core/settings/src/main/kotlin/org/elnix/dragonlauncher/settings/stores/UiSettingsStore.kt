@@ -2,9 +2,9 @@ package org.elnix.dragonlauncher.settings.stores
 
 import androidx.compose.ui.graphics.Color
 import org.elnix.dragonlauncher.settings.DataStoreName
-import org.elnix.dragonlauncher.settings.bases.Settings
 import org.elnix.dragonlauncher.settings.bases.BaseSettingObject
 import org.elnix.dragonlauncher.settings.bases.MapSettingsStore
+import org.elnix.dragonlauncher.settings.bases.Settings
 
 object UiSettingsStore : MapSettingsStore() {
 
@@ -201,6 +201,12 @@ object UiSettingsStore : MapSettingsStore() {
         default = true,
     )
 
+    val userThemes = Settings.stringSet(
+        key = "userThemes",
+        dataStoreName = ColorModesSettingsStore.dataStoreName,
+        default = emptySet()
+    )
+
     // unsing explicit this to avoid other stores that have the same name keys to be imported by mistake
     override val ALL: List<BaseSettingObject<*, *>> = listOf(
         this.rgbLoading,
@@ -230,6 +236,7 @@ object UiSettingsStore : MapSettingsStore() {
         this.chargingAnimation,
         this.mainScreenLayers,
         this.cellSizeDp,
-        this.showTooltipsOnAddPointDialog
+        this.showTooltipsOnAddPointDialog,
+        this.userThemes
     )
 }

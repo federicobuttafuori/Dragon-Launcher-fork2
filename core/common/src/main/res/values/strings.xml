@@ -997,7 +997,11 @@
     <string name="edit_hold_to_activate_elements_desc">Edit the actions that pops up when holding 3 sec. Only 1 mean auto redirect</string>
     <string name="less">Less</string>
     <string name="warning">Warning!</string>
-    <string name="this_is_a_beta_version">This is a beta version, which means it may contain unstable features and many bugs. Please report them if you found any! It really helps me</string>
+    <string name="this_is_a_beta_version">This is a beta version, which means it may contain unstable features and many bugs. Please report them if you found any! It really helps me </string>
     <string name="this_feature_is_in_beta">This feature is in beta, it may break and is not complete, report me any bugs or suggestions to help me improve it!</string>
+    <string name="export">Export</string>
+    <string name="import_text">Import</string>
+    <string name="user_theme">User theme %1$d</string>
+    <string name="add_current_theme">Add current theme</string>
 
 </resources>

@@ -58,10 +58,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import org.elnix.dragonlauncher.base.ColorUtils.semiTransparentIfDisabled
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.IconShape
 import org.elnix.dragonlauncher.common.serializables.allShapesWithoutRandom
-import org.elnix.dragonlauncher.base.ColorUtils.semiTransparentIfDisabled
 import org.elnix.dragonlauncher.common.utils.resolveShape
 import org.elnix.dragonlauncher.common.utils.vibrate
 import org.elnix.dragonlauncher.settings.stores.BehaviorSettingsStore
@@ -110,7 +110,7 @@ fun PinSetupDialog(
     var failedTries by remember { mutableIntStateOf(0) }
     val pinMismatch = stringResource(R.string.pin_mismatch)
 
-    val pinShapes = remember { mutableStateListOf<IconShape>() }
+    val pinShapes = remember(isConfirmStep) { mutableStateListOf<IconShape>() }
     val currentPin = if (isConfirmStep) confirmPin else firstPin
 
     FullScreenPinPrompt(

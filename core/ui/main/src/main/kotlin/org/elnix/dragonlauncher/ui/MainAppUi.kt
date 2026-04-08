@@ -65,6 +65,7 @@ import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.navigaton.EDIT_SCREENS
 import org.elnix.dragonlauncher.common.navigaton.ROUTES
 import org.elnix.dragonlauncher.common.navigaton.SETTINGS
+import org.elnix.dragonlauncher.common.navigaton.homeRoutes
 import org.elnix.dragonlauncher.common.serializables.ColorSerializer
 import org.elnix.dragonlauncher.common.serializables.FloatingAppObject
 import org.elnix.dragonlauncher.common.serializables.IconShape
@@ -163,6 +164,7 @@ import org.elnix.dragonlauncher.ui.settings.customization.HoldToActivateArcTab
 import org.elnix.dragonlauncher.ui.settings.customization.IconPackTab
 import org.elnix.dragonlauncher.ui.settings.customization.NestEditingScreen
 import org.elnix.dragonlauncher.ui.settings.customization.StatusBarTab
+import org.elnix.dragonlauncher.ui.settings.customization.ThemesTab
 import org.elnix.dragonlauncher.ui.settings.customization.WallpaperTab
 import org.elnix.dragonlauncher.ui.settings.debug.DebugTab
 import org.elnix.dragonlauncher.ui.settings.debug.LogsTab
@@ -182,7 +184,6 @@ import rikka.shizuku.Shizuku
 
 
 @SuppressLint("LocalContextGetResourceValueCall")
-@Suppress("AssignedValueIsNeverRead")
 @Composable
 fun MainAppUi(
     onBindCustomWidget: (Int, ComponentName, nestId: Int) -> Unit,
@@ -287,11 +288,7 @@ fun MainAppUi(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     var lastRoute by remember { mutableStateOf(ROUTES.MAIN) }
-    LaunchedEffect(currentRoute) {
-        currentRoute?.let {
-            lastRoute = it
-        }
-    }
+
 
 
     val autoBackupEnabled by BackupSettingsStore.autoBackupEnabled.asState()
@@ -315,12 +312,20 @@ fun MainAppUi(
         isUnlocked = lockMethod == LockMethod.NONE
     }
 
+    LaunchedEffect(currentRoute) {
+        currentRoute?.let {
+            lastRoute = it
+            if (it in homeRoutes) {
+                isUnlocked = false
+            }
+        }
+    }
+
     /*  ─────────────  Wellbeing Settings  ─────────────  */
     val socialMediaPauseEnabled by WellbeingSettingsStore.socialMediaPauseEnabled.asState()
     val guiltModeEnabled by WellbeingSettingsStore.guiltModeEnabled.asState()
     val pauseDuration by WellbeingSettingsStore.pauseDurationSeconds.asState()
-    val pausedApps by WellbeingSettingsStore.getPausedAppsFlow(ctx)
-        .collectAsState(initial = emptySet())
+    val pausedApps by WellbeingSettingsStore.pausedApps.asState()
     val reminderEnabled by WellbeingSettingsStore.reminderEnabled.asState()
     val reminderInterval by WellbeingSettingsStore.reminderIntervalMinutes.asState()
     val reminderMode by WellbeingSettingsStore.reminderMode.asState()
@@ -629,10 +634,7 @@ fun MainAppUi(
                     launchAction(homeAction)
                 }
 
-                else -> {
-                    isUnlocked = false
-                    popBackMainScreen()
-                }
+                else -> { popBackMainScreen() }
             }
         }
     }
@@ -884,6 +886,7 @@ fun MainAppUi(
 
                     // All the appearance sub-settings
                     settingComposable(SETTINGS.COLORS) { ColorSelectorTab(::popBackToAppearance) }
+                    settingComposable(SETTINGS.THEME) { ThemesTab(::popBackToAppearance) }
                     settingComposable(SETTINGS.WALLPAPER) { WallpaperTab(::popBackToAppearance) }
                     settingComposable(SETTINGS.ICON_PACK) { IconPackTab(::popBackToAppearance) }
                     settingComposable(SETTINGS.STATUS_BAR) { StatusBarTab(::popBackToAppearance) }

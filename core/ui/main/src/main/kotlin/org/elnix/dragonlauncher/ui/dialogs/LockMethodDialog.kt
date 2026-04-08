@@ -28,12 +28,12 @@ import org.elnix.dragonlauncher.common.utils.showToast
 import org.elnix.dragonlauncher.enumsui.LockMethod
 import org.elnix.dragonlauncher.settings.stores.PrivateSettingsStore
 import org.elnix.dragonlauncher.theme.AppObjectsColors
-import org.elnix.dragonlauncher.ui.dragon.components.DragonRow
 import org.elnix.dragonlauncher.ui.base.asState
+import org.elnix.dragonlauncher.ui.dragon.components.DragonRow
 import org.elnix.dragonlauncher.ui.dragon.dialogs.CustomAlertDialog
+import org.elnix.dragonlauncher.ui.dragon.text.TextWithDescription
 import org.elnix.dragonlauncher.ui.helpers.SecurityHelper
 import org.elnix.dragonlauncher.ui.helpers.findFragmentActivity
-import org.elnix.dragonlauncher.ui.dragon.text.TextWithDescription
 
 @Suppress("VariableNeverRead")
 @SuppressLint("LocalContextGetResourceValueCall")
@@ -76,58 +76,32 @@ fun LockMethodDialog(
                         when (method) {
                             LockMethod.PIN -> {
                                 pendingLockMethod = LockMethod.PIN
-
                                 showPinSetupDialog = true
-                                onDismiss()
                             }
 
                             LockMethod.NONE -> {
-                                if (currentLockMethod == LockMethod.PIN) {
-                                    // Remove PIN
-                                    scope.launch {
-                                        PrivateSettingsStore.lockPinHash.set(ctx, "")
-                                        PrivateSettingsStore.lockMethod.set(
-                                            ctx,
-                                            LockMethod.NONE
-                                        )
-                                        ctx.showToast(ctx.getString(R.string.pin_removed))
-                                    }
-                                } else {
-                                    scope.launch {
-                                        PrivateSettingsStore.lockMethod.set(
-                                            ctx,
-                                            LockMethod.NONE
-                                        )
-                                    }
+                                scope.launch {
+                                    PrivateSettingsStore.lockPinHash.reset(ctx)
+                                    PrivateSettingsStore.lockMethod.reset(ctx)
+                                    onDismiss()
                                 }
-                                onDismiss()
                             }
 
                             LockMethod.DEVICE_UNLOCK -> {
                                 // Test biometric authentication immediately
                                 val activity = ctx.findFragmentActivity()
-                                if (activity != null && SecurityHelper.isDeviceUnlockAvailable(
-                                        ctx
-                                    )
-                                ) {
+                                if (activity != null && SecurityHelper.isDeviceUnlockAvailable(ctx)) {
                                     SecurityHelper.showDeviceUnlockPrompt(
                                         activity = activity,
                                         onSuccess = {
                                             scope.launch {
-                                                PrivateSettingsStore.lockMethod.set(
-                                                    ctx,
-                                                    method
-                                                )
+                                                PrivateSettingsStore.lockPinHash.reset(ctx)
+                                                PrivateSettingsStore.lockMethod.set(ctx, LockMethod.DEVICE_UNLOCK)
+                                                onDismiss()
                                             }
-                                            onDismiss()
                                         },
                                         onError = { msg ->
-                                            ctx.showToast(
-                                                ctx.getString(
-                                                    R.string.authentication_error,
-                                                    msg
-                                                )
-                                            )
+                                            ctx.showToast(ctx.getString(R.string.authentication_error, msg))
                                         },
                                         onFailed = {
                                             ctx.showToast(ctx.getString(R.string.authentication_failed))
@@ -145,11 +119,9 @@ fun LockMethodDialog(
                         modifier = Modifier.fillMaxWidth()
                     ) {
 
-
                         TextWithDescription(
                             text = stringResource(method.resId),
-                            description = "TExtfesgrdfbgnbvdbgnhytfhdgbngftdgf ghfbd"
-//                            description = unavailableText
+                            description = unavailableText
                         )
 
                         Spacer(Modifier.width(8.dp))
@@ -177,9 +149,11 @@ fun LockMethodDialog(
                     PrivateSettingsStore.lockPinHash.set(ctx, hash)
                     PrivateSettingsStore.lockMethod.set(ctx, LockMethod.PIN)
                     ctx.showToast(ctx.getString(R.string.pin_set_success))
+
+                    showPinSetupDialog = false
+                    pendingLockMethod = null
+                    onDismiss()
                 }
-                showPinSetupDialog = false
-                pendingLockMethod = null
             }
         )
     }

@@ -48,8 +48,6 @@ import org.elnix.dragonlauncher.settings.stores.WidgetsSettingsStore
 import org.elnix.dragonlauncher.settings.stores.WorkspaceSettingsStore
 
 
-
-
 enum class DataStoreName(
     override val value: String,
     override val backupKey: String,
@@ -103,11 +101,14 @@ object SettingsStoreRegistry {
     )
 }
 
-val allStores = SettingsStoreRegistry.byName
+val allStores: Map<DatastoreProvider, BaseSettingsStore<*, *>>
+    get() = SettingsStoreRegistry.byName
 
+val themeStores: Set<DataStoreName>
+    get() = setOf(COLOR_MODE, COLOR)
 
-val backupableStores =
-    SettingsStoreRegistry.byName
+val backupableStores: Map<DatastoreProvider, BaseSettingsStore<*, *>>
+    get() = SettingsStoreRegistry.byName
         .filterKeys { it.userBackup }
 
 

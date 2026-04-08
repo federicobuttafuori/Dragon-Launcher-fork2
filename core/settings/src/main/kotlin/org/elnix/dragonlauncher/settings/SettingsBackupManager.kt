@@ -95,15 +95,10 @@ object SettingsBackupManager {
     }
 
 
-    /**
-     * Exports only the requested stores.
-     * @param requestedStores List of _root_ide_package_.org.elnix.dragonlauncher.settings.bases.DatastoreProvider objects
-     */
-    suspend fun exportSettings(
+    suspend fun createJsonToExport(
         ctx: Context,
-        uri: Uri,
         requestedStores: Set<DatastoreProvider>
-    ) {
+    ): JSONObject {
         val json = JSONObject()
 
         allStores.forEach { entry ->
@@ -117,6 +112,20 @@ object SettingsBackupManager {
                 }
             }
         }
+        return json
+    }
+
+
+    /**
+     * Exports only the requested stores.
+     * @param requestedStores List of _root_ide_package_.org.elnix.dragonlauncher.settings.bases.DatastoreProvider objects
+     */
+    suspend fun exportSettings(
+        ctx: Context,
+        uri: Uri,
+        requestedStores: Set<DatastoreProvider>
+    ) {
+       val json = createJsonToExport(ctx, requestedStores)
 
         writeJson(ctx, uri, json)
     }
@@ -167,7 +176,8 @@ object SettingsBackupManager {
                         }
                     }
 
-                    else -> { /* no-op */
+                    else -> {
+                        /* no-op */
                     }
                 }
             }
@@ -177,9 +187,6 @@ object SettingsBackupManager {
         if (DataStoreName.SWIPE in requestedStores) {
             PrivateSettingsStore.hasInitialized.set(ctx, true)
         }
-
-
-
 
 
         // FUCK LEGACY 🤎
@@ -207,5 +214,21 @@ object SettingsBackupManager {
 //                SwipeSettingsStore.saveNests(ctx, legacyNests)
 //            }
 //        }
+    }
+
+
+    /**
+     * Imports theme settings from a JSON object directly, without reading a file.
+     *
+     * This method only imports the Colors part of the
+     *
+     * @param ctx Context used for accessing DataStores
+     * @param json Parsed JSONObject containing backup data
+     */
+    suspend fun importTheme(
+        ctx: Context,
+        json: JSONObject
+    ) {
+        importSettingsFromJson(ctx,json, themeStores)
     }
 }

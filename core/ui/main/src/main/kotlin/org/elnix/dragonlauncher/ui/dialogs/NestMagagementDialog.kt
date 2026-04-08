@@ -248,7 +248,7 @@ private fun NestManagementItem(
                 onClick = { onDelete(nest.id) },
                 imageVector = Icons.Default.Close,
                 contentDescription = stringResource(R.string.delete_circle_nest),
-                colors = AppObjectsColors.errorIconButtonColors()
+                colors = AppObjectsColors.cancelIconButtonColors()
             )
         }
     }

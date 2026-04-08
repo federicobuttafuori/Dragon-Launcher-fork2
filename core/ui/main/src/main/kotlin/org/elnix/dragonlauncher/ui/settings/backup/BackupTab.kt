@@ -38,6 +38,7 @@ import org.elnix.dragonlauncher.common.utils.Constants.Logging.BACKUP_TAG
 import org.elnix.dragonlauncher.common.utils.formatDateTime
 import org.elnix.dragonlauncher.common.utils.getFilePathFromUri
 import org.elnix.dragonlauncher.common.utils.showToast
+import org.elnix.dragonlauncher.common.utils.today
 import org.elnix.dragonlauncher.logging.logD
 import org.elnix.dragonlauncher.logging.logE
 import org.elnix.dragonlauncher.models.BackupResult
@@ -262,7 +263,7 @@ fun BackupTab(onBack: () -> Unit) {
             onConfirm = { selectedStores ->
                 showExportDialog = false
                 selectedStoresForExport = selectedStores.keys
-                settingsExportLauncher.launch("backup-${System.currentTimeMillis()}.json")
+                settingsExportLauncher.launch("backup-${ctx.today()}.json")
             }
         )
     }

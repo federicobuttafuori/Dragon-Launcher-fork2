@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Polyline
 import androidx.compose.material.icons.filled.ShapeLine
 import androidx.compose.material.icons.filled.SignalCellular4Bar
+import androidx.compose.material.icons.filled.Style
 import androidx.compose.material.icons.filled.TextFields
 import androidx.compose.material.icons.filled.Wallpaper
 import androidx.compose.material.icons.filled.Widgets
@@ -29,27 +30,27 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
+import org.elnix.dragonlauncher.common.navigaton.SETTINGS
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.common.serializables.dummySwipePoint
-import org.elnix.dragonlauncher.common.navigaton.SETTINGS
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore.appIconOverlaySize
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore.appLabelIconOverlayTopPadding
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore.appLabelOverlaySize
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore.showLaunchingAppIcon
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore.showLaunchingAppLabel
+import org.elnix.dragonlauncher.ui.base.asState
 import org.elnix.dragonlauncher.ui.components.AppPreviewTitle
-import org.elnix.dragonlauncher.ui.dragon.expandable.ExpandableSection
-import org.elnix.dragonlauncher.ui.dragon.text.TextDivider
-import org.elnix.dragonlauncher.ui.dragon.components.DragonColumnGroup
 import org.elnix.dragonlauncher.ui.components.settings.SettingsSlider
 import org.elnix.dragonlauncher.ui.components.settings.SettingsSwitchRow
-import org.elnix.dragonlauncher.ui.base.asState
-import org.elnix.dragonlauncher.ui.helpers.settings.SettingsItem
-import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
 import org.elnix.dragonlauncher.ui.composition.LocalIcons
 import org.elnix.dragonlauncher.ui.composition.LocalNavController
+import org.elnix.dragonlauncher.ui.dragon.components.DragonColumnGroup
+import org.elnix.dragonlauncher.ui.dragon.expandable.ExpandableSection
 import org.elnix.dragonlauncher.ui.dragon.expandable.rememberExpandableSection
+import org.elnix.dragonlauncher.ui.dragon.text.TextDivider
+import org.elnix.dragonlauncher.ui.helpers.settings.SettingsItem
+import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
 
 
 @Composable
@@ -135,13 +136,12 @@ fun AppearanceTab(
             ) { navController.navigate(SETTINGS.STATUS_BAR) }
         }
 
-        // Disabled cause it's shitty, and I don't want shotty things in my app. it is also broken, as I did not make the color update
-//        item {
-//            SettingsItem(
-//                title = stringResource(R.string.theme_selector),
-//                icon = Icons.Default.Style
-//            ) { navController.navigate(SETTINGS.THEME) }
-//        }
+        item {
+            SettingsItem(
+                title = stringResource(R.string.theme_selector),
+                icon = Icons.Default.Style
+            ) { navController.navigate(SETTINGS.THEME) }
+        }
 
         item {
             SettingsItem(
