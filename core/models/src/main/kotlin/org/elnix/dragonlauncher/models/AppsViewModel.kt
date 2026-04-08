@@ -38,10 +38,6 @@ import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.logging.logD
-import org.elnix.dragonlauncher.logging.logE
-import org.elnix.dragonlauncher.logging.logI
-import org.elnix.dragonlauncher.logging.logW
 import org.elnix.dragonlauncher.common.serializables.AppModel
 import org.elnix.dragonlauncher.common.serializables.AppOverride
 import org.elnix.dragonlauncher.common.serializables.CacheKey
@@ -73,6 +69,10 @@ import org.elnix.dragonlauncher.common.utils.isDefaultLauncher
 import org.elnix.dragonlauncher.common.utils.isNotBlankJson
 import org.elnix.dragonlauncher.common.utils.showToast
 import org.elnix.dragonlauncher.enumsui.PrivateSpaceLoadingState
+import org.elnix.dragonlauncher.logging.logD
+import org.elnix.dragonlauncher.logging.logE
+import org.elnix.dragonlauncher.logging.logI
+import org.elnix.dragonlauncher.logging.logW
 import org.elnix.dragonlauncher.settings.stores.BehaviorSettingsStore
 import org.elnix.dragonlauncher.settings.stores.DrawerSettingsStore
 import org.elnix.dragonlauncher.settings.stores.PrivateAppsSettingsStore
@@ -257,7 +257,7 @@ class AppsViewModel(
                 getOnlyRemoved -> list.filter { it.iconCacheKey in removed }
                 else -> {
                     val base = when (workspace.type) {
-                        WorkspaceType.ALL, -> list
+                        WorkspaceType.ALL -> list
                         WorkspaceType.CUSTOM -> emptyList()
                         WorkspaceType.USER -> list.filter { !it.isWorkProfile && !it.isPrivateProfile && it.isLaunchable == true }
                         WorkspaceType.SYSTEM -> list.filter { it.isSystem }
@@ -945,13 +945,24 @@ class AppsViewModel(
 
         if (packPkg == null) return null
 
-        val packResources = ctx.packageManager.getResourcesForApplication(packPkg)
+        val packResources = try {
+            ctx.packageManager.getResourcesForApplication(packPkg)
+        } catch (e: Exception) {
+            logE(APPS_TAG, e) { "Error fetching pack ressources: app is likely not installed" }
+            null
+        }
 
-        // 1. Try standard drawable name
-        val drawableId = packResources.getIdentifier(iconName, "drawable", packPkg)
-        logD(ICONS_TAG) { "Trying drawable: name=$iconName id=$drawableId" }
-        if (drawableId != 0) {
-            return ResourcesCompat.getDrawable(packResources, drawableId, null)
+        packResources?.let {
+            try {
+                val drawableId = packResources.getIdentifier(iconName, "drawable", packPkg)
+
+                logD(ICONS_TAG) { "Trying drawable: name=$iconName id=$drawableId" }
+                if (drawableId != 0) {
+                    return ResourcesCompat.getDrawable(packResources, drawableId, null)
+                }
+            } catch (e: Exception) {
+                logE(APPS_TAG, e) { "Error fetching pack drawable ressources" }
+            }
         }
 
         return null
