@@ -85,7 +85,7 @@ object DebugSettingsStore : MapSettingsStore() {
     val snackBarLogLevel = Settings.int(
         key = "snackBarLogLevel",
         dataStoreName = dataStoreName,
-        default = Log.ERROR,
+        default = 7, // No logs
         allowedRange = 2..7
     )
 

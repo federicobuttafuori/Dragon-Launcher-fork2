@@ -257,7 +257,7 @@ fun LogsTab(
                         value = snackBarLogLevel,
                         showValue = false,
                         allowTextEditValue = false,
-                        valueRange = 2..6,
+                        valueRange = 2..7,
                         onReset = {
                             dragonLogViewModel.updateSnackBarLogLevel(Log.ERROR)
                         }
@@ -271,7 +271,7 @@ fun LogsTab(
                         value = filesLogLevel,
                         showValue = false,
                         allowTextEditValue = false,
-                        valueRange = 2..6,
+                        valueRange = 2..7,
                         onReset = {
                             dragonLogViewModel.updateFilesLogLevel(Log.DEBUG)
                         }
