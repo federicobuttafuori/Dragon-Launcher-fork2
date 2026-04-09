@@ -807,7 +807,7 @@
     <string name="drag_overlay">Drag overlay</string>
     <string name="hold_to_activate">Hold to activate</string>
     <string name="main_screen_layers">Main screen layers</string>
-    <string name="main_screen_layers_help">Configure the man screen layers order and display</string>
+    <string name="main_screen_layers_help">Configure the main screen layers order and display</string>
     <string name="main_screen_layers_reset">Are you sure you want to reset the layers to their default value?</string>
     <string name="main_screen_layers_reset_title">Reset main screen layers</string>
     <string name="custom_dim">Custom Dim</string>
