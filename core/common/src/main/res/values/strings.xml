@@ -8,7 +8,6 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="do_not_remind_me_again">Do not remind me again</string>
-    <string name="coming_soon">Coming Soon…</string>
     <string name="settings">Settings</string>
     <string name="appearance">Appearance</string>
     <string name="appearance_tab_text">Change appearance settings</string>
@@ -29,7 +28,6 @@
     <string name="language_german">German</string>
     <string name="language_spanish">Spanish</string>
     <string name="language_hindi">Hindi</string>
-    <string name="language_japanese">Japanese</string>
     <string name="language_korean">Korean</string>
     <string name="language_portuguese">Portuguese</string>
     <string name="system_default">System Default</string>
@@ -48,9 +46,6 @@
     <string name="export_successful">Export Successful</string>
     <string name="unknown_error">Unknown Error</string>
     <string name="color_selector_text">Select your preferred color theme</string>
-    <string name="color_custom_mode">Custom Mode</string>
-    <string name="color_mode_default">Default Mode</string>
-    <string name="color_mode_normal">Normal Mode</string>
     <string name="color_mode_all">All Colors</string>
     <string name="reset">Reset</string>
     <string name="reset_to_default_colors">Reset to Default Colors</string>
@@ -71,10 +66,7 @@
     <string name="test_colors">Test Colors</string>
     <string name="exit_test_mode">Exit Test Mode</string>
     <string name="exit_test_mode_message">Do you want to save your color changes or discard them?</string>
-    <string name="save_changes">Save Changes</string>
-    <string name="discard_changes">Discard Changes</string>
     <string name="back_to_colors_settings">Back to Colors Settings</string>
-    <string name="text_color">Text Color</string>
     <string name="light_theme">Light Theme</string>
     <string name="dark_theme">Dark Theme</string>
     <string name="amoled_theme">AMOLED Theme</string>
@@ -85,10 +77,8 @@
     <string name="report_a_bug">Report a bug</string>
     <string name="open_an_issue_on_github">Open a new issue on github</string>
     <string name="contributors">Contributors</string>
-    <string name="thanks_for_the_inspiration">Thanks for the inspiration, and some part of the code :)</string>
     <string name="app_developer">Lead Developer</string>
     <string name="check_for_updates_github">Check for release on Github</string>
-    <string name="check_for_updates_obtainium">Check for release on Obtainium</string>
     <string name="app_drawer">App Drawer</string>
     <string name="drawer_tab_text">Here you can customize appearance/behavior of you  app drawer</string>
     <string name="set_default_launcher">Set as default launcher</string>
@@ -114,7 +104,6 @@
     <string name="font_installed_fonts">Installed Fonts</string>
     <string name="font_available_in_extension">Available in Extension (%1$d)</string>
     <string name="font_download_all_started">Starting all fonts download. Check notifications.</string>
-    <string name="font_delete_mode">Selection Mode</string>
     <string name="font_confirm_delete">Confirm (%1$d)</string>
     <string name="font_search_placeholder">Search fonts…</string>
     <string name="font_downloading">Downloading %1$s…</string>
@@ -139,12 +128,9 @@
     <string name="remove_from_workspace">Remove From Workspace</string>
     <string name="add_to_workspace">Add To Workspace</string>
     <string name="change_app_icon">Change Icon</string>
-    <string name="app_info">App Info</string>
     <string name="uninstall">Uninstall</string>
     <string name="open">Open</string>
     <string name="rename">Rename</string>
-    <string name="icon_updated">Icon Updated</string>
-    <string name="icon_update_failed">Icon Update failed</string>
     <string name="none">None</string>
     <string name="workspace_type">Workspace Type</string>
     <string name="workspace_name">Workspace name</string>
@@ -163,7 +149,6 @@
     <string name="configure_your_apps">Configure your apps and shortcuts in settings</string>
     <string name="theme_selector">Theme selector</string>
     <string name="everything_ready">Everything Ready!</string>
-    <string name="reset_app_icon">Reset App Icon</string>
     <string name="home">Home</string>
     <string name="edit_point">Edit Point</string>
     <string name="choose_action">Choose Action</string>
@@ -171,7 +156,6 @@
     <string name="change">Change</string>
     <string name="remove">Remove</string>
     <string name="trigger_backup">Trigger Backup</string>
-    <string name="select_backup_file">Select backup file</string>
     <string name="last_backup">Last backup</string>
     <string name="auto_backup_stores">Automatic Backup Stores</string>
     <string name="recent_apps">Recent apps</string>
@@ -183,35 +167,22 @@
     <string name="top_padding">Top Padding</string>
     <string name="bottom_padding">Bottom Padding</string>
     <string name="connectivity_update_frequency">Connectivity Update Frequency (seconds)</string>
-    <string name="connectivity_indicators">Connectivity Indicators</string>
     <string name="show_airplane_mode">Show Airplane Mode</string>
     <string name="show_wifi">Show WiFi</string>
     <string name="show_bluetooth">Show Bluetooth</string>
     <string name="show_vpn">Show VPN</string>
     <string name="show_mobile_data">Show Mobile Data</string>
     <string name="show_hotspot">Show Hotspot</string>
-    <string name="date_time_formats">Date &amp; Time Formats</string>
-    <string name="custom_date_format">Custom Date Format</string>
-    <string name="custom_time_format">Custom Time Format</string>
-    <string name="bandwidth">Bandwidth</string>
     <string name="merge_bandwidth">Merge Bandwidth (Total)</string>
-    <string name="down_padding">Bottom Padding</string>
     <string name="wallpaper">Wallpaper</string>
     <string name="wallpaper_help">Set wallpaper for home/lock screen and use it or not in the launcher</string>
     <string name="select_image">Select Image</string>
     <string name="set_plain_wallpaper">Set plain wallpaper</string>
     <string name="plain_wallpaper_color">Plain Wallpaper Color</string>
-    <string name="use_main_wallpaper">Use main screen wallpaper</string>
-    <string name="use_drawer_wallpaper">Use drawer screen wallpaper</string>
     <string name="apply_wallpaper_to">Apply wallpaper to</string>
     <string name="main_screen">Main Screen</string>
     <string name="drawer_screen">Drawer Screen</string>
-    <string name="main_blur_amount">Main screen wallpaper blur amount</string>
-    <string name="drawer_blur_amount">Drawer screen wallpaper blur amount</string>
     <string name="show_all_actions_on_current_circle">Show all actions in current circle</string>
-    <string name="what_method_to_open_quick_actions">What method to open the quick actions?</string>
-    <string name="did_the_notif_or_quick_actions">Did the quick actions open or was it the notifications?</string>
-    <string name="quick_actions">Quick Actions</string>
     <string name="notifications">Notification</string>
     <string name="drawer_action_clear">Clear</string>
     <string name="drawer_action_search_web">Search the web</string>
@@ -222,33 +193,20 @@
     <string name="drawer_enter_key_action">Drawer enter key action</string>
     <string name="icon_pack">Icon packs</string>
     <string name="icon_pack_help">Select an icon pack to customize your app icons. Install icon packs from your store first.</string>
-    <string name="no_icon_pack_found">No icon pack found</string>
-    <string name="default_no_icon_pack">Default (No icon pack)</string>
     <string name="use_original_app_icon">Use original app icons</string>
-    <string name="show_actions_icon_border">Show Action Icon Border</string>
     <string name="status_bar">Status bar</string>
     <string name="status_bar_tab_text">Customize what is displayed in the status bar.</string>
-    <string name="display">Display</string>
-    <string name="show_time">Show time</string>
-    <string name="show_notifications">Show notifications</string>
-    <string name="show_battery">Show battery</string>
-    <string name="show_connectivity">Show Wi-Fi, data and airplane mode</string>
     <string name="show_status_bar">Show Status bar</string>
     <string name="status_bar_background">Status Bar Background</string>
     <string name="status_bar_text_color">Status Bar Text Color</string>
-    <string name="show_date">Show Date</string>
     <string name="time_format_title">Time Format</string>
     <string name="time_format_examples">Examples: HH:mm, HH:mm:ss, h:mm a, HH.mm</string>
     <string name="date_format_title">Date Format</string>
-    <string name="date_format_examples">Examples: MMM dd, E dd, dd/MM, MMMM d</string>
     <string name="invalid_format">Invalid format. Check examples above.</string>
     <string name="next_alarm_at">Alarm %1$s</string>
-    <string name="show_next_alarm">Show Next Alarm</string>
     <string name="theme_selector_help">Select a predefined themes, you can backup your settings and propose you theme in a pull request on github</string>
     <string name="open_nest_circle">Open Circle Nest</string>
     <string name="delete_circle_nest">Delete Circle Nest</string>
-    <string name="are_you_sure_to_delete_this_nest">Are you sure to  delete this nest? This cannot be undone, the points on it are lost forever</string>
-    <string name="min_dist_to_activate_action">Min Distance to activate action (0 for infinite)</string>
     <string name="workspace_defaults">All apps</string>
     <string name="workspace_added">Added apps</string>
     <string name="workspace_removed">Hidden apps</string>
@@ -262,30 +220,24 @@
     <string name="add_widget">Add Widget</string>
     <string name="widgets">Widgets</string>
     <string name="edit">Edit</string>
-    <string name="active_widgets">Active Widgets</string>
-    <string name="options">Options</string>
     <string name="widgets_floating_apps">Widgets / Floating Apps</string>
     <string name="floating_apps_tab_help">Manage your workspace widgets and floating apps: add, reorder, resize, and position them.\n Ghosted means the widget is not clickable\nForeground means the drag gestures aren\'t registered on the widget\nYou may try a combinaison of these two to achieve the configuration you like</string>
     <string name="delete_widget">Delete widget</string>
     <string name="add_point">Add Point</string>
     <string name="remove_point">Remove Point</string>
     <string name="copy_point">Copy Point</string>
-    <string name="toggle_drag_distances_editing">Toggle drag circle editing</string>
     <string name="ghosted">Ghosted</string>
     <string name="foreground">Foreground</string>
     <string name="app_label_icon_overlay_top_padding">App label/icon overlay top padding</string>
     <string name="show_launching_app_icon">Show App icon</string>
     <string name="show_launching_app_label">Show App Label</string>
     <string name="clock_action">Clock Action</string>
-    <string name="date_action">Date Action</string>
     <string name="opens_alarm_clock_app">Opens alarmClock app</string>
-    <string name="opens_calendar_app">Opens calendar app</string>
     <string name="edit_icon">Edit Icon</string>
     <string name="border_stroke">Border Stroke</string>
     <string name="border_stroke_selected">Border Stroke Selected</string>
     <string name="border_color">Border Color</string>
     <string name="border_color_selected">Border Color Selected</string>
-    <string name="background_color_selected">Background Color Selected</string>
     <string name="opacity">Opacity %</string>
     <string name="custom_name">Custom name</string>
     <string name="edit_action">Edit Action</string>
@@ -320,11 +272,8 @@
     <string name="line_preview_snap_to_action">Line Preview snap to action</string>
     <string name="icon_packs_found">%1$d icon packs found</string>
     <string name="default_text">Default</string>
-    <string name="app_icon_size">App Icon Size</string>
-    <string name="app_label_size">App Label Size</string>
     <string name="every_setting_will_return_to_its_default_state_this_cannot_be_undone_the_app_will_kill_itself">EVERY setting will return to its default state, this cannot be undone, the app will kill itself</string>
     <string name="reset_all_settings">Reset ALL settings ?!</string>
-    <string name="experimental">Experimental</string>
     <string name="set_wallpaper">Set Wallpaper</string>
     <string name="manage_nests">Nests Management</string>
     <string name="copy">Copy</string>
@@ -356,9 +305,6 @@
     <string name="remove_circle">Remove Circle</string>
     <string name="home_action">Home Action</string>
     <string name="drawer_home_action">Drawer Home action</string>
-    <string name="drag_distances">Drag distances</string>
-    <string name="wallpaper_edit_main">Home screen wallpaper</string>
-    <string name="wallpaper_edit_drawer">App drawer wallpaper</string>
     <string name="wallpaper_dim_amount">Wallpaper dim amount</string>
     <string name="fullscreen_description">Display or not the top bar and the navigation buttons / gesture button</string>
     <string name="rgb_loading_description">Show a RBG gradient on the loading circle upon entering settings, while holding down for 3 seconds</string>
@@ -376,7 +322,7 @@
     <string name="app_label_overlay_size">App label overlay size</string>
     <string name="app_icon_overlay_size">App Icon overlay size</string>
     <string name="next">Next</string>
-    <string name="loading_themes">Loading themes...</string>
+    <string name="loading_themes">Loading themes…</string>
     <string name="already_default_launcher">Already Default Launcher</string>
     <string name="open_default_launcher_settings">Open Default Launcher Settings</string>
     <string name="welcome_to_dragon_launcher">Welcome to Dragon Launcher</string>
@@ -417,7 +363,6 @@
     <string name="usage_permission_description">To display your real usage statistics, Dragon Launcher needs access to app usage data. This helps you be more aware of the time you spend on apps.</string>
 
     <!--  ─────────────  Digital Pause Screen  ─────────────  -->
-    <string name="digital_pause_title">Digital Pause</string>
     <string name="pause_breathe_1">Take a moment to breathe…</string>
     <string name="pause_breathe_2">Be present in this moment…</string>
     <string name="pause_breathe_3">Is this what you really need right now?</string>
@@ -429,9 +374,6 @@
     <string name="usage_yesterday">You used this app for %s yesterday</string>
     <string name="usage_today">You\'ve already spent %s today on this app</string>
     <string name="usage_guilt_yearly">That\'s about %s per year if you keep this up!</string>
-    <string name="usage_hours">%1$d hours</string>
-    <string name="usage_minutes">%1$d min</string>
-    <string name="usage_hours_minutes">%1$dh %2$dm</string>
     <string name="not_used_yet">You have not used this app yet, maybe it is good to keep going?</string>
     <string name="usage_permission_needed">Usage access permission needed</string>
     <string name="grant_usage_permission">Grant Permission</string>
@@ -441,7 +383,6 @@
     <string name="reminder_mode_description">Receive periodic reminders when you stay too long on a paused app</string>
     <string name="reminder_interval">Reminder interval</string>
     <string name="reminder_interval_description">Remind me every %d minutes</string>
-    <string name="reminder_delivery_mode">Reminder style</string>
     <string name="reminder_mode_notification">Notification</string>
     <string name="reminder_mode_overlay">On-screen popup</string>
     <string name="overlay_permission_required">Overlay Permission</string>
@@ -449,7 +390,6 @@
 
     <!--  Popup Display Options  -->
     <string name="popup_display_title">Popup Content</string>
-    <string name="popup_display_description">Choose what information to show in the reminder popup</string>
     <string name="popup_show_session_time">Show session time</string>
     <string name="popup_show_session_time_desc">Time since you opened the app</string>
     <string name="popup_show_today_time">Show today\'s total</string>
@@ -465,7 +405,6 @@
 
     <string name="reminder_notification_title">Still on %s</string>
     <string name="reminder_notification_text">You\'ve been using %1$s for %2$s. Maybe it\'s time for a break?</string>
-    <string name="reminder_overlay_text">You\'ve been on %1$s for %2$s</string>
     <string name="reminder_overlay_subtext">Take a break, your eyes will thank you 🌿</string>
 
     <!--  ─────────────  Wellbeing: Return to Launcher  ─────────────  -->
@@ -482,7 +421,6 @@
     <string name="time_limit_cancel">Cancel</string>
     <string name="timer_notification_title">Dragon is watching 🐉</string>
     <string name="timer_notification_text">%1$s remaining on %2$s</string>
-    <string name="time_warning_title">%1$s left on %2$s</string>
     <string name="time_warning_subtitle">Your session is almost over ⚡</string>
     <string name="time_exceeded_title">Time\'s up!</string>
     <string name="time_exceeded_message">You\'ve been on %s for too long.</string>
@@ -505,7 +443,6 @@
     <string name="icons_spacing_horizontal">icons Spacing horizontal</string>
     <string name="depth">Depth</string>
     <string name="depth_desc">How many sub nests are drawn at max</string>
-    <string name="warning_large_values_can_lag_your_phone">Warning, large values can lag your phone if you have lots of actions and sub nests</string>
     <string name="custom_theme">Custom Theme</string>
     <string name="dynamic_colors">Dynamic Colors</string>
     <string name="dynamic_colors_desc">Use android dynamic colors to provide you a dynamic colors scheme</string>
@@ -578,8 +515,6 @@
     <string name="on_tertiary_fixed_variant_color">On Tertiary Fixed Variant</string>
     <string name="custom_colors">Custom Colors</string>
     <string name="normal_colors">Normal Colors</string>
-    <string name="help_wanted">Help Wanted</string>
-    <string name="help_wanted_on_colors">I seek for good people that could make a clean color scheme, as this one\'s pretty empty and bad, so if someone has the determination, he could sent me the colors for every field and if it fits good, I\'ll set it by default</string>
     <string name="source">Source</string>
     <string name="reset_all_points">Reset All points</string>
     <string name="reset_all_points_desc">All your actions will be reset, this can\'t be undone!</string>
@@ -597,48 +532,35 @@
     <string name="category_grid_width">Category grid width</string>
     <string name="grid_settings">Grid Settings</string>
     <string name="category_cells">Category cells</string>
-    <string name="category_cells_desc">The number of rows and column in the category box</string>
 
     <!--  ─────────────  Multi Select  ─────────────  -->
-    <string name="multi_select_hint">Long press an app to start multi-selection</string>
     <string name="multi_select_count">%d selected</string>
-    <string name="add_selected_apps">Add selected apps</string>
     <string name="add_all_auto">Auto place on circle</string>
     <string name="add_all_manual">Place one by one</string>
     <string name="place_app_where">Where do you want to place %s?</string>
     <string name="tap_circle_to_place">Tap on the circle to place the app</string>
-    <string name="apps_added_successfully">%d apps added successfully</string>
     <string name="multi_select_drawer_hint">💡 Long press an app to select multiple at once</string>
     <string name="deselect_all">Deselect all</string>
 
     <!--  ─────────────  Shortcuts Settings  ─────────────  -->
-    <string name="shortcuts_settings">Shortcuts</string>
     <string name="prompt_shortcuts_when_adding_app">Prompt for shortcuts when adding an app</string>
     <string name="prompt_shortcuts_when_adding_app_desc">When enabled, you\'ll be asked to choose between the app or its shortcuts. When disabled, the app is added directly.</string>
 
     <!--  ─────────────  Lock Settings  ─────────────  -->
-    <string name="lock_settings">Lock Settings</string>
     <string name="lock_settings_description">Protect your launcher settings with a security method</string>
     <string name="lock_method">Lock Method</string>
     <string name="lock_none">None</string>
     <string name="lock_pin">PIN Code</string>
-    <string name="lock_biometric">Fingerprint</string>
-    <string name="lock_device_credentials">Device Credentials</string>
     <string name="lock_device_unlock">Device unlock</string>
     <string name="enter_pin">Enter PIN</string>
     <string name="confirm_pin">Confirm PIN</string>
     <string name="set_pin">Set PIN</string>
-    <string name="change_pin">Change PIN</string>
-    <string name="remove_pin">Remove PIN</string>
     <string name="pin_mismatch">PINs do not match</string>
-    <string name="pin_too_short">PIN must be at least 4 digits</string>
     <string name="pin_set_success">PIN set successfully</string>
-    <string name="pin_removed">PIN removed</string>
     <string name="wrong_pin">Wrong PIN</string>
     <string name="unlock_settings">Unlock Settings</string>
     <string name="biometric_prompt_title">Unlock Dragon Settings</string>
     <string name="biometric_prompt_subtitle">Authenticate to access settings</string>
-    <string name="biometric_not_available">Biometric authentication not available</string>
     <string name="device_credentials_not_available">No device lock screen set up</string>
     <string name="authentication_failed">Authentication failed</string>
     <string name="authentication_error">Authentication error: %s</string>
@@ -653,9 +575,7 @@
     <string name="pinned_shortcut_failed">Failed to add shortcut</string>
     <string name="pinned_shortcut_already_exists">"%s" shortcut is already on your circles</string>
     <string name="pinned_shortcuts">Shortcuts</string>
-    <string name="pinned_shortcuts_desc">Browse and add shortcuts from your apps</string>
     <string name="no_pinned_shortcuts">No shortcuts available</string>
-    <string name="pinned_shortcuts_from">Shortcuts from %s</string>
 
     <!--  ─────────────  Recently Used Apps  ─────────────  -->
     <string name="recently_used_apps">Recently used apps</string>
@@ -664,8 +584,6 @@
     <string name="recently_used_apps_count">Number of recent apps</string>
     <string name="show_category_name">Show Category name</string>
     <string name="show_category_name_desc">Display the name of the category below it</string>
-    <string name="search_bar_bottom">Search bar bottom</string>
-    <string name="search_bar_bottom_desc">Display the search bar at the bottom of the drawer</string>
     <string name="long_click_settings_duration">Long Click Settings Duration (ms)</string>
     <string name="long_click_settings_duration_desc">Configure how long you have to long click to access settings</string>
     <string name="hold_delay_before_starting_long_click_settings">Hold delay before starting long click settings (ms)</string>
@@ -677,28 +595,16 @@
     <string name="settings_json">Settings JSON</string>
     <string name="pick_a_settings_screen">Pick a settings screen</string>
     <string name="app_preview_settings">App preview overlay</string>
-    <string name="time_display_settings">Time Display Settings</string>
-    <string name="date_display_settings">Date Display Settings</string>
     <string name="not_implemented">Not implemented</string>
-    <string name="show_next_alarm_desc">Show the time of the next upcoming alarm</string>
-    <string name="show_battery_desc">Display the phone battery %</string>
-    <string name="show_connectivity_desc">Not working well, pleas wait for an hypothetical release about this one day</string>
-    <string name="show_time_desc">Display the time using the custom formatter</string>
-    <string name="show_date_desc">Display the date next to the time using the custom formatter</string>
     <string name="show_status_bar_desc">Display the status bar, if disabled nothing\'s showed</string>
-    <string name="display_options_settings">Display options settings</string>
     <string name="disable_haptic_globally">Disable Haptic feedback globally</string>
     <string name="disable_haptic_globally_desc">Prevent Dragon to produce any haptic feedback in points selection in case you hate it</string>
     <string name="point_action_snaps_to_outer_circle">Point action snaps to outer circle</string>
     <string name="point_action_snaps_to_outer_circle_desc">Choose if the action is activated on the inner circle or the outer one</string>
-    <string name="error_with_message">Error: %1$s</string>
     <string name="drag_handle">Drag handle</string>
     <string name="private_space_title">Private Space</string>
     <string name="private_space_locked">Private Space locked</string>
     <string name="private_space_authenticating">Authenticating…</string>
-    <string name="private_space_loading">Private Space loading</string>
-    <string name="private_space_please_wait">Please wait</string>
-    <string name="private_space_loading_description">Your Private Space is being loaded…</string>
     <string name="private_space_managed_by_android">This profile is managed by Android system.</string>
     <string name="private_space_manage_instructions">To add or remove apps, or delete this profile, use Android Settings.</string>
     <string name="samsung_secure_folder_settings">Samsung Secure Folder</string>
@@ -712,11 +618,8 @@
     <string name="app_info_is_work_profile">isWorkProfile = %1$s</string>
     <string name="app_info_is_private_profile">isPrivateProfile = %1$s</string>
     <string name="app_info_is_launchable">isLaunchable = %1$s</string>
-    <string name="app_info_settings">settings = %1$s</string>
     <string name="app_info_user_id">userId = %1$s</string>
-    <string name="app_info_cacheKey">cacheKey = %1$s</string>
     <string name="no_apps">No apps</string>
-    <string name="unlock">Unlock</string>
 
     <string name="activate_debug_mode">Activate Debug Mode</string>
     <string name="activate_debug_mode_desc">Enable debug features across the app</string>
@@ -734,21 +637,9 @@
     <string name="show_debug_infos_workspace_desc">Display debug information in workspace</string>
 
     <string name="has_initialized">Has initialized</string>
-    <string name="has_initialized_desc">Whether the app has completed initialization</string>
-
-    <string name="show_default_launcher_banner">Show default launcher banner</string>
-    <string name="show_default_launcher_banner_desc">Display the banner prompting to set the default launcher</string>
-
-    <string name="force_app_language_selector">Force app language selector</string>
-    <string name="force_app_language_selector_desc">Use the app\'s language selector instead of Android\'s system selector</string>
-
-    <string name="force_app_widgets_selector">Force app widgets selector</string>
 
     <string name="use_accessibility_instead_of_context">Use accessibility instead of context</string>
     <string name="use_accessibility_instead_of_context_desc">Expand action panel using accessibility instead of context</string>
-
-    <string name="ask_notifications_behavior">Ask notifications behavior</string>
-    <string name="ask_notifications_behavior_desc">Prompt each time for notifications / quick settings behavior</string>
 
     <string name="auto_raise_dragon_on_system_launcher">Auto launch Dragon on system launcher</string>
     <string name="auto_raise_dragon_on_system_launcher_desc">Automatically raise Dragon when on the system launcher (requires accessibility)</string>
@@ -758,14 +649,12 @@
 
     <string name="private_space_debug_info">Private space debug info</string>
     <string name="private_space_debug_info_desc">Display private space state debug infos on top of everything</string>
-    <string name="backspace">Backspace</string>
     <string name="super_warning_mode">Super Warning mode</string>
     <string name="super_warning_mode_desc">Do something funny when you enter a wrong pin</string>
 
     <string name="super_warning_mode_sound">Super Warning mode + sound</string>
     <string name="super_warning_mode_sound_desc">Adds the sound</string>
     <string name="alarm_sound">Alarm Sound</string>
-    <string name="alarm_sound_desc">Play an alarm sound when wrong pin entered</string>
     <string name="metal_pipes_sound">Metal pipes sound</string>
     <string name="metal_pipes_sound_desc">Play metal pipes sound when wrong pin entered</string>
     <string name="vibrate_on_error">Vibrate on error</string>
@@ -780,9 +669,6 @@
     <string name="pull_down_wallpaper_dim">Pull-down Wallpaper Dim</string>
     <string name="pull_down_wallpaper_dim_desc">Dim the wallpaper when the drawer is pulled down</string>
 
-    <string name="pull_down_icon_fade">Pull-down Icon Fade</string>
-    <string name="pull_down_icon_fade_desc">Fade icons in/out during pull-down drawer animation</string>
-
     <string name="pull_down_scale_in">Pull-down Scale In</string>
     <string name="pull_down_scale_in_desc">Scale icons when the drawer is pulled down</string>
     <string name="drawer_enter_exit_animations">Drawer Enter/Exit Animations</string>
@@ -793,20 +679,11 @@
     <string name="reload">Reload</string>
     <string name="select_icon">Select Icon</string>
 
-    <string name="show_notifications_desc">Show icons of apps with active notifications (requires Notification Access permission)</string>
     <string name="max_notification_icons">Max notification icons</string>
-    <string name="max_notification_icons_desc">Maximum number of app notification icons to display in the status bar</string>
-    <string name="grant_notification_access">Grant Notification Access</string>
-    <string name="show_bandwidth">Show live bandwidth</string>
-    <string name="show_bandwidth_desc">Display live network upload and download speed next to the battery</string>
     <string name="need_to_be_default_launcher_to_use_private_space">Need to be default launcher to use private space</string>
     <string name="use_differential_loading_private_space">Use Differential loading private space</string>
     <string name="use_differential_loading_private_space_desc">Toggle this when private apps appear in the user workspace, otherwise keep it unchecked for performances</string>
     <string name="edit_border_shape">Edit border shape</string>
-    <string name="hold_to_activate_radius">Hold to activate radius</string>
-    <string name="hold_to_activate_radius_desc">The radius of the loading circle progress</string>
-    <string name="hold_to_activate_stroke">Hold to activate stroke</string>
-    <string name="hold_to_activate_stroke_desc">The stroke of the arc</string>
     <string name="hold_settings">Hold settings</string>
     <string name="hold_to_activate_tolerance">Hold to activate tolerance</string>
     <string name="hold_to_activate_tolerance_desc">How far you can drag while holding without canceling the progress</string>
@@ -848,14 +725,9 @@
     <string name="debug_mode_already_enabled">Debug Mode is already enabled</string>
     <string name="not_supported_in_this_android_version">Not supported in this Android version</string>
     <string name="please_enable_accessibility_services_to_use_that_feature">Please enable accessibility service to use that feature</string>
-    <string name="clear_auto_backup">Clear Auto-Backup</string>
-    <string name="clear_auto_backup_desc">Disable auto backup and remove URI permission (not file)</string>
     <string name="backup_location">Backup Location</string>
     <string name="backup_location_desc">Tap to select destination</string>
 
-    <string name="last_backup_desc">Manually trigger a backup to the selected location</string>
-
-    <string name="auto_backup_cleared">Auto-backup cleared</string>
     <string name="backup_triggered">Backup triggered manually</string>
     <string name="auto_backup_desc">Automate backup generation to local storage</string>
     <string name="select_all">Select All</string>
@@ -875,7 +747,6 @@
     <string name="accessibility_service_desc">Used to expand the notification panel via gestures.</string>
 
     <string name="usage_access">Usage Statistics Access</string>
-    <string name="usage_access_desc">Required for Digital Wellbeing features.</string>
 
     <string name="android_permissions">Android Permissions</string>
 
@@ -892,14 +763,6 @@
     <string name="show_nest_preview">Show nest preview</string>
     <string name="general">General</string>
     <string name="action">Action</string>
-    <string name="icon">Icon</string>
-    <string name="shapes">Shapes</string>
-    <string name="reset_default_point">Reset default point</string>
-    <string name="reset_point">Reset point</string>
-    <string name="reset_default_point_desc">This will reset the default point settings, which means, all points that doesn\'t override settings</string>
-    <string name="reset_point_desc">This will reset the current point to it\'s default values. After that, it\'ll use the default point values for each of it\'s non-specific entries (size, borders…)</string>
-    <string name="default_point_help_text">Edit the values that all points takes by default, you can manually override each of these per point</string>
-    <string name="edit_point_help_desc">Edit a specific point, if you want to edit all points at once, use the more button on top of the settings screen and click on \"Edit default points settings\"</string>
     <string name="collapse">Collapse</string>
     <string name="haptic_feedback_editor">Haptic Feedback Editor</string>
     <string name="vibration">Vibration</string>
@@ -925,8 +788,6 @@
     <string name="use_custom_color_channels">Use custom color channels</string>
     <string name="use_custom_color_channels_desc">Override the default color channels used for the material objects, such as switches, to use mine</string>
     <string name="hold_settings_help">The settings related to the arc that spawns when you hold for long enough on the  main screen, You cannot fully disable it, otherwise, you could loose the last door that can lead you to settings, if you did shit, and so be forced to reset the app.</string>
-    <string name="rotation_start_angle">Rotation start angle</string>
-    <string name="rotation_start_angle_desc">I guess it\'s clear enough…</string>
     <string name="rotation_per_second">Rotations/second</string>
     <string name="rotation_per_second_desc">How many turns on itself it does in one second</string>
     <string name="enable_backup">Enable backup</string>
@@ -943,7 +804,6 @@
     <string name="shape">Shape</string>
     <string name="scale">Scale</string>
     <string name="current_nest">Current nest</string>
-    <string name="first_dim">First Dim</string>
     <string name="drag_overlay">Drag overlay</string>
     <string name="hold_to_activate">Hold to activate</string>
     <string name="main_screen_layers">Main screen layers</string>
@@ -964,7 +824,6 @@
     <string name="paste">Paste</string>
     <string name="refresh">Refresh</string>
     <string name="crash">App Crashed!</string>
-    <string name="crash_message">Crash message:</string>
     <string name="access_app">Access app (you may experience crash again)</string>
     <string name="shizuku_unavailable">Shizuku is unavailable</string>
     <string name="shizuku_unavailable_message">Shizuku is not installed or properly configured on your device</string>
@@ -974,7 +833,6 @@
     <string name="toggle_mobile_data">Toggle Mobile Data</string>
     <string name="toggle_wifi">Toggle wifi</string>
     <string name="adb_command_without_adb">Adb command without \"adb\"</string>
-    <string name="shizuku_bt_cmd_method">Method</string>
     <string name="shizuku_bt_cmd_cmd">Works on some Android 11+, not guaranteed across all OEMs</string>
     <string name="shizuku_bt_service_call">Old method, works on some Android versions and vendors, unreliable</string>
     <string name="shizuku_bt_root">Requires root access</string>
@@ -992,7 +850,6 @@
     <string name="dragging_display">Dragging display</string>
     <string name="select_settings_to_export">Select settings to export</string>
     <string name="select_settings_to_import">Select settings to import</string>
-    <string name="welcome_screen">Welcome Screen</string>
     <string name="edit_hold_to_activate_elements">Edit hold to activate elements</string>
     <string name="edit_hold_to_activate_elements_desc">Edit the actions that pops up when holding 3 sec. Only 1 mean auto redirect</string>
     <string name="less">Less</string>

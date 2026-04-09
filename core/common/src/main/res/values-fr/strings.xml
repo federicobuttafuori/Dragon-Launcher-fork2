@@ -9,7 +9,6 @@
     <string name="ok">D’accord</string>
     <string name="cancel">Annuler</string>
     <string name="do_not_remind_me_again">Ne me le rappelle plus</string>
-    <string name="coming_soon">À venir…</string>
     <string name="settings">Paramètres</string>
     <string name="appearance_tab_text">Modifier les paramètres d’apparence</string>
     <string name="fullscreen_app">Application plein écran</string>
@@ -29,7 +28,6 @@
     <string name="language_german">Allemand</string>
     <string name="language_spanish">Espagnol</string>
     <string name="language_hindi">hindi</string>
-    <string name="language_japanese">japonais</string>
     <string name="language_korean">coréen</string>
     <string name="language_portuguese">portugais</string>
     <string name="system_default">Par défaut système</string>
@@ -48,9 +46,6 @@
     <string name="export_successful">Exportation réussie</string>
     <string name="unknown_error">Erreur inconnue</string>
     <string name="color_selector_text">Sélectionnez le thème de couleur que vous souhaitez</string>
-    <string name="color_custom_mode">Mode personnalisé</string>
-    <string name="color_mode_default">Mode par défaut</string>
-    <string name="color_mode_normal">Mode normal</string>
     <string name="color_mode_all">Toutes les couleurs</string>
     <string name="reset">Réinitialisation</string>
     <string name="reset_to_default_colors">Réinitialisation aux couleurs par défaut</string>
@@ -71,10 +66,7 @@
     <string name="test_colors">Tester les couleurs</string>
     <string name="exit_test_mode">Quitter le mode test</string>
     <string name="exit_test_mode_message">Voulez-vous enregistrer vos modifications de couleur ou les annuler ?</string>
-    <string name="save_changes">Enregistrer les modifications</string>
-    <string name="discard_changes">Annuler les modifications</string>
     <string name="back_to_colors_settings">Retour aux paramètres de couleurs</string>
-    <string name="text_color">Couleur du texte</string>
     <string name="light_theme">Thème clair</string>
     <string name="dark_theme">Thème sombre</string>
     <string name="amoled_theme">Thème AMOLED</string>
@@ -85,10 +77,8 @@
     <string name="report_a_bug">Signaler un bug</string>
     <string name="open_an_issue_on_github">Ouvrir un nouveau problème sur Github</string>
     <string name="contributors">Contributeurs</string>
-    <string name="thanks_for_the_inspiration">Merci pour l’inspiration, et pour une partie du code :)</string>
     <string name="app_developer">Développeur principal</string>
     <string name="check_for_updates_github">Vérifiez la sortie sur Github</string>
-    <string name="check_for_updates_obtainium">Vérifier la sortie sur Obtainium</string>
     <string name="app_drawer">Tiroir d\'applications</string>
     <string name="drawer_tab_text">Ici, vous pouvez personnaliser l’apparence et le comportement de votre tiroir d’applications</string>
     <string name="set_default_launcher">Définir comme lanceur par défaut</string>
@@ -120,12 +110,9 @@
     <string name="remove_from_workspace">Retirer de l’espace de travail</string>
     <string name="add_to_workspace">Ajouter à l’espace de travail</string>
     <string name="change_app_icon">Changer l\'Icône</string>
-    <string name="app_info">Infos sur l’application</string>
     <string name="uninstall">Désinstaller</string>
     <string name="open">Ouvrir</string>
     <string name="rename">Renommer</string>
-    <string name="icon_updated">Icône mise à jour</string>
-    <string name="icon_update_failed">Mise à jour d’icônes échouée</string>
     <string name="none">Aucun</string>
     <string name="workspace_type">Type d’espace de travail</string>
     <string name="workspace_name">Nom de l’espace de travail</string>
@@ -144,7 +131,6 @@
     <string name="configure_your_apps">Configurez vos applications et raccourcis dans les paramètres</string>
     <string name="theme_selector">Sélecteur de thème</string>
     <string name="everything_ready">Tout est prêt !</string>
-    <string name="reset_app_icon">Réinitialiser l’icône de l’application</string>
     <string name="home">Accueil</string>
     <string name="edit_point">Point de modification</string>
     <string name="choose_action">Choisissez une action</string>
@@ -152,7 +138,6 @@
     <string name="change">Changement</string>
     <string name="remove">Retirer</string>
     <string name="trigger_backup">Sauvegarde de déclencheurs</string>
-    <string name="select_backup_file">Sélectionner le fichier de sauvegarde</string>
     <string name="last_backup">Dernière sauvegarde</string>
     <string name="auto_backup_stores">Stockage automatique de sauvegarde</string>
     <string name="recent_apps">Applications récentes</string>
@@ -164,35 +149,22 @@
     <string name="top_padding">Rembourrage supérieur</string>
     <string name="bottom_padding">Rembourrage inférieur</string>
     <string name="connectivity_update_frequency">Fréquence de mise à jour de la connectivité (secondes)</string>
-    <string name="connectivity_indicators">Indicateurs de connectivité</string>
     <string name="show_airplane_mode">Afficher le mode avion</string>
     <string name="show_wifi">Afficher le WiFi</string>
     <string name="show_bluetooth">Afficher le Bluetooth</string>
     <string name="show_vpn">Afficher le VPN</string>
     <string name="show_mobile_data">Afficher les données mobiles</string>
     <string name="show_hotspot">Afficher le point d\'accès</string>
-    <string name="date_time_formats">Formats de date et heure</string>
-    <string name="custom_date_format">Format de date personnalisé</string>
-    <string name="custom_time_format">Format d\'heure personnalisé</string>
-    <string name="bandwidth">Bande passante</string>
     <string name="merge_bandwidth">Fusionner la bande passante (Total)</string>
-    <string name="down_padding">Rembourrage inférieur</string>
     <string name="wallpaper">Fond d’écran</string>
     <string name="wallpaper_help">Définissez le fond d’écran pour l’écran d’accueil/verrouillage et utilisez-le ou non dans le lanceur</string>
     <string name="select_image">Sélectionner l’image</string>
     <string name="set_plain_wallpaper">Posez un papier peint uni</string>
     <string name="plain_wallpaper_color">Couleur unie du papier peint</string>
-    <string name="use_main_wallpaper">Utilisez le fond d’écran principal</string>
-    <string name="use_drawer_wallpaper">Utilisez un papier peint pour écran de tiroir</string>
     <string name="apply_wallpaper_to">Appliquez du papier peint sur</string>
     <string name="main_screen">Écran principal</string>
     <string name="drawer_screen">Écran de tiroir</string>
-    <string name="main_blur_amount">Quantité de flou du fond d’écran principal</string>
-    <string name="drawer_blur_amount">Quantité de flou du fond d’écran du tiroir</string>
     <string name="show_all_actions_on_current_circle">Afficher toutes les actions dans le cercle actuel</string>
-    <string name="what_method_to_open_quick_actions">Quelle méthode ouvrir les actions rapides \?</string>
-    <string name="did_the_notif_or_quick_actions">Les actions rapides se sont-elles ouvertes ou étaient-ce les notifications \?</string>
-    <string name="quick_actions">Actions rapides</string>
     <string name="notifications">Notification</string>
     <string name="drawer_action_clear">Clair</string>
     <string name="drawer_action_search_web">Chercher sur le web</string>
@@ -203,33 +175,20 @@
     <string name="drawer_enter_key_action">Action de saisie dans le tiroir</string>
     <string name="icon_pack">Packs d’icônes</string>
     <string name="icon_pack_help">Sélectionnez un pack d’icônes pour personnaliser les icônes de votre application. Installez d’abord les packs d’icônes depuis votre boutique.</string>
-    <string name="no_icon_pack_found">Aucun pack d’icônes trouvé</string>
-    <string name="default_no_icon_pack">Par défaut (pas de pack d’icônes)</string>
     <string name="use_original_app_icon">Utilisez les icônes d’application originales</string>
-    <string name="show_actions_icon_border">Afficher la bordure de l’icône d’action</string>
     <string name="status_bar">Barre de statut</string>
     <string name="status_bar_tab_text">Personnalisez ce qui est affiché dans la barre de statut.</string>
-    <string name="display">Affichage</string>
-    <string name="show_time">Afficher l\'heure</string>
-    <string name="show_notifications">Afficher les notifications</string>
-    <string name="show_battery">Afficher la batterie</string>
-    <string name="show_connectivity">Afficher le Wi-Fi, les données et le mode avion</string>
     <string name="show_status_bar">Afficher la barre de statut</string>
     <string name="status_bar_background">Contexte de la barre de statut</string>
     <string name="status_bar_text_color">Couleur du texte de la barre d’état</string>
-    <string name="show_date">Date du spectacle</string>
     <string name="time_format_title">Format horaire</string>
     <string name="time_format_examples"><![CDATA[Exemples : HH :mm, HH :mm :ss, h :mm a, HH.mm]]></string>
     <string name="date_format_title">Format de date</string>
-    <string name="date_format_examples">Exemples : MMM dd, E dd, dd/MM, MMMM d</string>
     <string name="invalid_format">Format invalide. Consultez les exemples ci-dessus.</string>
     <string name="next_alarm_at">Alarme %1$s</string>
-    <string name="show_next_alarm">Montrer Prochaine alarme</string>
     <string name="theme_selector_help">Sélectionnez un thème prédéfini, vous pouvez sauvegarder vos paramètres et proposer votre thème dans une Pull Request sur github</string>
     <string name="open_nest_circle">Nid Cercle Ouvert</string>
     <string name="delete_circle_nest">Supprimer le nid du cercle</string>
-    <string name="are_you_sure_to_delete_this_nest">Es-tu sûr de supprimer ce nid \? Cela ne peut pas être annulé, les points dessus sont perdus à jamais</string>
-    <string name="min_dist_to_activate_action">Distance minimale pour activer l’action (0 pour l’infini)</string>
     <string name="workspace_defaults">Toutes les applications</string>
     <string name="workspace_added">Applications ajoutées</string>
     <string name="workspace_removed">Applications cachées</string>
@@ -243,30 +202,24 @@
     <string name="add_widget">Ajouter un widget</string>
     <string name="widgets">Widgets</string>
     <string name="edit">Édit</string>
-    <string name="active_widgets">Widgets actifs</string>
-    <string name="options">Options</string>
     <string name="widgets_floating_apps">Widgets / Applications flottantes</string>
     <string name="floating_apps_tab_help"><![CDATA[Gérez les widgets de votre espace de travail et les applications flottantes : ajoutez-les, réorganisez-les, redimensionnez et positionnez-les.\n Ghosted signifie que le widget n\'est pas cliquable.\nLe premier plan signifie que les gestes de glissement ne sont pas enregistrés sur le widget.\nVous pouvez essayer une combinaison de ces deux pour obtenir la configuration que vous souhaitez.]]></string>
     <string name="delete_widget">Supprimer widget</string>
     <string name="add_point">Point d’ajout</string>
     <string name="remove_point">Point de retrait</string>
     <string name="copy_point">Point de copie</string>
-    <string name="toggle_drag_distances_editing">Modification du cercle par glisser à bascule</string>
     <string name="ghosted">Ghosté</string>
     <string name="foreground">Premier plan</string>
     <string name="app_label_icon_overlay_top_padding">Rembourrage supérieur superposé à l’étiquette/icône de l’application</string>
     <string name="show_launching_app_icon">Afficher l’icône de l’application</string>
     <string name="show_launching_app_label">Afficher l’étiquette de l’application</string>
     <string name="clock_action">Mécanisme d’horloge</string>
-    <string name="date_action">Date Action</string>
     <string name="opens_alarm_clock_app">Ouvre l’application AlarmClock</string>
-    <string name="opens_calendar_app">Ouvre l’application calendrier</string>
     <string name="edit_icon">Editer l\'icône</string>
     <string name="border_stroke">Contour de bordure</string>
     <string name="border_stroke_selected">Contour de bordure sélectionnée</string>
     <string name="border_color">Couleur de bordure</string>
     <string name="border_color_selected">Couleur de bordure sélectionnée</string>
-    <string name="background_color_selected">Couleur d\' arrière-plan sélectionnée</string>
     <string name="opacity">Opacité %</string>
     <string name="custom_name">Nom personnalisé</string>
     <string name="edit_action">Editer l\'action</string>
@@ -301,11 +254,8 @@
     <string name="line_preview_snap_to_action">Aperçu de la ligne instantané à l\'action</string>
     <string name="icon_packs_found">%1$d packs d\'icônes trouvés</string>
     <string name="default_text">Défaut</string>
-    <string name="app_icon_size">Taille de l\'icône de l\'application</string>
-    <string name="app_label_size">Taille de l\'étiquette de l\'application</string>
     <string name="every_setting_will_return_to_its_default_state_this_cannot_be_undone_the_app_will_kill_itself">CHAQUE paramètre reviendra à son état par défaut, cela ne peut pas être annulé, l\'application se tuera</string>
     <string name="reset_all_settings">Réinitialiser TOUS les paramètres \?!</string>
-    <string name="experimental">Expérimental</string>
     <string name="set_wallpaper">Définir le papier peint</string>
     <string name="manage_nests">Gestion des nids</string>
     <string name="copy">Copie</string>
@@ -337,9 +287,6 @@
     <string name="remove_circle">Supprimer le cercle</string>
     <string name="home_action">Action à domicile</string>
     <string name="drawer_home_action">Action de la maison du tiroir</string>
-    <string name="drag_distances">Distances de traînée</string>
-    <string name="wallpaper_edit_main">Fond d\'écran de l\'écran d\'accueil</string>
-    <string name="wallpaper_edit_drawer">Fond d\'écran du tiroir d\'applications</string>
     <string name="wallpaper_dim_amount">Quantité de papier peint</string>
     <string name="fullscreen_description">Afficher ou non la barre supérieure et les boutons de navigation/bouton geste</string>
     <string name="rgb_loading_description">Afficher un dégradé RBG sur le cercle de chargement lors de la saisie des paramètres, tout en maintenant enfoncé pendant 3 secondes</string>
@@ -396,7 +343,6 @@
     <string name="usage_permission_required">Permission d\'accès aux données d\'utilisation</string>
     <string name="usage_permission_description">Pour afficher vos vraies statistiques d\'utilisation, Dragon Launcher a besoin d\'accéder aux données d\'utilisation des applications. Cela vous aide à être plus conscient du temps que vous passez sur les apps.</string>
     <!--  ─────────────  Digital Pause Screen  ─────────────  -->
-    <string name="digital_pause_title">Pause Numérique</string>
     <string name="pause_breathe_1">Prenez un moment pour respirer…</string>
     <string name="pause_breathe_2">Soyez présent dans cet instant…</string>
     <string name="pause_breathe_3">Est-ce vraiment ce dont vous avez besoin maintenant ?</string>
@@ -408,9 +354,6 @@
     <string name="usage_yesterday">Vous avez utilisé cette application pendant %s hier</string>
     <string name="usage_today">Vous avez déjà passé %s aujourd\'hui sur cette application</string>
     <string name="usage_guilt_yearly">Ça représente environ %s par an si vous continuez comme ça !</string>
-    <string name="usage_hours">%1$d heures</string>
-    <string name="usage_minutes">%1$d min</string>
-    <string name="usage_hours_minutes">%1$dh %2$dm</string>
     <string name="not_used_yet">Vous n\'avez pas encore utilisé cette application aujourd\'hui, peut-être devriez-vous y renoncer?</string>
     <string name="usage_permission_needed">Permission d\'accès aux données d\'utilisation nécessaire</string>
     <string name="grant_usage_permission">Accorder la permission</string>
@@ -419,14 +362,12 @@
     <string name="reminder_mode_description">Recevez des rappels périodiques lorsque vous restez trop longtemps sur une app en pause</string>
     <string name="reminder_interval">Intervalle de rappel</string>
     <string name="reminder_interval_description">Me rappeler toutes les %d minutes</string>
-    <string name="reminder_delivery_mode">Style de rappel</string>
     <string name="reminder_mode_notification">Notification</string>
     <string name="reminder_mode_overlay">Popup à l\'écran</string>
     <string name="overlay_permission_required">Permission de superposition</string>
     <string name="overlay_permission_description">Pour afficher des rappels par-dessus d\'autres applications, Dragon Launcher a besoin de la permission « Afficher par-dessus d\'autres apps ».</string>
     <!--  Popup Display Options  -->
     <string name="popup_display_title">Contenu de la popup</string>
-    <string name="popup_display_description">Choisissez les informations à afficher dans la popup de rappel</string>
     <string name="popup_show_session_time">Afficher le temps de session</string>
     <string name="popup_show_session_time_desc">Temps depuis l\'ouverture de l\'app</string>
     <string name="popup_show_today_time">Afficher le total du jour</string>
@@ -440,7 +381,6 @@
     <string name="popup_no_limit">Pas de limite</string>
     <string name="reminder_notification_title">Toujours sur %s</string>
     <string name="reminder_notification_text">Vous utilisez %1$s depuis %2$s. Et si vous faisiez une pause ?</string>
-    <string name="reminder_overlay_text">Vous êtes sur %1$s depuis %2$s</string>
     <string name="reminder_overlay_subtext">Faites une pause, vos yeux vous remercieront 🌿</string>
     <!--  ─────────────  Wellbeing: Return to Launcher  ─────────────  -->
     <string name="return_to_launcher_title">Retour automatique au Launcher</string>
@@ -456,7 +396,6 @@
     <string name="time_limit_cancel">Annuler</string>
     <string name="timer_notification_title">Dragon surveille 🐉</string>
     <string name="timer_notification_text">%1$s restantes sur %2$s</string>
-    <string name="time_warning_title">%1$s restantes sur %2$s</string>
     <string name="time_warning_subtitle">Votre session est bientôt terminée ⚡</string>
     <string name="time_exceeded_title">Temps écoulé !</string>
     <string name="time_exceeded_message">Vous êtes resté trop longtemps sur %s.</string>
@@ -478,7 +417,6 @@
     <string name="icons_spacing_horizontal">icônes Espacement horizontal</string>
     <string name="depth">Profondeur</string>
     <string name="depth_desc">Combien de sous-nids sont dessinés au maximum</string>
-    <string name="warning_large_values_can_lag_your_phone">Attention, les valeurs élevées peuvent ralentir votre téléphone si vous avez beaucoup d’actions et de sous-titres</string>
     <string name="custom_theme">Thème personnalisé</string>
     <string name="dynamic_colors">Couleurs dynamiques</string>
     <string name="dynamic_colors_desc">Utilisez des couleurs dynamiques Android pour vous offrir un schéma de couleurs dynamique</string>
@@ -542,8 +480,6 @@
     <string name="on_tertiary_fixed_variant_color">Sur la variante fixe tertiaire</string>
     <string name="custom_colors">Couleurs personnalisées</string>
     <string name="normal_colors">Couleurs normales</string>
-    <string name="help_wanted">Besoin d’aide</string>
-    <string name="help_wanted_on_colors">Je cherche de bonnes personnes qui pourraient créer un schéma de couleurs épuré, car celui-ci est assez vide et mauvais, donc si quelqu’un a la détermination, il pourrait m’envoyer les couleurs de chaque champ et si ça va bien, je le définirai par défaut</string>
     <string name="source">Source</string>
     <string name="reset_all_points">Réinitialisez tous les points</string>
     <string name="reset_all_points_desc">Toutes vos actions seront réinitialisées, cela ne peut pas être annulé !</string>
@@ -561,45 +497,32 @@
     <string name="category_grid_width">Largeur de grille de catégorie</string>
     <string name="grid_settings">Réglages de la grille</string>
     <string name="category_cells">Cellules de catégorie</string>
-    <string name="category_cells_desc">Le nombre de lignes et de colonnes dans la boîte de catégorie</string>
     <!--  ─────────────  Multi Select  ─────────────  -->
-    <string name="multi_select_hint">Appui long sur une app pour démarrer la multi-sélection</string>
     <string name="multi_select_count">%d sélectionnée(s)</string>
-    <string name="add_selected_apps">Ajouter les apps sélectionnées</string>
     <string name="add_all_auto">Placement automatique sur le cercle</string>
     <string name="add_all_manual">Placer une par une</string>
     <string name="place_app_where">Où voulez-vous placer %s ?</string>
     <string name="tap_circle_to_place">Appuyez sur le cercle pour placer l\'app</string>
-    <string name="apps_added_successfully">%d apps ajoutées avec succès</string>
     <string name="multi_select_drawer_hint">💡 Appui long sur une app pour en sélectionner plusieurs d\'un coup</string>
     <string name="deselect_all">Tout désélectionner</string>
     <!--  ─────────────  Shortcuts Settings  ─────────────  -->
-    <string name="shortcuts_settings">Raccourcis</string>
     <string name="prompt_shortcuts_when_adding_app">Invite pour les raccourcis lors de l’ajout d’une application</string>
     <string name="prompt_shortcuts_when_adding_app_desc">Une fois activé, on vous demandera de choisir entre l’application ou ses raccourcis. Une fois désactivée, l’application est ajoutée directement.</string>
     <!--  ─────────────  Lock Settings  ─────────────  -->
-    <string name="lock_settings">Verrouiller les paramètres</string>
     <string name="lock_settings_description">Protégez les paramètres du lanceur avec une méthode de sécurité</string>
     <string name="lock_method">Méthode de verrouillage</string>
     <string name="lock_none">Aucun</string>
     <string name="lock_pin">Code PIN</string>
-    <string name="lock_biometric">Empreinte digitale</string>
-    <string name="lock_device_credentials">Identifiants de l\'appareil</string>
     <string name="lock_device_unlock">Déverrouillage de l\'appareil</string>
     <string name="enter_pin">Entrez le PIN</string>
     <string name="confirm_pin">Confirmez le PIN</string>
     <string name="set_pin">Définir le PIN</string>
-    <string name="change_pin">Changer le PIN</string>
-    <string name="remove_pin">Supprimer le PIN</string>
     <string name="pin_mismatch">Les PIN ne correspondent pas</string>
-    <string name="pin_too_short">Le PIN doit contenir au moins 4 chiffres</string>
     <string name="pin_set_success">PIN défini avec succès</string>
-    <string name="pin_removed">PIN supprimé</string>
     <string name="wrong_pin">PIN incorrect</string>
     <string name="unlock_settings">Déverrouiller les paramètres</string>
     <string name="biometric_prompt_title">Déverrouiller les paramètres Dragon</string>
     <string name="biometric_prompt_subtitle">Authentifiez-vous pour accéder aux paramètres</string>
-    <string name="biometric_not_available">Authentification biométrique non disponible</string>
     <string name="device_credentials_not_available">Aucun écran de verrouillage configuré</string>
     <string name="authentication_failed">Échec de l\'authentification</string>
     <string name="authentication_error">Erreur d\'authentification : %s</string>
@@ -612,9 +535,7 @@
     <string name="pinned_shortcut_failed">Échec de l\'ajout du raccourci</string>
     <string name="pinned_shortcut_already_exists">Le raccourci "%s" est déjà sur vos cercles</string>
     <string name="pinned_shortcuts">Raccourcis</string>
-    <string name="pinned_shortcuts_desc">Parcourir et ajouter les raccourcis de vos apps</string>
     <string name="no_pinned_shortcuts">Aucun raccourci disponible</string>
-    <string name="pinned_shortcuts_from">Raccourcis de %s</string>
     <!--  ─────────────  Recently Used Apps  ─────────────  -->
     <string name="recently_used_apps">Apps récemment utilisées</string>
     <string name="show_recently_used_apps">Afficher les apps récentes</string>
@@ -622,8 +543,6 @@
     <string name="recently_used_apps_count">Nombre d\'apps récentes</string>
     <string name="show_category_name">Catégorie de l’émission</string>
     <string name="show_category_name_desc">Affichez le nom de la catégorie en dessous</string>
-    <string name="search_bar_bottom">Fond de la barre de recherche</string>
-    <string name="search_bar_bottom_desc">Affichez la barre de recherche en bas du tiroir</string>
     <string name="long_click_settings_duration">Durée des paramètres du clic long (ms)</string>
     <string name="long_click_settings_duration_desc">Configurez combien de temps vous avez pour cliquer longtemps afin d’accéder aux paramètres</string>
     <string name="hold_delay_before_starting_long_click_settings">Maintenez le délai avant de commencer les paramètres du clic long (ms)</string>
@@ -635,28 +554,16 @@
     <string name="settings_json">Paramètres JSON</string>
     <string name="pick_a_settings_screen">Choisissez un écran de paramètres</string>
     <string name="app_preview_settings">Superposition d’aperçu d’application</string>
-    <string name="time_display_settings">Paramètres d’affichage temporel</string>
-    <string name="date_display_settings">Paramètres d’affichage de la date</string>
     <string name="not_implemented">Non implémenté</string>
-    <string name="show_next_alarm_desc">Montre l’heure de la prochaine alarme à venir</string>
-    <string name="show_battery_desc">Affichez le pourcentage de batterie du téléphone</string>
-    <string name="show_connectivity_desc">Ça ne marche pas bien, s’il vous plaît, attendez un jour une sortie hypothétique à ce sujet</string>
-    <string name="show_time_desc">Affichez l’heure à l’aide du formateur personnalisé</string>
-    <string name="show_date_desc">Affichez la date à côté de l’heure à l’aide du formateur personnalisé</string>
     <string name="show_status_bar_desc">Affichez la barre d’état, si désactivée rien n’apparaît</string>
-    <string name="display_options_settings">Paramètres des options d’affichage</string>
     <string name="disable_haptic_globally">Désactivez globalement le retour haptique</string>
     <string name="disable_haptic_globally_desc">Empêchez Dragon de produire un quelconque retour haptique dans la sélection des points au cas où vous détesteriez ça</string>
     <string name="point_action_snaps_to_outer_circle">L’action en point s’accroche au cercle extérieur</string>
     <string name="point_action_snaps_to_outer_circle_desc">Choisissez si l’action est activée sur le cercle intérieur ou sur celui extérieur</string>
-    <string name="error_with_message">Erreur : %1$s</string>
     <string name="drag_handle">Poignée de déplacement</string>
     <string name="private_space_title">Espace privé</string>
     <string name="private_space_locked">Espace privé verrouillé</string>
     <string name="private_space_authenticating">Authentification…</string>
-    <string name="private_space_loading">Chargement de l\'espace privé</string>
-    <string name="private_space_please_wait">Veuillez patienter</string>
-    <string name="private_space_loading_description">Votre espace privé est en cours de chargement…</string>
     <string name="private_space_managed_by_android">Ce profil est géré par le système Android.</string>
     <string name="private_space_manage_instructions">Pour ajouter ou supprimer des apps, ou supprimer ce profil, utilisez les paramètres Android.</string>
     <string name="samsung_secure_folder_settings">Dossier sécurisé Samsung</string>
@@ -670,11 +577,8 @@
     <string name="app_info_is_work_profile">isWorkProfile = %1$s</string>
     <string name="app_info_is_private_profile">isPrivateProfile = %1$s</string>
     <string name="app_info_is_launchable">isLaunchable = %1$s</string>
-    <string name="app_info_settings">settings = %1$s</string>
     <string name="app_info_user_id">userId = %1$s</string>
-    <string name="app_info_cacheKey">cacheKey = %1$s</string>
     <string name="no_apps">Pas d’applications</string>
-    <string name="unlock">Déverrouiller</string>
     <string name="activate_debug_mode">Activez le mode débogage</string>
     <string name="activate_debug_mode_desc">Activez les fonctionnalités de débogage sur toute l’application</string>
     <string name="show_debug_infos">Infos de débogage de l’affichage</string>
@@ -686,16 +590,8 @@
     <string name="show_debug_infos_workspace">Afficher les infos de débogage sur la page de l’espace de travail</string>
     <string name="show_debug_infos_workspace_desc">Afficher les informations de débogage dans l’espace de travail</string>
     <string name="has_initialized">A été initialisé</string>
-    <string name="has_initialized_desc">Si l’application a terminé son initialisation</string>
-    <string name="show_default_launcher_banner">Afficher bannière de lancement par défaut</string>
-    <string name="show_default_launcher_banner_desc">Affichez la bannière invitant à définir le lanceur par défaut</string>
-    <string name="force_app_language_selector">Force sélection de langue de l’application</string>
-    <string name="force_app_language_selector_desc">Utilisez le sélecteur de langue de l’application au lieu du sélecteur système d’Android</string>
-    <string name="force_app_widgets_selector">Forcer le sélecteur de widgets de l’application</string>
     <string name="use_accessibility_instead_of_context">Utilisez l’accessibilité plutôt que le contexte</string>
     <string name="use_accessibility_instead_of_context_desc">Élargir le panneau d’actions en utilisant l’accessibilité plutôt que le contexte</string>
-    <string name="ask_notifications_behavior">Comportement des notifications de demande</string>
-    <string name="ask_notifications_behavior_desc">Invite à chaque fois les notifications / le comportement des paramètres rapides</string>
     <string name="auto_raise_dragon_on_system_launcher">Dragon de lancement automatique sur le lanceur système</string>
     <string name="auto_raise_dragon_on_system_launcher_desc">Lancer automatiquement Dragon lorsqu’il est sur le lanceur système (nécessite une accessibilité)</string>
     <string name="are_you_sure">Tu es sûr \?</string>
@@ -703,13 +599,11 @@
     <string name="debug_infos">Infos de débogage</string>
     <string name="private_space_debug_info">Informations sur le débogage en espace privé</string>
     <string name="private_space_debug_info_desc">Afficher les informations de débogage de l’état de l’espace privé par-dessus tout</string>
-    <string name="backspace">Retour en arrière</string>
     <string name="super_warning_mode">Mode Super Avertissement</string>
     <string name="super_warning_mode_desc">Faites quelque chose de drôle quand vous entrez une épingle incorrecte</string>
     <string name="super_warning_mode_sound">Mode Super Avertissement + son</string>
     <string name="super_warning_mode_sound_desc">Ajoute le son</string>
     <string name="alarm_sound">Son d’alarme</string>
-    <string name="alarm_sound_desc">Jouez un son d’alarme lorsque la mauvaise goupille est entrée</string>
     <string name="metal_pipes_sound">Bruit de tuyaux métalliques</string>
     <string name="metal_pipes_sound_desc">Jouez le bruit des tuyaux métalliques quand la mauvaise goupille est entrée</string>
     <string name="vibrate_on_error">Vibrer en cas d’erreur</string>
@@ -719,8 +613,6 @@
     <string name="pull_down_animations_desc">Activez ou désactivez les animations en tirant vers le bas</string>
     <string name="pull_down_wallpaper_dim">Fond de papier peint rabattable Faible</string>
     <string name="pull_down_wallpaper_dim_desc">Atténuez le papier peint lorsque le tiroir est baissé</string>
-    <string name="pull_down_icon_fade">Fondu d’icône déroulante</string>
-    <string name="pull_down_icon_fade_desc">Icônes fondues dedans/sorties lors de l’animation du tiroir déroulant</string>
     <string name="pull_down_scale_in">Scale In à tirage vers le bas</string>
     <string name="pull_down_scale_in_desc">Écartez les icônes lorsque le tiroir est tiré vers le bas</string>
     <string name="drawer_enter_exit_animations">Animations d’entrée/sortie dans le tiroir</string>
@@ -730,20 +622,11 @@
     <string name="more">Plus</string>
     <string name="reload">Rechargement</string>
     <string name="select_icon">Icône de sélection</string>
-    <string name="show_notifications_desc">Afficher des icônes d’applications avec notifications actives (nécessite l’autorisation d’accès aux notifications)</string>
     <string name="max_notification_icons">Icônes de notification maximale</string>
-    <string name="max_notification_icons_desc">Nombre maximal d’icônes de notification d’application à afficher dans la barre d’état</string>
-    <string name="grant_notification_access">Accès à la notification de subvention</string>
-    <string name="show_bandwidth">Afficher la bande passante en direct</string>
-    <string name="show_bandwidth_desc">Affichez la vitesse de téléversement et de téléchargement réseau en direct à côté de la batterie</string>
     <string name="need_to_be_default_launcher_to_use_private_space">Il faut que le lanceur par défaut soit utilisé pour utiliser l’espace privé</string>
     <string name="use_differential_loading_private_space">Utiliser l’espace privé de charge différentielle</string>
     <string name="use_differential_loading_private_space_desc">Désactivez cela lorsque des applications privées apparaissent dans l’espace de travail utilisateur, sinon gardez les performances non cochées</string>
     <string name="edit_border_shape">Modifier la forme de la bordure</string>
-    <string name="hold_to_activate_radius">Maintenez pour activer le rayon</string>
-    <string name="hold_to_activate_radius_desc">Le rayon du cercle de chargement progresse</string>
-    <string name="hold_to_activate_stroke">Maintenez pour activer le coup</string>
-    <string name="hold_to_activate_stroke_desc">Le coup de l’arc</string>
     <string name="hold_settings">Paramètres de maintien</string>
     <string name="hold_to_activate_tolerance">Maintenez pour activer la tolérance</string>
     <string name="hold_to_activate_tolerance_desc">Jusqu’où pouvez-vous faire glisser en maintenant sans annuler la progression</string>
@@ -794,7 +677,6 @@
     <string name="accessibility_service">Service d\'accessibilité</string>
     <string name="accessibility_service_desc">Utilisé pour étendre le panneau de notifications via des gestes.</string>
     <string name="usage_access">Accès aux statistiques d\'utilisation</string>
-    <string name="usage_access_desc">Requis pour les fonctionnalités de Bien-être numérique.</string>
     <string name="android_permissions">Permissions Android</string>
     <string name="manage_in_system_settings">Gérer dans les paramètres système.</string>
     <string name="font_manage_help">Gérez vos polices ici. Vous pouvez importer vos propres fichiers TTF/OTF ou en télécharger depuis le catalogue Google Fonts.</string>
@@ -803,7 +685,6 @@
     <string name="font_installed_fonts">Polices installées</string>
     <string name="font_available_in_extension">Disponible dans l\'extension (%1$d)</string>
     <string name="font_download_all_started">Lancement du téléchargement de toutes les polices. Vérifiez vos notifications.</string>
-    <string name="font_delete_mode">Mode de sélection</string>
     <string name="font_confirm_delete">Confirmer (%1$d)</string>
     <string name="font_search_placeholder">Rechercher des polices…</string>
     <string name="font_downloading">Téléchargement de %1$s…</string>
@@ -815,12 +696,8 @@
     <string name="font_cat_handwriting">HANDWRITING</string>
     <string name="search_widgets">Rechercher des widgets…</string>
     <string name="precision_mode_active">Mode Précision</string>
-    <string name="clear_auto_backup">Effacer la sauvegarde automatique</string>
-    <string name="clear_auto_backup_desc">Désactiver la sauvegarde automatique et supprimer l\'autorisation d\'accès à l\'URI (pas au fichier)</string>
     <string name="backup_location">Emplacement de sauvegarde</string>
     <string name="backup_location_desc">Appuyez pour sélectionner la destination</string>
-    <string name="last_backup_desc">Lancer manuellement une sauvegarde vers l\'emplacement sélectionné</string>
-    <string name="auto_backup_cleared">La sauvegarde automatique a été désactivée</string>
     <string name="backup_triggered">Sauvegarde lancée manuellement</string>
     <string name="auto_backup_desc">Automatiser la création de sauvegardes sur le stockage local</string>
     <string name="select_all">Tout sélectionner</string>
@@ -841,11 +718,4 @@
     <string name="show_nest_preview">Afficher la previsualisation du nid</string>
     <string name="general">Général</string>
     <string name="action">Action</string>
-    <string name="icon">Icône</string>
-    <string name="shapes">Formes</string>
-    <string name="reset_default_point">Réinitialiser le point par defaut</string>
-    <string name="reset_point">Réinitialiser le point</string>
-    <string name="reset_default_point_desc">Cela réinitialisera les paramètres de point par défaut, ce qui signifie, tous les points qui ne remplacent pas les paramètres</string>
-    <string name="reset_point_desc">Cela réinitialisera le point courant à ses valeurs par défaut. Après cela, il utilisera les valeurs de point par défaut pour chacune de ses entrées non spécifiques (taille, bordures...)</string>
-    <string name="default_point_help_text">Modifier les valeurs que tous les points prennent par défaut, vous pouvez remplacer manuellement chacune de ces valeurs par point</string>
 </resources>

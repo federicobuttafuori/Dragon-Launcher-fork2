@@ -9,7 +9,6 @@
     <string name="ok">Okay</string>
     <string name="cancel">Abbrechen</string>
     <string name="do_not_remind_me_again">Erinnere mich nicht noch einmal daran.</string>
-    <string name="coming_soon">Demnächst…</string>
     <string name="settings">Einstellungen</string>
     <string name="appearance_tab_text">Aussehende Einstellungen ändern</string>
     <string name="fullscreen_app">Vollbild-App</string>
@@ -29,7 +28,6 @@
     <string name="language_german">Deutsch</string>
     <string name="language_spanish">Spanisch</string>
     <string name="language_hindi">Hindi</string>
-    <string name="language_japanese">japanisch</string>
     <string name="language_korean">Koreanisch</string>
     <string name="language_portuguese">Portugiesisch</string>
     <string name="system_default">Systemstandard</string>
@@ -47,9 +45,6 @@
     <string name="export_successful">Erfolgreicher Export</string>
     <string name="unknown_error">Unbekannter Fehler</string>
     <string name="color_selector_text">Wählen Sie Ihr bevorzugtes Farbthema aus</string>
-    <string name="color_custom_mode">Benutzerdefinierter Modus</string>
-    <string name="color_mode_default">Standardmodus</string>
-    <string name="color_mode_normal">Normalmodus</string>
     <string name="color_mode_all">Alle Farben</string>
     <string name="reset">Reset</string>
     <string name="reset_to_default_colors">Zurücksetzen auf Standardfarben</string>
@@ -70,10 +65,7 @@
     <string name="test_colors">Farben testen</string>
     <string name="exit_test_mode">Testmodus beenden</string>
     <string name="exit_test_mode_message">Möchten Sie Ihre Farbänderungen speichern oder verwerfen?</string>
-    <string name="save_changes">Änderungen speichern</string>
-    <string name="discard_changes">Änderungen verwerfen</string>
     <string name="back_to_colors_settings">Zurück zu Farbeinstellungen</string>
-    <string name="text_color">Textfarbe</string>
     <string name="light_theme">Lichtthema</string>
     <string name="dark_theme">Dunkles Thema</string>
     <string name="amoled_theme">AMOLED-Thema</string>
@@ -84,10 +76,8 @@
     <string name="report_a_bug">Melde einen Fehler</string>
     <string name="open_an_issue_on_github">Eröffne ein neues Problem auf GitHub</string>
     <string name="contributors">Mitwirkende</string>
-    <string name="thanks_for_the_inspiration">Danke für die Inspiration und für einen Teil des Codes :)</string>
     <string name="app_developer">Leitender Entwickler</string>
     <string name="check_for_updates_github">Überprüfe die Veröffentlichung auf Github</string>
-    <string name="check_for_updates_obtainium">Überprüfen Sie die Freigabe auf Obtainium</string>
     <string name="app_drawer">App Drawer</string>
     <string name="drawer_tab_text">Hier kannst du das Aussehen und das Verhalten deiner App-Schublade anpassen</string>
     <string name="set_default_launcher">Als Standard-Launcher eingestellt</string>
@@ -119,12 +109,9 @@
     <string name="remove_from_workspace">Aus dem Arbeitsbereich entfernen</string>
     <string name="add_to_workspace">Zum Arbeitsbereich hinzufügen</string>
     <string name="change_app_icon">Symbol ändern</string>
-    <string name="app_info">App-Informationen</string>
     <string name="uninstall">Deinstallieren</string>
     <string name="open">Offen</string>
     <string name="rename">Umbenennung</string>
-    <string name="icon_updated">Icon aktualisiert</string>
-    <string name="icon_update_failed">Icon-Update fehlgeschlagen</string>
     <string name="none">Nichts</string>
     <string name="workspace_type">Arbeitsbereichstyp</string>
     <string name="workspace_name">Name des Arbeitsbereichs</string>
@@ -143,7 +130,6 @@
     <string name="configure_your_apps">Konfiguriere deine Apps und Verknüpfungen in den Einstellungen</string>
     <string name="theme_selector">Themenauswahl</string>
     <string name="everything_ready">Alles bereit!</string>
-    <string name="reset_app_icon">App-Symbol zurücksetzen</string>
     <string name="home">Zuhause</string>
     <string name="edit_point">Bearbeitungspunkt</string>
     <string name="choose_action">Wähle eine Aktion</string>
@@ -151,7 +137,6 @@
     <string name="change">Veränderung</string>
     <string name="remove">Entfernen</string>
     <string name="trigger_backup">Trigger-Backup</string>
-    <string name="select_backup_file">Backup-Datei auswählen</string>
     <string name="last_backup">Letztes Backup</string>
     <string name="auto_backup_stores">Automatische Backup-Stores</string>
     <string name="recent_apps">Aktuelle Apps</string>
@@ -163,35 +148,22 @@
     <string name="top_padding">Top-Polsterung</string>
     <string name="bottom_padding">Bodenpolsterung</string>
     <string name="connectivity_update_frequency">Konnektivitäts-Update-Frequenz (Sekunden)</string>
-    <string name="connectivity_indicators">Konnektivitäts-Indikatoren</string>
     <string name="show_airplane_mode">Flugmodus anzeigen</string>
     <string name="show_wifi">WiFi anzeigen</string>
     <string name="show_bluetooth">Bluetooth anzeigen</string>
     <string name="show_vpn">VPN anzeigen</string>
     <string name="show_mobile_data">Mobile Daten anzeigen</string>
     <string name="show_hotspot">Hotspot anzeigen</string>
-    <string name="date_time_formats">Datums- und Zeitformate</string>
-    <string name="custom_date_format">Benutzerdefiniertes Datumsformat</string>
-    <string name="custom_time_format">Benutzerdefiniertes Zeitformat</string>
-    <string name="bandwidth">Bandbreite</string>
     <string name="merge_bandwidth">Bandbreite zusammenführen (Gesamt)</string>
-    <string name="down_padding">Bodenpolsterung</string>
     <string name="wallpaper">Tapete</string>
     <string name="wallpaper_help">Setze ein Hintergrundbild für Home/Sperrbildschirm und benutze es oder nicht im Launcher</string>
     <string name="select_image">Bild auswählen</string>
     <string name="set_plain_wallpaper">Einfache Tapete</string>
     <string name="plain_wallpaper_color">Schlichte Tapetenfarbe</string>
-    <string name="use_main_wallpaper">Verwenden Sie das Hauptbildschirm-Hintergrundbild</string>
-    <string name="use_drawer_wallpaper">Verwenden Sie eine Schubladebildschirm-Tapete</string>
     <string name="apply_wallpaper_to">Tapete auftragen</string>
     <string name="main_screen">Hauptbildschirm</string>
     <string name="drawer_screen">Schubladenbildschirm</string>
-    <string name="main_blur_amount">Menge an Tapetenunschärfe auf dem Hauptbildschirm</string>
-    <string name="drawer_blur_amount">Unschärfe des Hintergrundbilds im Schubladenbildschirm</string>
     <string name="show_all_actions_on_current_circle">Alle Aktionen im aktuellen Kreis anzeigen</string>
-    <string name="what_method_to_open_quick_actions">Welche Methode öffnet man die schnellen Aktionen\?</string>
-    <string name="did_the_notif_or_quick_actions">Haben sich die Schnellaktionen geöffnet oder waren es die Benachrichtigungen\?</string>
-    <string name="quick_actions">Schnelle Aktionen</string>
     <string name="notifications">Benachrichtigung</string>
     <string name="drawer_action_clear">Frei</string>
     <string name="drawer_action_search_web">Durchsuche das Internet</string>
@@ -202,33 +174,20 @@
     <string name="drawer_enter_key_action">Drawer Enter Key Aktion</string>
     <string name="icon_pack">Icon-Pakete</string>
     <string name="icon_pack_help">Wähle ein Icon-Paket, um deine App-Icons anzupassen. Installiere zuerst Icon-Packs aus deinem Store.</string>
-    <string name="no_icon_pack_found">Kein Icon-Pack gefunden</string>
-    <string name="default_no_icon_pack">Standard (Kein Icon-Pack)</string>
     <string name="use_original_app_icon">Verwenden Sie die Original-App-Icons</string>
-    <string name="show_actions_icon_border">Umrandung des Aktions-Symbols anzeigen</string>
     <string name="status_bar">Statusleiste</string>
     <string name="status_bar_tab_text">Passe an, was in der Statusleiste angezeigt wird.</string>
-    <string name="display">Anzeige</string>
-    <string name="show_time">Vorstellungszeit</string>
-    <string name="show_notifications">Sendungsbenachrichtigungen</string>
-    <string name="show_battery">Showbatterie</string>
-    <string name="show_connectivity">Wi-Fi, Daten- und Flugzeugmodus anzeigen</string>
     <string name="show_status_bar">Show-Statusleiste</string>
     <string name="status_bar_background">Hintergrund der Statusleiste</string>
     <string name="status_bar_text_color">Statusbalken-Textfarbe</string>
-    <string name="show_date">Vorstellungsdatum</string>
     <string name="time_format_title">Zeitformat</string>
     <string name="time_format_examples">Beispiele: HH:mm, HH:mm:ss, h:mm a, HH.mm</string>
     <string name="date_format_title">Datumsformat</string>
-    <string name="date_format_examples">Beispiele: MMM dd, E dd, dd/MM, MMMM d</string>
     <string name="invalid_format">Ungültiges Format. Schau dir die obigen Beispiele an.</string>
     <string name="next_alarm_at">Alarm at %1$s</string>
-    <string name="show_next_alarm">Nächster Alarm zeigen</string>
     <string name="theme_selector_help">Wähle ein vordefiniertes Theme, du kannst deine Einstellungen sichern und dein Theme in einer Pull Request auf GitHub vorschlagen</string>
     <string name="open_nest_circle">Open Circle Nest</string>
     <string name="delete_circle_nest">Circle Nest löschen</string>
-    <string name="are_you_sure_to_delete_this_nest">Bist du sicher, dass du dieses Nest löschst\? Das kann nicht rückgängig gemacht werden, die Punkte darauf sind für immer verloren</string>
-    <string name="min_dist_to_activate_action">Mindestdistanz zur Aktivierung der Aktion (0 für unendlich)</string>
     <string name="workspace_defaults">Alle Apps</string>
     <string name="workspace_added">Hinzugefügte Apps</string>
     <string name="workspace_removed">Versteckte Apps</string>
@@ -242,30 +201,24 @@
     <string name="add_widget">Widget hinzufügen</string>
     <string name="widgets">Widgets</string>
     <string name="edit">Bearbeitung</string>
-    <string name="active_widgets">Aktive Widgets</string>
-    <string name="options">Optionen</string>
     <string name="widgets_floating_apps">Widgets / Schwimmende Apps</string>
     <string name="floating_apps_tab_help">Verwalten Sie Ihre Arbeitsbereichs-Widgets und schwebenden Apps: Fügen Sie sie hinzu, ordnen Sie sie neu an, ändern Sie ihre Größe und positionieren Sie sie.\n Ghosted bedeutet, dass das Widget nicht anklickbar ist\nVordergrund bedeutet, dass die Ziehgesten nicht im Widget registriert sind\nSie können eine Kombination dieser beiden ausprobieren, um die gewünschte Konfiguration zu erreichen</string>
     <string name="delete_widget">Widget löschen</string>
     <string name="add_point">Add Point</string>
     <string name="remove_point">Punkt entfernen</string>
     <string name="copy_point">Kopierpunkt</string>
-    <string name="toggle_drag_distances_editing">Ziehkreis-Bearbeitung umschalten</string>
     <string name="ghosted">Geghostet</string>
     <string name="foreground">Vordergrund</string>
     <string name="app_label_icon_overlay_top_padding">App-Label/Icon-Overlay oben Polsterung</string>
     <string name="show_launching_app_icon">App-Symbol anzeigen</string>
     <string name="show_launching_app_label">Show App Label</string>
     <string name="clock_action">Uhrenaktion</string>
-    <string name="date_action">Datumsaktion</string>
     <string name="opens_alarm_clock_app">Öffnet die AlarmClock-App</string>
-    <string name="opens_calendar_app">Öffnet Kalender-App</string>
     <string name="edit_icon">Bearbeiten-Symbol</string>
     <string name="border_stroke">Border-Schlaganfall</string>
     <string name="border_stroke_selected">Border Stroke ausgewählt</string>
     <string name="border_color">Randfarbe</string>
     <string name="border_color_selected">Randfarbe ausgewählt</string>
-    <string name="background_color_selected">Hintergrundfarbe ausgewählt</string>
     <string name="opacity">Opazitätsprozent</string>
     <string name="custom_name">Benutzerdefinierter Name</string>
     <string name="edit_action">Bearbeitungsaktion</string>
@@ -300,11 +253,8 @@
     <string name="line_preview_snap_to_action">Die Linienvorschau lässt sich an die Aktion anpassen</string>
     <string name="icon_packs_found">%1$d Icon-Pakete gefunden</string>
     <string name="default_text">Standard</string>
-    <string name="app_icon_size">App-Symbolgröße</string>
-    <string name="app_label_size">Größe des App-Labels</string>
     <string name="every_setting_will_return_to_its_default_state_this_cannot_be_undone_the_app_will_kill_itself">JEDE Einstellung wird auf den Standardzustand zurückgesetzt. Dies kann nicht rückgängig gemacht werden, die App beendet sich selbst</string>
     <string name="reset_all_settings">ALLE Einstellungen zurücksetzen\?!</string>
-    <string name="experimental">Experimental</string>
     <string name="set_wallpaper">Hintergrundbild festlegen</string>
     <string name="manage_nests">Nestverwaltung</string>
     <string name="copy">Kopie</string>
@@ -336,9 +286,6 @@
     <string name="remove_circle">Kreis entfernen</string>
     <string name="home_action">Home-Aktion</string>
     <string name="drawer_home_action">Schubladen-Home-Aktion</string>
-    <string name="drag_distances">Distanzen ziehen</string>
-    <string name="wallpaper_edit_main">Hintergrundbild für den Startbildschirm</string>
-    <string name="wallpaper_edit_drawer">Hintergrundbild der App-Schublade</string>
     <string name="wallpaper_dim_amount">Tapetendimmmenge</string>
     <string name="fullscreen_description">Die obere Leiste und die Navigationsschaltflächen/Gestenschaltflächen anzeigen oder nicht</string>
     <string name="rgb_loading_description">Zeigen Sie beim Eingeben der Einstellungen einen RBG-Gradienten auf dem Ladekreis an, während Sie die Taste 3 Sekunden lang gedrückt halten</string>
@@ -395,7 +342,6 @@
     <string name="usage_permission_required">Nutzungszugriffsberechtigung</string>
     <string name="usage_permission_description">Um Ihre tatsächlichen Nutzungsstatistiken anzuzeigen, benötigt Dragon Launcher Zugriff auf App-Nutzungsdaten. Dies hilft Ihnen, sich der Zeit, die Sie mit Apps verbringen, bewusster zu werden.</string>
     <!--  ─────────────  Digital Pause Screen  ─────────────  -->
-    <string name="digital_pause_title">Digitale Pause</string>
     <string name="pause_breathe_1">Nehmen Sie sich einen Moment Zeit zum Durchatmen …</string>
     <string name="pause_breathe_2">Seien Sie in diesem Moment präsent …</string>
     <string name="pause_breathe_3">Ist es das, was Sie gerade wirklich brauchen\?</string>
@@ -407,9 +353,6 @@
     <string name="usage_yesterday">Du hast diese App gestern für %s verwendet</string>
     <string name="usage_today">Sie haben heute bereits %s für diese App ausgegeben</string>
     <string name="usage_guilt_yearly">Das sind etwa %s pro Jahr, wenn Sie so weitermachen!</string>
-    <string name="usage_hours">%1$d Stunden</string>
-    <string name="usage_minutes">%1$d Min</string>
-    <string name="usage_hours_minutes">%1$dh %2$dm</string>
     <string name="not_used_yet">Sie haben diese App noch nicht verwendet. Vielleicht ist es sinnvoll, weiterzumachen\?</string>
     <string name="usage_permission_needed">Nutzungszugriffsberechtigung erforderlich</string>
     <string name="grant_usage_permission">Erlaubnis erteilen</string>
@@ -418,14 +361,12 @@
     <string name="reminder_mode_description">Erhalten Sie regelmäßige Erinnerungen, wenn Sie zu lange in einer pausierten App bleiben</string>
     <string name="reminder_interval">Erinnerungsintervall</string>
     <string name="reminder_interval_description">Erinnere mich alle %d Minuten daran</string>
-    <string name="reminder_delivery_mode">Erinnerungsstil</string>
     <string name="reminder_mode_notification">Benachrichtigung</string>
     <string name="reminder_mode_overlay">Popup auf dem Bildschirm</string>
     <string name="overlay_permission_required">Overlay-Berechtigung</string>
     <string name="overlay_permission_description">Um Erinnerungen über anderen Apps anzuzeigen, benötigt Dragon Launcher die Berechtigung „Über anderen Apps anzeigen“.</string>
     <!--  Popup Display Options  -->
     <string name="popup_display_title">Popup-Inhalt</string>
-    <string name="popup_display_description">Wählen Sie aus, welche Informationen im Erinnerungs-Popup angezeigt werden sollen</string>
     <string name="popup_show_session_time">Sitzungszeit anzeigen</string>
     <string name="popup_show_session_time_desc">Zeit seitdem Öffnen der App</string>
     <string name="popup_show_today_time">Gesamtsumme von heute anzeigen</string>
@@ -439,7 +380,6 @@
     <string name="popup_no_limit">Keine Begrenzung</string>
     <string name="reminder_notification_title">Immer noch auf %s</string>
     <string name="reminder_notification_text">Sie verwenden %1$s seit %2$s. Vielleicht ist es Zeit für eine Pause\?</string>
-    <string name="reminder_overlay_text">Du bist seit %2$s auf %1$s</string>
     <string name="reminder_overlay_subtext">Gönnen Sie sich eine Pause, Ihre Augen werden es Ihnen danken 🌿</string>
     <!--  ─────────────  Wellbeing: Return to Launcher  ─────────────  -->
     <string name="return_to_launcher_title">Automatische Rückkehr zum Launcher</string>
@@ -455,7 +395,6 @@
     <string name="time_limit_cancel">Stornieren</string>
     <string name="timer_notification_title">Drache schaut zu 🐉</string>
     <string name="timer_notification_text">%1$s verbleiben auf %2$s</string>
-    <string name="time_warning_title">%1$s sind noch auf %2$s übrig</string>
     <string name="time_warning_subtitle">Deine Sitzung ist fast vorbei ⚡</string>
     <string name="time_exceeded_title">Die Zeit ist abgelaufen!</string>
     <string name="time_exceeded_message">Du bist schon zu lange auf %s.</string>
@@ -477,7 +416,6 @@
     <string name="icons_spacing_horizontal">Symbole Abstand horizontal</string>
     <string name="depth">Tiefe</string>
     <string name="depth_desc">Wie viele Unternester werden maximal gezeichnet\?</string>
-    <string name="warning_large_values_can_lag_your_phone">Achtung, große Werte können Ihr Telefon verzögern, wenn Sie viele Aktionen und Unterverschachtelungen haben</string>
     <string name="custom_theme">Benutzerdefiniertes Thema</string>
     <string name="dynamic_colors">Dynamische Farben</string>
     <string name="dynamic_colors_desc">Verwenden Sie dynamische Android-Farben, um ein dynamisches Farbschema bereitzustellen</string>
@@ -541,8 +479,6 @@
     <string name="on_tertiary_fixed_variant_color">Zur tertiären festen Variante</string>
     <string name="custom_colors">Benutzerdefinierte Farben</string>
     <string name="normal_colors">Normale Farben</string>
-    <string name="help_wanted">Stellenangebote</string>
-    <string name="help_wanted_on_colors">Ich bin auf der Suche nach guten Leuten, die ein sauberes Farbschema erstellen können, da dieses ziemlich leer und schlecht ist. Wenn also jemand die Entschlossenheit hat, könnte er mir die Farben für jedes Feld schicken und wenn es gut passt, werde ich es als Standard festlegen</string>
     <string name="source">Quelle</string>
     <string name="reset_all_points">Alle Punkte zurücksetzen</string>
     <string name="reset_all_points_desc">Alle Ihre Aktionen werden zurückgesetzt, dies kann nicht rückgängig gemacht werden!</string>
@@ -560,45 +496,32 @@
     <string name="category_grid_width">Breite des Kategorierasters</string>
     <string name="grid_settings">Rastereinstellungen</string>
     <string name="category_cells">Kategoriezellen</string>
-    <string name="category_cells_desc">Die Anzahl der Zeilen und Spalten im Kategoriefeld</string>
     <!--  ─────────────  Multi Select  ─────────────  -->
-    <string name="multi_select_hint">Lange auf eine App drücken um Mehrfachauswahl zu starten</string>
     <string name="multi_select_count">%d ausgewählt</string>
-    <string name="add_selected_apps">Ausgewählte Apps hinzufügen</string>
     <string name="add_all_auto">Automatisch auf dem Kreis platzieren</string>
     <string name="add_all_manual">Einzeln platzieren</string>
     <string name="place_app_where">Wo möchten Sie %s platzieren?</string>
     <string name="tap_circle_to_place">Tippen Sie auf den Kreis, um die App zu platzieren</string>
-    <string name="apps_added_successfully">%d Apps erfolgreich hinzugefügt</string>
     <string name="multi_select_drawer_hint">💡 Lange auf eine App drücken, um mehrere gleichzeitig auszuwählen</string>
     <string name="deselect_all">Alle abwählen</string>
     <!--  ─────────────  Shortcuts Settings  ─────────────  -->
-    <string name="shortcuts_settings">Verknüpfungen</string>
     <string name="prompt_shortcuts_when_adding_app">Beim Hinzufügen einer App nach Verknüpfungen fragen</string>
     <string name="prompt_shortcuts_when_adding_app_desc">Wenn diese Option aktiviert ist, werden Sie aufgefordert, zwischen der App oder ihren Verknüpfungen zu wählen. Bei Deaktivierung wird die App direkt hinzugefügt.</string>
     <!--  ─────────────  Lock Settings  ─────────────  -->
-    <string name="lock_settings">Einstellungen sperren</string>
     <string name="lock_settings_description">Schützen Sie Ihre Launcher-Einstellungen mit einer Sicherheitsmethode</string>
     <string name="lock_method">Sperrmethode</string>
     <string name="lock_none">Keine</string>
     <string name="lock_pin">PIN-Code</string>
-    <string name="lock_biometric">Fingerabdruck</string>
-    <string name="lock_device_credentials">Geräte-Anmeldedaten</string>
     <string name="lock_device_unlock">Geräte-Entsperrung</string>
     <string name="enter_pin">PIN eingeben</string>
     <string name="confirm_pin">PIN bestätigen</string>
     <string name="set_pin">PIN festlegen</string>
-    <string name="change_pin">PIN ändern</string>
-    <string name="remove_pin">PIN entfernen</string>
     <string name="pin_mismatch">PINs stimmen nicht überein</string>
-    <string name="pin_too_short">PIN muss mindestens 4 Ziffern haben</string>
     <string name="pin_set_success">PIN erfolgreich gesetzt</string>
-    <string name="pin_removed">PIN entfernt</string>
     <string name="wrong_pin">Falscher PIN</string>
     <string name="unlock_settings">Einstellungen entsperren</string>
     <string name="biometric_prompt_title">Dragon-Einstellungen entsperren</string>
     <string name="biometric_prompt_subtitle">Authentifizieren Sie sich, um auf die Einstellungen zuzugreifen</string>
-    <string name="biometric_not_available">Biometrische Authentifizierung nicht verfügbar</string>
     <string name="device_credentials_not_available">Kein Sperrbildschirm eingerichtet</string>
     <string name="authentication_failed">Authentifizierung fehlgeschlagen</string>
     <string name="authentication_error">Authentifizierungsfehler: %s</string>
@@ -611,9 +534,7 @@
     <string name="pinned_shortcut_failed">Angepinnte Verknüpfung konnte nicht hinzugefügt werden</string>
     <string name="pinned_shortcut_already_exists">Die Verknüpfung "%s" ist bereits in Ihren Kreisen</string>
     <string name="pinned_shortcuts">Angepinnte Verknüpfungen</string>
-    <string name="pinned_shortcuts_desc">Angepinnte Verknüpfungen Ihrer Apps durchsuchen und hinzufügen</string>
     <string name="no_pinned_shortcuts">Keine angepinnten Verknüpfungen verfügbar</string>
-    <string name="pinned_shortcuts_from">Verknüpfungen von %s</string>
     <!--  ─────────────  Recently Used Apps  ─────────────  -->
     <string name="recently_used_apps">Kürzlich verwendete Apps</string>
     <string name="show_recently_used_apps">Kürzlich verwendete Apps anzeigen</string>
@@ -621,8 +542,6 @@
     <string name="recently_used_apps_count">Anzahl der letzten Apps</string>
     <string name="show_category_name">Kategorienamen anzeigen</string>
     <string name="show_category_name_desc">Zeigt den Namen der Kategorie darunter an</string>
-    <string name="search_bar_bottom">Suchleiste unten</string>
-    <string name="search_bar_bottom_desc">Zeigen Sie die Suchleiste unten in der Schublade an</string>
     <string name="long_click_settings_duration">Dauer der Einstellungen für lange Klicks (ms)</string>
     <string name="long_click_settings_duration_desc">Konfigurieren Sie, wie lange Sie lange klicken müssen, um auf die Einstellungen zuzugreifen</string>
     <string name="hold_delay_before_starting_long_click_settings">Halteverzögerung vor dem Start der Einstellungen für langes Klicken (ms)</string>
@@ -634,28 +553,16 @@
     <string name="settings_json">Einstellungen JSON</string>
     <string name="pick_a_settings_screen">Wählen Sie einen Einstellungsbildschirm</string>
     <string name="app_preview_settings">App-Vorschau-Overlay</string>
-    <string name="time_display_settings">Einstellungen für die Zeitanzeige</string>
-    <string name="date_display_settings">Einstellungen für die Datumsanzeige</string>
     <string name="not_implemented">Nicht implementiert</string>
-    <string name="show_next_alarm_desc">Zeigt die Uhrzeit des nächsten bevorstehenden Alarms an</string>
-    <string name="show_battery_desc">Anzeige des Telefonakkus in %</string>
-    <string name="show_connectivity_desc">Funktioniert nicht richtig. Bitte warten Sie eines Tages auf eine hypothetische Veröffentlichung zu diesem Thema</string>
-    <string name="show_time_desc">Zeigen Sie die Uhrzeit mit dem benutzerdefinierten Formatierer an</string>
-    <string name="show_date_desc">Zeigen Sie das Datum neben der Uhrzeit mit dem benutzerdefinierten Formatierer an</string>
     <string name="show_status_bar_desc">Zeigen Sie die Statusleiste an. Wenn diese Option deaktiviert ist, wird nichts angezeigt</string>
-    <string name="display_options_settings">Einstellungen für Anzeigeoptionen</string>
     <string name="disable_haptic_globally">Deaktivieren Sie das haptische Feedback global</string>
     <string name="disable_haptic_globally_desc">Verhindern Sie, dass Dragon bei der Punkteauswahl haptische Rückmeldungen gibt, falls Sie das nicht mögen</string>
     <string name="point_action_snaps_to_outer_circle">Die Punktaktion rastet am äußeren Kreis ein</string>
     <string name="point_action_snaps_to_outer_circle_desc">Wählen Sie, ob die Aktion im inneren oder äußeren Kreis aktiviert wird</string>
-    <string name="error_with_message">Fehler: %1$s</string>
     <string name="drag_handle">Ziehgriff</string>
     <string name="private_space_title">Privater Bereich</string>
     <string name="private_space_locked">Privater Bereich gesperrt</string>
     <string name="private_space_authenticating">Authentifizierung…</string>
-    <string name="private_space_loading">Privater Bereich wird geladen</string>
-    <string name="private_space_please_wait">Bitte warten</string>
-    <string name="private_space_loading_description">Ihr privater Bereich wird geladen…</string>
     <string name="private_space_managed_by_android">Dieses Profil wird vom Android-System verwaltet.</string>
     <string name="private_space_manage_instructions">Zum Hinzufügen/Entfernen von Apps oder Löschen dieses Profils verwenden Sie die Android-Einstellungen.</string>
     <string name="samsung_secure_folder_settings">Sicherer Samsung-Ordner</string>
@@ -669,11 +576,8 @@
     <string name="app_info_is_work_profile">isWorkProfile = %1$s</string>
     <string name="app_info_is_private_profile">isPrivateProfile = %1$s</string>
     <string name="app_info_is_launchable">isLaunchable = %1$s</string>
-    <string name="app_info_settings">settings = %1$s</string>
     <string name="app_info_user_id">userId = %1$s</string>
-    <string name="app_info_cacheKey">CacheKey = %1$s</string>
     <string name="no_apps">Keine Apps</string>
-    <string name="unlock">Entsperren</string>
     <string name="activate_debug_mode">Aktivieren Sie den Debug-Modus</string>
     <string name="activate_debug_mode_desc">Aktivieren Sie Debugfunktionen in der gesamten App</string>
     <string name="show_debug_infos">Debug-Infos anzeigen</string>
@@ -685,16 +589,8 @@
     <string name="show_debug_infos_workspace">Debug-Informationen auf der Arbeitsbereichsseite anzeigen</string>
     <string name="show_debug_infos_workspace_desc">Debug-Informationen im Arbeitsbereich anzeigen</string>
     <string name="has_initialized">Wurde initialisiert</string>
-    <string name="has_initialized_desc">Ob die App die Initialisierung abgeschlossen hat</string>
-    <string name="show_default_launcher_banner">Standard-Launcher-Banner anzeigen</string>
-    <string name="show_default_launcher_banner_desc">Zeigen Sie die Banneraufforderung an, um den Standard-Launcher festzulegen</string>
-    <string name="force_app_language_selector">Sprachauswahl der App erzwingen</string>
-    <string name="force_app_language_selector_desc">Verwenden Sie die Sprachauswahl der App anstelle der Systemauswahl von Android</string>
-    <string name="force_app_widgets_selector">Auswahl der App-Widgets erzwingen</string>
     <string name="use_accessibility_instead_of_context">Nutze Barrierefreiheit statt Kontext</string>
     <string name="use_accessibility_instead_of_context_desc">Erweitere das Aktionspanel mit Barrierefreiheit statt mit Kontext</string>
-    <string name="ask_notifications_behavior">Verhalten von Benachrichtigungen fragen</string>
-    <string name="ask_notifications_behavior_desc">Jedes Mal eine Aufforderung nach Benachrichtigungen / schnellen Einstellungen</string>
     <string name="auto_raise_dragon_on_system_launcher">Auto-Launch von Dragon über den Systemlauncher</string>
     <string name="auto_raise_dragon_on_system_launcher_desc">Dragon automatisch aktivieren, wenn er im System-Launcher ist (erfordert Zugänglichkeit)</string>
     <string name="are_you_sure">Bist du sicher\?</string>
@@ -702,13 +598,11 @@
     <string name="debug_infos">Debug Infos</string>
     <string name="private_space_debug_info">Informationen zum Debuggen des privaten Raums</string>
     <string name="private_space_debug_info_desc">Zeige die Debug-Infos zum Debug des privaten Raums oben auf allem</string>
-    <string name="backspace">Backspace</string>
     <string name="super_warning_mode">Super-Warnmodus</string>
     <string name="super_warning_mode_desc">Mach etwas Komisches, wenn du eine falsche PIN eingibst</string>
     <string name="super_warning_mode_sound">Super-Warnmodus + Ton</string>
     <string name="super_warning_mode_sound_desc">Fügt den Klang hinzu</string>
     <string name="alarm_sound">Alarmton</string>
-    <string name="alarm_sound_desc">Ein Alarmton wird abgespielt, wenn der falsche Pin eingetreten ist</string>
     <string name="metal_pipes_sound">Metallpfeifen klingen</string>
     <string name="metal_pipes_sound_desc">Spielen Sie Metallpfeifen-Geräusche, wenn der falsche Pin eingeschlagen ist</string>
     <string name="vibrate_on_error">Vibration bei Fehler.</string>
@@ -718,8 +612,6 @@
     <string name="pull_down_animations_desc">Aktiviere oder deaktiviere Animationen beim Herunterziehen der Schublade</string>
     <string name="pull_down_wallpaper_dim">Herunterziehbare Tapete dimmt</string>
     <string name="pull_down_wallpaper_dim_desc">Dimmen Sie die Tapete, wenn die Schublade heruntergezogen wird</string>
-    <string name="pull_down_icon_fade">Herunterzieh-Icon-Fade</string>
-    <string name="pull_down_icon_fade_desc">Blend-Icons ein/aus während der Zug-down-Schublade-Animation</string>
     <string name="pull_down_scale_in">Pull-down-Skala In</string>
     <string name="pull_down_scale_in_desc">Skalieren Symbole, wenn die Schublade heruntergezogen wird</string>
     <string name="drawer_enter_exit_animations">Drawer Entry/Exit-Animationen</string>
@@ -729,20 +621,11 @@
     <string name="more">Mehr</string>
     <string name="reload">Nachladen</string>
     <string name="select_icon">Symbol auswählen</string>
-    <string name="show_notifications_desc">Symbole von Apps mit aktiven Benachrichtigungen anzeigen (erfordert Benachrichtigungszugriffsberechtigung)</string>
     <string name="max_notification_icons">Max-Benachrichtigungssymbole</string>
-    <string name="max_notification_icons_desc">Maximale Anzahl an App-Benachrichtigungssymbolen, die in der Statusleiste angezeigt werden sollen</string>
-    <string name="grant_notification_access">Zuschussbenachrichtigungszugang</string>
-    <string name="show_bandwidth">Live-Bandbreite anzeigen</string>
-    <string name="show_bandwidth_desc">Anzeige der Live-Netzwerk-Upload- und Download-Geschwindigkeit neben der Batterie</string>
     <string name="need_to_be_default_launcher_to_use_private_space">Um privaten Speicherplatz nutzen zu können, muss der Standard-Launcher aktiviert sein</string>
     <string name="use_differential_loading_private_space">Nutzen Sie den privaten Raum mit differenzieller Beladung</string>
     <string name="use_differential_loading_private_space_desc">Schalten Sie dies um, wenn private Apps im Benutzerarbeitsbereich angezeigt werden, andernfalls lassen Sie die Option für die Leistung deaktiviert</string>
     <string name="edit_border_shape">Randform bearbeiten</string>
-    <string name="hold_to_activate_radius">Halten Sie gedrückt, um den Radius zu aktivieren</string>
-    <string name="hold_to_activate_radius_desc">Der Radius des Ladekreisfortschritts</string>
-    <string name="hold_to_activate_stroke">Halten Sie gedrückt, um den Strich zu aktivieren</string>
-    <string name="hold_to_activate_stroke_desc">Der Strich des Bogens</string>
     <string name="hold_settings">Halten Sie die Einstellungen fest</string>
     <string name="hold_to_activate_tolerance">Halten Sie gedrückt, um die Toleranz zu aktivieren</string>
     <string name="hold_to_activate_tolerance_desc">Wie weit Sie ziehen können, während Sie gedrückt halten, ohne den Fortschritt abzubrechen</string>
@@ -805,13 +688,10 @@
     <string name="redo_all">Alles wiederherstellen</string>
     <string name="move_point_clockwise">Punkt im Uhrzeigersinn bewegen</string>
     <string name="move_point_anticlockwise">Punkt gegen Uhrzeigersinn bewegen</string>
-    <string name="shapes">Formen</string>
     <string name="collapse">Einklappen</string>
     <string name="vibration">Vibration</string>
     <string name="delay">Verzögerung</string>
     <string name="duration_ms">Dauer (ms)</string>
-    <string name="rotation_start_angle">Drehstartwinkel</string>
-    <string name="rotation_start_angle_desc">Ich denke es ist klar genug…</string>
     <string name="rotation_per_second">Umdrehungen/Sekunde</string>
     <string name="rotation_per_second_desc">Wie viele Drehungen es pro Sekunde um sich selbst macht</string>
     <string name="enable_backup">Datensicherung aktivieren</string>
@@ -823,5 +703,4 @@
     <string name="paste">Einfügen</string>
     <string name="refresh">Aktualisieren</string>
     <string name="crash">Die App ist abgestürzt!</string>
-    <string name="crash_message">Absturznachricht:</string>
 </resources>
