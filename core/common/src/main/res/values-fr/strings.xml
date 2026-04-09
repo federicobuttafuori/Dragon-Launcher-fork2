@@ -304,7 +304,7 @@
     <string name="app_label_overlay_size">Taille de superposition des étiquettes d\'application</string>
     <string name="app_icon_overlay_size">Taille de superposition des icônes d\'application</string>
     <string name="next">Suivant</string>
-    <string name="loading_themes"> Chargement des thèmes…</string>
+    <string name="loading_themes">Chargement des thèmes…</string>
     <string name="already_default_launcher">Lanceur déjà par défaut</string>
     <string name="open_default_launcher_settings">Ouvrir les paramètres du lanceur par défaut</string>
     <string name="welcome_to_dragon_launcher">Bienvenue sur Dragon Launcher</string>
