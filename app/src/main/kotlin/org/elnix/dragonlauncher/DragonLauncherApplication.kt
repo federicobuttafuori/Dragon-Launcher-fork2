@@ -1,5 +1,6 @@
 package org.elnix.dragonlauncher
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
@@ -22,6 +23,7 @@ class DragonLauncherApplication : Application() {
         SupervisorJob() + Dispatchers.Default
     )
 
+    @SuppressLint("LogNotTimber")
     override fun onCreate() {
         super.onCreate()
         val defaultHandler = Thread.getDefaultUncaughtExceptionHandler()

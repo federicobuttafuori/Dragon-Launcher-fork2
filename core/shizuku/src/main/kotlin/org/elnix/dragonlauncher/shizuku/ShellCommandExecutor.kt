@@ -5,11 +5,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import org.elnix.dragonlauncher.common.utils.Constants.Logging.SHIZUKU_TAG
 import org.elnix.dragonlauncher.logging.logD
 import org.elnix.dragonlauncher.logging.logE
 import org.elnix.dragonlauncher.logging.logW
-import org.elnix.dragonlauncher.common.utils.Constants.Logging.SHIZUKU_TAG
-import org.elnix.dragonlauncher.shizuku.OutputLine
 import rikka.shizuku.Shizuku
 import rikka.shizuku.ShizukuRemoteProcess
 import java.io.BufferedReader
@@ -196,38 +195,7 @@ class ShellCommandExecutor {
         }
 
     }
-
-    fun exec(process: Process): Flow<OutputLine> = flow {
-        currentProcess = process
-        val reader = BufferedReader(InputStreamReader(currentProcess?.inputStream))
-        val errorReader = BufferedReader(InputStreamReader(currentProcess?.errorStream))
-
-        try {
-            while (true) {
-                val line = reader.readLine() ?: break
-                emit(OutputLine(line, isError = false))
-            }
-
-            while (true) {
-                val errorLine = errorReader.readLine() ?: break
-                emit(OutputLine(errorLine, isError = true))
-            }
-
-            currentProcess?.waitFor()
-        } catch (e: InterruptedIOException) {
-        } catch (e: IOException) {
-            emit(OutputLine("Error reading process output: ${e.message}", isError = true))
-        } finally {
-            try {
-                reader.close()
-                errorReader.close()
-            } catch (_: IOException) {
-            }
-
-            currentProcess?.destroy()
-            currentProcess = null
-        }
-    }
+        .flowOn(Dispatchers.IO)
 
     fun stop() {
         currentProcess?.destroy()

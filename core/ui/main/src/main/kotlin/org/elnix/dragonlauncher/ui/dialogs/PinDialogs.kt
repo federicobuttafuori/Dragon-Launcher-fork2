@@ -2,6 +2,7 @@
 
 package org.elnix.dragonlauncher.ui.dialogs
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.media.AudioAttributes
 import android.media.AudioManager
@@ -168,6 +169,7 @@ fun PinSetupDialog(
     )
 }
 
+@SuppressLint("UseOfNonLambdaOffsetOverload")
 @Composable
 private fun FullScreenPinPrompt(
     title: String,

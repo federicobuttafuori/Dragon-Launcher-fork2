@@ -54,8 +54,8 @@ class UndoRedoStack<T> {
         return first
     }
 
-    fun clearAll() {
-        undoStack = emptyList()
-        redoStack = emptyList()
-    }
+//    fun clearAll() {
+//        undoStack = emptyList()
+//        redoStack = emptyList()
+//    }
 }

@@ -87,7 +87,7 @@ object UiConstants {
 
     val defaultHoldCustomObject = CustomObjectSerializable(
         stroke = 10f,
-        color = Color.Companion.Red,
+        color = Color.Red,
         glow = CustomGlow(
             radius = 12f
         ),

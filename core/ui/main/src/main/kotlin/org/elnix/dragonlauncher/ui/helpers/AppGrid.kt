@@ -25,7 +25,6 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,17 +39,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.AppCategory
 import org.elnix.dragonlauncher.common.serializables.AppModel
 import org.elnix.dragonlauncher.common.utils.waitASec
 import org.elnix.dragonlauncher.settings.stores.DrawerSettingsStore
-import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
 import org.elnix.dragonlauncher.ui.base.asState
+import org.elnix.dragonlauncher.ui.base.modifiers.shapedClickable
+import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
 import org.elnix.dragonlauncher.ui.drawer.AppItemGrid
 import org.elnix.dragonlauncher.ui.drawer.AppItemHorizontal
-import org.elnix.dragonlauncher.ui.base.modifiers.shapedClickable
 import kotlin.math.min
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -76,7 +74,6 @@ fun AppGrid(
 
     onTopStateChange: ((Boolean) -> Unit)? = null,
     onReload: (() -> Unit)? = null,
-    onLongClick: ((AppModel) -> Unit)?,
     longPressPopup: @Composable ((AppModel) -> Unit)?,
     onClick: ((AppModel) -> Unit)?
 ) {
@@ -198,7 +195,6 @@ fun AppGrid(
                                     maxIconSize = maxIconSize,
                                     txtColor = txtColor,
                                     showIcons = showIcons,
-                                    onLongClick = onLongClick,
                                     longPressPopup = longPressPopup,
                                     onClick = onClick,
                                     showCategoryName = showCategoryName,
@@ -233,7 +229,7 @@ fun AppGrid(
                             } else {
                                 onToggleSelect(app)
                             }
-                        } else onLongClick,
+                        } else null,
                         longPressPopup = longPressPopup,
                         onClick = {
                             if (isMultiSelectMode && onToggleSelect != null) {
@@ -272,7 +268,7 @@ fun AppGrid(
                             } else {
                                 onToggleSelect(app)
                             }
-                        } else onLongClick,
+                        } else null,
                         longPressPopup = longPressPopup,
                         onClick = {
                             if (isMultiSelectMode && onToggleSelect != null) {
@@ -299,7 +295,6 @@ private fun CategoryGrid(
     gridCells: Int,
     showCategoryName: Boolean,
     modifier: Modifier = Modifier,
-    onLongClick: ((AppModel) -> Unit)?,
     longPressPopup: @Composable ((AppModel) -> Unit)?,
     onClick: ((AppModel) -> Unit)?,
     onOpenCategory: () -> Unit
@@ -318,7 +313,6 @@ private fun CategoryGrid(
                 maxIconSize = maxIconSize,
                 txtColor = txtColor,
                 showIcons = showIcons,
-                onLongClick = onLongClick,
                 longPressPopup = longPressPopup,
                 onClick = onClick,
                 gridCells = gridCells,
@@ -401,23 +395,23 @@ private fun AppDefinedGrid(
 }
 
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@Composable
-fun WithFakeLoadingAnimation(
-    loadingDurationMillis: Long = 500L,
-    onClick: () -> Unit,
-    content: @Composable () -> Unit
-) {
-    val isLoading by remember { mutableStateOf(false) }
-
-    Crossfade(isLoading) { showLoadingIcon ->
-        if (showLoadingIcon) {
-            LoadingIndicator()
-            LaunchedEffect(Unit) {
-                delay(loadingDurationMillis)
-            }
-        } else {
-            content()
-        }
-    }
-}
+//@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+//@Composable
+//fun WithFakeLoadingAnimation(
+//    loadingDurationMillis: Long = 500L,
+//    onClick: () -> Unit,
+//    content: @Composable () -> Unit
+//) {
+//    val isLoading by remember { mutableStateOf(false) }
+//
+//    Crossfade(isLoading) { showLoadingIcon ->
+//        if (showLoadingIcon) {
+//            LoadingIndicator()
+//            LaunchedEffect(Unit) {
+//                delay(loadingDurationMillis)
+//            }
+//        } else {
+//            content()
+//        }
+//    }
+//}

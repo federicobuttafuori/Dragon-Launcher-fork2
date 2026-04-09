@@ -669,7 +669,6 @@ fun AppDrawerScreen(
                                         else appsViewModel.reloadApps()
                                     }
                                 },
-                                onLongClick = null,
                                 longPressPopup = { app -> AppLongPressRow(app) }
                             ) {
                                 onLaunchAction(it.action)
@@ -719,7 +718,6 @@ fun AppDrawerScreen(
                                     showIcons = showIcons,
                                     showLabels = showLabels,
                                     fillMaxSize = false,
-                                    onLongClick = null,
                                     longPressPopup = { app -> AppLongPressRow(app) }
                                 ) {
                                     onLaunchAction(it.action)

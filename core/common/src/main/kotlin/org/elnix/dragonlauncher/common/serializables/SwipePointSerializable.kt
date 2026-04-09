@@ -112,8 +112,8 @@ data class SwipePointSerializable(
     val borderShapeSelected: IconShape? = null
 ) {
 
-    fun toShortString(): String =
-        "action: $action | nestId: $nestId | angle: $angleDeg | circleNumber: $circleNumber"
+//    fun toShortString(): String =
+//        "action: $action | nestId: $nestId | angle: $angleDeg | circleNumber: $circleNumber"
 
 }
 

@@ -18,6 +18,7 @@ import org.elnix.dragonlauncher.common.utils.Update
 import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import java.text.SimpleDateFormat
 import java.util.Locale
+import androidx.compose.ui.platform.LocalLocale
 
 @Composable
 fun UpdateCard(
@@ -125,4 +126,4 @@ private fun UpdateSection(
 
 @Composable
 private fun rememberDateFormatter(): SimpleDateFormat =
-    SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
+    SimpleDateFormat("MMMM d, yyyy", LocalLocale.current.platformLocale)

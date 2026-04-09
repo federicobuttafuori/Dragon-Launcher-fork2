@@ -76,7 +76,6 @@ fun GridSizeSlider(apps: List<AppModel>) {
                 showLabels = showLabels,
                 useCategory = useCategory,
                 longPressPopup = null,
-                onLongClick = null,
                 onClick = null
             )
         }

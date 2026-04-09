@@ -1,17 +1,12 @@
 package org.elnix.dragonlauncher.ui.helpers
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 
 
 @Composable
 fun DoubleBackToExit() {
-    var lastBackPress by remember { mutableLongStateOf(0L) }
-    val ctx = LocalContext.current
+//    var lastBackPress by remember { mutableLongStateOf(0L) }
+//    val ctx = LocalContext.current
 
 //    val requirePressingBackTwiceToExit by BehaviorSettingsStore.getRequirePressingBackTwiceToExit(ctx)
 //        .collectAsState(initial = true)

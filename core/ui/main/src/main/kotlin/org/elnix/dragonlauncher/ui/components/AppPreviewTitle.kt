@@ -1,5 +1,6 @@
 package org.elnix.dragonlauncher.ui.components
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -33,6 +34,7 @@ import org.elnix.dragonlauncher.ui.actions.actionLabel
 import org.elnix.dragonlauncher.ui.composition.LocalIconShape
 import org.elnix.dragonlauncher.ui.composition.LocalIcons
 
+@SuppressLint("UseOfNonLambdaOffsetOverload")
 @Composable
 fun AppPreviewTitle(
     point: SwipePointSerializable?,

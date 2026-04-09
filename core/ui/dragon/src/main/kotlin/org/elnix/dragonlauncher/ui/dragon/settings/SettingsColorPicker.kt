@@ -1,4 +1,4 @@
-package org.elnix.dragonlauncher.ui.components.settings
+package org.elnix.dragonlauncher.ui.dragon.settings
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue

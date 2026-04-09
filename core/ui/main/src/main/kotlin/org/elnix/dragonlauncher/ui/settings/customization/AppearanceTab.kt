@@ -1,4 +1,4 @@
-@file:Suppress("AssignedValueIsNeverRead")
+
 
 package org.elnix.dragonlauncher.ui.settings.customization
 
@@ -41,8 +41,8 @@ import org.elnix.dragonlauncher.settings.stores.UiSettingsStore.showLaunchingApp
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore.showLaunchingAppLabel
 import org.elnix.dragonlauncher.ui.base.asState
 import org.elnix.dragonlauncher.ui.components.AppPreviewTitle
-import org.elnix.dragonlauncher.ui.components.settings.SettingsSlider
-import org.elnix.dragonlauncher.ui.components.settings.SettingsSwitchRow
+import org.elnix.dragonlauncher.ui.dragon.settings.SettingsSlider
+import org.elnix.dragonlauncher.ui.dragon.settings.SettingsSwitchRow
 import org.elnix.dragonlauncher.ui.composition.LocalIcons
 import org.elnix.dragonlauncher.ui.composition.LocalNavController
 import org.elnix.dragonlauncher.ui.dragon.components.DragonColumnGroup

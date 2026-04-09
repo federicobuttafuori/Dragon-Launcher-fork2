@@ -3,21 +3,18 @@ package org.elnix.dragonlauncher.services
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.view.accessibility.AccessibilityEvent
-import android.view.accessibility.AccessibilityNodeInfo
 import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import org.elnix.dragonlauncher.logging.logD
-import org.elnix.dragonlauncher.logging.logI
-import org.elnix.dragonlauncher.logging.logW
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.ACCESSIBILITY_TAG
+import org.elnix.dragonlauncher.logging.logD
+import org.elnix.dragonlauncher.logging.logW
 import org.elnix.dragonlauncher.settings.stores.DebugSettingsStore
 
 @SuppressLint("AccessibilityPolicy")
@@ -209,39 +206,4 @@ class SystemControlService : AccessibilityService() {
         super.onDestroy()
         serviceScope.cancel()
     }
-
-}
-
-
-/**
- * Should detect if the launched launcher is in recent or is the launcher screen
- * doesn't work on my redmagic thus.
- */
-private fun isLikelyRecents(ctx: Context, root: AccessibilityNodeInfo): Boolean {
-    logI(ACCESSIBILITY_TAG) { "Root: $root" }
-
-    var nodeCount = 0
-    var clickableCount = 0
-    var focusableCount = 0
-
-    fun traverse(node: AccessibilityNodeInfo?, depth: Int = 0) {
-        if (node == null || depth > 6) return   // depth limit = safety
-        nodeCount++
-
-        if (node.isClickable) clickableCount++
-        if (node.isFocusable) focusableCount++
-
-        for (i in 0 until node.childCount) {
-            traverse(node.getChild(i), depth + 1)
-        }
-    }
-
-    traverse(root)
-
-    logI(ACCESSIBILITY_TAG) { "NodeCount: $nodeCount" }
-    logI(ACCESSIBILITY_TAG) { "clickableCount: $clickableCount, focusableCount: $focusableCount" }
-    if (nodeCount < 5) return true
-    if (clickableCount == 0 && focusableCount == 0) return true
-
-    return false
 }

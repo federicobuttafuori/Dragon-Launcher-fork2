@@ -105,12 +105,12 @@ fun hasUsageStatsPermission(ctx: Context): Boolean {
 
 
 
-fun restartApp(ctx: Context) {
-    val intent = ctx.packageManager.getLaunchIntentForPackage(ctx.packageName)?.apply {
-        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-    } ?: return
-    ctx.startActivity(intent)
-}
+//fun restartApp(ctx: Context) {
+//    val intent = ctx.packageManager.getLaunchIntentForPackage(ctx.packageName)?.apply {
+//        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+//    } ?: return
+//    ctx.startActivity(intent)
+//}
 
 suspend fun waitASec() {
     delay(1000L)

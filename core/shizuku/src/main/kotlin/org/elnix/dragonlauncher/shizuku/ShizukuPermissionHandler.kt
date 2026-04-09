@@ -25,7 +25,7 @@ class ShizukuPermissionHandler {
         return Shizuku.pingBinder() && Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
     }
 
-    fun hasPermission(): Boolean = getInitialPermissionState()
+//    fun hasPermission(): Boolean = getInitialPermissionState()
 
     fun requestPermission() {
         if (!Shizuku.pingBinder()) return
@@ -33,7 +33,7 @@ class ShizukuPermissionHandler {
         Shizuku.requestPermission(0)
     }
 
-    fun refreshPermissionState() {
-        _permissionGranted.value = getInitialPermissionState()
-    }
+//    fun refreshPermissionState() {
+//        _permissionGranted.value = getInitialPermissionState()
+//    }
 }

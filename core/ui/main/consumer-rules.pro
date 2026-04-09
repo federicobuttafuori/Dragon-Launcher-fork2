@@ -9,10 +9,5 @@
 }
 -keep enum * { *; }
 
-
-# Gson essentials
--keepattributes Signature
--keepattributes *Annotation*
-
 # Keep adapters
 -keep class org.elnix.dragonlauncher.common.serializables.SwipeActionAdapter { *; }

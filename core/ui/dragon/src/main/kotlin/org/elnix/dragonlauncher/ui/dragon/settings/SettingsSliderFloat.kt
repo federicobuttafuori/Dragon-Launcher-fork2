@@ -1,6 +1,6 @@
 @file:Suppress("AssignedValueIsNeverRead", "unused")
 
-package org.elnix.dragonlauncher.ui.components.settings
+package org.elnix.dragonlauncher.ui.dragon.settings
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -66,52 +66,6 @@ fun SettingsSlider(
         }
     ) {
         tempState = it
-        onChange?.invoke(it)
-    }
-}
-
-@Composable
-fun SettingsSlider(
-    setting: BaseSettingObject<Float, Float>,
-    title: String,
-    valueRange: ClosedFloatingPointRange<Float>,
-    modifier: Modifier = Modifier,
-    description: String? = null,
-    color: Color = MaterialTheme.colorScheme.primary,
-    backgroundColor: Color = MaterialTheme.colorScheme.surface,
-    showValue: Boolean = true,
-    decimals: Int = 2,
-    enabled: Boolean = true,
-    allowTextEditValue: Boolean = true,
-    instantUiUpdate: Boolean,
-    onReset: (() -> Unit)? = null,
-    onDragStateChange: ((Boolean) -> Unit)? = null,
-    onChange: ((Float) -> Unit)? = null
-) {
-    val ctx = LocalContext.current
-    val scope = rememberCoroutineScope()
-
-    val state by setting.asState()
-
-    SliderWithLabel(
-        modifier = modifier,
-        label = title,
-        description = description,
-        value = state,
-        valueRange = valueRange,
-        color = color,
-        enabled = enabled,
-        backgroundColor = backgroundColor,
-        showValue = showValue,
-        decimals = decimals,
-        allowTextEditValue = allowTextEditValue,
-        onReset = {
-            scope.launch { setting.reset(ctx) }
-            onReset?.invoke()
-        },
-        onDragStateChange = onDragStateChange
-    ) {
-        scope.launch { setting.set(ctx, it) }
         onChange?.invoke(it)
     }
 }

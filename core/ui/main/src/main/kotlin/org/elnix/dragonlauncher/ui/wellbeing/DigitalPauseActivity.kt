@@ -1,5 +1,6 @@
 package org.elnix.dragonlauncher.ui.wellbeing
 
+import android.annotation.SuppressLint
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
@@ -630,6 +631,7 @@ private fun AuroraBackground() {
     )
 }
 
+@SuppressLint("UseOfNonLambdaOffsetOverload")
 @Composable
 private fun FloatingParticles(modifier: Modifier = Modifier) {
     val particles = remember {

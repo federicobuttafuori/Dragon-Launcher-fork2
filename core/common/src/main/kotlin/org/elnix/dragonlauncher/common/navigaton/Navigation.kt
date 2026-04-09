@@ -33,6 +33,7 @@ object SETTINGS {
 
 }
 
+@Suppress("ClassName")
 object EDIT_SCREENS {
     const val WORKSPACE_DETAIL = "settings/advanced/workspace/{id}"
     const val NESTS_EDIT = "settings/nest/{id}"

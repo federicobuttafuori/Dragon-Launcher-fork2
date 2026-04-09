@@ -123,7 +123,6 @@ object Constants {
     }
 
     object PackageNames {
-        const val MY_PACKAGE_NAME = "org.elnix.dragonlauncher"
         const val SHIZUKU_PACKAGE_NAME = "moe.shizuku.privileged.api"
     }
 
@@ -184,10 +183,10 @@ object Constants {
         val FLOATING_APPS_TAG = LogTag("FloatingAppsDebug")
         val ACCESSIBILITY_TAG = LogTag("SystemControl")
         val IMAGE_TAG = LogTag("ImageDebug")
-        val SETTINGS_TAG = LogTag("SettingsDebug")
+//        val SETTINGS_TAG = LogTag("SettingsDebug")
 //        val ICON_PACK_TAG = LogTag("IconsPacks")
         val SHAPES_TAG = LogTag("ShapesDebug")
-        val COLORS_TAG = LogTag("ColorsDebug")
+//        val COLORS_TAG = LogTag("ColorsDebug")
         val DRAWER_TAG = LogTag("DrawerDebug")
         val APP_LAUNCH_TAG = LogTag("AppLaunchDebug")
         val PRIVATE_SPACE_TAG = LogTag("PrivateSpaceDebug")
@@ -318,8 +317,8 @@ object Constants {
     }
 
     object Extensions {
-        const val INTERNET_PROXY_EXTENSION_PGK = "org.elnix.dragonlauncher.proxy"
-        const val AUTO_UPDATE_EXTENSION_PKG = "org.elnix.dragonlauncher.autoupdate"
+//        const val INTERNET_PROXY_EXTENSION_PGK = "org.elnix.dragonlauncher.proxy"
+//        const val AUTO_UPDATE_EXTENSION_PKG = "org.elnix.dragonlauncher.autoupdate"
         const val FONT_EXTENSION_PKG = "org.elnix.dragonlauncher.fonts"
     }
 }

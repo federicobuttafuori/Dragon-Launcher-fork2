@@ -19,23 +19,23 @@ object ColorUtils {
      * @return this color if defined, or `null` if it is `null` or `Color.Unspecified`
      */
     fun Color?.definedOrNull(): Color? =
-        this.takeIf { it != Color.Companion.Unspecified }
+        this.takeIf { it != Color.Unspecified }
 
 
-    /**
-     * Returns this [Color] if it is non-null, or [default] otherwise.
-     *
-     * This is a convenience extension for providing a fallback color when
-     * working with nullable [Color] values.
-     *
-     * Note that this does not treat [Color.Companion.Unspecified] as null; if the
-     * receiver is `Color.Unspecified`, it will be returned as-is.
-     *
-     * @param default the color to return when the receiver is null
-     * @return the receiver if non-null, otherwise [default]
-     */
-    fun Color?.orDefault(default: Color = Color.Companion.Unspecified): Color =
-        this ?: default
+//    /**
+//     * Returns this [Color] if it is non-null, or [default] otherwise.
+//     *
+//     * This is a convenience extension for providing a fallback color when
+//     * working with nullable [Color] values.
+//     *
+//     * Note that this does not treat [Color.Companion.Unspecified] as null; if the
+//     * receiver is `Color.Unspecified`, it will be returned as-is.
+//     *
+//     * @param default the color to return when the receiver is null
+//     * @return the receiver if non-null, otherwise [default]
+//     */
+//    fun Color?.orDefault(default: Color = Color.Unspecified): Color =
+//        this ?: default
 
     /**
      * Returns a copy of this [Color] with its alpha multiplied by [multiplier].
@@ -76,9 +76,9 @@ object ColorUtils {
         maxLuminance: Float = 1f,
         alpha: Boolean = false
     ): Color {
-        val hue = Random.Default.nextFloat() * 360f
+        val hue = Random.nextFloat() * 360f
         val saturation = 1f
-        val value = Random.Default.nextFloat() * (maxLuminance - minLuminance) + minLuminance
+        val value = Random.nextFloat() * (maxLuminance - minLuminance) + minLuminance
 
         // Convert HSV to RGB
         val c = value * saturation
@@ -98,6 +98,6 @@ object ColorUtils {
         val g = g1 + m
         val b = b1 + m
 
-        return Color(r, g, b, if (alpha) Random.Default.nextFloat() else 1f)
+        return Color(r, g, b, if (alpha) Random.nextFloat() else 1f)
     }
 }

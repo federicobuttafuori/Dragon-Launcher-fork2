@@ -1,3 +1,5 @@
+@file:Suppress("UnusedReceiverParameter")
+
 package org.elnix.dragonlauncher.ui.base.components
 
 import androidx.compose.foundation.layout.ColumnScope
@@ -19,6 +21,7 @@ fun ColumnScope.Spacer() {
     Spacer(Modifier.weight(1f))
 }
 
+@Suppress("UnusedReceiverParameter")
 @Composable
 fun RowScope.Spacer(width: Dp) {
     Spacer(Modifier.width(width))

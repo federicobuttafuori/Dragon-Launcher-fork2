@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
@@ -69,34 +70,34 @@ class AppTimerService : Service() {
             ctx.startForegroundService(intent)
         }
 
-        fun stop(ctx: Context) {
-            ctx.stopService(Intent(ctx, AppTimerService::class.java))
-        }
+//        fun stop(ctx: Context) {
+//            ctx.stopService(Intent(ctx, AppTimerService::class.java))
+//        }
 
-        /**
-         * Helper used by debug UI to send a one-off reminder notification for testing.
-         */
-        fun sendTestReminderNotification(ctx: Context, appName: String = "Dragon Launcher", minutes: Int = 5) {
-            val nm = ctx.getSystemService(NotificationManager::class.java) ?: return
-            nm.createNotificationChannel(
-                NotificationChannel(
-                    CHANNEL_REMINDER,
-                    "Usage Reminders",
-                    NotificationManager.IMPORTANCE_HIGH
-                ).apply {
-                    description = "Periodic reminders when you stay on an app too long"
-                }
-            )
-            val timeText = "$minutes min"
-            val notif = NotificationCompat.Builder(ctx, CHANNEL_REMINDER)
-                .setSmallIcon(R.drawable.ic_action_notification)
-                .setContentTitle(ctx.getString(R.string.reminder_notification_title, appName))
-                .setContentText(ctx.getString(R.string.reminder_notification_text, appName, timeText))
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setAutoCancel(true)
-                .build()
-            nm.notify(NOTIF_ID_REMINDER, notif)
-        }
+//        /**
+//         * Helper used by debug UI to send a one-off reminder notification for testing.
+//         */
+//        fun sendTestReminderNotification(ctx: Context, appName: String = "Dragon Launcher", minutes: Int = 5) {
+//            val nm = ctx.getSystemService(NotificationManager::class.java) ?: return
+//            nm.createNotificationChannel(
+//                NotificationChannel(
+//                    CHANNEL_REMINDER,
+//                    "Usage Reminders",
+//                    NotificationManager.IMPORTANCE_HIGH
+//                ).apply {
+//                    description = "Periodic reminders when you stay on an app too long"
+//                }
+//            )
+//            val timeText = "$minutes min"
+//            val notif = NotificationCompat.Builder(ctx, CHANNEL_REMINDER)
+//                .setSmallIcon(R.drawable.ic_action_notification)
+//                .setContentTitle(ctx.getString(R.string.reminder_notification_title, appName))
+//                .setContentText(ctx.getString(R.string.reminder_notification_text, appName, timeText))
+//                .setPriority(NotificationCompat.PRIORITY_HIGH)
+//                .setAutoCancel(true)
+//                .build()
+//            nm.notify(NOTIF_ID_REMINDER, notif)
+//        }
     }
 
     private var trackedPackage: String = ""
@@ -150,10 +151,11 @@ class AppTimerService : Service() {
             // Method 1: Query recent events (most reliable for foreground detection)
             val events = usm.queryEvents(now - 5000, now)
             var lastPackage: String? = null
-            val event = android.app.usage.UsageEvents.Event()
+            val event = UsageEvents.Event()
             while (events.hasNextEvent()) {
                 events.getNextEvent(event)
-                if (event.eventType == android.app.usage.UsageEvents.Event.MOVE_TO_FOREGROUND) {
+                @Suppress("DEPRECATION")
+                if (event.eventType == UsageEvents.Event.MOVE_TO_FOREGROUND) {
                     lastPackage = event.packageName
                 }
             }
@@ -182,15 +184,17 @@ class AppTimerService : Service() {
     }
 
     private fun createTimerThread(startId: Int) = object : Thread("AppTimerThread") {
+        @Suppress("AssignedValueIsNeverRead")
         override fun run() {
             try {
-                var elapsed = 0L
+                var elapsed: Long
                 var nextReminderAt = if (reminderEnabled) reminderIntervalMs else Long.MAX_VALUE
                 var lastForegroundCheckMs = System.currentTimeMillis()
                 var notForegroundCount = 0
                 val maxNotForeground = 5
                 var isAppActive = true  // Track if we're still on the tracked app
 
+                @Suppress("KotlinConstantConditions")
                 while (!isInterrupted && isAppActive) {
                     sleep(1000)
                     elapsed = System.currentTimeMillis() - startTimeMs
@@ -207,7 +211,7 @@ class AppTimerService : Service() {
                             notForegroundCount++
                             if (notForegroundCount >= maxNotForeground) {
                                 // Can't detect foreground app - stop after grace period
-                                isAppActive = false
+                                 isAppActive = false
                                 break
                             }
                         } else if (fg != trackedPackage) {

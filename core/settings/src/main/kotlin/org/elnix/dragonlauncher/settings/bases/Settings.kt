@@ -115,6 +115,7 @@ internal object Settings {
             onChanged = onChange
         )
 
+    @Suppress("unused")
     fun double(
         key: String,
         dataStoreName: DatastoreProvider,
@@ -203,6 +204,7 @@ internal object Settings {
             onChanged = onChange
         )
 
+    @Suppress("unused")
     fun <E : Enum<E>> enumList(
         key: String,
         dataStoreName: DatastoreProvider,

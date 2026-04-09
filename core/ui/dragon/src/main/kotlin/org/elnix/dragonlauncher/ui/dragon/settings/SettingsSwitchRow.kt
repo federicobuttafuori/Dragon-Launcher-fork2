@@ -1,6 +1,4 @@
-@file:Suppress("AssignedValueIsNeverRead")
-
-package org.elnix.dragonlauncher.ui.components.settings
+package org.elnix.dragonlauncher.ui.dragon.settings
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,8 +13,8 @@ import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.settings.bases.BaseSettingObject
 import org.elnix.dragonlauncher.ui.base.asState
-import org.elnix.dragonlauncher.ui.dragon.dialogs.UserValidation
 import org.elnix.dragonlauncher.ui.dragon.components.SwitchRow
+import org.elnix.dragonlauncher.ui.dragon.dialogs.UserValidation
 
 @Composable
 fun SettingsSwitchRow(

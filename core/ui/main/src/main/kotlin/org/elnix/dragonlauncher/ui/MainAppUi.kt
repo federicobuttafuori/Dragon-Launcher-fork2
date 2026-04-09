@@ -475,7 +475,6 @@ fun MainAppUi(
             go()
             return
         }
-        @Suppress("KotlinConstantConditions")
         when (lockMethod) {
             LockMethod.PIN -> {
                 showPinDialog = route

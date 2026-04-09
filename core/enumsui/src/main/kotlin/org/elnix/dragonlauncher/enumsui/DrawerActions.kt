@@ -48,9 +48,5 @@ fun drawerActionsLabel(ctx: Context,action: DrawerActions) = when (action) {
         OPEN_KB -> ctx.getString(R.string.open_kb)
 }
 
-
-fun DrawerActions.isEnabled(): Boolean =
-    this != DISABLED
-
 fun DrawerActions.isUsed(): Boolean =
     this != DISABLED && this != NONE

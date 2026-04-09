@@ -1,4 +1,4 @@
-@file:Suppress("AssignedValueIsNeverRead", "VariableNeverRead")
+@file:Suppress("AssignedValueIsNeverRead")
 
 package org.elnix.dragonlauncher.ui.dragon.generic
 

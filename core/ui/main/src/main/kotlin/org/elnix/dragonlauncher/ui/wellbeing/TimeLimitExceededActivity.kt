@@ -1,5 +1,6 @@
 package org.elnix.dragonlauncher.ui.wellbeing
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -98,6 +99,7 @@ class TimeLimitExceededActivity : ComponentActivity() {
         }
     }
 
+    @SuppressLint("MissingSuperCall")
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         finish()
@@ -366,6 +368,7 @@ private fun GlassEncouragementCard() {
     }
 }
 
+@SuppressLint("UseOfNonLambdaOffsetOverload")
 @Composable
 private fun SoftParticles(modifier: Modifier = Modifier) {
     data class Particle(val x: Float, val y: Float, val size: Dp, val speed: Long)

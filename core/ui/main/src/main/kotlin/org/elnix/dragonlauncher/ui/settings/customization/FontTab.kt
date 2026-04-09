@@ -82,10 +82,10 @@ import org.elnix.dragonlauncher.logging.logD
 import org.elnix.dragonlauncher.logging.logE
 import org.elnix.dragonlauncher.services.ExtensionManager
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
+import org.elnix.dragonlauncher.theme.AppObjectsColors
 import org.elnix.dragonlauncher.theme.fontNameToFont
 import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import org.elnix.dragonlauncher.ui.base.asState
-import org.elnix.dragonlauncher.theme.AppObjectsColors
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
 import java.io.File
 import java.io.FileOutputStream
@@ -792,9 +792,9 @@ fun FontRow(
 private suspend fun queryWithRetry(ctx: Context, uri: Uri, retries: Int = 3): Cursor? {
 
     // Wake up the extension process first
-    val wakeIntent = Intent("org.elnix.dragonlauncher.ACTION_GET_FONTS").apply {
-        setPackage("org.elnix.dragonlauncher.fonts")
-    }
+//    val wakeIntent = Intent("org.elnix.dragonlauncher.ACTION_GET_FONTS").apply {
+//        setPackage("org.elnix.dragonlauncher.fonts")
+//    }
 //    ctx.startService(wakeIntent)
 
     // Give it a moment to start

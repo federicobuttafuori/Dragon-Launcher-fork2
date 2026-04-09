@@ -94,5 +94,4 @@ dependencies {
     implementation(project(":core:logging"))
     implementation(project(":core:services"))
     implementation(project(":core:settings"))
-    implementation(libs.androidx.runtime)
 }
