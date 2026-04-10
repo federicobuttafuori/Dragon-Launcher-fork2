@@ -26,14 +26,14 @@ data class ExtraColors(
 
 
 val DefaultExtraColors = ExtraColors(
-    angleLine = Color.Red,
-    circle = Color(0xFF960000),
+    angleLine = Color(0xFFFF0000),
+    circle = Color(0x92FFFFFF),
     launchApp = Color(0xFF55AAFF),
     openUrl = Color(0xFF66DD77),
     notificationShade = Color(0xFFFFBB44),
     controlPanel = Color(0xFFFF6688),
     openAppDrawer = Color(0xFFDD55FF),
-    launcherSettings = Color.Red,
+    launcherSettings = Color(0xFFFF0000),
     lock = Color(0xFF555555),
     openFile = Color(0xFF00FFF7),
     reload = Color(0xFF886300),
@@ -45,4 +45,5 @@ val DefaultExtraColors = ExtraColors(
     toggleBluetooth = Color(0xFF2196F3),
     runAdbCommand = Color(0xFF1BEE14)
 )
+
 val LocalExtraColors = staticCompositionLocalOf { DefaultExtraColors }
