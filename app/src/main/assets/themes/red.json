@@ -61,8 +61,9 @@
   },
   "hold_to_activate": {
     "holdDelayBeforeStartingLongClickSettings": 200,
-    "longCLickSettingsDuration": 200,
+    "longCLickSettingsDuration": 500,
     "holdToActivateSettingsTolerance": 43.096153,
-    "holdToActivateArcCustomObject": "{\n    \"stroke\": 4.9102955,\n    \"glow\": {\n        \"radius\": 20.426828\n    },\n    \"rotation\": -1,\n    \"shape\": {\n        \"type\": \"org.elnix.dragonlauncher.common.serializables.IconShape.Pebble\"\n    },\n    \"size\": 120.25094,\n    \"eraseBackground\": false\n}"
+    "holdToActivateArcCustomObject": "{\"stroke\":4.9102955,\"glow\":{\"radius\":20.426828},\"rotation\":-1,\"shape\":{\"type\":\"org.elnix.dragonlauncher.common.serializables.IconShape.Pebble\"},\"size\":120.25094,\"eraseBackground\":false}",
+    "rotationPerSecond": 2
   }
 }
