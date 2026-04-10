@@ -19,6 +19,7 @@ import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
 import org.elnix.dragonlauncher.common.serializables.applyColorAction
 import org.elnix.dragonlauncher.common.serializables.defaultSwipePointsValues
 import org.elnix.dragonlauncher.common.utils.ImageUtils.loadDrawableResAsBitmap
+import org.elnix.dragonlauncher.common.utils.cycleLayerIconCacheKey
 import org.elnix.dragonlauncher.common.utils.UiCircle
 import org.elnix.dragonlauncher.common.utils.resolveShape
 import org.elnix.dragonlauncher.ui.actions.actionColor
@@ -169,26 +170,61 @@ fun DrawScope.actionsInCircle(
             drawContext.canvas.restore()
 
 
-            val icon = point.id.let { icons[it] }
             val colorAction = actionColor(point.action, extraColors)
 
+            val persisted = drawParams.points.find { it.id == point.id } ?: point
+            val cycleStages = persisted.cycleActions
+            val stackKey0 = cycleLayerIconCacheKey(persisted.id, 0)
 
-            // 4. Draw icon in center
-            if (icon != null) {
-                drawImage(
-                    image = icon,
-                    dstOffset = dstOffset,
-                    dstSize = intSize,
-                    colorFilter =
-                        if (point.applyColorAction()) ColorFilter.tint(colorAction)
-                        else null
-                )
+            // 4. Draw icon(s) — Cycle Actions: stages offset to the right, base drawn last (on top)
+            if (!cycleStages.isNullOrEmpty() && icons.containsKey(stackKey0)) {
+                val n = cycleStages.size
+                val stepPx = (intSize.width * 0.07f).toInt().coerceIn(2, 8)
+                for (i in n downTo 1) {
+                    val bmp = icons[cycleLayerIconCacheKey(persisted.id, i)] ?: continue
+                    val layerAction = cycleStages[i - 1].action
+                    val layerPoint = persisted.copy(action = layerAction)
+                    drawImage(
+                        image = bmp,
+                        dstOffset = dstOffset + IntOffset(i * stepPx, 0),
+                        dstSize = intSize,
+                        colorFilter =
+                            if (layerPoint.applyColorAction()) ColorFilter.tint(
+                                actionColor(layerAction, extraColors)
+                            )
+                            else null
+                    )
+                }
+                icons[stackKey0]?.let { baseBmp ->
+                    drawImage(
+                        image = baseBmp,
+                        dstOffset = dstOffset,
+                        dstSize = intSize,
+                        colorFilter =
+                            if (persisted.applyColorAction()) ColorFilter.tint(
+                                actionColor(persisted.action, extraColors)
+                            )
+                            else null
+                    )
+                }
+            } else {
+                val icon = point.id.let { icons[it] }
+                if (icon != null) {
+                    drawImage(
+                        image = icon,
+                        dstOffset = dstOffset,
+                        dstSize = intSize,
+                        colorFilter =
+                            if (point.applyColorAction()) ColorFilter.tint(colorAction)
+                            else null
+                    )
+                }
             }
 
-            // 5. Hold & Run: small lightning at top-right of the action icon
+            // 5. Hold & Run: lightning badge at top-right of the action icon (shadow below for legibility)
             if (point.holdAndRunDelayMs != null) {
                 val iconPx = intSize.width
-                val badgeSize = (iconPx / 4).coerceIn(8, 22)
+                val badgeSize = (iconPx / 3f).toInt().coerceIn(14, 36)
                 val bolt = ctx.loadDrawableResAsBitmap(
                     R.drawable.ic_hold_and_run_bolt,
                     badgeSize,
@@ -198,6 +234,13 @@ fun DrawScope.actionsInCircle(
                 val topI = py.toInt() - iconPx / 2
                 val boltLeft = leftI + iconPx - badgeSize
                 val boltTop = topI - (badgeSize / 4).coerceAtLeast(1)
+                val shadowDy = (badgeSize / 6).coerceAtLeast(2)
+                drawImage(
+                    image = bolt,
+                    dstOffset = IntOffset(boltLeft, boltTop + shadowDy),
+                    dstSize = IntSize(badgeSize, badgeSize),
+                    colorFilter = ColorFilter.tint(Color.Black.copy(alpha = 0.42f)),
+                )
                 drawImage(
                     image = bolt,
                     dstOffset = IntOffset(boltLeft, boltTop),

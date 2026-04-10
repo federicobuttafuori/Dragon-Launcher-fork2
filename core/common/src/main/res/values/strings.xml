@@ -124,6 +124,7 @@
     <string name="are_you_sure_to_delete_workspace">Are you sure to delete workspace</string>
     <string name="search_apps">Search Apps</string>
     <string name="search_widgets">Search widgets…</string>
+    <string name="search_shortcuts">Search shortcuts…</string>
     <string name="precision_mode_active">Precision Mode</string>
     <string name="remove_from_workspace">Remove From Workspace</string>
     <string name="add_to_workspace">Add To Workspace</string>
@@ -577,6 +578,9 @@
     <string name="pinned_shortcut_already_exists">"%s" shortcut is already on your circles</string>
     <string name="pinned_shortcuts">Shortcuts</string>
     <string name="no_pinned_shortcuts">No shortcuts available</string>
+    <string name="select_shortcut_action_title">Select action for %1$s</string>
+    <string name="no_extra_shortcuts">No extra actions available.</string>
+    <string name="just_open_app">Just open %1$s</string>
 
     <!--  ─────────────  Recently Used Apps  ─────────────  -->
     <string name="recently_used_apps">Recently used apps</string>

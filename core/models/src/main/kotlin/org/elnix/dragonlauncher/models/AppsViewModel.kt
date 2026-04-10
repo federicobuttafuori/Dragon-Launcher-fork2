@@ -57,6 +57,7 @@ import org.elnix.dragonlauncher.common.serializables.defaultWorkspaces
 import org.elnix.dragonlauncher.common.serializables.dummySwipePoint
 import org.elnix.dragonlauncher.common.serializables.resolveApp
 import org.elnix.dragonlauncher.common.serializables.splitCacheKey
+import org.elnix.dragonlauncher.common.utils.cycleLayerIconCacheKey
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.APPS_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.ICONS_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.WORKSPACES_TAG
@@ -824,6 +825,27 @@ class AppsViewModel(
             val bmp = loadPointIcon(point)
 
             iconCache.put(id, bmp)
+            _iconsTrigger.update { it + 1 }
+            _iconsVersion.value++
+        }
+    }
+
+    /**
+     * Preload per-layer bitmaps for Cycle Actions preview (stacked icons: base + each stage).
+     * Cached under [cycleLayerIconCacheKey] (layer 0 = base, 1..N = stages).
+     */
+    fun preloadCycleLayerIcons(point: SwipePointSerializable) {
+        val stages = point.cycleActions ?: return
+        if (stages.isEmpty()) return
+        scope.launch(Dispatchers.IO) {
+            runCatching {
+                val baseBmp = loadPointIcon(point)
+                iconCache.put(cycleLayerIconCacheKey(point.id, 0), baseBmp)
+                stages.forEachIndexed { i, stage ->
+                    val bmp = loadPointIcon(point.copy(action = stage.action))
+                    iconCache.put(cycleLayerIconCacheKey(point.id, i + 1), bmp)
+                }
+            }
             _iconsTrigger.update { it + 1 }
             _iconsVersion.value++
         }

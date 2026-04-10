@@ -7,6 +7,7 @@ import android.os.Process
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,13 +19,22 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,6 +63,16 @@ private data class PinnedShortcutItem(
     val appName: String,
     val packageName: String
 )
+
+private fun PinnedShortcutItem.matchesShortcutSearch(q: String): Boolean {
+    if (q.isBlank()) return true
+    val s = shortcutInfo
+    return appName.contains(q, ignoreCase = true) ||
+        packageName.contains(q, ignoreCase = true) ||
+        (s.shortLabel?.toString()?.contains(q, ignoreCase = true) == true) ||
+        (s.longLabel?.toString()?.contains(q, ignoreCase = true) == true) ||
+        s.id.contains(q, ignoreCase = true)
+}
 
 /**
  * Dialog that displays all pinned shortcuts from all installed apps,
@@ -98,42 +118,98 @@ fun PinnedShortcutsPickerDialog(
                     )
                 }
             } else {
-                Column(
-                    modifier = Modifier
-                        .heightIn(max = 450.dp)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    var isFirst = true
-                    groupedShortcuts.forEach { (appName, shortcuts) ->
-                        if (!isFirst) {
-                            Spacer(Modifier.height(8.dp))
-                            HorizontalDivider()
-                            Spacer(Modifier.height(8.dp))
-                        }
-                        isFirst = false
+                var searchQuery by remember { mutableStateOf("") }
+                val filteredGrouped = remember(searchQuery, groupedShortcuts) {
+                    if (searchQuery.isBlank()) groupedShortcuts
+                    else {
+                        val q = searchQuery
+                        groupedShortcuts.mapNotNull { (appName, items) ->
+                            val filteredItems = items.filter { it.matchesShortcutSearch(q) }
+                            if (filteredItems.isEmpty()) null else appName to filteredItems
+                        }.toMap()
+                    }
+                }
 
-                        // App header
-                        Text(
-                            text = appName,
-                            style = MaterialTheme.typography.titleSmall,
-                            fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                        )
-
-                        // Shortcuts list
-                        shortcuts.forEach { item ->
-                            ShortcutRow(
-                                shortcut = item.shortcutInfo,
-                                onClick = {
-                                    onShortcutSelected(
-                                        SwipeActionSerializable.LaunchShortcut(
-                                            packageName = item.packageName,
-                                            shortcutId = item.shortcutInfo.id
-                                        )
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    OutlinedTextField(
+                        value = searchQuery,
+                        onValueChange = { searchQuery = it },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 12.dp),
+                        placeholder = { Text(stringResource(R.string.search_shortcuts)) },
+                        leadingIcon = {
+                            Icon(
+                                Icons.Default.Search,
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        },
+                        trailingIcon = {
+                            if (searchQuery.isNotEmpty()) {
+                                IconButton(onClick = { searchQuery = "" }) {
+                                    Icon(
+                                        Icons.Default.Close,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(20.dp)
                                     )
                                 }
+                            }
+                        },
+                        singleLine = true,
+                        shape = DragonShape
+                    )
+
+                    if (filteredGrouped.isEmpty() && searchQuery.isNotEmpty()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 24.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = stringResource(R.string.no_search_match),
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
+                        }
+                    } else {
+                        Column(
+                            modifier = Modifier
+                                .heightIn(max = 450.dp)
+                                .verticalScroll(rememberScrollState())
+                        ) {
+                            var isFirst = true
+                            filteredGrouped.forEach { (appName, shortcuts) ->
+                                if (!isFirst) {
+                                    Spacer(Modifier.height(8.dp))
+                                    HorizontalDivider()
+                                    Spacer(Modifier.height(8.dp))
+                                }
+                                isFirst = false
+
+                                Text(
+                                    text = appName,
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                                )
+
+                                shortcuts.forEach { item ->
+                                    ShortcutRow(
+                                        shortcut = item.shortcutInfo,
+                                        onClick = {
+                                            onShortcutSelected(
+                                                SwipeActionSerializable.LaunchShortcut(
+                                                    packageName = item.packageName,
+                                                    shortcutId = item.shortcutInfo.id
+                                                )
+                                            )
+                                        }
+                                    )
+                                }
+                            }
                         }
                     }
                 }

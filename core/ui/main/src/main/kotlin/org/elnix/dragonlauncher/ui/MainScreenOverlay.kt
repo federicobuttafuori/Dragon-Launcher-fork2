@@ -385,6 +385,22 @@ fun MainScreenOverlay(
         }
     }
 
+    LaunchedEffect(
+        hoveredPoint?.id,
+        hoveredPoint?.cycleActions,
+        liveNestedCurrentAction?.id,
+        liveNestedCurrentAction?.cycleActions
+    ) {
+        fun preloadCycleIfNeeded(p: SwipePointSerializable?) {
+            if (p == null) return
+            if (p.cycleActions.isNullOrEmpty()) return
+            val persisted = points.find { it.id == p.id } ?: p
+            appsViewModel.preloadCycleLayerIcons(persisted)
+        }
+        preloadCycleIfNeeded(hoveredPoint)
+        preloadCycleIfNeeded(liveNestedCurrentAction)
+    }
+
     /*  Icon bitmaps are keyed by point id; [actionsInCircle] / [AppPreviewTitle] read
      *  icons[point.id]. Reload when the staged action changes so the cache matches
      *  [displayPoint.action], then restore from persisted [points] on release / drift.  */
