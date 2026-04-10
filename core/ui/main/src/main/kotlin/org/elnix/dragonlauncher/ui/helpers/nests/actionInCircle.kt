@@ -185,6 +185,26 @@ fun DrawScope.actionsInCircle(
                 )
             }
 
+            // 5. Hold & Run: small lightning at top-right of the action icon
+            if (point.holdAndRunDelayMs != null) {
+                val iconPx = intSize.width
+                val badgeSize = (iconPx / 4).coerceIn(8, 22)
+                val bolt = ctx.loadDrawableResAsBitmap(
+                    R.drawable.ic_hold_and_run_bolt,
+                    badgeSize,
+                    badgeSize
+                )
+                val leftI = px.toInt() - iconPx / 2
+                val topI = py.toInt() - iconPx / 2
+                val boltLeft = leftI + iconPx - badgeSize
+                val boltTop = topI - (badgeSize / 4).coerceAtLeast(1)
+                drawImage(
+                    image = bolt,
+                    dstOffset = IntOffset(boltLeft, boltTop),
+                    dstSize = IntSize(badgeSize, badgeSize)
+                )
+            }
+
         } else {
             nests.find { it.id == action.nestId }?.let { nest ->
 

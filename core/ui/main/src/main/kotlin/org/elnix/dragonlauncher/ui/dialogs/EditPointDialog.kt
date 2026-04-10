@@ -102,9 +102,10 @@ fun EditPointDialog(
     var showHapticFeedbackEditor by remember { mutableStateOf(false) }
 
     /*  ─────────────  Live Nest / Cycle Actions: single expanded panel  ─────────────  */
-    var expandedFeaturePanel by remember(point.id) {
+    var expandedFeaturePanel by remember(point.id, isDefaultEditing) {
         mutableStateOf(
-                when {
+            when {
+                isDefaultEditing -> PointFeaturePanel.None
                 point.liveNestTargetNestId != null -> PointFeaturePanel.LiveNest
                 point.cycleActions != null -> PointFeaturePanel.CycleActions
                 point.holdAndRunDelayMs != null -> PointFeaturePanel.HoldAndRun
@@ -270,10 +271,77 @@ fun EditPointDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                if (!isDefaultEditing) {
-
-                    /*  ─────────────  Feature row: Live Nest / Cycle Actions / Hold & Run  ─────────────  */
-                    item {
+                /*  ─────────────  Feature row: Live Nest / Cycle / Hold — or Live / Hold for default template  ─────────────  */
+                item {
+                    if (isDefaultEditing) {
+                        val liveNestExpanded = expandedFeaturePanel == PointFeaturePanel.LiveNest
+                        val harExpanded = expandedFeaturePanel == PointFeaturePanel.HoldAndRun
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .clip(DragonShape)
+                                    .background(
+                                        if (liveNestExpanded) MaterialTheme.colorScheme.primaryContainer
+                                        else MaterialTheme.colorScheme.surfaceVariant
+                                    )
+                                    .clickable {
+                                        expandedFeaturePanel =
+                                            if (expandedFeaturePanel == PointFeaturePanel.LiveNest) {
+                                                PointFeaturePanel.None
+                                            } else {
+                                                PointFeaturePanel.LiveNest
+                                            }
+                                    }
+                                    .padding(horizontal = 10.dp, vertical = 10.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.live_nest),
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = if (liveNestExpanded) {
+                                        MaterialTheme.colorScheme.onPrimaryContainer
+                                    } else {
+                                        MaterialTheme.colorScheme.onSurface
+                                    }
+                                )
+                            }
+                            Row(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .clip(DragonShape)
+                                    .background(
+                                        if (harExpanded) MaterialTheme.colorScheme.primaryContainer
+                                        else MaterialTheme.colorScheme.surfaceVariant
+                                    )
+                                    .clickable {
+                                        expandedFeaturePanel =
+                                            if (expandedFeaturePanel == PointFeaturePanel.HoldAndRun) {
+                                                PointFeaturePanel.None
+                                            } else {
+                                                PointFeaturePanel.HoldAndRun
+                                            }
+                                    }
+                                    .padding(horizontal = 10.dp, vertical = 10.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.hold_and_run),
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = if (harExpanded) {
+                                        MaterialTheme.colorScheme.onPrimaryContainer
+                                    } else {
+                                        MaterialTheme.colorScheme.onSurface
+                                    }
+                                )
+                            }
+                        }
+                    } else {
                         val liveNestActive = editPoint.liveNestTargetNestId != null
                         val cycleConfigured = editPoint.cycleActions != null
                         val harConfigured = editPoint.holdAndRunDelayMs != null
@@ -390,10 +458,13 @@ fun EditPointDialog(
                             }
                         }
                     }
+                }
 
+                if (!isDefaultEditing) {
                     item {
                         TextDivider(stringResource(R.string.general_style))
                     }
+                }
 
                     /*  ─────────────  Live Nest configuration panel  ─────────────  */
                     item {

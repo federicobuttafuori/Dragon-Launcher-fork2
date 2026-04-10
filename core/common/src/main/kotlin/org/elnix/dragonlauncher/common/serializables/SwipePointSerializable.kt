@@ -214,7 +214,15 @@ data class SwipePointSerializable(
      * Null means the same action as tap/release (default).
      */
     @SerializedName("holdAndRunAction")
-    val holdAndRunAction: SwipeActionSerializable? = null
+    val holdAndRunAction: SwipeActionSerializable? = null,
+
+    /**
+     * Default Hold & Run delay (ms) applied when the user enables Hold & Run on a point.
+     * Stored on the global default template only; ignored on normal swipe points.
+     * When null, enabling Hold & Run uses 1000 ms.
+     */
+    @SerializedName("defaultHoldAndRunDelayMs")
+    val defaultHoldAndRunDelayMs: Int? = null
 ) {
 
 //    fun toShortString(): String =

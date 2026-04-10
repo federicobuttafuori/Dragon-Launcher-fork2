@@ -592,6 +592,10 @@
     <string name="keep_screen_on_desc">Do not turn the screen off and lock, keep it always on when Dragon is focused</string>
     <string name="drag_zone_padding">Drag zone padding</string>
     <string name="points_settings">Point settings</string>
+    <string name="default_point_live_nest_defaults">Live Nest defaults</string>
+    <string name="default_point_live_nest_defaults_summary">Used when you pick a target nest on a point (preview delay, scale, grace, dim).</string>
+    <string name="default_hold_and_run_delay">Default Hold &amp; Run delay (ms)</string>
+    <string name="default_hold_and_run_delay_summary">Delay applied when you enable Hold &amp; Run on a point (tap “Enable Hold &amp; Run”).</string>
     <string name="logs">Logs</string>
     <string name="settings_json">Settings JSON</string>
     <string name="pick_a_settings_screen">Pick a settings screen</string>
