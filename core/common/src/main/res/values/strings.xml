@@ -860,5 +860,7 @@
     <string name="import_text">Import</string>
     <string name="user_theme">User theme %1$d</string>
     <string name="add_current_theme">Add current theme</string>
+    <string name="test_mode_validate">Keep current colors</string>
+    <string name="test_mode_cancel">Restore previous theme</string>
 
 </resources>

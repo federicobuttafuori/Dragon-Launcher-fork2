@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,17 +15,13 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Remove
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -56,6 +51,7 @@ import org.elnix.dragonlauncher.common.utils.Constants.Logging.THEMES_TAG
 import org.elnix.dragonlauncher.common.utils.ThemeObject
 import org.elnix.dragonlauncher.common.utils.loadThemes
 import org.elnix.dragonlauncher.common.utils.today
+import org.elnix.dragonlauncher.enumsui.ExportImportTheme
 import org.elnix.dragonlauncher.logging.logE
 import org.elnix.dragonlauncher.models.BackupResult
 import org.elnix.dragonlauncher.settings.SettingsBackupManager
@@ -73,6 +69,8 @@ import org.elnix.dragonlauncher.ui.composition.LocalBackupViewModel
 import org.elnix.dragonlauncher.ui.dialogs.ThemeJsonPopup
 import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
 import org.elnix.dragonlauncher.ui.dragon.components.DragonRow
+import org.elnix.dragonlauncher.ui.dragon.generic.MultiSelectConnectedButtonRow
+import org.elnix.dragonlauncher.ui.dragon.generic.ShowLabels
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
 import org.elnix.dragonlauncher.ui.remembers.rememberSettingsExportLauncher
 import org.elnix.dragonlauncher.ui.remembers.rememberSettingsImportLauncher
@@ -154,6 +152,27 @@ fun ThemesTab(
         content = {
             BetaVersionWarning(BetaVersionType.Feature)
 
+            MultiSelectConnectedButtonRow(
+                entries = ExportImportTheme.entries,
+                showLabels = ShowLabels.Always
+            ) {
+                when (it){
+                    ExportImportTheme.Export -> {
+                        settingsExportLauncher.launch("dragon_launcher_theme-${today()}.json")
+                    }
+                    ExportImportTheme.Import -> {
+                        settingsImportLauncher.launch(
+                            arrayOf(
+                                "application/json",
+                                "text/plain",
+                                "application/octet-stream",
+                                "*/*"
+                            )
+                        )
+                    }
+                }
+            }
+
             if (themes == null) {
                 Column(
                     modifier = Modifier.fillMaxSize(),
@@ -172,19 +191,6 @@ fun ThemesTab(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.heightIn(max = 1000.dp)
                 ) {
-                    downLoadUploadButton(false) {
-                        settingsExportLauncher.launch("dragon_launcher_theme-${today()}.json")
-                    }
-                    downLoadUploadButton(true) {
-                        settingsImportLauncher.launch(
-                            arrayOf(
-                                "application/json",
-                                "text/plain",
-                                "application/octet-stream",
-                                "*/*"
-                            )
-                        )
-                    }
 
                     themes?.let {
                         items(it) { theme ->
@@ -269,42 +275,6 @@ fun ThemesTab(
 
     if (showJson != null) {
         ThemeJsonPopup(showJson!!) { showJson = null }
-    }
-}
-
-
-private fun LazyGridScope.downLoadUploadButton(
-    isDownload: Boolean,
-    onClick: () -> Unit
-) {
-
-    item {
-        val text = stringResource(if (isDownload) R.string.import_text else R.string.export)
-
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(1f)
-                .shapedClickable(onClick = onClick)
-                .background(MaterialTheme.colorScheme.surface)
-                .padding(16.dp)
-        ) {
-            val icon = if (isDownload) Icons.Default.Download else Icons.Default.Share
-
-            Icon(
-                imageVector = icon,
-                contentDescription = text
-            )
-            Spacer(5.dp)
-
-            Text(
-                text = text,
-                style = MaterialTheme.typography.labelMedium,
-                textAlign = TextAlign.Center
-            )
-        }
     }
 }
 
