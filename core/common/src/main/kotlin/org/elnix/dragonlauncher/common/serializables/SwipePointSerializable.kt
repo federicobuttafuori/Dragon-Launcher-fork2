@@ -14,7 +14,8 @@ import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable.Ope
  * [SwipePointSerializable.cycleActions] and evaluated continuously during a hold to
  * determine which action fires on release.
  *
- * @param triggerTimeMs Milliseconds after finger-down at which this stage becomes current.
+ * @param triggerTimeMs Extra milliseconds to hold **after the previous stage** before this stage
+ *   becomes current (after finger-down for Stage 1). The runtime sums these into absolute thresholds.
  * @param action        Action executed on release while this stage is active.
  * @param hapticFeedback Haptic pulse played once when transitioning into this stage.
  *                      Null falls back to the point's own haptic setting.
@@ -177,7 +178,8 @@ data class SwipePointSerializable(
      * Null means Cycle Actions is disabled for this point.
      *
      * Stage 0 is always the point's own [action] (base, no threshold).
-     * Each entry here is Stage[1..N], activated after [CycleActionStage.triggerTimeMs] ms of hold.
+     * Each entry is Stage[1..N]: [CycleActionStage.triggerTimeMs] is the **additional** hold time
+     * after the previous stage (or after finger-down for Stage 1) before that stage becomes current.
      */
     @SerializedName("cycleActions")
     val cycleActions: List<CycleActionStage>? = null,

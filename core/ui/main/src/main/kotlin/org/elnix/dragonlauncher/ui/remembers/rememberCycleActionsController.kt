@@ -15,6 +15,19 @@ import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
 import org.elnix.dragonlauncher.common.utils.performCustomHaptic
 import org.elnix.dragonlauncher.ui.defaultHapticFeedback
 
+/**
+ * For each extra stage, [CycleActionStage.triggerTimeMs] is the **additional** hold time after the
+ * previous stage before that stage becomes current. This returns absolute thresholds from
+ * finger-down: cumulative sums of those delays.
+ */
+private fun cumulativeTriggerThresholdsMs(stages: List<CycleActionStage>): List<Long> {
+    var acc = 0L
+    return stages.map { stage ->
+        acc += stage.triggerTimeMs.toLong().coerceAtLeast(1)
+        acc
+    }
+}
+
 /*  ─────────────  Cycle Actions public state  ─────────────  */
 
 /**
@@ -43,6 +56,10 @@ data class CycleActionsState(
 /**
  * Composable controller that manages the Cycle Actions elapsed timer, stage derivation,
  * per-stage haptic pulses, optional loop wrap with a "Loop Over" tail, and release resolution.
+ *
+ * Each stage's [CycleActionStage.triggerTimeMs] is an **extra** hold duration after the previous
+ * stage (finger-down for the first stage); thresholds are cumulative sums for comparison with
+ * elapsed time since finger-down.
  *
  * Runs independently of [rememberLiveNestController]. The overlay passes null for [currentAction]
  * when Live Nest is active, which automatically pauses the timer and deactivates cycle state.
@@ -89,7 +106,8 @@ fun rememberCycleActionsController(
         val act = currentAction!!
         val loopEnabled = act.cycleActionsLoopEnabled
         val loopDelayMs = (act.cycleActionsLoopDelayMs ?: 500).coerceAtLeast(1)
-        val tLast = stages.last().triggerTimeMs.toLong()
+        val cumulativeMs = cumulativeTriggerThresholdsMs(stages)
+        val tLast = cumulativeMs.last()
         val cycleLen = tLast + loopDelayMs
 
         var elapsedMs = 0L
@@ -116,7 +134,7 @@ fun rememberCycleActionsController(
             val newIndex = if (loopEnabled && eff >= tLast && eff < tLast + loopDelayMs) {
                 stages.size + 1
             } else {
-                val crossedIndex = stages.indexOfLast { eff >= it.triggerTimeMs }
+                val crossedIndex = cumulativeMs.indexOfLast { eff >= it }
                 (crossedIndex + 1).coerceAtMost(stages.size)
             }
 

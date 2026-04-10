@@ -863,10 +863,8 @@ fun EditPointDialog(
                                             .clip(DragonShape)
                                             .background(MaterialTheme.colorScheme.surfaceVariant)
                                             .clickable {
-                                                val lastThreshold =
-                                                    cycleStages.lastOrNull()?.triggerTimeMs ?: 0
                                                 val newStage = CycleActionStage(
-                                                    triggerTimeMs = lastThreshold + 500,
+                                                    triggerTimeMs = 500,
                                                     action = editPoint.action
                                                 )
                                                 editPoint = editPoint.copy(

@@ -889,7 +889,7 @@
     <!--  Cycle Actions  -->
     <string name="cycle_actions_add_stage">Add Stage</string>
     <string name="cycle_actions_stage">Stage %1$d</string>
-    <string name="cycle_actions_delay">Hold delay (ms)</string>
+    <string name="cycle_actions_delay">Extra hold to reach this stage (ms)</string>
     <string name="cycle_actions_loop">Loop</string>
     <string name="cycle_actions_loop_summary">After the last stage, wait in “Loop Over”, then repeat the cycle.</string>
     <string name="cycle_actions_loop_over">Loop Over</string>
