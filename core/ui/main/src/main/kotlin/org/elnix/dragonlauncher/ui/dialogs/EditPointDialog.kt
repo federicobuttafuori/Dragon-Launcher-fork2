@@ -82,6 +82,8 @@ private enum class PointFeaturePanel {
 fun EditPointDialog(
     point: SwipePointSerializable,
     isDefaultEditing: Boolean = false,
+    /** When non-null, "Create new nest" is shown in the Live Nest nest picker (same as [AddPointDialog]). */
+    onNewNest: (() -> Unit)? = null,
     onDismiss: () -> Unit,
     onConfirm: (SwipePointSerializable) -> Unit
 ) {
@@ -1276,7 +1278,7 @@ fun EditPointDialog(
         NestManagementDialog(
             onDismissRequest = { showLiveNestNestPicker = false },
             title = stringResource(R.string.pick_a_nest),
-            onNewNest = null,
+            onNewNest = onNewNest,
             onNameChange = null,
             onDelete = null,
             onSelect = { selectedNest ->

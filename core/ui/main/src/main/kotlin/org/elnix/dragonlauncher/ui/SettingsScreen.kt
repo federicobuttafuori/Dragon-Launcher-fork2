@@ -1629,6 +1629,7 @@ fun SettingsScreen(
 
         EditPointDialog(
             point = editPoint,
+            onNewNest = { addNewNest() },
             onDismiss = {
                 showEditDialog = null
                 appsViewModel.reloadPointIcon(editPoint)
@@ -1745,6 +1746,7 @@ fun SettingsScreen(
         EditPointDialog(
             point = defaultPoint,
             isDefaultEditing = true,
+            onNewNest = { addNewNest() },
             onDismiss = {
                 showEditDefaultPoint = false
             },
