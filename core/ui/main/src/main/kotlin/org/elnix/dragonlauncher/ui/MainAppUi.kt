@@ -711,7 +711,6 @@ fun MainAppUi(
     /* ───────────── Decodes the angle lines things ───────────── */
 
     val json = Json {
-        prettyPrint = true
         serializersModule = SerializersModule {
             contextual(Color::class, ColorSerializer)
         }
