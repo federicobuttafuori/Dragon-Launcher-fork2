@@ -30,6 +30,8 @@ class DragonLogViewModel(
     private val _filesLogsLevel = MutableStateFlow(Log.DEBUG)
     val filesLogsLevel = _filesLogsLevel.asStateFlow()
 
+    private val _filterTag = MutableStateFlow("")
+    val filterTag = _filterTag.asStateFlow()
 
     private var fileTree: FileLoggingTree? = null
 
@@ -54,6 +56,9 @@ class DragonLogViewModel(
 
             _filesLogsLevel.value = DebugSettingsStore.filesLogLevel.get(ctx)
             fileTree?.filesLogsLevel = _filesLogsLevel.value
+
+            _filterTag.value = DebugSettingsStore.filterTag.get(ctx)
+            fileTree?.filterTag = filterTag.value
         }
 
         updateLoggingState()
@@ -93,6 +98,14 @@ class DragonLogViewModel(
         fileTree?.filesLogsLevel = newLevel
         viewModelScope.launch {
             DebugSettingsStore.filesLogLevel.set(ctx, newLevel)
+        }
+    }
+
+    fun updateFilterTag(newTag: String) {
+        _filterTag.value = newTag
+        fileTree?.filterTag = newTag
+        viewModelScope.launch {
+            DebugSettingsStore.filterTag.set(ctx, newTag)
         }
     }
 

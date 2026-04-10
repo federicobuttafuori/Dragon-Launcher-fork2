@@ -15,14 +15,15 @@ import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.core.content.ContextCompat
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.logging.logD
-import org.elnix.dragonlauncher.logging.logE
-import org.elnix.dragonlauncher.logging.logI
 import org.elnix.dragonlauncher.common.serializables.AppModel
 import org.elnix.dragonlauncher.common.serializables.mapAppToSection
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.APPS_TAG
+import org.elnix.dragonlauncher.common.utils.Constants.Logging.ICONS_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.PM_COMPAT_TAG
 import org.elnix.dragonlauncher.common.utils.ImageUtils.loadDrawableAsBitmap
+import org.elnix.dragonlauncher.logging.logD
+import org.elnix.dragonlauncher.logging.logE
+import org.elnix.dragonlauncher.logging.logI
 
 class PackageManagerCompat(private val pm: PackageManager, private val ctx: Context) {
 
@@ -241,7 +242,7 @@ class PackageManagerCompat(private val pm: PackageManager, private val ctx: Cont
             appInfo.loadIcon(pm)
 
         } catch (e: Exception) {
-            logD(APPS_TAG) { e.toString() }
+            logE(ICONS_TAG, e) { "Error getting the app icon for $packageName, userId=$userId" }
             ContextCompat.getDrawable(ctx, R.drawable.ic_app_default)!!
         }
     }
@@ -309,6 +310,7 @@ fun loadShortcutIcon(
 
         return loadDrawableAsBitmap(drawable, 48, 48)
     } catch (e: Exception) {
+        logE(ICONS_TAG, e) { "Error getting the shortcut icon for $packageName" }
         e.printStackTrace()
     }
     return null

@@ -96,6 +96,12 @@ object DebugSettingsStore : MapSettingsStore() {
         allowedRange = 2..7
     )
 
+    val filterTag = Settings.string(
+        key = "filterTag",
+        dataStoreName = dataStoreName,
+        default = ""
+    )
+
     val showFps = Settings.boolean(
         key = "showFps",
         dataStoreName = dataStoreName,
@@ -118,6 +124,7 @@ object DebugSettingsStore : MapSettingsStore() {
             this.disableExtensionSignatureCheck,
             this.snackBarLogLevel,
             this.filesLogLevel,
-            this.showFps
+            this.showFps,
+            this.filterTag
         )
     }

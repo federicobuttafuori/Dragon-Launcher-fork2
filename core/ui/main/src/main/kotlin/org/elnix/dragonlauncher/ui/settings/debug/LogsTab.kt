@@ -31,6 +31,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -95,6 +96,9 @@ fun LogsTab(
     val enableLogging by dragonLogViewModel.isLoggingEnabled.collectAsState()
     val snackBarLogLevel by dragonLogViewModel.snackBarLogLevel.collectAsState()
     val filesLogLevel by dragonLogViewModel.filesLogsLevel.collectAsState()
+    val filterTag by dragonLogViewModel.filterTag.collectAsState()
+
+    var tempFilterTag by remember(filterTag) { mutableStateOf(filterTag) }
 
     var refreshTrigger by remember { mutableIntStateOf(0) }
     val logFiles by produceState(initialValue = emptyList(), ctx, refreshTrigger) {
@@ -279,6 +283,18 @@ fun LogsTab(
                         dragonLogViewModel.updateFilesLogLevel(it)
                     }
 
+                    TextField(
+                        value = tempFilterTag,
+                        onValueChange = {
+                          tempFilterTag = it
+                            dragonLogViewModel.updateFilterTag(it)
+                        },
+                        label = {
+                            Text("Filter tag")
+                        },
+                        colors = AppObjectsColors.outlinedTextFieldColors(),
+                        modifier = Modifier.fillMaxWidth(1f)
+                    )
 
                     DragonButton(
                         onClick = {

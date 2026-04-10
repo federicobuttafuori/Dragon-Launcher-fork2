@@ -780,7 +780,9 @@ class AppsViewModel(
                 null
             } ?: run {
                 isIconPack = false
-                pmCompat.getAppIcon(packageName, userId ?: 0, isPrivateProfile)
+                pmCompat.getAppIcon(packageName, userId ?: 0, isPrivateProfile).also {
+                    logD(ICONS_TAG) { "Drawable for ${app.iconCacheKey} got from pmCompat: $it" }
+                }
             }
 
 
@@ -791,13 +793,17 @@ class AppsViewModel(
             tint = _packTint.value.takeIf { isIconPack }
         )
 
+        logD(ICONS_TAG) { "Icons loaded for ${app.iconCacheKey}: $orig" }
+
         if (useOverrides) {
             _workspacesState.value.appOverrides[cacheKey]?.customIcon?.let { customIcon ->
                 return renderCustomIcon(
                     orig = orig,
                     customIcon = customIcon,
                     sizePx = sizePx
-                )
+                ).also {
+                    logD(ICONS_TAG) { "Custom Icon rendered for ${app.iconCacheKey}: $orig" }
+                }
             }
         }
 
@@ -814,12 +820,10 @@ class AppsViewModel(
      * @param point which point's icon to load
      */
     fun reloadPointIcon(point: SwipePointSerializable) {
-        val id = point.id
-
         scope.launch(Dispatchers.IO) {
             val bmp = loadPointIcon(point)
 
-            iconCache.put(id, bmp)
+            iconCache.put(point.id, bmp)
             _iconsTrigger.update { it + 1 }
         }
     }
@@ -902,6 +906,8 @@ class AppsViewModel(
             }.getOrNull() ?: return@forEach
 
             iconCache.put(app.iconCacheKey.cacheKey, bitmap)
+            logD(ICONS_TAG) { "Put ${app.iconCacheKey} into the iconCache" }
+
         }
         _iconsTrigger.update { it + 1 }
     }

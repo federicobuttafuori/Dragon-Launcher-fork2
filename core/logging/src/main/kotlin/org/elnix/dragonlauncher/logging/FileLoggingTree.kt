@@ -23,6 +23,7 @@ class FileLoggingTree(
 
     var snackBarLogLevel = 7 // No Logging
     var filesLogsLevel = Log.DEBUG
+    var filterTag: String = ""
 
     private val logDir = File(ctx.filesDir, "logs").apply { if (!exists()) mkdirs() }
     private val logQueue = ConcurrentLinkedQueue<String>()
@@ -51,6 +52,16 @@ class FileLoggingTree(
     }
 
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+
+        if (filterTag.isNotEmpty()) {
+            val tagContainsFilterTag = tag?.contains(filterTag, ignoreCase = true) == true
+            val messageContainsFilterTag = message.contains(filterTag, ignoreCase = true)
+
+            if (!(tagContainsFilterTag || messageContainsFilterTag)) {
+                return
+            }
+        }
+
         if (priority >= snackBarLogLevel) {
             onHighPriorityLog(priority,message)
         }
