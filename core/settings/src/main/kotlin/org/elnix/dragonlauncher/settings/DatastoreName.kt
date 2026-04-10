@@ -3,6 +3,7 @@ package org.elnix.dragonlauncher.settings
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import org.elnix.dragonlauncher.settings.DataStoreName.ANGLE_LINE
 import org.elnix.dragonlauncher.settings.DataStoreName.BACKUP
@@ -162,4 +163,15 @@ internal fun Context.resolveDataStore(name: DatastoreProvider): DataStore<Prefer
         HOLD_TO_ACTIVATE -> appCtx.holeToActivateDatastore
         else -> null
     } ?: error("Datastore not found")
+}
+
+
+
+suspend fun clearAllData(ctx: Context) {
+    DataStoreName.entries.forEach { dataStoreName ->
+        val datastore = ctx.resolveDataStore(dataStoreName)
+        datastore.edit { preferences ->
+            preferences.clear()
+        }
+    }
 }

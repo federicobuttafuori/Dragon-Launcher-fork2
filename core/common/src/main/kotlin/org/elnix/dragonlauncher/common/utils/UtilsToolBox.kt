@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Process
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import kotlinx.coroutines.delay
 import org.elnix.dragonlauncher.common.utils.Constants.PackageNameLists.systemLaunchers
@@ -104,13 +105,9 @@ fun hasUsageStatsPermission(ctx: Context): Boolean {
 }
 
 
-
-//fun restartApp(ctx: Context) {
-//    val intent = ctx.packageManager.getLaunchIntentForPackage(ctx.packageName)?.apply {
-//        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-//    } ?: return
-//    ctx.startActivity(intent)
-//}
+fun closeApp(activity: ComponentActivity) {
+    activity.finishAffinity()
+}
 
 suspend fun waitASec() {
     delay(1000L)

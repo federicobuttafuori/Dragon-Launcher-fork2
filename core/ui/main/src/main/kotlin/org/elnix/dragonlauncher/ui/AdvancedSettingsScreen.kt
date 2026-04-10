@@ -5,8 +5,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import android.system.Os.kill
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -51,7 +51,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.base.ColorUtils.alphaMultiplier
 import org.elnix.dragonlauncher.common.R
@@ -66,12 +65,13 @@ import org.elnix.dragonlauncher.common.utils.Constants.URLs.GITHUB_REPO_RELEASES
 import org.elnix.dragonlauncher.common.utils.Constants.URLs.MAILTO_LINK
 import org.elnix.dragonlauncher.common.utils.Constants.URLs.REDDIT_LINK
 import org.elnix.dragonlauncher.common.utils.Constants.URLs.WEBLATE_LINK
+import org.elnix.dragonlauncher.common.utils.closeApp
 import org.elnix.dragonlauncher.common.utils.copyToClipboard
 import org.elnix.dragonlauncher.common.utils.getVersionCode
 import org.elnix.dragonlauncher.common.utils.isBetaVersion
 import org.elnix.dragonlauncher.common.utils.openUrl
 import org.elnix.dragonlauncher.common.utils.showToast
-import org.elnix.dragonlauncher.settings.SettingsStoreRegistry
+import org.elnix.dragonlauncher.settings.clearAllData
 import org.elnix.dragonlauncher.settings.stores.DebugSettingsStore
 import org.elnix.dragonlauncher.settings.stores.PrivateSettingsStore
 import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
@@ -120,19 +120,8 @@ fun AdvancedSettingsScreen(
         resetText = stringResource(R.string.every_setting_will_return_to_its_default_state_this_cannot_be_undone_the_app_will_kill_itself),
         onReset = {
             scope.launch {
-                // Reset all stores, one by one, using their defined resetAll functions
-                SettingsStoreRegistry.byName.entries.filter {
-                    it.value != PrivateSettingsStore
-                }.forEach {
-                    it.value.resetAll(ctx)
-                }
-
-                // Small delay to allow the default apps to load before initializing
-                delay(200)
-                PrivateSettingsStore.resetAll(ctx)
-
-                /* Kill App to also reset viewModels and caches */
-                kill(9, 9)
+                clearAllData(ctx)
+                closeApp(ctx as ComponentActivity)
             }
         },
     ) {
