@@ -805,11 +805,6 @@ class AppsViewModel(
     }
 
 
-    /* ──────────────────────────────────────────────────  */
-
-    private val _iconsVersion = MutableStateFlow(0)
-    val iconsVersion = _iconsVersion
-
 
     /* ───────────── Reload Functions ───────────── */
 
@@ -826,7 +821,6 @@ class AppsViewModel(
 
             iconCache.put(id, bmp)
             _iconsTrigger.update { it + 1 }
-            _iconsVersion.value++
         }
     }
 
@@ -851,12 +845,13 @@ class AppsViewModel(
 
             iconCache.put(app.iconCacheKey.cacheKey, icon)
 
-            if (!app.isWorkProfile && !app.isPrivateProfile) {
-                iconCache.put(app.iconCacheKey.cacheKey, icon)
-            }
+//            if (!app.isWorkProfile && !app.isPrivateProfile) {
+//                iconCache.put(app.iconCacheKey.cacheKey, icon)
+//            }
+
+            logD(ICONS_TAG) { "Put ${app.iconCacheKey} into the iconCache" }
 
             _iconsTrigger.update { it + 1 }
-            _iconsVersion.value++
         }
     }
 
@@ -909,7 +904,6 @@ class AppsViewModel(
             iconCache.put(app.iconCacheKey.cacheKey, bitmap)
         }
         _iconsTrigger.update { it + 1 }
-        _iconsVersion.value++
     }
 
 
