@@ -80,8 +80,6 @@ import org.elnix.dragonlauncher.ui.base.asStateNull
 import org.elnix.dragonlauncher.ui.base.modifiers.conditional
 import org.elnix.dragonlauncher.ui.components.burger.BurgerAction
 import org.elnix.dragonlauncher.ui.components.burger.BurgerListAction
-import org.elnix.dragonlauncher.ui.dragon.settings.SettingsColorPicker
-import org.elnix.dragonlauncher.ui.dragon.settings.SettingsSwitchRow
 import org.elnix.dragonlauncher.ui.dragon.colors.ColorPickerRow
 import org.elnix.dragonlauncher.ui.dragon.components.DragonButton
 import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
@@ -92,6 +90,8 @@ import org.elnix.dragonlauncher.ui.dragon.expandable.ExpandableSectionState
 import org.elnix.dragonlauncher.ui.dragon.expandable.rememberExpandableSection
 import org.elnix.dragonlauncher.ui.dragon.generic.MultiSelectConnectedButtonRow
 import org.elnix.dragonlauncher.ui.dragon.generic.ShowLabels
+import org.elnix.dragonlauncher.ui.dragon.settings.SettingsColorPicker
+import org.elnix.dragonlauncher.ui.dragon.settings.SettingsSwitchRow
 import org.elnix.dragonlauncher.ui.dragon.text.AutoResizeableText
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
 
@@ -405,6 +405,10 @@ fun ColorSelectorTab(
     val openRecentAppsColor by ColorSettingsStore.openRecentAppsColor.asStateNull()
     val openCircleNest by ColorSettingsStore.openCircleNestColor.asStateNull()
     val goParentCircle by ColorSettingsStore.goParentNestColor.asStateNull()
+    val toggleBluetooth by ColorSettingsStore.toggleBluetooth.asStateNull()
+    val toggleData by ColorSettingsStore.toggleData.asStateNull()
+    val toggleWifi by ColorSettingsStore.toggleWifi.asStateNull()
+    val runAdbCommand by ColorSettingsStore.runAdbCommand.asStateNull()
 
     val selectedDefaultTheme by ColorModesSettingsStore.defaultTheme.asState()
 
@@ -825,6 +829,40 @@ fun ColorSelectorTab(
                                             label = stringResource(R.string.go_parent_nest_color)
                                         )
                                     }
+
+                                    item {
+                                        SettingsColorPicker(
+                                            settingObject = ColorSettingsStore.toggleWifi,
+                                            defaultColor = toggleWifi.definedOrNull() ?: DefaultExtraColors.toggleWifi,
+                                            label = stringResource(R.string.toggle_wifi)
+                                        )
+                                    }
+
+                                    item {
+                                        SettingsColorPicker(
+                                            settingObject = ColorSettingsStore.toggleBluetooth,
+                                            defaultColor = toggleBluetooth.definedOrNull() ?: DefaultExtraColors.toggleBluetooth,
+                                            label = stringResource(R.string.toggle_bluetooth)
+                                        )
+                                    }
+
+
+                                    item {
+                                        SettingsColorPicker(
+                                            settingObject = ColorSettingsStore.toggleData,
+                                            defaultColor = toggleData.definedOrNull() ?: DefaultExtraColors.toggleData,
+                                            label = stringResource(R.string.toggle_mobile_data)
+                                        )
+                                    }
+
+
+                                    item {
+                                        SettingsColorPicker(
+                                            settingObject = ColorSettingsStore.runAdbCommand,
+                                            defaultColor = runAdbCommand.definedOrNull() ?: DefaultExtraColors.runAdbCommand,
+                                            label = stringResource(R.string.run_adb_command)
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -898,15 +936,17 @@ fun ColorSelectorTab(
                     UserValidation(
                         title = stringResource(R.string.exit_test_mode),
                         message = stringResource(R.string.exit_test_mode_message),
+                        validateText = stringResource(R.string.test_mode_validate),
+                        cancelText = stringResource(R.string.test_mode_cancel),
                         onDismiss = {
                             scope.launch {
+                                ColorSettingsStore.restoreColors(ctx)
                                 ColorModesSettingsStore.colorTestMode.set(ctx, false)
                                 showExitTestValidation = false
                             }
                         },
                         onValidate = {
                             scope.launch {
-                                ColorSettingsStore.restoreColors(ctx)
                                 ColorModesSettingsStore.colorTestMode.set(ctx, false)
                                 showExitTestValidation = false
                             }
