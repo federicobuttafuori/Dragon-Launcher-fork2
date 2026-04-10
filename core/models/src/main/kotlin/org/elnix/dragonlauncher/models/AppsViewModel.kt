@@ -851,7 +851,7 @@ class AppsViewModel(
             iconCache.put(app.iconCacheKey.cacheKey, icon)
 
             if (!app.isWorkProfile && !app.isPrivateProfile) {
-                iconCache.put(app.packageName, icon)
+                iconCache.put(app.iconCacheKey.cacheKey, icon)
             }
 
             _iconsTrigger.update { it + 1 }
