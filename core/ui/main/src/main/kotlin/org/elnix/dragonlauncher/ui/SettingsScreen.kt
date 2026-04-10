@@ -166,7 +166,7 @@ fun SettingsScreen(
 
     val scope = rememberCoroutineScope()
 
-    val iconsVersion by appsViewModel.iconsVersion.collectAsState()
+    val iconsVersion by appsViewModel.iconsTrigger.collectAsState()
 
     val backgroundColor = MaterialTheme.colorScheme.background
     val primaryColor = MaterialTheme.colorScheme.primary
