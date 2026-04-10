@@ -116,6 +116,7 @@ class AppsViewModel(
     }
 
     private val _iconsTrigger = MutableStateFlow(0)
+    val iconsTrigger = _iconsTrigger.asStateFlow()
 
     /**
      * Reactive access to icons.
