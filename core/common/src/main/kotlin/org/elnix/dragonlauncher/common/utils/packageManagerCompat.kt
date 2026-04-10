@@ -285,10 +285,16 @@ fun launchShortcut(ctx: Context, pkg: String, id: String) {
     }
 }
 
+/**
+ * Renders the shortcut icon at [widthPx]×[heightPx] so callers (e.g. large floating apps)
+ * are not stuck upscaling a tiny 48×48 raster.
+ */
 fun loadShortcutIcon(
     ctx: Context,
     packageName: String,
-    shortcutId: String
+    shortcutId: String,
+    widthPx: Int = 48,
+    heightPx: Int = 48
 ): ImageBitmap? {
     try {
         val launcherApps = ctx.getSystemService(LauncherApps::class.java) ?: return null
@@ -305,9 +311,12 @@ fun loadShortcutIcon(
         val shortcuts = launcherApps.getShortcuts(query, user) ?: return null
         val shortcut = shortcuts.firstOrNull { it.id == shortcutId } ?: return null
 
-        val drawable = launcherApps.getShortcutIconDrawable(shortcut, 0) ?: return null
+        val densityDpi = ctx.resources.displayMetrics.densityDpi
+        val drawable = launcherApps.getShortcutIconDrawable(shortcut, densityDpi) ?: return null
 
-        return loadDrawableAsBitmap(drawable, 48, 48)
+        val w = widthPx.coerceAtLeast(1)
+        val h = heightPx.coerceAtLeast(1)
+        return loadDrawableAsBitmap(drawable, w, h)
     } catch (e: Exception) {
         e.printStackTrace()
     }
