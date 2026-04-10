@@ -264,7 +264,8 @@
     <string name="open_burger_menu">बर्गर मेनू खोलें</string>
     <string name="selected_text">चयनित</string>
     <string name="unselected">इसे नहीं चुना जाता</string>
-    <string name="individual_options">व्यक्तिगत विकल्प</string>
+    <string name="general_style">सामान्य शैली</string>
+    <string name="individual_style">व्यक्तिगत शैली</string>
     <string name="inner_padding">भीतरी गद्दी</string>
     <string name="plain_color">सादा रंग</string>
     <string name="tint">टिंट</string>

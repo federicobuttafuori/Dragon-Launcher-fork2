@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -41,6 +42,8 @@ import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.NESTS_TAG
 import org.elnix.dragonlauncher.common.utils.UiCircle
 import org.elnix.dragonlauncher.common.utils.circles.computePointPosition
+import org.elnix.dragonlauncher.common.utils.circles.scaleDragDistances
+import org.elnix.dragonlauncher.common.utils.circles.uiCirclesFromScaledDragDistances
 import org.elnix.dragonlauncher.common.utils.performCustomHaptic
 import org.elnix.dragonlauncher.common.utils.resolveShape
 import org.elnix.dragonlauncher.settings.stores.AngleLineSettingsStore
@@ -56,11 +59,14 @@ import org.elnix.dragonlauncher.ui.helpers.nests.actionsInCircle
 import org.elnix.dragonlauncher.ui.helpers.nests.circlesSettingsOverlay
 import org.elnix.dragonlauncher.ui.remembers.rememberSwipeDefaultParams
 import org.elnix.dragonlauncher.ui.composition.LocalAngleLineObject
+import org.elnix.dragonlauncher.ui.composition.LocalAppsViewModel
 import org.elnix.dragonlauncher.ui.composition.LocalEndLineObject
 import org.elnix.dragonlauncher.ui.composition.LocalLineObject
 import org.elnix.dragonlauncher.ui.composition.LocalNests
 import org.elnix.dragonlauncher.ui.composition.LocalPoints
 import org.elnix.dragonlauncher.ui.composition.LocalStartLineObject
+import org.elnix.dragonlauncher.ui.remembers.rememberCycleActionsController
+import org.elnix.dragonlauncher.ui.remembers.rememberLiveNestController
 import org.elnix.dragonlauncher.ui.remembers.rememberSweepAngle
 import kotlin.math.abs
 import kotlin.math.atan2
@@ -245,9 +251,77 @@ fun MainScreenOverlay(
     }
 
 
+    /*  ─────────────  Live Nest controller  ─────────────  */
+
+    val liveNest = rememberLiveNestController(
+        currentAction = currentAction,
+        isDragging = isDragging,
+        start = start,
+        current = current,
+        nests = nests,
+        points = points,
+        snapToOuterCircle = pointsActionSnapsToOuterCircle
+    )
+
+    // While Live Nest is active, null both so the main nest drawing block is skipped entirely —
+    // no circle, no highlight, no dynamic reaction to finger position.
+    if (liveNest.isActive) {
+        currentAction = null
+        hoveredPoint = null
+    }
+
+    /*  ─────────────  Cycle Actions controller  ─────────────  */
+
+    // currentAction is null when Live Nest is active, which pauses the cycle timer automatically.
+    val cycleActions = rememberCycleActionsController(
+        currentAction = currentAction,
+        isDragging = isDragging,
+        ctx = ctx,
+        disableHapticFeedback = disableHapticFeedback
+    )
+
+    // When a non-base cycle stage is active, substitute the stage's action in the preview point
+    // so actionsInCircle and AppPreviewTitle reflect the action that will fire on release.
+    val displayPoint = if (cycleActions.currentStageAction != null && hoveredPoint != null) {
+        hoveredPoint!!.copy(action = cycleActions.currentStageAction!!)
+    } else {
+        hoveredPoint
+    }
+
+    val appsViewModel = LocalAppsViewModel.current
+
+    /*  Icon bitmaps are keyed by point id; [actionsInCircle] / [AppPreviewTitle] read
+     *  icons[point.id]. Reload when the staged action changes so the cache matches
+     *  [displayPoint.action], then restore from persisted [points] on release / drift.  */
+    var lastHoveredSwipePointId by remember { mutableStateOf<String?>(null) }
+    SideEffect {
+        if (hoveredPoint != null) lastHoveredSwipePointId = hoveredPoint!!.id
+    }
+
+    LaunchedEffect(hoveredPoint?.id, cycleActions.currentStageIndex) {
+        if (!isDragging) return@LaunchedEffect
+        val hp = hoveredPoint ?: return@LaunchedEffect
+        if (hp.cycleActions.isNullOrEmpty()) return@LaunchedEffect
+        if (cycleActions.currentStageIndex == 0) return@LaunchedEffect
+        val dp = displayPoint ?: return@LaunchedEffect
+        appsViewModel.reloadPointIcon(dp)
+    }
+
+    LaunchedEffect(hoveredPoint?.id, isDragging) {
+        if (isDragging && hoveredPoint == null) {
+            lastHoveredSwipePointId?.let { id ->
+                points.find { it.id == id }
+                    ?.takeIf { !it.cycleActions.isNullOrEmpty() }
+                    ?.let { appsViewModel.reloadPointIcon(it) }
+            }
+            lastHoveredSwipePointId = null
+        }
+    }
+
+    // Main-nest haptic — suppressed while Live Nest is active (interaction is frozen).
     LaunchedEffect(hoveredPoint?.id) {
         hoveredPoint?.let { point ->
-            if (!disableHapticFeedback) {
+            if (!disableHapticFeedback && !liveNest.isActive) {
                 (point.hapticFeedback ?: haptics[targetCircle]
                 ?: defaultHapticFeedback(targetCircle)).let { customHaptic ->
                     performCustomHaptic(ctx, customHaptic)
@@ -256,10 +330,65 @@ fun MainScreenOverlay(
         }
     }
 
+    // Haptic feedback when the selected nested point changes — same resolution hierarchy
+    // as the main nest: point-level override → nest per-circle map → default by ring id.
+    LaunchedEffect(liveNest.nestedHit?.selectedPoint?.id) {
+        val nestedPoint = liveNest.nestedHit?.selectedPoint ?: return@LaunchedEffect
+        if (!disableHapticFeedback) {
+            val nestedTargetCircle = liveNest.nestedHit?.targetCircle ?: 0
+            val nestedHaptics = liveNest.nestedNest?.haptic ?: emptyMap()
+            val haptic = nestedPoint.hapticFeedback
+                ?: nestedHaptics[nestedTargetCircle]
+                ?: defaultHapticFeedback(nestedTargetCircle)
+            performCustomHaptic(ctx, haptic)
+        }
+    }
+
+    // Haptic feedback on Live Nest activation — double-pulse to signal "overlay opened".
+    LaunchedEffect(liveNest.isActive) {
+        if (liveNest.isActive && !disableHapticFeedback) {
+            performCustomHaptic(
+                ctx,
+                CustomHapticFeedbackSerializable(listOf(true to 30))
+            )
+        }
+    }
+
+    /*  ─────────────  Release / launch guard  ─────────────  */
+
     LaunchedEffect(isDragging) {
         if (!isDragging) {
-            if (currentAction != null) {
-                onLaunch?.invoke(currentAction!!)
+            // Reset icon cache to the persisted point (base action) after a staged cycle preview.
+            val hadAdvancedCycle = currentAction?.cycleActions?.isNotEmpty() == true &&
+                cycleActions.currentStageIndex > 0
+            if (hadAdvancedCycle) {
+                (hoveredPoint ?: currentAction)?.id?.let { pid ->
+                    points.find { it.id == pid }?.let { appsViewModel.reloadPointIcon(it) }
+                }
+            }
+            when {
+                liveNest.isActive -> {
+                    // Live Nest was open: resolve to nested point (Case A) or host (Case B)
+                    liveNest.resolveOnRelease()?.let { onLaunch?.invoke(it) }
+                    liveNest.clearAfterLaunch()
+                }
+                liveNest.suppressMainLaunch -> {
+                    // Abort happened this gesture (Cases C / F): fire nothing
+                    // suppressMainLaunch will be cleared on the next pointer-down
+                }
+                else -> {
+                    // Normal path — also handles Cycle Actions resolution when applicable.
+                    // resolveOnRelease() returns the extra-stage action, or null for base stage.
+                    if (currentAction != null) {
+                        val stageAction = cycleActions.resolveOnRelease()
+                        if (stageAction != null) {
+                            onLaunch?.invoke(currentAction!!.copy(action = stageAction))
+                        } else {
+                            onLaunch?.invoke(currentAction!!)
+                        }
+                        cycleActions.clear()
+                    }
+                }
             }
             hoveredPoint = null
             currentAction = null
@@ -413,7 +542,7 @@ fun MainScreenOverlay(
                     )
                 }
 
-                hoveredPoint?.let { point ->
+                displayPoint?.let { point ->
 
                     // same circle radii as SettingsScreen
                     val radius = dragRadii[targetCircle]!!.toFloat()
@@ -425,6 +554,33 @@ fun MainScreenOverlay(
                         radius = radius,
                         center = start
                     )
+
+                    /*  Semi-transparent Live Nest preview at the host point while swiping,
+                        before the hold timer opens the full overlay.  */
+                    val liveNestTargetId = point.liveNestTargetNestId
+                    if (liveNestTargetId != null && !liveNest.isActive) {
+                        val nestedNest = nests.firstOrNull { it.id == liveNestTargetId } ?: CircleNest()
+                        val nestScale = point.liveNestScale ?: 0.5f
+                        val scaledCircles = uiCirclesFromScaledDragDistances(
+                            scaleDragDistances(nestedNest.dragDistances, nestScale)
+                        )
+                        if (scaledCircles.isNotEmpty()) {
+                            drawIntoCanvas { canvas ->
+                                val bounds = Rect(0f, 0f, size.width, size.height)
+                                canvas.saveLayer(bounds, Paint().apply { alpha = 0.4f })
+                                circlesSettingsOverlay(
+                                    drawParams = drawParams,
+                                    center = end,
+                                    depth = 1,
+                                    circles = scaledCircles,
+                                    selectedPoint = null,
+                                    nestId = nestedNest.id,
+                                    preventBgErasing = true
+                                )
+                                canvas.restore()
+                            }
+                        }
+                    }
 
                     // If the line snaps, I draw it here once
                     if (linePreviewSnapToAction) {
@@ -509,15 +665,37 @@ fun MainScreenOverlay(
                         canvas.restore()
                     }
                 }
+
+                /*  ─────────────  Live Nest overlay layer  ─────────────  */
+
+                if (liveNest.isActive && liveNest.nestedNest != null && liveNest.liveNestCenter != null) {
+                    drawIntoCanvas { canvas ->
+                        val bounds = Rect(0f, 0f, size.width, size.height)
+                        canvas.saveLayer(bounds, Paint())
+
+                        circlesSettingsOverlay(
+                            drawParams = drawParams,
+                            center = liveNest.liveNestCenter,
+                            depth = 1,
+                            circles = liveNest.scaledUiCircles,
+                            selectedPoint = liveNest.nestedHit?.selectedPoint,
+                            nestId = liveNest.nestedNest!!.id
+                        )
+
+                        canvas.restore()
+                    }
+                }
             }
         }
     }
 
 
-    // Label on top of the screen to indicate the launching app
+    // Label on top of the screen: show the nested selected point while Live Nest is active,
+    // otherwise show the current display point (which reflects the active cycle stage, if any).
     if (showLaunchingAppLabel || showLaunchingAppIcon) {
+        val labelPoint = if (liveNest.isActive) liveNest.nestedHit?.selectedPoint else displayPoint
         AppPreviewTitle(
-            point = hoveredPoint,
+            point = labelPoint,
             topPadding = appLabelIconOverlayTopPadding.dp,
             labelSize = appLabelOverlaySize,
             iconSize = appIconOverlaySize,

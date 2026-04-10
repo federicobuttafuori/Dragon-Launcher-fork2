@@ -285,7 +285,8 @@
     <string name="open_burger_menu">Open Burger Menu</string>
     <string name="selected_text">Selected</string>
     <string name="unselected">Unselected</string>
-    <string name="individual_options">Individual Option</string>
+    <string name="general_style">General style</string>
+    <string name="individual_style">Individual style</string>
     <string name="inner_padding">Inner Padding</string>
     <string name="plain_color">Plain Color</string>
     <string name="tint">Tint</string>
@@ -860,5 +861,21 @@
     <string name="import_text">Import</string>
     <string name="user_theme">User theme %1$d</string>
     <string name="add_current_theme">Add current theme</string>
+
+    <string name="disable">Disable</string>
+
+    <!--  Live Nest  -->
+    <string name="live_nest">Live Nest</string>
+    <string name="live_nest_enabled">Live Nest enabled</string>
+    <string name="live_nest_disabled">Live Nest disabled</string>
+    <string name="live_nest_target_nest">Target Nest</string>
+    <string name="live_nest_hold_delay">Hold delay (ms)</string>
+    <string name="live_nest_scale">Nest scale</string>
+    <string name="cycle_actions">Cycle Actions</string>
+    <string name="hold_and_run">Hold &amp; Run</string>
+    <!--  Cycle Actions  -->
+    <string name="cycle_actions_add_stage">Add Stage</string>
+    <string name="cycle_actions_stage">Stage %1$d</string>
+    <string name="cycle_actions_delay">Hold delay (ms)</string>
 
 </resources>

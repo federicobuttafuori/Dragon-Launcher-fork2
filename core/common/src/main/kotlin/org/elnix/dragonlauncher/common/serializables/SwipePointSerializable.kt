@@ -5,6 +5,27 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable.OpenDragonLauncherSettings
 
+/*  ─────────────  Cycle Actions model  ─────────────  */
+
+/**
+ * One timed stage in a Cycle Actions sequence.
+ *
+ * Stage 0 is implicit (the point's base action, 0 ms). Stages 1..N are stored in
+ * [SwipePointSerializable.cycleActions] and evaluated continuously during a hold to
+ * determine which action fires on release.
+ *
+ * @param triggerTimeMs Milliseconds after finger-down at which this stage becomes current.
+ * @param action        Action executed on release while this stage is active.
+ * @param hapticFeedback Haptic pulse played once when transitioning into this stage.
+ *                      Null falls back to the point's own haptic setting.
+ */
+@Serializable
+data class CycleActionStage(
+    val triggerTimeMs: Int,
+    val action: SwipeActionSerializable,
+    val hapticFeedback: CustomHapticFeedbackSerializable? = null
+)
+
 /**
  * Serializable model representing a single swipe point on a radial / circular UI.
  *
@@ -109,7 +130,42 @@ data class SwipePointSerializable(
      * Shape of the selected border icon, default is a circle
      */
     @SerializedName("borderShapeSelected")
-    val borderShapeSelected: IconShape? = null
+    val borderShapeSelected: IconShape? = null,
+
+    /*  ─────────────  Live Nest configuration  ─────────────  */
+
+    /**
+     * Id of the [CircleNest] to render as a scaled overlay when this point is held.
+     * Null means Live Nest is disabled for this point.
+     */
+    @SerializedName("liveNestTargetNestId")
+    val liveNestTargetNestId: Int? = null,
+
+    /**
+     * How long (ms) the user must hold on this point before Live Nest activates.
+     * Null falls back to a sensible default (500 ms) defined in the overlay controller.
+     */
+    @SerializedName("liveNestPreviewDelayMs")
+    val liveNestPreviewDelayMs: Int? = null,
+
+    /**
+     * Scale factor applied to the Live Nest radii, range 0.3–1.0.
+     * Null defaults to 0.5 (half the normal nest size).
+     */
+    @SerializedName("liveNestScale")
+    val liveNestScale: Float? = null,
+
+    /*  ─────────────  Cycle Actions configuration  ─────────────  */
+
+    /**
+     * Ordered list of extra timed stages for Cycle Actions.
+     * Null means Cycle Actions is disabled for this point.
+     *
+     * Stage 0 is always the point's own [action] (base, no threshold).
+     * Each entry here is Stage[1..N], activated after [CycleActionStage.triggerTimeMs] ms of hold.
+     */
+    @SerializedName("cycleActions")
+    val cycleActions: List<CycleActionStage>? = null
 ) {
 
 //    fun toShortString(): String =
