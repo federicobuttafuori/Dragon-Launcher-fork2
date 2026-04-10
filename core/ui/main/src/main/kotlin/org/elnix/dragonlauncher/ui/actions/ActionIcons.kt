@@ -14,9 +14,11 @@ import org.elnix.dragonlauncher.base.theme.LocalExtraColors
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.AppModel
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
+import org.elnix.dragonlauncher.common.utils.Constants.Logging.ICONS_TAG
 import org.elnix.dragonlauncher.common.utils.ImageUtils.createUntintedBitmap
 import org.elnix.dragonlauncher.common.utils.ImageUtils.loadDrawableResAsBitmap
 import org.elnix.dragonlauncher.common.utils.PlatformShape
+import org.elnix.dragonlauncher.logging.logW
 import org.elnix.dragonlauncher.ui.composition.LocalIcons
 
 @Composable
@@ -30,6 +32,7 @@ fun appIcon(
     return if (cached != null) {
         BitmapPainter(cached)
     } else {
+        logW(ICONS_TAG) { "Failed to get icon for ${app.packageName}, unknown reason\nHere's the complete icons list:\n$icons" }
         painterResource(R.drawable.ic_app_default)
     }
 }
