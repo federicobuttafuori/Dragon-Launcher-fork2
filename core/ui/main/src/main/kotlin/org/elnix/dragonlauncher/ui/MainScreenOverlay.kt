@@ -30,9 +30,11 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.base.theme.LocalExtraColors
 import org.elnix.dragonlauncher.common.serializables.CircleNest
 import org.elnix.dragonlauncher.common.serializables.CustomHapticFeedbackSerializable
@@ -279,15 +281,30 @@ fun MainScreenOverlay(
 
     // When a non-base cycle stage is active, substitute the stage's action in the preview point
     // so actionsInCircle and AppPreviewTitle reflect the action that will fire on release.
-    // customIcon is cleared whenever either the base or staged action is OpenCircleNest:
-    // actionsInCircle draws mini-nest rings only when customIcon is null.
+    // Loop Over reuses the last stage's action with a temporary label; customIcon is cleared
+    // whenever either the base or staged action is OpenCircleNest (mini-nest rings need null icon).
+    val loopOverLabel = stringResource(R.string.cycle_actions_loop_over)
     val displayPoint: SwipePointSerializable? = hoveredPoint?.let { hp ->
-        val staged = hp.cycleActions?.getOrNull(cycleActions.currentStageIndex - 1)?.action
-            ?: return@let hp
-        if (staged is SwipeActionSerializable.OpenCircleNest || hp.action is SwipeActionSerializable.OpenCircleNest)
-            hp.copy(action = staged, customIcon = null)
-        else
-            hp.copy(action = staged)
+        val ca = hp.cycleActions
+        if (ca.isNullOrEmpty()) return@let hp
+        when {
+            cycleActions.isLoopOverPhase -> {
+                val last = ca.last().action
+                if (last is SwipeActionSerializable.OpenCircleNest || hp.action is SwipeActionSerializable.OpenCircleNest)
+                    hp.copy(action = last, customIcon = null, customName = loopOverLabel)
+                else
+                    hp.copy(action = last, customName = loopOverLabel)
+            }
+            cycleActions.currentStageIndex > 0 -> {
+                val staged = ca.getOrNull(cycleActions.currentStageIndex - 1)?.action
+                    ?: return@let hp
+                if (staged is SwipeActionSerializable.OpenCircleNest || hp.action is SwipeActionSerializable.OpenCircleNest)
+                    hp.copy(action = staged, customIcon = null)
+                else
+                    hp.copy(action = staged)
+            }
+            else -> hp
+        }
     }
 
     val appsViewModel = LocalAppsViewModel.current
@@ -346,12 +363,26 @@ fun MainScreenOverlay(
 
     // Display point for the nested selection — applies the active Cycle Actions stage, if any.
     val liveNestDisplayPoint: SwipePointSerializable? = liveNestedCurrentAction?.let { np ->
-        val staged = np.cycleActions?.getOrNull(liveNestCycleActions.currentStageIndex - 1)?.action
-            ?: return@let np
-        if (staged is SwipeActionSerializable.OpenCircleNest || np.action is SwipeActionSerializable.OpenCircleNest)
-            np.copy(action = staged, customIcon = null)
-        else
-            np.copy(action = staged)
+        val ca = np.cycleActions
+        if (ca.isNullOrEmpty()) return@let np
+        when {
+            liveNestCycleActions.isLoopOverPhase -> {
+                val last = ca.last().action
+                if (last is SwipeActionSerializable.OpenCircleNest || np.action is SwipeActionSerializable.OpenCircleNest)
+                    np.copy(action = last, customIcon = null, customName = loopOverLabel)
+                else
+                    np.copy(action = last, customName = loopOverLabel)
+            }
+            liveNestCycleActions.currentStageIndex > 0 -> {
+                val staged = ca.getOrNull(liveNestCycleActions.currentStageIndex - 1)?.action
+                    ?: return@let np
+                if (staged is SwipeActionSerializable.OpenCircleNest || np.action is SwipeActionSerializable.OpenCircleNest)
+                    np.copy(action = staged, customIcon = null)
+                else
+                    np.copy(action = staged)
+            }
+            else -> np
+        }
     }
 
     /*  Icon bitmaps are keyed by point id; [actionsInCircle] / [AppPreviewTitle] read

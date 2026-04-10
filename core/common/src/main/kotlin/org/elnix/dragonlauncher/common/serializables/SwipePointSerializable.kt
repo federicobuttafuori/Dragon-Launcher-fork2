@@ -182,6 +182,21 @@ data class SwipePointSerializable(
     @SerializedName("cycleActions")
     val cycleActions: List<CycleActionStage>? = null,
 
+    /**
+     * When true, after the last configured stage the sequence enters a "Loop Over" pause, then
+     * restarts from the base stage (Stage 0). The pause length is [cycleActionsLoopDelayMs]
+     * (500 ms when null).
+     */
+    @SerializedName("cycleActionsLoopEnabled")
+    val cycleActionsLoopEnabled: Boolean = false,
+
+    /**
+     * Milliseconds to wait in the "Loop Over" phase before the cycle restarts.
+     * When null, the runtime uses 500 ms. Ignored when [cycleActionsLoopEnabled] is false.
+     */
+    @SerializedName("cycleActionsLoopDelayMs")
+    val cycleActionsLoopDelayMs: Int? = null,
+
     /*  ─────────────  Hold & Run configuration  ─────────────  */
 
     /**

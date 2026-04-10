@@ -400,7 +400,7 @@ fun EditPointDialog(
                             val targetNest = nests.find { it.id == editPoint.liveNestTargetNestId }
                             val nestLabel = targetNest?.name ?: targetNest?.let { "Nest ${it.id}" }
                             val currentDelay = editPoint.liveNestPreviewDelayMs ?: 500
-                            val currentScale = editPoint.liveNestScale ?: 0.5f
+                            val currentScale = editPoint.liveNestScale ?: 0.65f
 
                             DragonColumnGroup {
                                 if (!liveNestEnabled) {
@@ -476,7 +476,7 @@ fun EditPointDialog(
                                     /*  ─── Grace distance slider ───  */
                                     SliderWithLabel(
                                         label = stringResource(R.string.live_nest_grace_distance),
-                                        value = editPoint.liveNestGraceDistancePx ?: 0,
+                                        value = editPoint.liveNestGraceDistancePx ?: 50,
                                         valueRange = 0..300,
                                         color = MaterialTheme.colorScheme.primary,
                                         onReset = {
@@ -621,9 +621,15 @@ fun EditPointDialog(
                                                         onClick = {
                                                             val updated = cycleStages.toMutableList()
                                                                 .also { it.removeAt(index) }
-                                                            editPoint = editPoint.copy(
-                                                                cycleActions = if (updated.isEmpty()) null else updated
-                                                            )
+                                                            editPoint = if (updated.isEmpty()) {
+                                                                editPoint.copy(
+                                                                    cycleActions = null,
+                                                                    cycleActionsLoopEnabled = false,
+                                                                    cycleActionsLoopDelayMs = null
+                                                                )
+                                                            } else {
+                                                                editPoint.copy(cycleActions = updated)
+                                                            }
                                                         },
                                                         imageVector = Icons.Default.Close,
                                                         contentDescription = stringResource(R.string.disable)
@@ -703,11 +709,63 @@ fun EditPointDialog(
                                         )
                                     }
 
+                                    /*  ─── Loop (optional tail before cycle restarts) ───  */
+                                    if (cycleStages.isNotEmpty()) {
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.SpaceBetween
+                                        ) {
+                                            Column(modifier = Modifier.weight(1f)) {
+                                                Text(
+                                                    text = stringResource(R.string.cycle_actions_loop),
+                                                    style = MaterialTheme.typography.titleSmall,
+                                                    color = MaterialTheme.colorScheme.primary
+                                                )
+                                                Text(
+                                                    text = stringResource(R.string.cycle_actions_loop_summary),
+                                                    style = MaterialTheme.typography.bodySmall,
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                )
+                                            }
+                                            Switch(
+                                                checked = editPoint.cycleActionsLoopEnabled,
+                                                onCheckedChange = { on ->
+                                                    editPoint = editPoint.copy(
+                                                        cycleActionsLoopEnabled = on,
+                                                        cycleActionsLoopDelayMs = when {
+                                                            on -> editPoint.cycleActionsLoopDelayMs ?: 500
+                                                            else -> editPoint.cycleActionsLoopDelayMs
+                                                        }
+                                                    )
+                                                }
+                                            )
+                                        }
+                                        if (editPoint.cycleActionsLoopEnabled) {
+                                            val loopDelay = editPoint.cycleActionsLoopDelayMs ?: 500
+                                            SliderWithLabel(
+                                                label = stringResource(R.string.cycle_actions_loop_delay),
+                                                value = loopDelay,
+                                                valueRange = 50..5000,
+                                                color = MaterialTheme.colorScheme.primary,
+                                                onReset = {
+                                                    editPoint = editPoint.copy(cycleActionsLoopDelayMs = 500)
+                                                }
+                                            ) { ms ->
+                                                editPoint = editPoint.copy(cycleActionsLoopDelayMs = ms)
+                                            }
+                                        }
+                                    }
+
                                     /*  ─── Disable Cycle Actions ───  */
                                     if (editPoint.cycleActions != null) {
                                         OutlinedButton(
                                             onClick = {
-                                                editPoint = editPoint.copy(cycleActions = null)
+                                                editPoint = editPoint.copy(
+                                                    cycleActions = null,
+                                                    cycleActionsLoopEnabled = false,
+                                                    cycleActionsLoopDelayMs = null
+                                                )
                                             },
                                             modifier = Modifier.fillMaxWidth(),
                                             border = BorderStroke(1.dp, MaterialTheme.colorScheme.error),
@@ -1223,8 +1281,8 @@ fun EditPointDialog(
                 editPoint = editPoint.copy(
                     liveNestTargetNestId = selectedNest.id,
                     liveNestPreviewDelayMs = editPoint.liveNestPreviewDelayMs ?: 500,
-                    liveNestScale = editPoint.liveNestScale ?: 0.5f,
-                    liveNestMainNestOpacityPercent = editPoint.liveNestMainNestOpacityPercent
+                    liveNestScale = editPoint.liveNestScale ?: 0.65f,
+                    liveNestMainNestOpacityPercent = editPoint.liveNestMainNestOpacityPercent ?: 50
                 )
                 showLiveNestNestPicker = false
             }

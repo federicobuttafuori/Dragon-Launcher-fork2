@@ -119,7 +119,7 @@ fun rememberLiveNestController(
                 liveNestScale = liveNestScale,
                 points = points,
                 snapToOuterCircle = snapToOuterCircle,
-                graceDistancePx = (hostPoint?.liveNestGraceDistancePx ?: 0).toFloat()
+                graceDistancePx = (hostPoint?.liveNestGraceDistancePx ?: 50).toFloat()
             )
         }
     }
@@ -161,7 +161,7 @@ fun rememberLiveNestController(
 
         val targetNestId = currentAction.liveNestTargetNestId ?: return@LaunchedEffect
         val delayMs = (currentAction.liveNestPreviewDelayMs ?: 500).toLong()
-        val scale = currentAction.liveNestScale ?: 0.5f
+        val scale = currentAction.liveNestScale ?: 0.65f
 
         delay(delayMs)
 
