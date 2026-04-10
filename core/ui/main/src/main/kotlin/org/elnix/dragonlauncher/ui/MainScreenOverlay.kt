@@ -42,8 +42,6 @@ import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.NESTS_TAG
 import org.elnix.dragonlauncher.common.utils.UiCircle
 import org.elnix.dragonlauncher.common.utils.circles.computePointPosition
-import org.elnix.dragonlauncher.common.utils.circles.scaleDragDistances
-import org.elnix.dragonlauncher.common.utils.circles.uiCirclesFromScaledDragDistances
 import org.elnix.dragonlauncher.common.utils.performCustomHaptic
 import org.elnix.dragonlauncher.common.utils.resolveShape
 import org.elnix.dragonlauncher.settings.stores.AngleLineSettingsStore
@@ -554,33 +552,6 @@ fun MainScreenOverlay(
                         radius = radius,
                         center = start
                     )
-
-                    /*  Semi-transparent Live Nest preview at the host point while swiping,
-                        before the hold timer opens the full overlay.  */
-                    val liveNestTargetId = point.liveNestTargetNestId
-                    if (liveNestTargetId != null && !liveNest.isActive) {
-                        val nestedNest = nests.firstOrNull { it.id == liveNestTargetId } ?: CircleNest()
-                        val nestScale = point.liveNestScale ?: 0.5f
-                        val scaledCircles = uiCirclesFromScaledDragDistances(
-                            scaleDragDistances(nestedNest.dragDistances, nestScale)
-                        )
-                        if (scaledCircles.isNotEmpty()) {
-                            drawIntoCanvas { canvas ->
-                                val bounds = Rect(0f, 0f, size.width, size.height)
-                                canvas.saveLayer(bounds, Paint().apply { alpha = 0.4f })
-                                circlesSettingsOverlay(
-                                    drawParams = drawParams,
-                                    center = end,
-                                    depth = 1,
-                                    circles = scaledCircles,
-                                    selectedPoint = null,
-                                    nestId = nestedNest.id,
-                                    preventBgErasing = true
-                                )
-                                canvas.restore()
-                            }
-                        }
-                    }
 
                     // If the line snaps, I draw it here once
                     if (linePreviewSnapToAction) {

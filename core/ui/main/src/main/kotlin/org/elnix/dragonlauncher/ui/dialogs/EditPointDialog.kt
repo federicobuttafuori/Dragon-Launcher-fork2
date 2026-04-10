@@ -5,7 +5,6 @@ package org.elnix.dragonlauncher.ui.dialogs
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,8 +19,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Restore
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -36,9 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -46,7 +43,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.elnix.dragonlauncher.base.theme.LocalExtraColors
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.common.serializables.CircleNest
 import org.elnix.dragonlauncher.common.serializables.CycleActionStage
 import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
 import org.elnix.dragonlauncher.common.utils.circles.computePointPosition
@@ -72,6 +68,12 @@ import org.elnix.dragonlauncher.ui.composition.LocalDefaultPoint
 import org.elnix.dragonlauncher.ui.composition.LocalNests
 import org.elnix.dragonlauncher.ui.dragon.dialogs.CustomAlertDialog
 
+/** Which optional feature block is expanded in the edit dialog — at most one at a time. */
+private enum class PointFeaturePanel {
+    None,
+    LiveNest,
+    CycleActions
+}
 
 @Composable
 fun EditPointDialog(
@@ -94,15 +96,19 @@ fun EditPointDialog(
     var showSelectedShapePickerDialog by remember { mutableStateOf(false) }
     var showHapticFeedbackEditor by remember { mutableStateOf(false) }
 
-    /*  ─────────────  Live Nest dialog state  ─────────────  */
-    // Open the panel automatically if live nest is already configured on this point.
-    var showLiveNestPanel by remember { mutableStateOf(point.liveNestTargetNestId != null) }
+    /*  ─────────────  Live Nest / Cycle Actions: single expanded panel  ─────────────  */
+    var expandedFeaturePanel by remember(point.id) {
+        mutableStateOf(
+            when {
+                point.liveNestTargetNestId != null -> PointFeaturePanel.LiveNest
+                point.cycleActions != null -> PointFeaturePanel.CycleActions
+                else -> PointFeaturePanel.None
+            }
+        )
+    }
     var showLiveNestNestPicker by remember { mutableStateOf(false) }
 
-    /*  ─────────────  Cycle Actions dialog state  ─────────────  */
-    // Open the panel automatically if cycle actions are already configured on this point.
-    var showCycleActionsPanel by remember { mutableStateOf(point.cycleActions != null) }
-    // Index of the stage whose action / haptic is currently being edited (null = no editor open).
+    // Cycle Actions: index of the stage whose action / haptic is being edited (null = none).
     var editingCycleStageActionIndex by remember { mutableStateOf<Int?>(null) }
     var editingCycleStageHapticIndex by remember { mutableStateOf<Int?>(null) }
 
@@ -262,6 +268,9 @@ fun EditPointDialog(
                     /*  ─────────────  Feature row: Live Nest / Cycle Actions / Hold & Run  ─────────────  */
                     item {
                         val liveNestActive = editPoint.liveNestTargetNestId != null
+                        val cycleConfigured = editPoint.cycleActions != null
+                        val liveNestExpanded = expandedFeaturePanel == PointFeaturePanel.LiveNest
+                        val cycleExpanded = expandedFeaturePanel == PointFeaturePanel.CycleActions
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
@@ -272,10 +281,20 @@ fun EditPointDialog(
                                     .weight(1f)
                                     .clip(DragonShape)
                                     .background(
-                                        if (liveNestActive) MaterialTheme.colorScheme.primaryContainer
-                                        else MaterialTheme.colorScheme.surfaceVariant
+                                        when {
+                                            liveNestExpanded -> MaterialTheme.colorScheme.primaryContainer
+                                            liveNestActive -> MaterialTheme.colorScheme.secondaryContainer
+                                            else -> MaterialTheme.colorScheme.surfaceVariant
+                                        }
                                     )
-                                    .clickable { showLiveNestPanel = !showLiveNestPanel }
+                                    .clickable {
+                                        expandedFeaturePanel =
+                                            if (expandedFeaturePanel == PointFeaturePanel.LiveNest) {
+                                                PointFeaturePanel.None
+                                            } else {
+                                                PointFeaturePanel.LiveNest
+                                            }
+                                    }
                                     .padding(horizontal = 10.dp, vertical = 10.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.Center
@@ -283,8 +302,11 @@ fun EditPointDialog(
                                 Text(
                                     text = stringResource(R.string.live_nest),
                                     style = MaterialTheme.typography.labelMedium,
-                                    color = if (liveNestActive) MaterialTheme.colorScheme.onPrimaryContainer
-                                            else MaterialTheme.colorScheme.onSurface
+                                    color = when {
+                                        liveNestExpanded -> MaterialTheme.colorScheme.onPrimaryContainer
+                                        liveNestActive -> MaterialTheme.colorScheme.onSecondaryContainer
+                                        else -> MaterialTheme.colorScheme.onSurface
+                                    }
                                 )
                             }
 
@@ -294,11 +316,20 @@ fun EditPointDialog(
                                     .weight(1f)
                                     .clip(DragonShape)
                                     .background(
-                                        if (editPoint.cycleActions != null)
-                                            MaterialTheme.colorScheme.primaryContainer
-                                        else MaterialTheme.colorScheme.surfaceVariant
+                                        when {
+                                            cycleExpanded -> MaterialTheme.colorScheme.primaryContainer
+                                            cycleConfigured -> MaterialTheme.colorScheme.secondaryContainer
+                                            else -> MaterialTheme.colorScheme.surfaceVariant
+                                        }
                                     )
-                                    .clickable { showCycleActionsPanel = !showCycleActionsPanel }
+                                    .clickable {
+                                        expandedFeaturePanel =
+                                            if (expandedFeaturePanel == PointFeaturePanel.CycleActions) {
+                                                PointFeaturePanel.None
+                                            } else {
+                                                PointFeaturePanel.CycleActions
+                                            }
+                                    }
                                     .padding(horizontal = 10.dp, vertical = 10.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.Center
@@ -306,9 +337,11 @@ fun EditPointDialog(
                                 Text(
                                     text = stringResource(R.string.cycle_actions),
                                     style = MaterialTheme.typography.labelMedium,
-                                    color = if (editPoint.cycleActions != null)
-                                        MaterialTheme.colorScheme.onPrimaryContainer
-                                    else MaterialTheme.colorScheme.onSurface
+                                    color = when {
+                                        cycleExpanded -> MaterialTheme.colorScheme.onPrimaryContainer
+                                        cycleConfigured -> MaterialTheme.colorScheme.onSecondaryContainer
+                                        else -> MaterialTheme.colorScheme.onSurface
+                                    }
                                 )
                             }
 
@@ -338,7 +371,7 @@ fun EditPointDialog(
 
                     /*  ─────────────  Live Nest configuration panel  ─────────────  */
                     item {
-                        AnimatedVisibility(visible = showLiveNestPanel) {
+                        AnimatedVisibility(visible = expandedFeaturePanel == PointFeaturePanel.LiveNest) {
                             val liveNestEnabled = editPoint.liveNestTargetNestId != null
                             val targetNest = nests.find { it.id == editPoint.liveNestTargetNestId }
                             val nestLabel = targetNest?.name
@@ -349,59 +382,6 @@ fun EditPointDialog(
                             val currentScale = editPoint.liveNestScale ?: 0.5f
 
                             DragonColumnGroup {
-
-                                /*  ─── Context preview: host ring + point position + live nest  ───  */
-                                val hostNest = nests.find { it.id == (editPoint.nestId ?: 0) }
-                                    ?: CircleNest()
-                                val hostRadiusPx = hostNest.dragDistances[editPoint.circleNumber]
-                                    ?.toFloat() ?: 200f
-                                val ringColor = MaterialTheme.colorScheme.outline
-                                val pointDotColor = MaterialTheme.colorScheme.primary
-                                val liveNestColor = MaterialTheme.colorScheme.tertiary
-
-                                Canvas(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(150.dp)
-                                        .clip(DragonShape)
-                                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                                ) {
-                                    val displayRadius = size.minDimension / 2f * 0.75f
-                                    val radiusScale = displayRadius / hostRadiusPx
-                                    val canvasCenter = Offset(size.width / 2f, size.height / 2f)
-                                    val pointPos = computePointPosition(editPoint, displayRadius, canvasCenter)
-
-                                    // Host circle ring — the one the edited point lives on.
-                                    drawCircle(
-                                        color = ringColor,
-                                        radius = displayRadius,
-                                        center = canvasCenter,
-                                        style = Stroke(width = 3f)
-                                    )
-
-                                    // Dot marking the point's angular position on its ring.
-                                    drawCircle(
-                                        color = pointDotColor,
-                                        radius = 10f,
-                                        center = pointPos
-                                    )
-
-                                    // Scaled live nest rings (if a target nest is configured).
-                                    if (liveNestEnabled && targetNest != null) {
-                                        targetNest.dragDistances
-                                            .filter { it.key != -1 }
-                                            .values
-                                            .forEach { nestRadius ->
-                                                val scaledR = nestRadius * currentScale * radiusScale
-                                                drawCircle(
-                                                    color = liveNestColor.copy(alpha = 0.7f),
-                                                    radius = scaledR,
-                                                    center = pointPos,
-                                                    style = Stroke(width = 2f)
-                                                )
-                                            }
-                                    }
-                                }
 
                                 /*  ─── Nest picker row ───  */
                                 Row(
@@ -484,7 +464,7 @@ fun EditPointDialog(
 
                     /*  ─────────────  Cycle Actions configuration panel  ─────────────  */
                     item {
-                        AnimatedVisibility(visible = showCycleActionsPanel) {
+                        AnimatedVisibility(visible = expandedFeaturePanel == PointFeaturePanel.CycleActions) {
                             val cycleStages = editPoint.cycleActions ?: emptyList()
 
                             DragonColumnGroup {
@@ -498,21 +478,29 @@ fun EditPointDialog(
                                         val stageLabel = actionLabel(stage.action)
                                         val stageActionColor = actionColor(stage.action, extraColors)
 
-                                        ElevatedCard(
+                                        val stageCardColor =
+                                            if (index % 2 == 0) {
+                                                MaterialTheme.colorScheme.surfaceContainerHighest
+                                            } else {
+                                                MaterialTheme.colorScheme.surfaceContainerHigh
+                                            }
+
+                                        OutlinedCard(
                                             modifier = Modifier.fillMaxWidth(),
                                             shape = DragonShape,
-                                            elevation = CardDefaults.elevatedCardElevation(
-                                                defaultElevation = 2.dp
+                                            border = BorderStroke(
+                                                1.dp,
+                                                MaterialTheme.colorScheme.outlineVariant
                                             ),
-                                            colors = CardDefaults.elevatedCardColors(
-                                                containerColor = MaterialTheme.colorScheme.surfaceVariant
+                                            colors = CardDefaults.outlinedCardColors(
+                                                containerColor = stageCardColor
                                             )
                                         ) {
                                             Column(
                                                 modifier = Modifier
                                                     .fillMaxWidth()
-                                                    .padding(horizontal = 12.dp, vertical = 10.dp),
-                                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                                                    .padding(horizontal = 14.dp, vertical = 12.dp),
+                                                verticalArrangement = Arrangement.spacedBy(10.dp)
                                             ) {
                                                 Text(
                                                     text = stringResource(
@@ -528,11 +516,8 @@ fun EditPointDialog(
                                                     modifier = Modifier
                                                         .fillMaxWidth()
                                                         .clip(DragonShape)
-                                                        .background(
-                                                            MaterialTheme.colorScheme.surface
-                                                        )
                                                         .clickable { editingCycleStageActionIndex = index }
-                                                        .padding(horizontal = 12.dp, vertical = 10.dp),
+                                                        .padding(vertical = 4.dp),
                                                     verticalAlignment = Alignment.CenterVertically,
                                                     horizontalArrangement = Arrangement.SpaceBetween
                                                 ) {
