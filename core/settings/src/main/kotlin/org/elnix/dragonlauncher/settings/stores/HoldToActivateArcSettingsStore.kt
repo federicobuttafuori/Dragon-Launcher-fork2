@@ -28,14 +28,14 @@ object HoldToActivateArcSettingsStore : MapSettingsStore() {
         key = "holdDelayBeforeStartingLongClickSettings",
         dataStoreName = dataStoreName,
         default = 500,
-        allowedRange = 200..2000
+        allowedRange = 0..2000
     )
 
     val longCLickSettingsDuration = Settings.int(
         key = "longCLickSettingsDuration",
         dataStoreName = dataStoreName,
         default = 1000,
-        allowedRange = 200..5000
+        allowedRange = 0..5000
     )
 
     val holdToActivateSettingsTolerance = Settings.float(

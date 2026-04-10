@@ -191,14 +191,14 @@ fun HoldToActivateArcTab(onBack: () -> Unit) {
                     setting = HoldToActivateArcSettingsStore.longCLickSettingsDuration,
                     title = stringResource(R.string.long_click_settings_duration),
                     description = stringResource(R.string.long_click_settings_duration_desc),
-                    valueRange = 200..5000
+                    valueRange = 0..5000
                 )
 
                 SettingsSlider(
                     setting = HoldToActivateArcSettingsStore.holdDelayBeforeStartingLongClickSettings,
                     title = stringResource(R.string.hold_delay_before_starting_long_click_settings),
                     description = stringResource(R.string.hold_delay_before_starting_long_click_settings_desc),
-                    valueRange = 200..2000
+                    valueRange = 0..2000
                 )
 
                 SettingsSlider(
