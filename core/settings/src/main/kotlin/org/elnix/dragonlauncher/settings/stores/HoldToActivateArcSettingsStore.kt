@@ -8,7 +8,7 @@ import org.elnix.dragonlauncher.settings.bases.Settings
 
 object HoldToActivateArcSettingsStore : MapSettingsStore() {
 
-    override val name: String = "Behavior"
+    override val name: String = "Hold to activate"
 
     override val dataStoreName = DataStoreName.HOLD_TO_ACTIVATE
 
