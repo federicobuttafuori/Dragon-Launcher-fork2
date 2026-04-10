@@ -41,7 +41,8 @@ import org.elnix.dragonlauncher.ui.dragon.components.ValidateCancelButtons
 fun UserValidation(
     title: String? = null,
     message: String?,
-    validateText: String = stringResource(R.string.ok),
+    validateText: String? = null,
+    cancelText: String? = null,
     doNotRemindMeAgain: (() -> Unit)? = null,
     titleIcon: ImageVector = Icons.Default.Warning,
     titleColor: Color = MaterialTheme.colorScheme.error,
@@ -58,6 +59,7 @@ fun UserValidation(
         confirmButton = {
             ValidateCancelButtons(
                 validateText = validateText,
+                cancelText = cancelText,
                 onCancel = onDismiss,
                 onConfirm = onValidate
             )
