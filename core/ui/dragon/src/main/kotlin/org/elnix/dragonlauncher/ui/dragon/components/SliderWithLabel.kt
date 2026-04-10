@@ -75,6 +75,7 @@ private fun commitEditText(
  * @param onReset Optional reset button callback
  * @param onDragStateChange Optional callback invoked with true on drag start
  *                          and false on drag end
+ * @param textCommitRange Range used when committing typed values; defaults to [valueRange].
  * @param onChange Callback invoked when slider value changes
  */
 @Composable
@@ -93,6 +94,7 @@ private fun SliderWithLabelInternal(
     allowTextEditValue: Boolean,
     onReset: (() -> Unit)?,
     onDragStateChange: ((Boolean) -> Unit)?,
+    textCommitRange: ClosedFloatingPointRange<Float>? = null,
     onChange: (Float) -> Unit
 ) {
     val displayColor = color.semiTransparentIfDisabled(enabled)
@@ -106,7 +108,7 @@ private fun SliderWithLabelInternal(
 
 
     fun editValue() {
-        commitEditText(editingText, valueRange, onDragStateChange, onChange)
+        commitEditText(editingText, textCommitRange ?: valueRange, onDragStateChange, onChange)
         focusManager.clearFocus()
     }
 
@@ -214,7 +216,8 @@ private fun SliderWithLabelInternal(
  * @param modifier Modifier applied to the slider container
  * @param label Optional label displayed above the slider
  * @param value Current integer value
- * @param valueRange Allowed integer range (inclusive)
+ * @param valueRange Allowed integer range (inclusive) for the slider thumb
+ * @param textInputValueRange Allowed range when committing a typed value; defaults to [valueRange]
  * @param color Primary color for slider and text
  * @param backgroundColor Color of the background of the slider
  * @param enabled Whether if the slider is interactable, slightly faded when disabled
@@ -230,6 +233,7 @@ fun SliderWithLabel(
     description: String? = null,
     value: Int,
     valueRange: IntRange,
+    textInputValueRange: IntRange = valueRange,
     enabled: Boolean = true,
     color: Color = MaterialTheme.colorScheme.primary,
     backgroundColor: Color = MaterialTheme.colorScheme.surface,
@@ -243,16 +247,22 @@ fun SliderWithLabel(
         valueRange.first.toFloat()..valueRange.last.toFloat()
     }
 
+    val textCommitFloatRange = remember(textInputValueRange) {
+        textInputValueRange.first.toFloat()..textInputValueRange.last.toFloat()
+    }
+
     val steps = remember(valueRange) {
         // Number of discrete selectable values minus endpoints
         (valueRange.last - valueRange.first - 1).coerceAtLeast(0)
     }
 
+    val sliderValue = value.coerceIn(valueRange)
+
     SliderWithLabelInternal(
         modifier = modifier,
         label = label,
         description = description,
-        value = value.toFloat(),
+        value = sliderValue.toFloat(),
         valueRange = floatRange,
         steps = steps,
         color = color,
@@ -262,7 +272,8 @@ fun SliderWithLabel(
         enabled = enabled,
         allowTextEditValue = allowTextEditValue,
         onReset = onReset,
-        onDragStateChange = onDragStateChange
+        onDragStateChange = onDragStateChange,
+        textCommitRange = textCommitFloatRange
     ) { floatValue ->
         onChange(floatValue.roundToInt())
     }

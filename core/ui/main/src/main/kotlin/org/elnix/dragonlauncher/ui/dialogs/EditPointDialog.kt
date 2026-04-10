@@ -455,7 +455,8 @@ fun EditPointDialog(
                                     SliderWithLabel(
                                         label = stringResource(R.string.live_nest_hold_delay),
                                         value = currentDelay,
-                                        valueRange = 100..2000,
+                                        valueRange = 0..3000,
+                                        textInputValueRange = 0..Int.MAX_VALUE,
                                         color = MaterialTheme.colorScheme.primary,
                                         onReset = {
                                             editPoint = editPoint.copy(liveNestPreviewDelayMs = null)
@@ -477,7 +478,8 @@ fun EditPointDialog(
                                     SliderWithLabel(
                                         label = stringResource(R.string.live_nest_grace_distance),
                                         value = editPoint.liveNestGraceDistancePx ?: 50,
-                                        valueRange = 0..300,
+                                        valueRange = 0..500,
+                                        textInputValueRange = 0..3000,
                                         color = MaterialTheme.colorScheme.primary,
                                         onReset = {
                                             editPoint = editPoint.copy(liveNestGraceDistancePx = null)
