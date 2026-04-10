@@ -108,7 +108,7 @@ fun rememberLiveNestController(
     // Use liveNestCenter (activation-time snapshot) as origin, not start.
     // This ensures the finger starts at center (dist≈0) instead of at the main-ring distance,
     // preventing an immediate out-of-bounds abort right after activation.
-    val liveNestHit: LiveNestHitResult? = remember(liveNestActive, liveNestCenter, current, nestedNest, liveNestScale, snapToOuterCircle) {
+    val liveNestHit: LiveNestHitResult? = remember(liveNestActive, liveNestCenter, current, nestedNest, liveNestScale, snapToOuterCircle, hostPoint) {
         if (!liveNestActive || liveNestCenter == null || current == null || nestedNest == null) {
             null
         } else {
@@ -118,7 +118,8 @@ fun rememberLiveNestController(
                 nestedNest = nestedNest!!,
                 liveNestScale = liveNestScale,
                 points = points,
-                snapToOuterCircle = snapToOuterCircle
+                snapToOuterCircle = snapToOuterCircle,
+                graceDistancePx = (hostPoint?.liveNestGraceDistancePx ?: 0).toFloat()
             )
         }
     }

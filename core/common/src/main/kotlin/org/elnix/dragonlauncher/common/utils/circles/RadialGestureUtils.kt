@@ -160,6 +160,8 @@ data class LiveNestHitResult(
  * @param liveNestScale Scale factor applied to all radii (0.3–1.0).
  * @param points All swipe points; filtered internally to [nestedNest].id.
  * @param snapToOuterCircle Same flag as [BehaviorSettingsStore.pointsActionSnapsToOuterCircle].
+ * @param graceDistancePx Extra tolerance (px) added beyond the outer ring before exit fires.
+ *   0 means strict bounds (default behaviour).
  */
 fun resolveLiveNestHit(
     center: Offset,
@@ -167,7 +169,8 @@ fun resolveLiveNestHit(
     nestedNest: CircleNest,
     liveNestScale: Float,
     points: List<SwipePointSerializable>,
-    snapToOuterCircle: Boolean
+    snapToOuterCircle: Boolean,
+    graceDistancePx: Float = 0f
 ): LiveNestHitResult {
     val scaledDistances = scaleDragDistances(nestedNest.dragDistances, liveNestScale)
     val outerRadius = outerRadiusPx(scaledDistances)
@@ -175,7 +178,7 @@ fun resolveLiveNestHit(
     val angle360 = angle360FromOffset(center, pointerPos)
 
     /*  ─── Bounds check (Case C / F) ───  */
-    if (outerRadius > 0f && dist > outerRadius) {
+    if (outerRadius > 0f && dist > outerRadius + graceDistancePx) {
         return LiveNestHitResult(
             targetCircle = -1,
             selectedPoint = null,

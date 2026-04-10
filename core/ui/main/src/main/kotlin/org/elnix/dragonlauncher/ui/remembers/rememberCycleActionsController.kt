@@ -113,17 +113,22 @@ fun rememberCycleActionsController(
     val resolveOnRelease: () -> SwipeActionSerializable? = remember(stages) {
         {
             val idx = stageIndexState.intValue
-            if (idx == 0 || stages.isNullOrEmpty()) null else stages[idx - 1].action
+            if (idx == 0 || stages.isNullOrEmpty() || idx > stages.size) null
+            else stages[idx - 1].action
         }
     }
 
     val clear: () -> Unit = remember { { stageIndexState.intValue = 0 } }
 
+    // Guard against the one-frame race where the timer has already advanced currentStageIndex
+    // beyond what the newly-recomposed (shorter) stages list can satisfy.
+    val safeStageIndex = if (!stages.isNullOrEmpty()) currentStageIndex.coerceAtMost(stages.size) else 0
+
     return CycleActionsState(
         isActive = isDragging && !stages.isNullOrEmpty(),
-        currentStageIndex = currentStageIndex,
-        currentStageAction = if (currentStageIndex > 0 && !stages.isNullOrEmpty())
-            stages[currentStageIndex - 1].action else null,
+        currentStageIndex = safeStageIndex,
+        currentStageAction = if (safeStageIndex > 0 && !stages.isNullOrEmpty())
+            stages[safeStageIndex - 1].action else null,
         resolveOnRelease = resolveOnRelease,
         clear = clear
     )

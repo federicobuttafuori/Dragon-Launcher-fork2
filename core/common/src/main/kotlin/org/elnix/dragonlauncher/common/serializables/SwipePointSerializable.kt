@@ -155,6 +155,21 @@ data class SwipePointSerializable(
     @SerializedName("liveNestScale")
     val liveNestScale: Float? = null,
 
+    /**
+     * Extra tolerance radius (px) added beyond the outermost Live Nest ring before an
+     * out-of-bounds exit is triggered. Prevents accidental dismissal when the finger
+     * drifts slightly outside the circle. Null / 0 means no grace (strict bounds).
+     */
+    @SerializedName("liveNestGraceDistancePx")
+    val liveNestGraceDistancePx: Int? = null,
+
+    /**
+     * When non-null and Live Nest is open, the main nest layer is drawn at this opacity (0–100).
+     * Null means the option is off (main nest stays fully opaque). Default when enabled is 50.
+     */
+    @SerializedName("liveNestMainNestOpacityPercent")
+    val liveNestMainNestOpacityPercent: Int? = null,
+
     /*  ─────────────  Cycle Actions configuration  ─────────────  */
 
     /**
@@ -165,7 +180,26 @@ data class SwipePointSerializable(
      * Each entry here is Stage[1..N], activated after [CycleActionStage.triggerTimeMs] ms of hold.
      */
     @SerializedName("cycleActions")
-    val cycleActions: List<CycleActionStage>? = null
+    val cycleActions: List<CycleActionStage>? = null,
+
+    /*  ─────────────  Hold & Run configuration  ─────────────  */
+
+    /**
+     * Milliseconds of continuous hold after which [action] fires automatically, without release.
+     * Null means Hold & Run is disabled for this point.
+     *
+     * When set, the gesture is consumed as soon as the delay elapses; releasing the finger
+     * afterwards does not trigger any additional launch.
+     */
+    @SerializedName("holdAndRunDelayMs")
+    val holdAndRunDelayMs: Int? = null,
+
+    /**
+     * When non-null, Hold & Run runs this action instead of the point’s main [action].
+     * Null means the same action as tap/release (default).
+     */
+    @SerializedName("holdAndRunAction")
+    val holdAndRunAction: SwipeActionSerializable? = null
 ) {
 
 //    fun toShortString(): String =

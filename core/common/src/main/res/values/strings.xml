@@ -871,8 +871,17 @@
     <string name="live_nest_target_nest">Target Nest</string>
     <string name="live_nest_hold_delay">Hold delay (ms)</string>
     <string name="live_nest_scale">Nest scale</string>
+    <string name="live_nest_pick_nest">Pick Nest</string>
+    <string name="live_nest_grace_distance">Grace distance (px)</string>
+    <string name="live_nest_dim_main_nest">Dim main nest while open</string>
+    <string name="live_nest_dim_main_nest_summary">Lowers main nest opacity when Live Nest is active so the overlay stands out.</string>
+    <string name="live_nest_main_nest_opacity">Main nest opacity (%)</string>
     <string name="cycle_actions">Cycle Actions</string>
     <string name="hold_and_run">Hold &amp; Run</string>
+    <string name="hold_and_run_delay">Hold before run (ms)</string>
+    <string name="hold_and_run_enable">Enable Hold &amp; Run</string>
+    <string name="hold_and_run_custom_action">Custom Hold &amp; Run action</string>
+    <string name="hold_and_run_custom_action_summary">Off: uses this point’s main action. On: pick a different action (e.g. another app).</string>
     <!--  Cycle Actions  -->
     <string name="cycle_actions_add_stage">Add Stage</string>
     <string name="cycle_actions_stage">Stage %1$d</string>

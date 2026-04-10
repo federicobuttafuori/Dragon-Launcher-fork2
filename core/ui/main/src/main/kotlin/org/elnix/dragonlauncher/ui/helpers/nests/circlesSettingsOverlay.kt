@@ -82,12 +82,17 @@ fun DrawScope.circlesSettingsOverlay(
                     center = center
                 )
 
+                // Use the selectedPoint snapshot for the selected point so any staged action
+                // from Cycle Actions is reflected visually (e.g. different nest or app icon).
+                val drawPoint = if (selectedPoint != null && p.id == selectedPoint.id)
+                    selectedPoint else p
+
                 actionsInCircle(
                     drawParams = drawParams,
 
                     center = newCenter,
                     depth = depth,
-                    point = p,
+                    point = drawPoint,
                     selected = selectedAll || (p.id == selectedPoint?.id),
                     preventBgErasing = preventBgErasing
                 )
