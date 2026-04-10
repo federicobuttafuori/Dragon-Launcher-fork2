@@ -64,6 +64,5 @@
     "longCLickSettingsDuration": 200,
     "holdToActivateSettingsTolerance": 43.096153,
     "holdToActivateArcCustomObject": "{\n    \"stroke\": 4.9102955,\n    \"glow\": {\n        \"radius\": 20.426828\n    },\n    \"rotation\": -1,\n    \"shape\": {\n        \"type\": \"org.elnix.dragonlauncher.common.serializables.IconShape.Pebble\"\n    },\n    \"size\": 120.25094,\n    \"eraseBackground\": false\n}"
-  },
-  "app_version": "3.0.0 (Wither) (49)"
+  }
 }
