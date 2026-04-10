@@ -85,6 +85,28 @@ internal fun getStringStrict(
 }
 
 
+//internal fun getJsonObjectStrict(
+//    raw: Any?,
+//    def: JSONObject
+//): JSONObject {
+//    return when (raw) {
+//        is JSONObject -> raw
+//        null -> def
+//        is String -> try {
+//            JSONObject(raw)
+//        } catch (e: Exception) {
+//            logE(BACKUP_TAG, e) { "Failed to decode item as JSONObject" }
+//            def
+//        }
+//        else -> try {
+//            JSONObject(raw.toString())
+//        } catch (e: Exception) {
+//            logE(BACKUP_TAG, e) { "Failed to decode item as JSONObject" }
+//            def
+//        }
+//    }
+//}
+
 internal fun getSwipeActionSerializableStrict(
     raw: Any?,
     def: SwipeActionSerializable

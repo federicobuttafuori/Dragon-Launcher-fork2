@@ -13,7 +13,7 @@ import org.elnix.dragonlauncher.common.serializables.IconShape
 import org.elnix.dragonlauncher.common.serializables.IconShapeGson
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.common.serializables.SwipeJson
-import org.elnix.dragonlauncher.common.utils.Constants
+import org.elnix.dragonlauncher.common.utils.Constants.Logging.BACKUP_TAG
 import org.elnix.dragonlauncher.logging.logI
 
 /**
@@ -150,6 +150,22 @@ internal object Settings {
             onChanged = onChange
         )
 
+//    fun jsonObject(
+//        key: String,
+//        dataStoreName: DatastoreProvider,
+//        default: JSONObject,
+//        onChange: (() -> Unit)? = null
+//    ): BaseSettingObject<JSONObject, String> =
+//        BaseSettingObject(
+//            key = key,
+//            dataStoreName = dataStoreName,
+//            default = default,
+//            preferenceKey = stringPreferencesKey(key),
+//            encode = { it.toString() },
+//            decode = { raw -> getJsonObjectStrict(raw, default) },
+//            onChanged = onChange
+//        )
+
     fun stringSet(
         key: String,
         dataStoreName: DatastoreProvider,
@@ -180,7 +196,7 @@ internal object Settings {
             encode = { list ->
 
                 val encoded = list.joinToString(",")
-                logI(Constants.Logging.BACKUP_TAG) { "Encoded: $encoded" }
+                logI(BACKUP_TAG) { "Encoded: $encoded" }
                 encoded
             },
             decode = { raw -> getStringListStrict(raw, default) },
