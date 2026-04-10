@@ -43,9 +43,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
 import kotlinx.coroutines.launch
-import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.base.ColorUtils.semiTransparentIfDisabled
 import org.elnix.dragonlauncher.base.ColorUtils.toHexWithAlpha
+import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.utils.copyToClipboard
 import org.elnix.dragonlauncher.common.utils.pasteClipboard
 import org.elnix.dragonlauncher.common.utils.showToast
@@ -53,14 +53,14 @@ import org.elnix.dragonlauncher.enumsui.ColorPickerMode
 import org.elnix.dragonlauncher.settings.stores.ColorModesSettingsStore
 import org.elnix.dragonlauncher.theme.AppObjectsColors
 import org.elnix.dragonlauncher.ui.base.asState
-import org.elnix.dragonlauncher.ui.dragon.components.ValidateCancelButtons
+import org.elnix.dragonlauncher.ui.base.modifiers.shapedClickable
 import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
 import org.elnix.dragonlauncher.ui.dragon.components.DragonRow
+import org.elnix.dragonlauncher.ui.dragon.components.SliderWithLabel
+import org.elnix.dragonlauncher.ui.dragon.components.ValidateCancelButtons
+import org.elnix.dragonlauncher.ui.dragon.dialogs.CustomAlertDialog
 import org.elnix.dragonlauncher.ui.dragon.generic.MultiSelectConnectedButtonRow
 import org.elnix.dragonlauncher.ui.dragon.generic.ShowLabels
-import org.elnix.dragonlauncher.ui.dragon.dialogs.CustomAlertDialog
-import org.elnix.dragonlauncher.ui.dragon.components.SliderWithLabel
-import org.elnix.dragonlauncher.ui.base.modifiers.shapedClickable
 
 @Composable
 fun ColorPickerRow(
@@ -72,7 +72,7 @@ fun ColorPickerRow(
     onColorPicked: (Color?) -> Unit
 ) {
     var showPicker by remember { mutableStateOf(false) }
-    var actualColor by remember { mutableStateOf(currentColor) }
+    var actualColor by remember(currentColor) { mutableStateOf(currentColor) }
 
     val modifier = if (showLabel) Modifier.fillMaxWidth() else Modifier.wrapContentWidth()
 

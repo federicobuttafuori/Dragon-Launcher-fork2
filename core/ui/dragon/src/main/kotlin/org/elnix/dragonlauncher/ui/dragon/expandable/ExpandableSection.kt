@@ -44,7 +44,7 @@ fun ExpandableSection(
         Animatable(0f)
     }
 
-    val backgroundColor = remember {
+    val backgroundColor = remember(expandedColor, collapsedColor) {
         androidx.compose.animation.Animatable(
             collapsedColor
         )
@@ -58,7 +58,7 @@ fun ExpandableSection(
     LaunchedEffect(expanded) {
         rotationDegrees.animateTo(if (expanded) 90f else 0f)
     }
-    LaunchedEffect(expanded) {
+    LaunchedEffect(expanded, expandedColor, collapsedColor) {
         backgroundColor.animateTo(if (expanded) expandedColor else collapsedColor)
     }
 
