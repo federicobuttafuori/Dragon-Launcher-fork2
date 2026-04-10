@@ -105,7 +105,7 @@ val allStores: Map<DatastoreProvider, BaseSettingsStore<*, *>>
     get() = SettingsStoreRegistry.byName
 
 val themeStores: Set<DataStoreName>
-    get() = setOf(COLOR_MODE, COLOR)
+    get() = setOf(UI, COLOR_MODE, COLOR, ANGLE_LINE, HOLD_TO_ACTIVATE)
 
 val backupableStores: Map<DatastoreProvider, BaseSettingsStore<*, *>>
     get() = SettingsStoreRegistry.byName
