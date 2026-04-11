@@ -16,8 +16,6 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.Density
 import androidx.core.content.res.ResourcesCompat
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -37,11 +35,11 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
+import kotlinx.serialization.json.Json
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.AppModel
 import org.elnix.dragonlauncher.common.serializables.AppOverride
 import org.elnix.dragonlauncher.common.serializables.CacheKey
-import org.elnix.dragonlauncher.common.serializables.CacheKeyAdapter
 import org.elnix.dragonlauncher.common.serializables.CustomIconSerializable
 import org.elnix.dragonlauncher.common.serializables.IconMapping
 import org.elnix.dragonlauncher.common.serializables.IconPackInfo
@@ -92,6 +90,10 @@ class AppsViewModel(
 
     private val _apps = MutableStateFlow<List<AppModel>>(emptyList())
     val allApps: StateFlow<List<AppModel>> = _apps.asStateFlow()
+
+    val allAppsSize: StateFlow<Int> = _apps
+        .map { it.size }
+        .stateIn(scope, SharingStarted.Lazily, allApps.value.size)
 
     private val _iconPacksList = MutableStateFlow<List<IconPackInfo>>(emptyList())
     val iconPacksList = _iconPacksList.asStateFlow()
@@ -157,12 +159,6 @@ class AppsViewModel(
      * Used to correctly dispatch the heavy background load, as long as I understand
      */
     private val iconSemaphore = Semaphore(4)
-
-
-    private val gson = GsonBuilder()
-        .registerTypeAdapter(CacheKey::class.java, CacheKeyAdapter())
-        .enableComplexMapKeySerialization()
-        .create()
 
 
     /* ───────────── Workspace things ───────────── */
@@ -361,16 +357,15 @@ class AppsViewModel(
 
                         val existingMap: MutableMap<String, Int?> =
                             if (existingJson.isNotBlankJson) mutableMapOf()
-                            else gson.fromJson(
-                                existingJson,
-                                object : TypeToken<MutableMap<String, Int?>>() {}.type
-                            )
+                            else {
+                                Json.decodeFromString<MutableMap<String, Int?>>(existingJson)
+                            }
 
                         assignments.forEach { (identity, userId) ->
                             existingMap[identity] = userId
                         }
 
-                        PrivateAppsSettingsStore.jsonSetting.set(ctx, gson.toJson(existingMap))
+                        PrivateAppsSettingsStore.jsonSetting.set(ctx, Json.encodeToString(existingMap))
                         logI(APPS_TAG) { "Persisted ${assignments.size} private app assignments" }
                     } catch (e: Exception) {
                         logE(APPS_TAG, e) { "Error persisting private package assignments" }
@@ -811,7 +806,6 @@ class AppsViewModel(
     }
 
 
-
     /* ───────────── Reload Functions ───────────── */
 
     /**
@@ -1157,15 +1151,12 @@ class AppsViewModel(
             val json = WorkspaceSettingsStore.getAll(ctx).toString()
             if (json.isBlank()) return@withContext
 
-            val type = object : TypeToken<WorkspaceState>() {}.type
-            val loadedState: WorkspaceState? = gson.fromJson(json, type)
-
-            val finalState = loadedState ?: WorkspaceState()
-            _workspacesState.value = finalState
+            val loadedState = Json.decodeFromString<WorkspaceState>(json)
+            _workspacesState.value = loadedState
 
             // Async reload of icons to not block the workspace state emission
             launch {
-                finalState.appOverrides.forEach { (iconCacheKey, override) ->
+                loadedState.appOverrides.forEach { (iconCacheKey, override) ->
                     val (packageName, userId) = iconCacheKey.splitCacheKey()
                     override.customIcon?.let { customIcon ->
                         reloadPointIcon(
@@ -1187,13 +1178,10 @@ class AppsViewModel(
 
         logW(WORKSPACES_TAG) { "Persisting the state: ${_workspacesState.value}" }
 
-        val json = gson.toJson(_workspacesState.value)
+        val json = Json.encodeToString(_workspacesState.value)
 
-        logW(WORKSPACES_TAG) { json }
-        WorkspaceSettingsStore.setAll(
-            ctx,
-            JSONObject(json)
-        )
+        logW(WORKSPACES_TAG) { "Encoded json workspace: $json" }
+        WorkspaceSettingsStore.setAll(ctx, JSONObject(json))
     }
 
     fun selectWorkspace(id: String) {

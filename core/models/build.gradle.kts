@@ -2,6 +2,7 @@ import com.android.build.api.dsl.LibraryExtension
 
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -53,6 +54,8 @@ dependencies {
     implementation(libs.gson)
 
     implementation(libs.androidx.datastore.preferences)
+
+    implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.androidx.ui.graphics)
     implementation(libs.timber)

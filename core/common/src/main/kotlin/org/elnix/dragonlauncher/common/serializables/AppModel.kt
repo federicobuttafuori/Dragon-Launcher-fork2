@@ -3,6 +3,7 @@ package org.elnix.dragonlauncher.common.serializables
 import android.content.pm.ApplicationInfo
 import androidx.compose.runtime.Immutable
 import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.WORKSPACES_TAG
 import org.elnix.dragonlauncher.logging.logE
 
@@ -62,8 +63,9 @@ fun CacheKey.splitCacheKey(): Pair<String, Int> {
     return Pair(cacheKey, 0)
 }
 
+@Serializable
 data class CacheKey (
-    @SerializedName("cacheKey") val cacheKey: String
+    val cacheKey: String
 )
 
 fun SwipeActionSerializable.LaunchApp.toAppModel() =
@@ -146,6 +148,7 @@ enum class WorkspaceType {
     CUSTOM
 }
 
+@Serializable
 data class Workspace(
     val id: String,
     val name: String,
@@ -155,7 +158,7 @@ data class Workspace(
     val enabled: Boolean
 )
 
-
+@Serializable
 data class AppOverride(
     val customName: String? = null,
     val customIcon: CustomIconSerializable? = null,
@@ -164,6 +167,7 @@ data class AppOverride(
 
 
 
+@Serializable
 data class WorkspaceState(
     val workspaces: List<Workspace> = defaultWorkspaces,
     val appOverrides: Map<CacheKey, AppOverride> = emptyMap(),
