@@ -38,7 +38,7 @@ import org.elnix.dragonlauncher.common.serializables.IconShape
  * @param initialMaxSize Maximum number of [Path] entries before LRU eviction kicks in.
  *   Updated dynamically via [updateMaxCacheSize] as the point count changes.
  */
-class DrawPathCache(initialMaxSize: Int = 64) {
+class DrawPathCache(initialMaxSize: Int) {
 
     private var maxSize = initialMaxSize
 

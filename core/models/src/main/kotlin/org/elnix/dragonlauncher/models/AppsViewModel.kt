@@ -91,10 +91,6 @@ class AppsViewModel(
     private val _apps = MutableStateFlow<List<AppModel>>(emptyList())
     val allApps: StateFlow<List<AppModel>> = _apps.asStateFlow()
 
-    val allAppsSize: StateFlow<Int> = _apps
-        .map { it.size }
-        .stateIn(scope, SharingStarted.Lazily, allApps.value.size)
-
     private val _iconPacksList = MutableStateFlow<List<IconPackInfo>>(emptyList())
     val iconPacksList = _iconPacksList.asStateFlow()
 
