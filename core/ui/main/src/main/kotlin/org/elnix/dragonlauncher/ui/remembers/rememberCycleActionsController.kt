@@ -121,7 +121,6 @@ fun rememberCycleActionsController(
             
             if (loopEnabled && cycleCount != lastCycleCount) {
                 lastCycleCount = cycleCount
-                lastFiredStageIndex = -1
             }
 
             val newIndex = {
@@ -132,12 +131,18 @@ fun rememberCycleActionsController(
             if (newIndex != currentStageIndex) {
                 currentStageIndex = newIndex
 
-                // Haptic feedback for stage transitions (1..N). 
-                // We reset lastFiredStageIndex on each loop wrap to ensure Stage 1 vibrates again.
-                if (!disableHapticFeedback && newIndex > lastFiredStageIndex) {
-                    val haptic = if (newIndex in 1..stages.size) {
-                        stages[newIndex - 1].hapticFeedback ?: defaultHapticFeedback(newIndex)
-                    } else null
+                // Haptic feedback for stage entries (1..N) and loop-wrap to Base (0).
+                if (!disableHapticFeedback && newIndex != lastFiredStageIndex) {
+                    val haptic = when {
+                        newIndex in 1..stages.size -> {
+                            stages[newIndex - 1].hapticFeedback ?: defaultHapticFeedback(newIndex)
+                        }
+                        newIndex == 0 && loopEnabled && lastFiredStageIndex == stages.size -> {
+                            // Light haptic when the loop wraps back to the base action.
+                            defaultHapticFeedback(-1)
+                        }
+                        else -> null
+                    }
                     
                     haptic?.let { performCustomHaptic(ctx, it) }
                     lastFiredStageIndex = newIndex

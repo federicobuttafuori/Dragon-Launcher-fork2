@@ -182,15 +182,29 @@ fun DrawScope.actionsInCircle(
             // 4. Icon — home overlay: single bitmap only. Settings / edit: optional cycle stack + bolt.
             if (showConfiguratorDecorations && !cycleStages.isNullOrEmpty()) {
                 val n = cycleStages.size
-                val stepPx = (intSize.width * 0.05f).toInt().coerceIn(2, 6)
+                val stepPx = (intSize.width * 0.08f).toInt().coerceIn(4, 14)
                 val cacheId = point.id
+                val shadowAlpha = 0.45f
+                val shadowShift = (stepPx / 5).coerceAtLeast(1)
+
                 for (i in n downTo 1) {
                     val bmp = icons[cycleLayerIconCacheKey(cacheId, i)] ?: continue
                     val layerAction = cycleStages[i - 1].action
                     val layerPoint = modelForCycle.copy(action = layerAction)
+                    val layerOffset = dstOffset + IntOffset(i * stepPx * 4, i * stepPx * 2)
+
+                    // 1. Layer shadow
                     drawImage(
                         image = bmp,
-                        dstOffset = dstOffset + IntOffset(i * stepPx, 0),
+                        dstOffset = layerOffset + IntOffset(shadowShift, shadowShift),
+                        dstSize = intSize,
+                        colorFilter = ColorFilter.tint(Color.Black.copy(alpha = shadowAlpha))
+                    )
+
+                    // 2. Layer icon
+                    drawImage(
+                        image = bmp,
+                        dstOffset = layerOffset,
                         dstSize = intSize,
                         colorFilter =
                             if (layerPoint.applyColorAction()) ColorFilter.tint(
@@ -199,8 +213,18 @@ fun DrawScope.actionsInCircle(
                             else null
                     )
                 }
+
                 val baseBmp = icons[cycleLayerIconCacheKey(cacheId, 0)] ?: icons[point.id]
                 if (baseBmp != null) {
+                    // 1. Base shadow
+                    drawImage(
+                        image = baseBmp,
+                        dstOffset = dstOffset + IntOffset(shadowShift, shadowShift),
+                        dstSize = intSize,
+                        colorFilter = ColorFilter.tint(Color.Black.copy(alpha = shadowAlpha))
+                    )
+
+                    // 2. Base icon
                     drawImage(
                         image = baseBmp,
                         dstOffset = dstOffset,

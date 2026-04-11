@@ -283,27 +283,19 @@ fun MainScreenOverlay(
     // so actionsInCircle and AppPreviewTitle reflect the action that will fire on release.
     // Loop Over reuses the last stage's action with a temporary label; customIcon is cleared
     // whenever either the base or staged action is OpenCircleNest (mini-nest rings need null icon).
-    val loopOverLabel = stringResource(R.string.cycle_actions_loop_over)
     val displayPoint: SwipePointSerializable? = hoveredPoint?.let { hp ->
         val ca = hp.cycleActions
         if (ca.isNullOrEmpty()) return@let hp
-        when {
-            cycleActions.isLoopOverPhase -> {
-                val last = ca.last().action
-                if (last is SwipeActionSerializable.OpenCircleNest || hp.action is SwipeActionSerializable.OpenCircleNest)
-                    hp.copy(action = last, customIcon = null, customName = loopOverLabel)
-                else
-                    hp.copy(action = last, customName = loopOverLabel)
-            }
-            cycleActions.currentStageIndex > 0 -> {
-                val staged = ca.getOrNull(cycleActions.currentStageIndex - 1)?.action
-                    ?: return@let hp
-                if (staged is SwipeActionSerializable.OpenCircleNest || hp.action is SwipeActionSerializable.OpenCircleNest)
-                    hp.copy(action = staged, customIcon = null)
-                else
-                    hp.copy(action = staged)
-            }
-            else -> hp
+        
+        val idx = cycleActions.currentStageIndex
+        if (idx > 0) {
+            val staged = ca.getOrNull(idx - 1)?.action ?: return@let hp
+            if (staged is SwipeActionSerializable.OpenCircleNest || hp.action is SwipeActionSerializable.OpenCircleNest)
+                hp.copy(action = staged, customIcon = null)
+            else
+                hp.copy(action = staged)
+        } else {
+            hp
         }
     }
 
@@ -365,23 +357,16 @@ fun MainScreenOverlay(
     val liveNestDisplayPoint: SwipePointSerializable? = liveNestedCurrentAction?.let { np ->
         val ca = np.cycleActions
         if (ca.isNullOrEmpty()) return@let np
-        when {
-            liveNestCycleActions.isLoopOverPhase -> {
-                val last = ca.last().action
-                if (last is SwipeActionSerializable.OpenCircleNest || np.action is SwipeActionSerializable.OpenCircleNest)
-                    np.copy(action = last, customIcon = null, customName = loopOverLabel)
-                else
-                    np.copy(action = last, customName = loopOverLabel)
-            }
-            liveNestCycleActions.currentStageIndex > 0 -> {
-                val staged = ca.getOrNull(liveNestCycleActions.currentStageIndex - 1)?.action
-                    ?: return@let np
-                if (staged is SwipeActionSerializable.OpenCircleNest || np.action is SwipeActionSerializable.OpenCircleNest)
-                    np.copy(action = staged, customIcon = null)
-                else
-                    np.copy(action = staged)
-            }
-            else -> np
+        
+        val idx = liveNestCycleActions.currentStageIndex
+        if (idx > 0) {
+            val staged = ca.getOrNull(idx - 1)?.action ?: return@let np
+            if (staged is SwipeActionSerializable.OpenCircleNest || np.action is SwipeActionSerializable.OpenCircleNest)
+                np.copy(action = staged, customIcon = null)
+            else
+                np.copy(action = staged)
+        } else {
+            np
         }
     }
 
@@ -397,7 +382,6 @@ fun MainScreenOverlay(
         if (!isDragging) return@LaunchedEffect
         val hp = hoveredPoint ?: return@LaunchedEffect
         if (hp.cycleActions.isNullOrEmpty()) return@LaunchedEffect
-        if (cycleActions.currentStageIndex == 0) return@LaunchedEffect
         val dp = displayPoint ?: return@LaunchedEffect
         appsViewModel.reloadPointIcon(dp)
     }
@@ -418,7 +402,6 @@ fun MainScreenOverlay(
         if (!isDragging || !liveNest.isActive) return@LaunchedEffect
         val np = liveNestedCurrentAction ?: return@LaunchedEffect
         if (np.cycleActions.isNullOrEmpty()) return@LaunchedEffect
-        if (liveNestCycleActions.currentStageIndex == 0) return@LaunchedEffect
         val dp = liveNestDisplayPoint ?: return@LaunchedEffect
         appsViewModel.reloadPointIcon(dp)
     }
@@ -450,6 +433,13 @@ fun MainScreenOverlay(
         }
     }
 
+    // Haptic when entering the "cancel zone" of the Live Nest (Case B).
+    LaunchedEffect(liveNest.nestedHit?.isInCancelZone) {
+        if (liveNest.isActive && liveNest.nestedHit?.isInCancelZone == true && !disableHapticFeedback) {
+            performCustomHaptic(ctx, defaultHapticFeedback(-1))
+        }
+    }
+
     // Haptic for inner Live Nest activation.
     LaunchedEffect(innerLiveNest.nestedHit?.selectedPoint?.id) {
         val hit = innerLiveNest.nestedHit ?: return@LaunchedEffect
@@ -461,6 +451,13 @@ fun MainScreenOverlay(
                 ?: nestedHaptics[nestedTargetCircle]
                 ?: defaultHapticFeedback(nestedTargetCircle)
             performCustomHaptic(ctx, haptic)
+        }
+    }
+
+    // Haptic when entering the "cancel zone" of the inner Live Nest.
+    LaunchedEffect(innerLiveNest.nestedHit?.isInCancelZone) {
+        if (innerLiveNest.isActive && innerLiveNest.nestedHit?.isInCancelZone == true && !disableHapticFeedback) {
+            performCustomHaptic(ctx, defaultHapticFeedback(-1))
         }
     }
 
