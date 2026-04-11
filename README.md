@@ -97,6 +97,8 @@ The reason is likely that Dragon asks for _sensitive permissions_ - normal, that
 * **No** data collection
 * Dragon Launcher has not even access to internet -> it cannot steal your data
 * No intrusive permissions requested for the app to work
+  - `android.permission.SYSTEM_ALERT_WINDOW` is used by the Wellbeing Feature, to display over other apps a popup telling the user when to stop using the app (social media or other)
+  - `android.permission.READ_PHONE_STATE` is used by the status bar to get info about the connectivity states, wifi, bluetooth, data... even hotspot.
 * Uses Accessibility permissions (optionally) to:
     1. Expand notifications panel (needed by android)
         - Uses accessibility to expand the notifications panel
