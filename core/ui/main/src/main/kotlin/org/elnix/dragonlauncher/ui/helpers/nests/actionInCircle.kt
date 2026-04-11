@@ -33,7 +33,9 @@ fun DrawScope.actionsInCircle(
     depth: Int,
     point: SwipePointSerializable,
     selected: Boolean,
-    preventBgErasing: Boolean = false
+    preventBgErasing: Boolean = false,
+    /** Cycle stack + Hold & Run bolt — only in settings / edit previews, not on the home overlay. */
+    showConfiguratorDecorations: Boolean = false,
 ) {
     val ctx = drawParams.ctx
     val nests = drawParams.nests
@@ -173,20 +175,36 @@ fun DrawScope.actionsInCircle(
             val colorAction = actionColor(point.action, extraColors)
 
             val persisted = drawParams.points.find { it.id == point.id } ?: point
-            val cycleStages = persisted.cycleActions
-            val stackKey0 = cycleLayerIconCacheKey(persisted.id, 0)
+            // Edit dialog passes live [point] state; nest list can lag until save.
+            val modelForCycle = if (showConfiguratorDecorations) point else persisted
+            val cycleStages = modelForCycle.cycleActions
 
-            // 4. Draw icon(s) — Cycle Actions: stages offset to the right, base drawn last (on top)
-            if (!cycleStages.isNullOrEmpty() && icons.containsKey(stackKey0)) {
+            // 4. Icon — home overlay: single bitmap only. Settings / edit: optional cycle stack + bolt.
+            if (showConfiguratorDecorations && !cycleStages.isNullOrEmpty()) {
                 val n = cycleStages.size
-                val stepPx = (intSize.width * 0.07f).toInt().coerceIn(2, 8)
+                val stepPx = (intSize.width * 0.08f).toInt().coerceIn(4, 14)
+                val cacheId = point.id
+                val shadowAlpha = 0.45f
+                val shadowShift = (stepPx / 5).coerceAtLeast(1)
+
                 for (i in n downTo 1) {
-                    val bmp = icons[cycleLayerIconCacheKey(persisted.id, i)] ?: continue
+                    val bmp = icons[cycleLayerIconCacheKey(cacheId, i)] ?: continue
                     val layerAction = cycleStages[i - 1].action
-                    val layerPoint = persisted.copy(action = layerAction)
+                    val layerPoint = modelForCycle.copy(action = layerAction)
+                    val layerOffset = dstOffset + IntOffset(i * stepPx * 4, i * stepPx * 2)
+
+                    // 1. Layer shadow
                     drawImage(
                         image = bmp,
-                        dstOffset = dstOffset + IntOffset(i * stepPx, 0),
+                        dstOffset = layerOffset + IntOffset(shadowShift, shadowShift),
+                        dstSize = intSize,
+                        colorFilter = ColorFilter.tint(Color.Black.copy(alpha = shadowAlpha))
+                    )
+
+                    // 2. Layer icon
+                    drawImage(
+                        image = bmp,
+                        dstOffset = layerOffset,
                         dstSize = intSize,
                         colorFilter =
                             if (layerPoint.applyColorAction()) ColorFilter.tint(
@@ -195,14 +213,25 @@ fun DrawScope.actionsInCircle(
                             else null
                     )
                 }
-                icons[stackKey0]?.let { baseBmp ->
+
+                val baseBmp = icons[cycleLayerIconCacheKey(cacheId, 0)] ?: icons[point.id]
+                if (baseBmp != null) {
+                    // 1. Base shadow
+                    drawImage(
+                        image = baseBmp,
+                        dstOffset = dstOffset + IntOffset(shadowShift, shadowShift),
+                        dstSize = intSize,
+                        colorFilter = ColorFilter.tint(Color.Black.copy(alpha = shadowAlpha))
+                    )
+
+                    // 2. Base icon
                     drawImage(
                         image = baseBmp,
                         dstOffset = dstOffset,
                         dstSize = intSize,
                         colorFilter =
-                            if (persisted.applyColorAction()) ColorFilter.tint(
-                                actionColor(persisted.action, extraColors)
+                            if (modelForCycle.applyColorAction()) ColorFilter.tint(
+                                actionColor(modelForCycle.action, extraColors)
                             )
                             else null
                     )
@@ -221,8 +250,7 @@ fun DrawScope.actionsInCircle(
                 }
             }
 
-            // 5. Hold & Run: lightning badge at top-right of the action icon (shadow below for legibility)
-            if (point.holdAndRunDelayMs != null) {
+            if (showConfiguratorDecorations && point.holdAndRunDelayMs != null) {
                 val iconPx = intSize.width
                 val badgeSize = (iconPx / 3f).toInt().coerceIn(14, 36)
                 val bolt = ctx.loadDrawableResAsBitmap(
@@ -274,7 +302,8 @@ fun DrawScope.actionsInCircle(
                     selectedPoint = point,
                     nestId = nest.id,
                     selectedAll = selected,
-                    preventBgErasing = preventBgErasing
+                    preventBgErasing = preventBgErasing,
+                    showConfiguratorDecorations = showConfiguratorDecorations,
                 )
             } ?: drawImage( // <- if this is drawn there a big bug
                 image = ctx.loadDrawableResAsBitmap(R.drawable.ic_action_target, 48, 48),

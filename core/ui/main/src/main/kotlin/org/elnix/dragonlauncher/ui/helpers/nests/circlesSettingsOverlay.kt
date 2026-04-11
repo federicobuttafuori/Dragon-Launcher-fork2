@@ -21,7 +21,9 @@ fun DrawScope.circlesSettingsOverlay(
     selectedPoint: SwipePointSerializable?,
     nestId: Int,
     selectedAll: Boolean = false,
-    preventBgErasing: Boolean = false
+    preventBgErasing: Boolean = false,
+    /** When true, only the [selectedPoint] draws cycle stack + Hold & Run bolt (nest editor / dialogs). */
+    showConfiguratorDecorations: Boolean = false,
 ) {
 
     val points = drawParams.points
@@ -87,6 +89,11 @@ fun DrawScope.circlesSettingsOverlay(
                 val drawPoint = if (selectedPoint != null && p.id == selectedPoint.id)
                     selectedPoint else p
 
+                val decorate =
+                    showConfiguratorDecorations &&
+                        selectedPoint != null &&
+                        p.id == selectedPoint.id
+
                 actionsInCircle(
                     drawParams = drawParams,
 
@@ -94,7 +101,8 @@ fun DrawScope.circlesSettingsOverlay(
                     depth = depth,
                     point = drawPoint,
                     selected = selectedAll || (p.id == selectedPoint?.id),
-                    preventBgErasing = preventBgErasing
+                    preventBgErasing = preventBgErasing,
+                    showConfiguratorDecorations = decorate,
                 )
             }
     }

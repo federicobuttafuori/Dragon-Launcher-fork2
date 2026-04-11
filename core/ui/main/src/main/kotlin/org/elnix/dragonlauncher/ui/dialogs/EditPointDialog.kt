@@ -181,9 +181,12 @@ fun EditPointDialog(
         editPoint.action,
         editPoint.customIcon,
         editPoint.customActionColor,
-        editPoint.size
+        editPoint.size,
+        editPoint.cycleActions,
+        editPoint.holdAndRunDelayMs,
     ) {
         appsViewModel.reloadPointIcon(editPoint)
+        appsViewModel.preloadCycleLayerIcons(editPoint)
     }
 
 

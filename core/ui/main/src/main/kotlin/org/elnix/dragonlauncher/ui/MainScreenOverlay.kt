@@ -26,6 +26,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.graphicsLayer
@@ -115,6 +116,7 @@ fun MainScreenOverlay(
 
 
     val showAppPreviewIconCenterStartPosition by UiSettingsStore.showAppPreviewIconCenterStartPosition.asState()
+    val wallpaperDimMainScreen by UiSettingsStore.wallpaperDimMainScreen.asState()
     val linePreviewSnapToAction by UiSettingsStore.linePreviewSnapToAction.asState()
     val showAllActionsOnCurrentCircle by UiSettingsStore.showAllActionsOnCurrentCircle.asState()
     val showAllActionsOnCurrentNest by UiSettingsStore.showAllActionsOnCurrentNest.asState()
@@ -383,22 +385,6 @@ fun MainScreenOverlay(
             }
             else -> np
         }
-    }
-
-    LaunchedEffect(
-        hoveredPoint?.id,
-        hoveredPoint?.cycleActions,
-        liveNestedCurrentAction?.id,
-        liveNestedCurrentAction?.cycleActions
-    ) {
-        fun preloadCycleIfNeeded(p: SwipePointSerializable?) {
-            if (p == null) return
-            if (p.cycleActions.isNullOrEmpty()) return
-            val persisted = points.find { it.id == p.id } ?: p
-            appsViewModel.preloadCycleLayerIcons(persisted)
-        }
-        preloadCycleIfNeeded(hoveredPoint)
-        preloadCycleIfNeeded(liveNestedCurrentAction)
     }
 
     /*  Icon bitmaps are keyed by point id; [actionsInCircle] / [AppPreviewTitle] read
@@ -759,6 +745,21 @@ fun MainScreenOverlay(
                             )
                         }
 
+                        val nestCenter = start ?: return@let
+                        val outerNestRadiusPx = when {
+                            showAllActionsOnCurrentCircle || showAllActionsOnCurrentNest ->
+                                filteredCircles.maxOfOrNull { it.radius } ?: 0f
+                            showAppLaunchPreview && showAppCirclePreview -> radius
+                            else -> 0f
+                        }
+                        if (wallpaperDimMainScreen > 0.02f && outerNestRadiusPx > 0f) {
+                            drawNestShadowBeneath(
+                                center = nestCenter,
+                                outerRadiusPx = outerNestRadiusPx,
+                                wallpaperDimAmount = wallpaperDimMainScreen,
+                            )
+                        }
+
                         drawIntoCanvas { canvas ->
 
                             val bounds = Rect(0f, 0f, size.width, size.height)
@@ -820,6 +821,15 @@ fun MainScreenOverlay(
                     val nestedNestForDraw = liveNest.nestedNest
                     val liveNestCenterForDraw = liveNest.liveNestCenter
                     if (nestedNestForDraw != null && liveNestCenterForDraw != null) {
+                        val outerLiveNestR =
+                            liveNest.scaledUiCircles.maxOfOrNull { it.radius } ?: 0f
+                        if (wallpaperDimMainScreen > 0.02f && outerLiveNestR > 0f) {
+                            drawNestShadowBeneath(
+                                center = liveNestCenterForDraw,
+                                outerRadiusPx = outerLiveNestR,
+                                wallpaperDimAmount = wallpaperDimMainScreen,
+                            )
+                        }
                         drawIntoCanvas { canvas ->
                             val bounds = Rect(0f, 0f, size.width, size.height)
                             canvas.saveLayer(bounds, Paint())
@@ -848,6 +858,15 @@ fun MainScreenOverlay(
                         val innerNestForDraw = innerLiveNest.nestedNest
                         val innerCenterForDraw = innerLiveNest.liveNestCenter
                         if (innerLiveNest.isActive && innerNestForDraw != null && innerCenterForDraw != null) {
+                            val outerInnerR =
+                                innerLiveNest.scaledUiCircles.maxOfOrNull { it.radius } ?: 0f
+                            if (wallpaperDimMainScreen > 0.02f && outerInnerR > 0f) {
+                                drawNestShadowBeneath(
+                                    center = innerCenterForDraw,
+                                    outerRadiusPx = outerInnerR,
+                                    wallpaperDimAmount = wallpaperDimMainScreen,
+                                )
+                            }
                             drawIntoCanvas { canvas ->
                                 val bounds = Rect(0f, 0f, size.width, size.height)
                                 canvas.saveLayer(bounds, Paint())
@@ -890,6 +909,30 @@ fun MainScreenOverlay(
     }
 }
 
+/**
+ * Drop shadow under the swipe nest; only used when wallpaper dim is on — strength follows dim amount
+ * and outer ring radius so it stays proportional to the nest.
+ */
+private fun DrawScope.drawNestShadowBeneath(
+    center: Offset,
+    outerRadiusPx: Float,
+    wallpaperDimAmount: Float,
+) {
+    if (wallpaperDimAmount < 0.02f || outerRadiusPx <= 0f) return
+    val dim = wallpaperDimAmount.coerceIn(0f, 1f)
+    val dropY = (6f + outerRadiusPx * 0.045f).coerceIn(5f, 26f)
+    val layerCount = 7
+    for (i in layerCount downTo 1) {
+        val t = i / layerCount.toFloat()
+        val spread = outerRadiusPx * 0.1f * (1.2f - t) + 2f * (layerCount - i + 1)
+        val alpha = (0.03f + 0.14f * dim) * t * t
+        drawCircle(
+            color = Color.Black.copy(alpha = alpha.coerceIn(0.015f, 0.4f)),
+            radius = outerRadiusPx + spread,
+            center = center + Offset(0f, dropY),
+        )
+    }
+}
 
 fun defaultHapticFeedback(id: Int): CustomHapticFeedbackSerializable = CustomHapticFeedbackSerializable(
     listOf(

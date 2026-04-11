@@ -46,7 +46,6 @@ data class CycleActionsState(
     val isActive: Boolean,
     val currentStageIndex: Int,
     val currentStageAction: SwipeActionSerializable?,
-    val isLoopOverPhase: Boolean,
     val resolveOnRelease: () -> SwipeActionSerializable?,
     val clear: () -> Unit
 )
@@ -86,8 +85,6 @@ fun rememberCycleActionsController(
     val stageIndexState = remember { mutableIntStateOf(0) }
     var currentStageIndex by stageIndexState
 
-    /*  ─────────────  Elapsed timer and stage derivation  ─────────────  */
-
     LaunchedEffect(
         currentAction?.id,
         isDragging,
@@ -95,68 +92,62 @@ fun rememberCycleActionsController(
         currentAction?.cycleActionsLoopEnabled,
         currentAction?.cycleActionsLoopDelayMs
     ) {
-        // When isDragging goes false, do NOT reset here: let the overlay's release guard read
-        // the final stage index via resolveOnRelease() and then call clear() to reset.
+        // When isDragging goes false, do NOT reset here: let the overlay's release resolution logic
+        // read the final stage index via resolveOnRelease() before cleaning up.
         if (!isDragging) return@LaunchedEffect
 
-        // Finger is down (new gesture, or hovered point changed): always start fresh.
+        // New gesture or hovered point changed: start fresh.
         currentStageIndex = 0
         if (stages.isNullOrEmpty()) return@LaunchedEffect
 
         val act = currentAction!!
         val loopEnabled = act.cycleActionsLoopEnabled
-        val loopDelayMs = (act.cycleActionsLoopDelayMs ?: 500).coerceAtLeast(1)
+        val loopDelayMs = (act.cycleActionsLoopDelayMs ?: 500).toLong().coerceAtLeast(1L)
+        
         val cumulativeMs = cumulativeTriggerThresholdsMs(stages)
-        val tLast = cumulativeMs.last()
-        val cycleLen = tLast + loopDelayMs
+        val tLastEntry = cumulativeMs.last()
+        val cycleLen = tLastEntry + loopDelayMs
 
-        var elapsedMs = 0L
-        var cycleBase = 0L
-        var prevCycleBase = 0L
-        var lastFiredStageIndex = 0
+        val startTime = System.currentTimeMillis()
+        var lastCycleCount = -1L
+        var lastFiredStageIndex = -1
 
         while (isActive) {
-            delay(16L)
-            elapsedMs += 16L
-
-            if (loopEnabled) {
-                while (elapsedMs - cycleBase >= cycleLen) {
-                    cycleBase += cycleLen
-                }
-                if (cycleBase != prevCycleBase) {
-                    prevCycleBase = cycleBase
-                    lastFiredStageIndex = -1
-                }
+            val now = System.currentTimeMillis()
+            val totalElapsed = now - startTime
+            
+            val cycleCount = if (loopEnabled) totalElapsed / cycleLen else 0L
+            val eff = if (loopEnabled) totalElapsed % cycleLen else totalElapsed
+            
+            if (loopEnabled && cycleCount != lastCycleCount) {
+                lastCycleCount = cycleCount
+                lastFiredStageIndex = -1
             }
 
-            val eff = elapsedMs - cycleBase
-
-            val newIndex = if (loopEnabled && eff >= tLast && eff < tLast + loopDelayMs) {
-                stages.size + 1
-            } else {
+            val newIndex = {
                 val crossedIndex = cumulativeMs.indexOfLast { eff >= it }
                 (crossedIndex + 1).coerceAtMost(stages.size)
-            }
+            }()
 
             if (newIndex != currentStageIndex) {
                 currentStageIndex = newIndex
 
-                // One haptic pulse per upward transition (or when re-entering stages after a loop wrap).
+                // Haptic feedback for stage transitions (1..N). 
+                // We reset lastFiredStageIndex on each loop wrap to ensure Stage 1 vibrates again.
                 if (!disableHapticFeedback && newIndex > lastFiredStageIndex) {
-                    val haptic = when {
-                        newIndex == stages.size + 1 ->
-                            defaultHapticFeedback(stages.size + 1)
-                        newIndex in 1..stages.size ->
-                            stages[newIndex - 1].hapticFeedback
-                                ?: defaultHapticFeedback(newIndex)
-                        else -> null
-                    }
+                    val haptic = if (newIndex in 1..stages.size) {
+                        stages[newIndex - 1].hapticFeedback ?: defaultHapticFeedback(newIndex)
+                    } else null
+                    
                     haptic?.let { performCustomHaptic(ctx, it) }
                     lastFiredStageIndex = newIndex
                 }
             }
 
+            // If looping is disabled, we stay in the last stage Snafter it is reached.
             if (!loopEnabled && newIndex >= stages.size) break
+            
+            delay(16L)
         }
     }
 
@@ -168,31 +159,18 @@ fun rememberCycleActionsController(
         {
             val idx = stageIndexState.intValue
             if (idx == 0 || stages.isNullOrEmpty()) null
-            else when {
-                idx == stages.size + 1 && loopEnabledForRelease -> stages.last().action
-                idx in 1..stages.size -> stages[idx - 1].action
-                else -> null
-            }
+            else if (idx in 1..stages.size) stages[idx - 1].action
+            else null
         }
     }
 
     val clear: () -> Unit = remember { { stageIndexState.intValue = 0 } }
 
-    val maxIndex = when {
-        stages.isNullOrEmpty() -> 0
-        loopEnabledForRelease -> stages.size + 1
-        else -> stages.size
-    }
-    val safeStageIndex = currentStageIndex.coerceIn(0, maxIndex)
-
-    val isLoopOverPhase = !stages.isNullOrEmpty() &&
-        loopEnabledForRelease &&
-        safeStageIndex == stages.size + 1
+    val safeStageIndex = currentStageIndex.coerceIn(0, stages?.size ?: 0)
 
     val currentStageAction: SwipeActionSerializable? = when {
         stages.isNullOrEmpty() -> null
         safeStageIndex == 0 -> null
-        isLoopOverPhase -> stages.last().action
         safeStageIndex in 1..stages.size -> stages[safeStageIndex - 1].action
         else -> null
     }
@@ -201,7 +179,6 @@ fun rememberCycleActionsController(
         isActive = isDragging && !stages.isNullOrEmpty(),
         currentStageIndex = safeStageIndex,
         currentStageAction = currentStageAction,
-        isLoopOverPhase = isLoopOverPhase,
         resolveOnRelease = resolveOnRelease,
         clear = clear
     )

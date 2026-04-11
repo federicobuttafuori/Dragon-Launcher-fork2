@@ -62,12 +62,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
@@ -79,8 +76,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.Dispatchers
@@ -99,7 +94,6 @@ import org.elnix.dragonlauncher.common.utils.Constants.Logging.NESTS_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.SWIPE_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Settings.POINT_RADIUS_PX
 import org.elnix.dragonlauncher.common.utils.Constants.Settings.SNAP_STEP_DEG
-import org.elnix.dragonlauncher.common.utils.ImageUtils
 import org.elnix.dragonlauncher.common.utils.Constants.Settings.TOUCH_THRESHOLD_PX
 import org.elnix.dragonlauncher.common.utils.UiCircle
 import org.elnix.dragonlauncher.common.utils.circles.autoSeparate
@@ -672,31 +666,10 @@ fun SettingsScreen(
     }
 
     val density = LocalDensity.current
-    val iconsMap by appsViewModel.icons.collectAsState()
 
-    /** Mini icons along the bottom-left diagonal for Cycle Actions (settings canvas preview). */
-    val cycleActionsPreview = remember(
-        selectedPoint?.id,
-        selectedPoint?.cycleActions,
-        iconsVersion,
-        iconsMap,
-        density.density
-    ) {
-        val p = selectedPoint ?: return@remember null
-        val stages = p.cycleActions ?: return@remember null
-        if (stages.isEmpty()) return@remember null
-        val iconPx = (28f * density.density).toInt().coerceIn(24, 128)
-        val bitmaps = (0 until minOf(2, stages.size)).map { i ->
-            ImageUtils.createUntintedBitmap(
-                action = stages[i].action,
-                ctx = ctx,
-                icons = iconsMap,
-                width = iconPx,
-                height = iconPx
-            )
-        }
-        val overflow = stages.size > 2
-        Triple(bitmaps, overflow, iconPx)
+    LaunchedEffect(selectedPoint?.id, selectedPoint?.cycleActions) {
+        val p = selectedPoint ?: return@LaunchedEffect
+        appsViewModel.preloadCycleLayerIcons(p)
     }
 
     Box(
@@ -858,7 +831,8 @@ fun SettingsScreen(
                             circles = circles,
                             selectedPoint = selectedPoint,
                             nestId = nestId,
-                            preventBgErasing = true
+                            preventBgErasing = true,
+                            showConfiguratorDecorations = true,
                         )
 
                         /*  Live Nest: semi-transparent target nest preview at the selected point (nest editor only).  */
@@ -885,7 +859,8 @@ fun SettingsScreen(
                                     circles = scaledCircles,
                                     selectedPoint = null,
                                     nestId = nestedNest.id,
-                                    preventBgErasing = true
+                                    preventBgErasing = true,
+                                    showConfiguratorDecorations = true,
                                 )
                                 canvas.restore()
                             }
@@ -898,58 +873,9 @@ fun SettingsScreen(
                                 depth = 1,
                                 point = selectedPoint!!,
                                 selected = true,
-                                preventBgErasing = true
+                                preventBgErasing = true,
+                                showConfiguratorDecorations = true,
                             )
-                        }
-
-                        /*  Cycle Actions: small stage icons toward bottom-left of the selected point.  */
-                        cycleActionsPreview?.let { (bitmaps, overflow, iconPx) ->
-                            selectedPoint?.let { p ->
-                                val hostCenter = if (isDragging) {
-                                    selectedPointTempOffset.value
-                                } else {
-                                    computePointPosition(p, circles, center)
-                                }
-                                val unit = Offset(-1f, 1f).let { o ->
-                                    val h = hypot(o.x, o.y)
-                                    Offset(o.x / h, o.y / h)
-                                }
-                                val step = iconPx + 6f * density.density
-                                bitmaps.forEachIndexed { i, bmp ->
-                                    val dist = step * (i + 1)
-                                    val c = hostCenter + unit * dist
-                                    val dstOffset = IntOffset(
-                                        (c.x - iconPx / 2f).toInt(),
-                                        (c.y - iconPx / 2f).toInt()
-                                    )
-                                    drawImage(
-                                        image = bmp,
-                                        dstOffset = dstOffset,
-                                        dstSize = IntSize(iconPx, iconPx),
-                                        alpha = 0.92f
-                                    )
-                                }
-                                if (overflow) {
-                                    val dist = step * (bitmaps.size + 1)
-                                    val c = hostCenter + unit * dist
-                                    val half = iconPx / 2f
-                                    val strokeW = 2.dp.toPx()
-                                    val corner = 4.dp.toPx()
-                                    drawRoundRect(
-                                        color = primaryColor,
-                                        topLeft = Offset(c.x - half, c.y - half),
-                                        size = Size(iconPx.toFloat(), iconPx.toFloat()),
-                                        cornerRadius = CornerRadius(corner, corner),
-                                        style = Stroke(
-                                            width = strokeW,
-                                            pathEffect = PathEffect.dashPathEffect(
-                                                floatArrayOf(8f, 5f),
-                                                0f
-                                            )
-                                        )
-                                    )
-                                }
-                            }
                         }
 
                         if (isDragging && closestHoveredTempOffset != null && ableToLaunchHoverAction) {
