@@ -20,8 +20,7 @@
 
 - Use camelCase for variables and functions name, and globally everywhere
 - call Context instances `ctx`, not `context`
-- Use snake_case for resources like strings or images
-- Use SCREAMING_SNAKE_CASE for settings keys in stores
+- Use snake_case for resources like strings or images, and settings_keys
 - Always add spaces between brackets in function declaration, condition statement
 
 ```kotlin
