@@ -53,22 +53,23 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(libs.gson)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.activity.compose)
-
-    // Shapes things
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.ui.graphics)
-
-    /* Image Bitmap*/
     implementation(libs.androidx.ui.graphics)
-
-
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.annotation)
+    implementation(libs.androidx.compose.runtime.annotation)
+    implementation(libs.androidx.compose.ui.geometry)
+    implementation(libs.androidx.core)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.androidx.ui)
 
+    api(libs.gson)
+    api(libs.androidx.activity)
+    api(libs.androidx.compose.ui.unit)
+    api(libs.kotlinx.serialization.core)
+    api(libs.androidx.compose.runtime)
 
-    implementation(project(":core:logging"))
-    implementation(project(":core:base"))
+    api(project(":core:logging"))
 }

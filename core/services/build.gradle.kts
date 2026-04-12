@@ -55,12 +55,12 @@ extensions.configure<LibraryExtension> {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.annotation)
+    implementation(libs.androidx.compose.runtime)
 
+    api(libs.kotlinx.coroutines.core)
+
+    api(project(":core:common"))
     implementation(project(":core:logging"))
-    implementation(project(":core:common"))
     implementation(project(":core:settings"))
 }

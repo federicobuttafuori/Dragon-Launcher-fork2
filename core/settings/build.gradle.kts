@@ -49,13 +49,15 @@ extensions.configure<LibraryExtension> {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.datastore.preferences)
-
     implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.datastore.core)
+
+    api(libs.androidx.datastore.preferences.core)
+    api(libs.kotlinx.coroutines.core)
 
     implementation(project(":core:base"))
     implementation(project(":core:logging"))
-    implementation(project(":core:common"))
-    implementation(project(":core:enumsui"))
+    api(project(":core:common"))
+    api(project(":core:enumsui"))
 }

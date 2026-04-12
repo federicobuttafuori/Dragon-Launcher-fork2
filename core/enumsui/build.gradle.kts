@@ -63,16 +63,12 @@ extensions.configure<LibraryExtension> {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-
-    /* Composable, icons and stringResource in enums */
-    implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.androidx.material.icons.extended)
 
+    api(libs.androidx.compose.runtime)
+    api(libs.androidx.ui)
 
-    implementation(project(":core:logging"))
     implementation(project(":core:common"))
 }

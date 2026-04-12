@@ -168,25 +168,30 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.reorderable)
-    implementation(libs.android.image.cropper)
-    implementation(libs.material)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.annotation)
+    implementation(libs.androidx.compose.animation)
+    implementation(libs.androidx.core)
+    implementation(libs.androidx.fragment)
+    implementation(libs.androidx.lifecycle.common)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.navigation.common)
+    implementation(libs.androidx.navigation.runtime)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.androidx.compose.runtime)
 
+    runtimeOnly(libs.android.image.cropper)
 
     implementation(project(":core:ui:base"))
     implementation(project(":core:ui:main"))
     implementation(project(":core:ui:theme"))
     implementation(project(":core:ui:composition"))
 
-    implementation(project(":core:base"))
     implementation(project(":core:common"))
     implementation(project(":core:models"))
     implementation(project(":core:enumsui"))
@@ -234,14 +239,18 @@ tasks.register("downloadExtensionsRegistry") {
 }
 
 // Use preBuild tasks instead of merge* (they exist in AGP)
-tasks.named("preBuild") {
-    dependsOn("copyChangelogsToAssets")
+if (!gradle.startParameter.taskRequests.any { it.args.contains("buildHealth") }) {
+    tasks.named("preBuild") {
+        dependsOn("copyChangelogsToAssets")
 
-    // Only download extensions registry on release builds
-    val isReleaseVariant = gradle.startParameter.taskRequests.any {
-        it.args.any { arg -> arg.contains("Release", ignoreCase = true) }
+        // Only download extensions registry on release builds
+        val isReleaseVariant = gradle.startParameter.taskRequests.any {
+            it.args.any { arg -> arg.contains("Release", ignoreCase = true) }
+        }
+        if (isReleaseVariant) {
+            dependsOn("downloadExtensionsRegistry")
+        }
     }
-    if (isReleaseVariant) {
-        dependsOn("downloadExtensionsRegistry")
-    }
+} else {
+    println("Gradle in using build health, not running preBuild")
 }

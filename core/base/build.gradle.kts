@@ -41,11 +41,14 @@ extensions.configure<LibraryExtension> {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.material)
     implementation(libs.androidx.compose.runtime)
-
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.runtime.annotation)
+    implementation(libs.androidx.compose.ui.geometry)
+    implementation(libs.androidx.compose.ui.unit)
+    implementation(libs.androidx.ui)
     implementation(libs.androidx.material3)
+    implementation(platform(libs.androidx.compose.bom))
+
+    api(libs.androidx.ui.graphics)
+
 }

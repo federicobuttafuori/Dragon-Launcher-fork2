@@ -48,22 +48,20 @@ extensions.configure<LibraryExtension> {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.gson)
-
-    implementation(libs.androidx.datastore.preferences)
-
     implementation(libs.kotlinx.serialization.json)
-
     implementation(libs.androidx.ui.graphics)
     implementation(libs.timber)
+    implementation(libs.androidx.annotation)
+    implementation(libs.androidx.compose.ui.unit)
+    implementation(libs.androidx.core)
+    implementation(libs.kotlinx.serialization.core)
 
+    api(libs.kotlinx.coroutines.core)
 
-    implementation(project(":core:logging"))
-    implementation(project(":core:common"))
-    implementation(project(":core:enumsui"))
-    implementation(project(":core:settings"))
-    implementation(project(":core:shizuku"))
+    api(project(":core:logging"))
+    api(project(":core:common"))
+    api(project(":core:enumsui"))
+    api(project(":core:settings"))
+    api(project(":core:shizuku"))
 }

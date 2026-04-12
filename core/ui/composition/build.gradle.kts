@@ -54,13 +54,10 @@ extensions.configure<LibraryExtension> {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.process)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.navigation.compose)
+    api(libs.androidx.navigation.runtime)
+    api(libs.androidx.compose.runtime)
+    api(libs.androidx.ui.graphics)
 
-    implementation(project(":core:common"))
-    implementation(project(":core:logging"))
-    implementation(project(":core:models"))
+    api(project(":core:common"))
+    api(project(":core:models"))
 }

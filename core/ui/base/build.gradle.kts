@@ -54,39 +54,26 @@ extensions.configure<LibraryExtension> {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.process)
-    implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
-//    implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.compose.foundation.layout)
-    implementation(libs.androidx.appcompat)
-//    implementation(libs.androidx.biometric)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.material.icons.extended)
-    implementation(libs.androidx.navigation.compose)
-//    implementation(libs.reorderable)
-//    implementation(libs.android.image.cropper)
-    implementation(libs.material)
     implementation(libs.material3)
-//    implementation(libs.kotlinx.serialization.json)
-//    implementation(libs.shapeindicators)
-//    implementation(libs.shizuku.api)
-//    implementation(libs.androidx.runtime)
-//
-//
-//
+    implementation(libs.androidx.compose.animation.core)
+    implementation(libs.androidx.compose.runtime.retain)
+    implementation(libs.androidx.compose.ui.unit)
+    implementation(libs.kotlinx.coroutines.core)
+
+    runtimeOnly(libs.androidx.lifecycle.process)
+
+    api(libs.androidx.compose.foundation)
+    api(libs.androidx.compose.runtime)
+
+    api(project(":core:common"))
+    api(project(":core:settings"))
     implementation(project(":core:base"))
-    implementation(project(":core:ui:composition"))
-    implementation(project(":core:common"))
-//    implementation(project(":core:enumsui"))
-//    implementation(project(":core:logging"))
-//    implementation(project(":core:services"))
-    implementation(project(":core:settings"))
 }

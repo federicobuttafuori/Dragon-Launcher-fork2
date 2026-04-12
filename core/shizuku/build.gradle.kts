@@ -48,12 +48,9 @@ extensions.configure<LibraryExtension> {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-
-
     implementation(libs.shizuku.api)
     implementation(libs.shizuku.provider)
+    api(libs.kotlinx.coroutines.core)
 
     implementation(project(":core:logging"))
     implementation(project(":core:common"))
