@@ -105,7 +105,7 @@ class AppsViewModel(
     val packTint = _packTint.asStateFlow()
 
     private val json = Json {
-        json = true
+        allowStructuredMapKeys = true
     }
 
     /**
