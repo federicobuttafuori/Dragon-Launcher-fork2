@@ -104,6 +104,10 @@ class AppsViewModel(
     private val _packTint = MutableStateFlow<Int?>(null)
     val packTint = _packTint.asStateFlow()
 
+    private val json = Json {
+        json = true
+    }
+
     /**
      * Cache for icons with memory management (20MB size for better storage of bitmaps)
      */
@@ -354,14 +358,14 @@ class AppsViewModel(
                         val existingMap: MutableMap<String, Int?> =
                             if (existingJson.isNotBlankJson) mutableMapOf()
                             else {
-                                Json.decodeFromString<MutableMap<String, Int?>>(existingJson)
+                                json.decodeFromString<MutableMap<String, Int?>>(existingJson)
                             }
 
                         assignments.forEach { (identity, userId) ->
                             existingMap[identity] = userId
                         }
 
-                        PrivateAppsSettingsStore.jsonSetting.set(ctx, Json.encodeToString(existingMap))
+                        PrivateAppsSettingsStore.jsonSetting.set(ctx, json.encodeToString(existingMap))
                         logI(APPS_TAG) { "Persisted ${assignments.size} private app assignments" }
                     } catch (e: Exception) {
                         logE(APPS_TAG, e) { "Error persisting private package assignments" }
@@ -1144,10 +1148,10 @@ class AppsViewModel(
     /** Load the user's workspaces into the _state var, enforced safety due to some crash at start */
     private suspend fun loadWorkspaces() = withContext(Dispatchers.IO) {
         try {
-            val json = WorkspaceSettingsStore.getAll(ctx).toString()
-            if (json.isBlank()) return@withContext
+            val jsonString = WorkspaceSettingsStore.getAll(ctx).toString()
+            if (jsonString.isBlank()) return@withContext
 
-            val loadedState = Json.decodeFromString<WorkspaceState>(json)
+            val loadedState = json.decodeFromString<WorkspaceState>(jsonString)
             _workspacesState.value = loadedState
 
             // Async reload of icons to not block the workspace state emission
@@ -1174,7 +1178,7 @@ class AppsViewModel(
 
         logW(WORKSPACES_TAG) { "Persisting the state: ${_workspacesState.value}" }
 
-        val json = Json.encodeToString(_workspacesState.value)
+        val json = json.encodeToString(_workspacesState.value)
 
         logW(WORKSPACES_TAG) { "Encoded json workspace: $json" }
         WorkspaceSettingsStore.setAll(ctx, JSONObject(json))
