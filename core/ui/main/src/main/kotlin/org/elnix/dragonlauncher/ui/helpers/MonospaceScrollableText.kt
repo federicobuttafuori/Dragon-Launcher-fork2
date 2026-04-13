@@ -7,10 +7,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.sp
 import org.elnix.dragonlauncher.logging.logLevel
@@ -41,7 +41,7 @@ fun MonospaceScrollableText(
 
                     Text(
                         text = line,
-                        color = color ?: MaterialTheme.colorScheme.onBackground,
+                        color = color ?: Color.Unspecified,
                         softWrap = false,
                         fontSize = 10.sp,
                         lineHeight = 10.sp,

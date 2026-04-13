@@ -17,6 +17,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -375,163 +376,162 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
             controller.hide(WindowInsetsCompat.Type.systemBars())
         }
 
-
         setContent {
-            val ctx = LocalContext.current
 
+            val ctx = LocalContext.current
             val scope = rememberCoroutineScope()
 
+            if (lastStackTrace.isNullOrBlank()) {
 
-            DragonLauncherTheme {
+                DragonLauncherTheme {
 
-                val navController = rememberNavController()
-                navControllerHolder.value = navController
+                    val navController = rememberNavController()
+                    navControllerHolder.value = navController
 
-                val lifecycleOwner = LocalLifecycleOwner.current
+                    val lifecycleOwner = LocalLifecycleOwner.current
 
-                val appsViewModel = remember(ctx) {
-                    (ctx.applicationContext as DragonLauncherApplication).appsViewModel
-                }
+                    val appsViewModel = remember(ctx) {
+                        (ctx.applicationContext as DragonLauncherApplication).appsViewModel
+                    }
 
-                val shizukuViewModel = remember(ctx) {
-                    ShizukuViewModel(
-                        shellCommandExecutor = ShellCommandExecutor(),
-                        shizukuPermissionHandler = ShizukuPermissionHandler(),
-                        coroutineScope = scope
-                    )
-                }
+                    val shizukuViewModel = remember(ctx) {
+                        ShizukuViewModel(
+                            shellCommandExecutor = ShellCommandExecutor(),
+                            shizukuPermissionHandler = ShizukuPermissionHandler(),
+                            coroutineScope = scope
+                        )
+                    }
 
-                // May be used in the future for some quit action / operation
-                // DoubleBackToExit()
+                    // May be used in the future for some quit action / operation
+                    // DoubleBackToExit()
 
-                // Used to visually block private space content on window quit, and if user locks his phone,
-                // the apps are also visually blocked, since they can't be launched
-                DisposableEffect(lifecycleOwner) {
-                    val observer = LifecycleEventObserver { _, event ->
-                        if (
-                            event == Lifecycle.Event.ON_RESUME &&
-                            PrivateSpaceUtils.isPrivateSpaceSupported()
-                        ) {
-                            val locked = PrivateSpaceUtils.isPrivateSpaceLocked(ctx) ?: false
+                    // Used to visually block private space content on window quit, and if user locks his phone,
+                    // the apps are also visually blocked, since they can't be launched
+                    DisposableEffect(lifecycleOwner) {
+                        val observer = LifecycleEventObserver { _, event ->
+                            if (
+                                event == Lifecycle.Event.ON_RESUME &&
+                                PrivateSpaceUtils.isPrivateSpaceSupported()
+                            ) {
+                                val locked = PrivateSpaceUtils.isPrivateSpaceLocked(ctx) ?: false
 
-                            // If private space is locked on return, set it unavailable on the viewmodel state
-                            if (locked) {
-                                appsViewModel.setPrivateSpaceLocked()
-                            } else { // Set it available
-                                scope.launch(Dispatchers.IO) {
-                                    appsViewModel.unlockAndReloadPrivateSpace()
+                                // If private space is locked on return, set it unavailable on the viewmodel state
+                                if (locked) {
+                                    appsViewModel.setPrivateSpaceLocked()
+                                } else { // Set it available
+                                    scope.launch(Dispatchers.IO) {
+                                        appsViewModel.unlockAndReloadPrivateSpace()
+                                    }
                                 }
+                            }
+                        }
+
+                        // Add the observer to the lifecycle
+                        lifecycleOwner.lifecycle.addObserver(observer)
+
+                        onDispose {
+                            lifecycleOwner.lifecycle.removeObserver(observer)
+                        }
+                    }
+
+
+                    val keepScreenOn by BehaviorSettingsStore.keepScreenOn.asState()
+                    val fullscreen by UiSettingsStore.fullScreen.asState()
+                    val hasInitialized by PrivateSettingsStore.hasInitialized.asStateNull()
+                    val samsungPreferSecureFolder by PrivateSettingsStore.samsungPreferSecureFolder.asState()
+
+
+                    val offScreenTimeout by BehaviorSettingsStore.offScreenTimeout.asState()
+                    LaunchedEffect(offScreenTimeout) {
+                        Companion.offScreenTimeout = offScreenTimeout
+                    }
+
+
+                    LaunchedEffect(Unit) {
+                        appLifecycleViewModel.privateSpaceUnlockRequestEvents.collect {
+
+                            val openPrivateSpace = {
+                                logI(PRIVATE_SPACE_TAG) { "Using standard Android Private Space" }
+                                ctx.startActivity(
+                                    Intent(ctx, PrivateSpaceUnlockActivity::class.java)
+                                )
+                            }
+
+                            logI(PRIVATE_SPACE_TAG) { "Loading Samsung preference: $samsungPreferSecureFolder" }
+                            val useSecureFolder = SamsungWorkspaceIntegration.resolveUseSecureFolder(
+                                ctx = ctx,
+                                preferenceEnabled = samsungPreferSecureFolder
+                            )
+                            logI(PRIVATE_SPACE_TAG) { "Using system: ${if (useSecureFolder) "Secure Folder" else "Private Space"}" }
+
+                            if (useSecureFolder) {
+                                SamsungWorkspaceIntegration.openSecureFolder(
+                                    ctx = ctx,
+                                    onFallback = openPrivateSpace
+                                )
+                            } else {
+                                openPrivateSpace()
                             }
                         }
                     }
 
-                    // Add the observer to the lifecycle
-                    lifecycleOwner.lifecycle.addObserver(observer)
 
-                    onDispose {
-                        lifecycleOwner.lifecycle.removeObserver(observer)
-                    }
-                }
+                    val window = this@MainActivity.window
+                    val controller = WindowInsetsControllerCompat(window, window.decorView)
 
-
-                val keepScreenOn by BehaviorSettingsStore.keepScreenOn.asState()
-                val fullscreen by UiSettingsStore.fullScreen.asState()
-                val hasInitialized by PrivateSettingsStore.hasInitialized.asStateNull()
-                val samsungPreferSecureFolder by PrivateSettingsStore.samsungPreferSecureFolder.asState()
-
-
-                val offScreenTimeout by BehaviorSettingsStore.offScreenTimeout.asState()
-                LaunchedEffect(offScreenTimeout) {
-                    Companion.offScreenTimeout = offScreenTimeout
-                }
-
-
-                LaunchedEffect(Unit) {
-                    appLifecycleViewModel.privateSpaceUnlockRequestEvents.collect {
-
-                        val openPrivateSpace = {
-                            logI(PRIVATE_SPACE_TAG) { "Using standard Android Private Space" }
-                            ctx.startActivity(
-                                Intent(ctx, PrivateSpaceUnlockActivity::class.java)
-                            )
-                        }
-
-                        logI(PRIVATE_SPACE_TAG) { "Loading Samsung preference: $samsungPreferSecureFolder" }
-                        val useSecureFolder = SamsungWorkspaceIntegration.resolveUseSecureFolder(
-                            ctx = ctx,
-                            preferenceEnabled = samsungPreferSecureFolder
-                        )
-                        logI(PRIVATE_SPACE_TAG) { "Using system: ${if (useSecureFolder) "Secure Folder" else "Private Space"}" }
-
-                        if (useSecureFolder) {
-                            SamsungWorkspaceIntegration.openSecureFolder(
-                                ctx = ctx,
-                                onFallback = openPrivateSpace
-                            )
+                    LaunchedEffect(keepScreenOn) {
+                        if (keepScreenOn) {
+                            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                         } else {
-                            openPrivateSpace()
+                            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                         }
                     }
-                }
 
-
-                val window = this@MainActivity.window
-                val controller = WindowInsetsControllerCompat(window, window.decorView)
-
-                LaunchedEffect(keepScreenOn) {
-                    if (keepScreenOn) {
-                        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-                    } else {
-                        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                    LaunchedEffect(Unit, fullscreen) {
+                        if (fullscreen) {
+                            controller.hide(WindowInsetsCompat.Type.systemBars())
+                            controller.systemBarsBehavior =
+                                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                        } else {
+                            controller.show(WindowInsetsCompat.Type.systemBars())
+                        }
                     }
-                }
-
-                LaunchedEffect(Unit, fullscreen) {
-                    if (fullscreen) {
-                        controller.hide(WindowInsetsCompat.Type.systemBars())
-                        controller.systemBarsBehavior =
-                            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                    } else {
-                        controller.show(WindowInsetsCompat.Type.systemBars())
-                    }
-                }
 
 
-                LaunchedEffect(hasInitialized) {
-                    if (hasInitialized == false) {
+                    LaunchedEffect(hasInitialized) {
+                        if (hasInitialized == false) {
 
-                        /* ───────────── Create the 3 default points (has to be changed ───────────── */
-                        SwipeSettingsStore.savePoints(
-                            ctx,
-                            listOf(
-                                SwipePointSerializable(
-                                    circleNumber = 0,
-                                    angleDeg = 0.toDouble(),
-                                    action = SwipeActionSerializable.OpenAppDrawer(),
-                                    id = UUID.randomUUID().toString()
-                                ),
-                                SwipePointSerializable(
-                                    circleNumber = 1,
-                                    angleDeg = 200.toDouble(),
-                                    action = SwipeActionSerializable.NotificationShade,
-                                    id = UUID.randomUUID().toString()
-                                ),
-                                SwipePointSerializable(
-                                    circleNumber = 1,
-                                    angleDeg = 160.toDouble(),
-                                    action = SwipeActionSerializable.ControlPanel,
-                                    id = UUID.randomUUID().toString()
+                            /* ───────────── Create the 3 default points (has to be changed ───────────── */
+                            SwipeSettingsStore.savePoints(
+                                ctx,
+                                listOf(
+                                    SwipePointSerializable(
+                                        circleNumber = 0,
+                                        angleDeg = 0.toDouble(),
+                                        action = SwipeActionSerializable.OpenAppDrawer(),
+                                        id = UUID.randomUUID().toString()
+                                    ),
+                                    SwipePointSerializable(
+                                        circleNumber = 1,
+                                        angleDeg = 200.toDouble(),
+                                        action = SwipeActionSerializable.NotificationShade,
+                                        id = UUID.randomUUID().toString()
+                                    ),
+                                    SwipePointSerializable(
+                                        circleNumber = 1,
+                                        angleDeg = 160.toDouble(),
+                                        action = SwipeActionSerializable.ControlPanel,
+                                        id = UUID.randomUUID().toString()
+                                    )
                                 )
                             )
-                        )
 
-                        /* ───────────── Finally, initialize ───────────── */
-                        PrivateSettingsStore.hasInitialized.set(ctx, true)
+                            /* ───────────── Finally, initialize ───────────── */
+                            PrivateSettingsStore.hasInitialized.set(ctx, true)
+                        }
                     }
-                }
 
 
-                if (lastStackTrace.isNullOrBlank()) {
                     CompositionLocalProvider(
                         LocalBackupViewModel provides backupViewModel,
                         LocalAppsViewModel provides appsViewModel,
@@ -558,7 +558,9 @@ class MainActivity : FragmentActivity(), WidgetHostProvider {
                             }
                         )
                     }
-                } else {
+                }
+            } else {
+                MaterialTheme {
                     CrashScreen(
                         stackTrace = lastStackTrace ?: "Unable to recover last stackTrace",
                         onDismiss = {
