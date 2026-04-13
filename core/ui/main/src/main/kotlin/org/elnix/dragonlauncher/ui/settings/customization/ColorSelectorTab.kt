@@ -1,3 +1,5 @@
+@file:Suppress("AssignedValueIsNeverRead")
+
 package org.elnix.dragonlauncher.ui.settings.customization
 
 
@@ -868,94 +870,92 @@ fun ColorSelectorTab(
                         }
                     }
                 }
-
-
-
-                if (showResetValidation) {
-                    UserValidation(
-                        title = stringResource(R.string.reset_to_default_colors),
-                        message = stringResource(R.string.reset_to_default_colors_explanation),
-                        onDismiss = { showResetValidation = false }
-                    ) {
-                        scope.launch {
-                            ColorSettingsStore.resetAll(ctx)
-                            showResetValidation = false
-                        }
-                    }
-                }
-                if (showRandomColorsValidation) {
-                    UserValidation(
-                        title = stringResource(R.string.make_every_colors_random),
-                        message = stringResource(R.string.make_every_colors_random_explanation),
-                        onDismiss = { showRandomColorsValidation = false }
-                    ) {
-                        scope.launch {
-                            ColorSettingsStore.setAllRandomColors(ctx)
-                            showRandomColorsValidation = false
-                        }
-                    }
-                }
-
-
-                if (showAllColorsValidation) {
-                    var applyColor by remember { mutableStateOf(Color.Black) }
-                    AlertDialog(
-                        onDismissRequest = { showAllColorsValidation = false },
-                        confirmButton = {
-                            TextButton(
-                                onClick = {
-                                    scope.launch {
-                                        ColorSettingsStore.setAllSameColors(ctx, applyColor)
-                                        showAllColorsValidation = false
-                                    }
-                                },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clip(CircleShape)
-                                    .padding(5.dp)
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.apply),
-                                    color = MaterialTheme.colorScheme.primary
-                                )
-                            }
-                        },
-                        title = {
-                            ColorPickerRow(
-                                currentColor = applyColor,
-                                label = stringResource(R.string.color_mode_all),
-                                backgroundColor = MaterialTheme.colorScheme.surface.alphaMultiplier(0.7f)
-                            ) { applyColor = it ?: Color.Black }
-                        },
-                        containerColor = MaterialTheme.colorScheme.surface,
-                        shape = DragonShape
-                    )
-                }
-
-                if (showExitTestValidation) {
-                    UserValidation(
-                        title = stringResource(R.string.exit_test_mode),
-                        message = stringResource(R.string.exit_test_mode_message),
-                        validateText = stringResource(R.string.test_mode_validate),
-                        cancelText = stringResource(R.string.test_mode_cancel),
-                        onDismiss = {
-                            scope.launch {
-                                ColorSettingsStore.restoreColors(ctx)
-                                ColorModesSettingsStore.colorTestMode.set(ctx, false)
-                                showExitTestValidation = false
-                            }
-                        },
-                        onValidate = {
-                            scope.launch {
-                                ColorModesSettingsStore.colorTestMode.set(ctx, false)
-                                showExitTestValidation = false
-                            }
-                        }
-                    )
-                }
             }
         }
     )
+
+    if (showResetValidation) {
+        UserValidation(
+            title = stringResource(R.string.reset_to_default_colors),
+            message = stringResource(R.string.reset_to_default_colors_explanation),
+            onDismiss = { showResetValidation = false }
+        ) {
+            scope.launch {
+                ColorSettingsStore.resetAll(ctx)
+                showResetValidation = false
+            }
+        }
+    }
+    if (showRandomColorsValidation) {
+        UserValidation(
+            title = stringResource(R.string.make_every_colors_random),
+            message = stringResource(R.string.make_every_colors_random_explanation),
+            onDismiss = { showRandomColorsValidation = false }
+        ) {
+            scope.launch {
+                ColorSettingsStore.setAllRandomColors(ctx)
+                showRandomColorsValidation = false
+            }
+        }
+    }
+
+
+    if (showAllColorsValidation) {
+        var applyColor by remember { mutableStateOf(Color.Black) }
+        AlertDialog(
+            onDismissRequest = { showAllColorsValidation = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        scope.launch {
+                            ColorSettingsStore.setAllSameColors(ctx, applyColor)
+                            showAllColorsValidation = false
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(CircleShape)
+                        .padding(5.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.apply),
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            },
+            title = {
+                ColorPickerRow(
+                    currentColor = applyColor,
+                    label = stringResource(R.string.color_mode_all),
+                    backgroundColor = MaterialTheme.colorScheme.surface.alphaMultiplier(0.7f)
+                ) { applyColor = it ?: Color.Black }
+            },
+            containerColor = MaterialTheme.colorScheme.surface,
+            shape = DragonShape
+        )
+    }
+
+    if (showExitTestValidation) {
+        UserValidation(
+            title = stringResource(R.string.exit_test_mode),
+            message = stringResource(R.string.exit_test_mode_message),
+            validateText = stringResource(R.string.test_mode_validate),
+            cancelText = stringResource(R.string.test_mode_cancel),
+            onDismiss = {
+                scope.launch {
+                    ColorSettingsStore.restoreColors(ctx)
+                    ColorModesSettingsStore.colorTestMode.set(ctx, false)
+                    showExitTestValidation = false
+                }
+            },
+            onValidate = {
+                scope.launch {
+                    ColorModesSettingsStore.colorTestMode.set(ctx, false)
+                    showExitTestValidation = false
+                }
+            }
+        )
+    }
 }
 
 private data class ColorEdit(
