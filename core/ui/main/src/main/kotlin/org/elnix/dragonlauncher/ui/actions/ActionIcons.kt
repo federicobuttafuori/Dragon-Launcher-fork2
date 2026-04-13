@@ -2,6 +2,9 @@ package org.elnix.dragonlauncher.ui.actions
 
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
@@ -19,21 +22,36 @@ import org.elnix.dragonlauncher.common.utils.ImageUtils.createUntintedBitmap
 import org.elnix.dragonlauncher.common.utils.ImageUtils.loadDrawableResAsBitmap
 import org.elnix.dragonlauncher.common.utils.PlatformShape
 import org.elnix.dragonlauncher.logging.logW
+import org.elnix.dragonlauncher.ui.composition.LocalAppsViewModel
 import org.elnix.dragonlauncher.ui.composition.LocalIcons
+
+
+/**
+ * Helper to quickly determine if the given string (in the `icons` list) is a profile key or a point id
+ */
+inline val String.isProfileKey: Boolean
+    get() = this.contains("#")
 
 @Composable
 fun appIcon(
     app: AppModel,
 ): Painter {
+    val iconsTrigger by LocalAppsViewModel.current.iconsTrigger.collectAsState()
     val icons = LocalIcons.current
-
     val profileKey = app.iconCacheKey.cacheKey
+
     val cached = icons[profileKey] ?: icons[app.packageName]
-    return if (cached != null) {
-        BitmapPainter(cached)
-    } else {
-        logW(ICONS_TAG) { "Failed to get icon for ${app.packageName}, unknown reason\nHere's the complete icons list:\n$icons" }
-        painterResource(R.drawable.ic_app_default)
+
+    key(cached) {
+        return if (cached != null) {
+            BitmapPainter(cached)
+        } else {
+            val totalIconsNumber = icons.size
+            val totalAppsNumber = icons.count { !it.key.isProfileKey }
+            val totalPointsNumber = icons.count { it.key.isProfileKey }
+            logW(ICONS_TAG) { "Failed to get icon for ${app.packageName}, unknown reason\niconsTrigger: $iconsTrigger\ntotal apps number: $totalAppsNumber\ntotal points number: $totalPointsNumber\ntotal icons number: $totalIconsNumber\nHere's the complete icons list:\n$icons" }
+            painterResource(R.drawable.ic_app_default)
+        }
     }
 }
 
@@ -48,7 +66,6 @@ fun ActionIcon(
     val ctx = LocalContext.current
     val icons = LocalIcons.current
     val extraColors = LocalExtraColors.current
-
 
     val bitmap: ImageBitmap? = when {
         action is SwipeActionSerializable.LaunchApp && showLaunchAppVectorGrid ->
@@ -65,8 +82,6 @@ fun ActionIcon(
     }
 
     if (bitmap == null) return
-
-
 
     Image(
         bitmap = bitmap,
