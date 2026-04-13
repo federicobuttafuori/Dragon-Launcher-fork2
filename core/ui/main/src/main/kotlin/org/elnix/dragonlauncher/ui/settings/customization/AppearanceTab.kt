@@ -18,7 +18,6 @@ import androidx.compose.material.icons.filled.Wallpaper
 import androidx.compose.material.icons.filled.Widgets
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,13 +40,13 @@ import org.elnix.dragonlauncher.settings.stores.UiSettingsStore.showLaunchingApp
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore.showLaunchingAppLabel
 import org.elnix.dragonlauncher.ui.base.asState
 import org.elnix.dragonlauncher.ui.components.AppPreviewTitle
-import org.elnix.dragonlauncher.ui.dragon.settings.SettingsSlider
-import org.elnix.dragonlauncher.ui.dragon.settings.SettingsSwitchRow
 import org.elnix.dragonlauncher.ui.composition.LocalIcons
 import org.elnix.dragonlauncher.ui.composition.LocalNavController
 import org.elnix.dragonlauncher.ui.dragon.components.DragonColumnGroup
 import org.elnix.dragonlauncher.ui.dragon.expandable.ExpandableSection
 import org.elnix.dragonlauncher.ui.dragon.expandable.rememberExpandableSection
+import org.elnix.dragonlauncher.ui.dragon.settings.SettingsSlider
+import org.elnix.dragonlauncher.ui.dragon.settings.SettingsSwitchRow
 import org.elnix.dragonlauncher.ui.dragon.text.TextDivider
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsItem
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
@@ -74,13 +73,12 @@ fun AppearanceTab(
     val draggingDisplayState = rememberExpandableSection(stringResource(R.string.dragging_display))
 
     var isDraggingAppPreviewOverlays by remember { mutableStateOf(false) }
-    var demoIcon by remember { mutableStateOf(icons.keys.random()) }
-
-    LaunchedEffect(isDraggingAppPreviewOverlays) {
-        // Changed the icon only when the user stops dragging, to prevent UI animations overhead
-        demoIcon = icons.keys.random()
+    var demoIcon by remember(isDraggingAppPreviewOverlays) {
+        val iconString = if (icons.isNotEmpty()) {
+            icons.keys.random()
+        } else ""
+        mutableStateOf(iconString)
     }
-
 
     SettingsScaffold(
         title = stringResource(R.string.appearance),
