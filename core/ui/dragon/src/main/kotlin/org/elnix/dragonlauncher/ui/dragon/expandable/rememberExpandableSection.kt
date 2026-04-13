@@ -17,7 +17,7 @@ data class ExpandableSectionState(
 fun rememberExpandableSection(title: String, enabled: () -> Boolean = { true }): ExpandableSectionState {
     var isExpanded by remember { mutableStateOf(false) }
 
-    return remember(title) {
+    return remember(title, enabled) {
         ExpandableSectionState(
             isExpanded = { isExpanded },
             enabled = enabled,
