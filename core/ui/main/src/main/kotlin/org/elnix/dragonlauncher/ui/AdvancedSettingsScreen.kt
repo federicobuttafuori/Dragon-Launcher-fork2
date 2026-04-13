@@ -379,7 +379,7 @@ fun AdvancedSettingsScreen(
                 name = "YoannDev90",
                 imageRes = R.drawable.yoanndev90,
                 description = stringResource(R.string.yoann_desc),
-                githubUrl = "https://lthb.fr"
+                githubUrl = "https://github.com/YoannDev90"
             )
         }
 
@@ -388,10 +388,18 @@ fun AdvancedSettingsScreen(
                 name = "Lucky",
                 imageRes = R.drawable.lucky_the_cookie,
                 description = stringResource(R.string.lucky_desc),
-                githubUrl = "https://github.com/YoannDev90"
+                githubUrl = "https://lthb.fr"
             )
         }
 
+        item {
+            ContributorItem(
+                name = "Federico",
+                imageRes = R.drawable.federico,
+                description = stringResource(R.string.federico_desc),
+                githubUrl = "https://github.com/federicobuttafuori"
+            )
+        }
 
         // Version name (clickable to access debug / copy)
         item {
