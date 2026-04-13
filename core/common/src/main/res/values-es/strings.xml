@@ -95,8 +95,8 @@
     <string name="drawer_actions_width">Ancho de acciones del cajón</string>
     <string name="drawer_actions">Acciones de cajón</string>
     <string name="close_app_drawer">Cerrar cajón</string>
-    <string name="font_selector">Global Font Selector</string>
-    <string name="font_selector_desc">Elige una fuente para toda la app. ¡Próximamente habrá más fuentes!</string>
+    <string name="font_selector">Selector de fuentes</string>
+    <string name="font_selector_desc">Elige una fuente para toda la app. Puedes importar tus propias fuentes o añadirlas desde el catálogo.</string>
     <string name="toggle_kb">Teclado alterno</string>
     <string name="behavior">Comportamiento</string>
     <string name="workspaces">Espacios de trabajo</string>
@@ -141,7 +141,7 @@
     <string name="recent_apps">Aplicaciones recientes</string>
     <string name="open_recent_apps_color">Abrir Apps Recientes Color</string>
     <string name="open_circle_nest_color">Color del nido en círculo abierto</string>
-    <string name="go_parent_nest_color">Go Parent Nest Color</string>
+    <string name="go_parent_nest_color">Ir al color del nido principal</string>
     <string name="left_padding">Acolchado izquierdo</string>
     <string name="right_padding">Acolchado derecho</string>
     <string name="top_padding">Acolchado superior</string>
@@ -154,12 +154,12 @@
     <string name="show_mobile_data">Mostrar datos móviles</string>
     <string name="show_hotspot">Mostrar punto de acceso</string>
     <string name="merge_bandwidth">Fusionar ancho de banda (Total)</string>
-    <string name="wallpaper">Papel pintado</string>
+    <string name="wallpaper">Fondo de pantalla</string>
     <string name="wallpaper_help">Configura el fondo de pantalla para inicio/pantalla de bloqueo y úsalo o no en el lanzador</string>
     <string name="select_image">Seleccionar imagen</string>
-    <string name="set_plain_wallpaper">Poner papel pintado liso</string>
-    <string name="plain_wallpaper_color">Color liso de papel pintado</string>
-    <string name="apply_wallpaper_to">Aplica papel pintado</string>
+    <string name="set_plain_wallpaper">Asignar un color como fondo de pantalla</string>
+    <string name="plain_wallpaper_color">Color plano como fondo de pantalla</string>
+    <string name="apply_wallpaper_to">Aplicar fondo a</string>
     <string name="main_screen">Pantalla principal</string>
     <string name="drawer_screen">Rejilla de cajón</string>
     <string name="show_all_actions_on_current_circle">Mostrar todas las acciones en el círculo actual</string>
@@ -232,8 +232,8 @@
     <string name="rotation">Rotación</string>
     <string name="scale_x">Escala X</string>
     <string name="scale_y">Escala Y</string>
-    <string name="open_app">Open App</string>
-    <string name="open_url">URL abierta</string>
+    <string name="open_app">Abrir app</string>
+    <string name="open_url">Abrir enlace</string>
     <string name="open_file">Archivo abierto</string>
     <string name="select_app">Seleccionar la aplicación</string>
     <string name="enter_url">Ingrese la URL</string>
@@ -248,12 +248,12 @@
     <string name="show_app_circle_preview">Mostrar vista previa del círculo de aplicaciones</string>
     <string name="show_app_line_preview">Mostrar vista previa de la línea de la aplicación</string>
     <string name="show_app_angle_preview">Mostrar vista previa del ángulo de la aplicación. %1$s</string>
-    <string name="do_you_hate_it">\"¿Lo odias\?\"</string>
+    <string name="do_you_hate_it">" • ¿No te gusta?"</string>
     <string name="line_preview_snap_to_action">Vista previa de línea: ajuste a la acción</string>
     <string name="icon_packs_found">%1$d paquetes de iconos encontrados</string>
     <string name="default_text">Por defecto</string>
     <string name="every_setting_will_return_to_its_default_state_this_cannot_be_undone_the_app_will_kill_itself">CADA configuración volverá a su estado predeterminado, esto no se puede deshacer, la aplicación se cerrará sola</string>
-    <string name="reset_all_settings">¿Restablecer TODAS las configuraciones\?</string>
+    <string name="reset_all_settings">¡¿Restablecer TODAS las configuraciones?!</string>
     <string name="set_wallpaper">Establecer fondo de pantalla</string>
     <string name="manage_nests">Manejo de Nidos</string>
     <string name="copy">Copiar</string>
@@ -285,7 +285,7 @@
     <string name="remove_circle">Quitar círculo</string>
     <string name="home_action">Inicio Acción</string>
     <string name="drawer_home_action">Acción de inicio del cajón</string>
-    <string name="wallpaper_dim_amount">Cantidad de papel tapiz tenue</string>
+    <string name="wallpaper_dim_amount">Atenuación del fondo de pantalla</string>
     <string name="fullscreen_description">Mostrar o no la barra superior y los botones de navegación/botón de gestos</string>
     <string name="rgb_loading_description">Muestra un degradado RBG en el círculo de carga al ingresar a la configuración, mientras mantienes presionado durante 3 segundos</string>
     <string name="rgb_line_selector_description">Muestra el selector de acción (la línea que sigue a tu dedo) en un degradado RGB dependiendo del ángulo</string>
@@ -294,10 +294,10 @@
     <string name="show_app_launch_preview_description">Muestra la aplicación seleccionada en el círculo al soltarla, ejecútala (una vista previa)</string>
     <string name="show_app_circle_preview_description">Muestra el círculo de destino de vista previa actual, al que pertenece la aplicación seleccionada actualmente</string>
     <string name="show_app_line_preview_description">Si se muestra el rastro que va desde la posición inicial de arrastre hasta el dedo (relacionado con la línea rgb)</string>
-    <string name="show_app_angle_preview_description">Mostrar el indicador de ángulo en la línea.</string>
+    <string name="show_app_angle_preview_description">Mostrar el indicador del ángulo en la línea</string>
     <string name="show_app_icon_start_drag_position_description">Muestra la aplicación seleccionada actualmente en el centro de donde destacaste para arrastrar</string>
     <string name="line_preview_snap_to_action_description">La vista previa de línea no se puede mover libremente, se ajusta a la acción seleccionada cuando hay una</string>
-    <string name="show_all_actions_on_current_circle_description">Cuando se selecciona una acción, también se muestran todos los puntos del mismo círculo.</string>
+    <string name="show_all_actions_on_current_circle_description">Cuando se selecciona una acción, también se muestran todos los puntos del mismo círculo</string>
     <string name="min_angle_to_activate">Ángulo mínimo para activar</string>
     <string name="app_label_overlay_size">Tamaño de superposición de etiquetas de aplicaciones</string>
     <string name="app_icon_overlay_size">Tamaño de superposición del icono de la aplicación</string>
@@ -309,7 +309,7 @@
     <string name="fast_minimal_powerful_gestures_infinite_custom">Rápido. Mínimo. Gestos poderosos. Personalización infinita</string>
     <string name="customize_apps">Personalizar aplicaciones</string>
     <string name="dont_customize">No personalices y comienza a usar directamente Dragon Launcher</string>
-    <string name="app_aliases">Alias</string>
+    <string name="app_aliases">Apodos</string>
     <string name="edit_alias">Editar alias</string>
     <string name="alias">Alias</string>
     <string name="add_alias">Agregar alias</string>
@@ -319,7 +319,7 @@
     <string name="auto_launch_single_match">Lanzamiento automático de partida única</string>
     <string name="auto_launch_single_match_desc">Cuando solo hay una aplicación visible en el cajón, se iniciará automáticamente</string>
     <string name="auto_show_keyboard">Teclado de presentación automática</string>
-    <string name="auto_show_keyboard_desc">Abre el teclado al entrar al cajón.</string>
+    <string name="auto_show_keyboard_desc">Abrír el teclado al entrar al cajón</string>
     <string name="tap_empty_space_action">Toca la acción del espacio vacío</string>
     <string name="close_kb">Cerrar teclado</string>
     <string name="open_kb">Abrir teclado</string>
@@ -331,7 +331,7 @@
     <string name="social_media_pause">Pausa en las redes sociales</string>
     <string name="social_media_pause_description">Muestra una pantalla de atención plena antes de abrir aplicaciones que puedan distraer tu atención (TikTok, Instagram, Snapchat…)</string>
     <string name="guilt_mode">Modo de reconocimiento de tiempo</string>
-    <string name="guilt_mode_description">Muestra estadísticas de uso reales para ayudarte a reflexionar sobre el tiempo dedicado a las aplicaciones.</string>
+    <string name="guilt_mode_description">Muestra estadísticas de uso reales para ayudarte a reflexionar sobre el tiempo dedicado a las aplicaciones</string>
     <string name="pause_duration">Duración de la pausa</string>
     <string name="pause_duration_description">Cuánto tiempo respirar antes de poder continuar (%d segundos)</string>
     <string name="paused_apps">Aplicaciones pausadas</string>
@@ -398,7 +398,7 @@
     <string name="time_exceeded_title">¡Se acabó el tiempo!</string>
     <string name="time_exceeded_message">Has estado en %s durante demasiado tiempo.</string>
     <string name="time_exceeded_subtitle">Es hora de tomar un descanso y hacer algo que disfrutes sin conexión 🌱</string>
-    <string name="time_exceeded_ok">Entendido, gracias Dragón.</string>
+    <string name="time_exceeded_ok">Entendido, gracias Dragon</string>
     <string name="time_exceeded_header">Sesión finalizada</string>
     <string name="encouragement_walk">Sal a caminar 🚶</string>
     <string name="encouragement_water">Bebe un poco de agua 💧</string>
@@ -407,7 +407,7 @@
     <string name="encouragement_text_someone">Envíale un mensaje a alguien que amas 💬</string>
     <!--  ─────────────  Appearance ?  ─────────────  -->
     <string name="edit_icons_shape">Editar forma de iconos</string>
-    <string name="edit_icons_shape_desc">Personaliza la forma de los iconos del cajón y del resto de la aplicación.</string>
+    <string name="edit_icons_shape_desc">Personaliza la forma de los iconos del cajón y del resto de la aplicación</string>
     <string name="random_shape">Forma aleatoria</string>
     <string name="grid_size">Tamaño de cuadrícula</string>
     <string name="max_icon_size">Tamaño máximo del icono</string>
@@ -556,7 +556,7 @@
     <string name="show_status_bar_desc">Mostrar la barra de estado, si está deshabilitada no se muestra nada</string>
     <string name="disable_haptic_globally">Deshabilitar la retroalimentación háptica globalmente</string>
     <string name="disable_haptic_globally_desc">Evite que Dragon produzca retroalimentación háptica en la selección de puntos en caso de que lo odie</string>
-    <string name="point_action_snaps_to_outer_circle">La acción del punto se ajusta al círculo exterior.</string>
+    <string name="point_action_snaps_to_outer_circle">La acción del punto se ajusta al círculo exterior</string>
     <string name="point_action_snaps_to_outer_circle_desc">Elige si la acción se activa en el círculo interior o exterior</string>
     <string name="drag_handle">Controlador de arrastre</string>
     <string name="private_space_title">Espacio privado</string>
@@ -569,13 +569,13 @@
     <string name="secure_folder_prefer_disabled">Usando el espacio privado estándar de Android.</string>
     <string name="secure_folder_unavailable">Carpeta segura no disponible en este dispositivo</string>
     <string name="app_info_name">name = %1$s</string>
-    <string name="app_info_package_name">packageName = %1$s</string>
-    <string name="app_info_is_enabled">isEnabled = %1$s</string>
-    <string name="app_info_is_system">isSystem = %1$s</string>
-    <string name="app_info_is_work_profile">isWorkProfile = %1$s</string>
-    <string name="app_info_is_private_profile">isPrivateProfile = %1$s</string>
-    <string name="app_info_is_launchable">isLaunchable = %1$s</string>
-    <string name="app_info_user_id">userId = %1$s</string>
+    <string name="app_info_package_name">Nombre del paquete = %1$s</string>
+    <string name="app_info_is_enabled">Activo = %1$s</string>
+    <string name="app_info_is_system">Del sistema = %1$s</string>
+    <string name="app_info_is_work_profile">Tiene perfil de trabajo= %1$s</string>
+    <string name="app_info_is_private_profile">Tiene un perfil privado = %1$s</string>
+    <string name="app_info_is_launchable">Se puede abrir = %1$s</string>
+    <string name="app_info_user_id">id de usuario = %1$s</string>
     <string name="no_apps">No hay aplicaciones</string>
     <string name="activate_debug_mode">Activar el modo de depuración</string>
     <string name="activate_debug_mode_desc">Activar las funciones de depuración en toda la aplicación</string>
@@ -610,7 +610,7 @@
     <string name="pull_down_animations">Animaciones de arrastre hacia abajo</string>
     <string name="pull_down_animations_desc">Activa o desactiva las animaciones al abrir el cajón</string>
     <string name="pull_down_wallpaper_dim">Fondo de pantalla abatible tenue</string>
-    <string name="pull_down_wallpaper_dim_desc">Atenua el papel pintado cuando bajes el cajón</string>
+    <string name="pull_down_wallpaper_dim_desc">Atenúa el fondo cuando emerje el cajón</string>
     <string name="pull_down_scale_in">Escala Descendente</string>
     <string name="pull_down_scale_in_desc">Escala iconos cuando el cajón se baja</string>
     <string name="drawer_enter_exit_animations">Animaciones de entrada/salida en cajones</string>
@@ -637,7 +637,7 @@
     <string name="show_percentage_desc">Mostrar el porcentaje de batería en texto plano</string>
     <string name="set_status_bar_template">¡Aviso de configurar plantilla de barra de sattus (mía). ¡Al hacer clic aquí borra tu configuración actual!</string>
     <string name="notch_mode">Modo: Muesca (Aplica un espaciador en la muesca)</string>
-    <string name="google_lockdown_warning">\"Google ha anunciado que, a partir de 2026/2027, todas las aplicaciones en dispositivos Android certificados requerirán que el desarrollador envíe datos de identidad personal directamente a Google. Dado que los desarrolladores de esta aplicación no están de acuerdo con este requisito, esta aplicación ya no funcionará en dispositivos Android certificados después de ese tiempo. \"</string>
+    <string name="google_lockdown_warning">"\"Google ha anunciado que, a partir de 2026/2027, todas las aplicaciones en dispositivos Android certificados requerirán que el desarrollador envíe datos de identidad personal directamente a Google. Dado que los desarrolladores de esta aplicación no están de acuerdo con este requisito, esta aplicación ya no funcionará en dispositivos Android certificados después de ese tiempo.\" "</string>
     <string name="solution">Solución</string>
     <string name="dismiss">Despedir</string>
     <string name="nest_radius">Radio del nido</string>
@@ -659,11 +659,126 @@
     <string name="start_object">Objeto de inicio</string>
     <string name="end_object">Objetivo final</string>
     <string name="show_all_actions_on_current_nest">Mostrar toda la acción en el nido actual</string>
-    <string name="show_all_actions_on_current_nest_desc">Diasplay todos los círculos y puntos del nido actual mientras arrastras</string>
+    <string name="show_all_actions_on_current_nest_desc">Mostrar todos los círculos y puntos del nido actual mientras arrastras</string>
     <string name="disable_auto_launch_on_space_first_char">Desactiva el lanzamiento automático en el primer personaje espacial</string>
     <string name="disable_auto_launch_on_space_first_char_desc">Cuando pulsas espacio antes de buscar, el lanzamiento automático no se activa</string>
     <string name="configure_draw_order">Configurar el orden de dibujo</string>
     <string name="debug_mode_already_enabled">El modo Depuración ya está activado</string>
     <string name="not_supported_in_this_android_version">No soportado en esta versión de Android</string>
     <string name="please_enable_accessibility_services_to_use_that_feature">Por favor, habilita el servicio de accesibilidad para usar esa función</string>
+    <string name="appearance">Apariencia</string>
+    <string name="backup_restore">Respaldo</string>
+    <string name="font_manage_help">Configurar fuentes. Puedes importar tus propias fuentes usando archivos TTF/OTF o conseguirlos desde Google Fonts.</string>
+    <string name="font_catalog">Catálogo</string>
+    <string name="font_import">Importar</string>
+    <string name="font_installed_fonts">Fuentes instaladas</string>
+    <string name="font_available_in_extension">Disponible en la extensión (%1$d)</string>
+    <string name="font_download_all_started">Iniciando la descarga de todas las fuentes. Revisa tus notificaciones.</string>
+    <string name="font_confirm_delete">¿Confirmar? (%1$d)</string>
+    <string name="font_search_placeholder">Buscando fuentes…</string>
+    <string name="font_downloading">Descargando%1$s…</string>
+    <string name="font_cat_all">TODOS</string>
+    <string name="font_cat_serif">SERIF</string>
+    <string name="font_cat_sans_serif">SANS-SERIF</string>
+    <string name="font_cat_monospace">MONOESPACIO</string>
+    <string name="font_cat_display">DISPLAY</string>
+    <string name="font_cat_handwriting">ESCRITAS A MANO</string>
+    <string name="search_widgets">Buscando widgets…</string>
+    <string name="precision_mode_active">Modo de presición</string>
+    <string name="change_app_icon">Cambiar icono</string>
+    <string name="backup_location">Ubicación del respaldo</string>
+    <string name="backup_location_desc">Toca para seleccionar el destino</string>
+    <string name="backup_triggered">Respaldo activado automáticamente</string>
+    <string name="auto_backup_desc">Regenerar respaldos en el almacenamiento local automáticamente</string>
+    <string name="select_all">Seleccionar todos</string>
+    <string name="invert">Invertir</string>
+    <string name="advanced">Avanzado</string>
+    <string name="yoann_desc">Colaborar importante (extensiones, mejoras, widgets)</string>
+    <string name="lucky_desc">Colaborador importante (bienestar digital y recordatorios)</string>
+    <string name="version_copied_to_clipboard">Versión copiada al portapapeles</string>
+    <string name="permission_tab_help">Controlar los permisos de la aplicación y el acceso a extensiones externas</string>
+    <string name="special_system_access">Acceso especial al sistema</string>
+    <string name="notification_access">Acceso a notificaciones</string>
+    <string name="notification_access_desc">Permitir que las aplicaciones muestren puntos de notificaciones</string>
+    <string name="install_from_unknown_source_permission">Instalar desde fuentes desconocidas (APK)</string>
+    <string name="install_from_unknown_source_permission_desc">Indispensable para instalar extensiones</string>
+    <string name="accessibility_service">Servicios de accesibilidad</string>
+    <string name="accessibility_service_desc">Se usa para acceder al panel de notificaciones por gestos.</string>
+    <string name="usage_access">Acceso a estadísticas de uso</string>
+    <string name="android_permissions">Permisos de Android</string>
+    <string name="manage_in_system_settings">Administrar la configuración del sistema.</string>
+    <string name="free_move_dragged_point">Arrastrar libremente el punto seleccionado</string>
+    <string name="snap_points">Ajustar puntos</string>
+    <string name="show_circle">Mostrar círculo</string>
+    <string name="undo">Deshacer</string>
+    <string name="undo_all">Deshacer todo</string>
+    <string name="redo">Revertir</string>
+    <string name="redo_all">Revertir todo</string>
+    <string name="move_point_clockwise">Mover el punto en sentido horario</string>
+    <string name="move_point_anticlockwise">Mover punto en sentido antihorario</string>
+    <string name="show_nest_preview">Visualizar elementos anidados</string>
+    <string name="general">General</string>
+    <string name="action">Accción</string>
+    <string name="collapse">Colapsar</string>
+    <string name="haptic_feedback_editor">Editor de respuesta háptica</string>
+    <string name="vibration">Vibración</string>
+    <string name="delay">Retrasar</string>
+    <string name="no_steps_yet_add_a_vibration_or_delay">No hay pasos asignados. Añada vibraciones o retrasos. Luego pruébelos usando el botón de reproducir. Si se deja vacío, se usará el valor por defecto</string>
+    <string name="duration_ms">Duración (ms)</string>
+    <string name="play">Reproducir</string>
+    <string name="haptic_preset_single">Toque único</string>
+    <string name="haptic_preset_double">Doble toque</string>
+    <string name="haptic_preset_triple">Triple toque</string>
+    <string name="haptic_preset_heavy">Vibración fuerte</string>
+    <string name="haptic_preset_heartbeat">Latidos del corazón</string>
+    <string name="haptic_preset_error">Sacudir si hay error</string>
+    <string name="haptic_preset_tick">Tirón suave</string>
+    <string name="haptic_preset_success">Explosión sucesiva</string>
+    <string name="common_settings">Ajustes cotidianos</string>
+    <string name="dragging_display">Arrastrar pantalla</string>
+    <string name="select_settings_to_export">Exportar configuraciones seleccionadas</string>
+    <string name="select_settings_to_import">Importar configuraciones seleccionadas</string>
+    <string name="edit_hold_to_activate_elements">Mantener presionado para editar elementos activos</string>
+    <string name="edit_hold_to_activate_elements_desc">Editar las acciones invocadas tras presionar durante 3 segundos. 1 indica autoredirección</string>
+    <string name="less">Menos</string>
+    <string name="warning">¡Advertencia!</string>
+    <string name="access_app">Acceso a la aplicación (es posible que nuevamente experimente fallas)</string>
+    <string name="shizuku_unavailable">Shizuku no está disponible</string>
+    <string name="shizuku_unavailable_message">Shizuku no está instalado o configurado para funcionar dentro del dispositivo</string>
+    <string name="shizuku">Shizuku</string>
+    <string name="run_adb_command">Ejecutar comando ADB</string>
+    <string name="toggle_bluetooth">Activar/Desactivar Bluetooth</string>
+    <string name="toggle_mobile_data">Activar/Desactivar Datos móviles</string>
+    <string name="toggle_wifi">Activar/Desactivar Wi-Fi</string>
+    <string name="adb_command_without_adb">Comando adb sin \"adb\"</string>
+    <string name="shizuku_bt_cmd_cmd">Funciona en algunos dispositivos Android 11+, no está garantizado que operé con todos los dispositivos</string>
+    <string name="shizuku_bt_service_call">Metódo antiguo, funciona en versiones anteriores de Android y algunos dispositivos, no recomendable</string>
+    <string name="shizuku_bt_root">Requiere acceso a root</string>
+    <string name="shizuku_bt_intent">Abrir un diálogo de confirmación para el usuario</string>
+    <string name="shizuku_wifi_svc">Funciona para la mayoría de dispositivos, funcional en mayoría de versiones de Android</string>
+    <string name="shizuku_data_svc">Funciona en varios equipos, algunos proveedores (Samsung, Xiaomi, Techno) podrían bloquear esto</string>
+    <string name="shizuku_data_settings">Generalmente no se aplican al instante, tal vez requieran un reinicio</string>
+    <string name="pick_a">Elegir un</string>
+    <string name="command">Comando</string>
+    <string name="show_toast">Mostrar mensaje rápido</string>
+    <string name="show_tooltips">Mostrar información sobre funciones</string>
+    <string name="gradient">Gradiente</string>
+    <string name="sliders">Deslizadores</string>
+    <string name="this_is_a_beta_version">Esta es una versión beta, lo cuál implica que contiene funciones y características inestables o en prueba que pueden generar errores y fallas. ¡Por favor, informa si encuentras alguno! Esto ayuda a seguir mejorando la aplicación</string>
+    <string name="this_feature_is_in_beta">Esta función está en beta, puede que llegue a fallar y no está terminada todavía, ¡reporta si hayas errores o tienes alguna sugerecia para mejorarla!</string>
+    <string name="export">Exportar</string>
+    <string name="import_text">Importar</string>
+    <string name="user_theme">Tema del usuario %1$d</string>
+    <string name="add_current_theme">Añadir tema aplicado</string>
+    <string name="test_mode_validate">Mantener los colores aplicados</string>
+    <string name="test_mode_cancel">Restaurar tema anterior</string>
+    <string name="haptic_preset_buzz_roll">Vibrar repetidamente</string>
+    <string name="haptic_preset_long_press">Mantener pulsado para confirmar</string>
+    <string name="presets">Preajustes</string>
+    <string name="steps">Pasos</string>
+    <string name="you_can_edit_haptic_feedback_on_nest_settings">Puedes editar la respuesta háptica en los ajustes</string>
+    <string name="edit_nest_help">Configura en tamaño del nido, distancia del arrastre, retroalimentación háptica y otras opciones</string>
+    <string name="reset_nest_text">¿Restaurar el nido a su estado predeterminado?, todos los cambios ¡Desaparecerán!</string>
+    <string name="use_custom_color_channels">Usar canales de color personalizados</string>
+    <string name="use_custom_color_channels_desc">Anular los canales de color predeterminados, usados para los objetos de material, como los interruptores, para usar los del launcher</string>
 </resources>
