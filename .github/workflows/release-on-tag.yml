@@ -64,11 +64,21 @@ jobs:
           DEBUG="DragonLauncher-${{ env.VERSION }}-debuggable.apk"
           mv app/build/outputs/apk/beta/debuggableRelease/app-beta-debuggableRelease.apk "$DEBUG"
           
+          MAPPINGS_MIN="Mappings-${{ env.VERSION }}.txt"
+          MAPPINGS_DEBUG="Mappings-${{ env.VERSION }}-debuggable.txt"
+          
+          [ -f "app/build/outputs/mapping/stableRelease/mapping.txt" ] && cp app/build/outputs/mapping/stableRelease/mapping.txt "$MAPPINGS_MIN"
+          [ -f "app/build/outputs/mapping/debuggableRelease/mapping.txt" ] && cp app/build/outputs/mapping/debuggableRelease/mapping.txt "$MAPPINGS_DEBUG"
+          
           echo "Debug file: $DEBUG"
           echo "Release file: $NAME"
+          echo "Mappings files: $MAPPINGS_MIN, $MAPPINGS_DEBUG"
+        
           {
             echo "APK_DEBUG=$DEBUG"
             echo "APK=$NAME"
+            echo "$MAPPINGS_MIN=$MAPPINGS_MIN"
+            echo "$MAPPINGS_DEBUG=$MAPPINGS_DEBUG"
           } >> $GITHUB_ENV
 
       - name: Create GitHub Release
@@ -79,6 +89,8 @@ jobs:
           files: |
             ${{ env.APK }}
             ${{ env.APK_DEBUG }}
+            ${{ env.MAPPINGS_MIN }}
+            ${{ env.MAPPINGS_DEBUG }}
           body: |
             ${{ steps.changelog.outputs.changelog }}
 
