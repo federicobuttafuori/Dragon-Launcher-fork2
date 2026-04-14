@@ -34,7 +34,6 @@ import androidx.compose.material.icons.filled.Restore
 import androidx.compose.material.icons.filled.SelectAll
 import androidx.compose.material.icons.filled.Shuffle
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ButtonGroup
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.HorizontalDivider
@@ -586,11 +585,14 @@ fun ColorSelectorTab(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     @Suppress("DEPRECATION")
-                    ButtonGroup(
-                        Modifier.fillMaxWidth(),
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         DragonButton(
-                            onClick = { showResetValidation = true }
+                            onClick = { showResetValidation = true },
+                            modifier = Modifier.weight(1f)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Restore,
