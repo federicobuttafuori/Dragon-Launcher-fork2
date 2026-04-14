@@ -32,7 +32,7 @@ import org.elnix.dragonlauncher.common.utils.resolveShape
 import org.elnix.dragonlauncher.ui.actions.actionColor
 import org.elnix.dragonlauncher.ui.actions.actionLabel
 import org.elnix.dragonlauncher.ui.composition.LocalIconShape
-import org.elnix.dragonlauncher.ui.composition.LocalIcons
+import org.elnix.dragonlauncher.ui.composition.LocalPointIconsCache
 
 @SuppressLint("UseOfNonLambdaOffsetOverload")
 @Composable
@@ -47,7 +47,7 @@ fun AppPreviewTitle(
     if (point == null) return
 
     val extraColors = LocalExtraColors.current
-    val icons = LocalIcons.current
+    val icons = LocalPointIconsCache.current
     val iconShape = LocalIconShape.current
 
     val label = point.customName ?: actionLabel(point.action)
@@ -92,7 +92,7 @@ fun AppPreviewTitle(
                 if (showIcon) {
                     val colorAction =
                         actionColor(action, extraColors, point.customActionColor?.let { Color(it) })
-                    icons[point.id]?.let {
+                    icons.get(point.id)?.let {
                         Image(
                             bitmap = it,
                             contentDescription = null,

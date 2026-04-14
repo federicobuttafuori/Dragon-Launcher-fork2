@@ -73,19 +73,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.base.theme.LocalExtraColors
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.logging.logD
-import org.elnix.dragonlauncher.logging.logE
 import org.elnix.dragonlauncher.common.serializables.CircleNest
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
 import org.elnix.dragonlauncher.common.undoredo.UndoRedoManager
 import org.elnix.dragonlauncher.common.utils.Constants
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.NESTS_TAG
+import org.elnix.dragonlauncher.common.utils.Constants.Logging.SPECIAL_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.SWIPE_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Settings.POINT_RADIUS_PX
 import org.elnix.dragonlauncher.common.utils.Constants.Settings.SNAP_STEP_DEG
@@ -108,6 +106,9 @@ import org.elnix.dragonlauncher.enumsui.PointsEditTools.FreeMove
 import org.elnix.dragonlauncher.enumsui.PointsEditTools.SnapPoints
 import org.elnix.dragonlauncher.enumsui.SelectedPointEditTools
 import org.elnix.dragonlauncher.enumsui.UndRedoEditTools
+import org.elnix.dragonlauncher.logging.logD
+import org.elnix.dragonlauncher.logging.logE
+import org.elnix.dragonlauncher.logging.logWtf
 import org.elnix.dragonlauncher.settings.stores.DebugSettingsStore
 import org.elnix.dragonlauncher.settings.stores.SwipeMapSettingsStore
 import org.elnix.dragonlauncher.settings.stores.SwipeSettingsStore
@@ -116,29 +117,29 @@ import org.elnix.dragonlauncher.settings.stores.UiSettingsStore.autoSeparatePoin
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore.freeMoveDraggedPoint
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore.snapPoints
 import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.base.asState
+import org.elnix.dragonlauncher.ui.base.modifiers.shapedClickable
 import org.elnix.dragonlauncher.ui.components.AppPreviewTitle
 import org.elnix.dragonlauncher.ui.components.burger.BurgerAction
 import org.elnix.dragonlauncher.ui.components.burger.BurgerListAction
-import org.elnix.dragonlauncher.ui.dragon.components.DragonColumnGroup
-import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
-import org.elnix.dragonlauncher.ui.dragon.components.DragonTooltip
-import org.elnix.dragonlauncher.ui.dragon.generic.MultiSelectConnectedButtonColumn
-import org.elnix.dragonlauncher.ui.dragon.generic.MultiSelectConnectedButtonRow
-import org.elnix.dragonlauncher.ui.dragon.settings.SettingsSlider
-import org.elnix.dragonlauncher.ui.base.asState
+import org.elnix.dragonlauncher.ui.composition.LocalAppsViewModel
+import org.elnix.dragonlauncher.ui.composition.LocalDefaultPoint
 import org.elnix.dragonlauncher.ui.dialogs.AddPointDialog
 import org.elnix.dragonlauncher.ui.dialogs.EditPointDialog
 import org.elnix.dragonlauncher.ui.dialogs.NestManagementDialog
-import org.elnix.dragonlauncher.ui.dragon.dialogs.UserValidation
+import org.elnix.dragonlauncher.ui.dragon.components.DragonColumnGroup
+import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
+import org.elnix.dragonlauncher.ui.dragon.components.DragonTooltip
 import org.elnix.dragonlauncher.ui.dragon.components.EditValueTextField
+import org.elnix.dragonlauncher.ui.dragon.dialogs.UserValidation
+import org.elnix.dragonlauncher.ui.dragon.generic.MultiSelectConnectedButtonColumn
+import org.elnix.dragonlauncher.ui.dragon.generic.MultiSelectConnectedButtonRow
+import org.elnix.dragonlauncher.ui.dragon.settings.SettingsSlider
+import org.elnix.dragonlauncher.ui.helpers.customobjects.glowOverlay
 import org.elnix.dragonlauncher.ui.helpers.nests.actionsInCircle
 import org.elnix.dragonlauncher.ui.helpers.nests.circlesSettingsOverlay
-import org.elnix.dragonlauncher.ui.helpers.customobjects.glowOverlay
-import org.elnix.dragonlauncher.ui.remembers.rememberSwipeDefaultParams
 import org.elnix.dragonlauncher.ui.helpers.settings.fullScreenStatusBarsPaddings
-import org.elnix.dragonlauncher.ui.base.modifiers.shapedClickable
-import org.elnix.dragonlauncher.ui.composition.LocalAppsViewModel
-import org.elnix.dragonlauncher.ui.composition.LocalDefaultPoint
+import org.elnix.dragonlauncher.ui.remembers.rememberSwipeDefaultParams
 import java.math.RoundingMode
 import java.util.UUID
 import kotlin.math.abs
@@ -166,7 +167,7 @@ fun SettingsScreen(
 
     val scope = rememberCoroutineScope()
 
-    val iconsVersion by appsViewModel.iconsTrigger.collectAsState()
+    val pointsIconsTrigger by appsViewModel.pointsIconsCache.iconsTrigger.collectAsState()
 
     val backgroundColor = MaterialTheme.colorScheme.background
     val primaryColor = MaterialTheme.colorScheme.primary
@@ -260,27 +261,23 @@ fun SettingsScreen(
 
     fun reloadIcons() {
         appsViewModel.preloadPointIcons(
-            points = points.filter { it.nestId == nestId },
-            override = true
+            points = points,
+            overwrite = true
         )
-
-        /* Load asynchronously all the other points, to avoid lag */
-        scope.launch(Dispatchers.IO) {
-            appsViewModel.preloadPointIcons(
-                points = points,
-                override = true
-            )
-        }
     }
 
-    /**
-     * Reload all point icons on every change of the points, nestId, appIconOverlaySize, or default point
-     * Set the size of the icons to the max size between the 2 overlays sizes preview to display them cleanly
-     */
-    LaunchedEffect(points, nestId, appIconOverlaySize, defaultPoint) {
-        reloadIcons()
-    }
+//    /**
+//     * Reload all point icons on every change of the points, nestId, appIconOverlaySize, or default point
+//     * Set the size of the icons to the max size between the 2 overlays sizes preview to display them cleanly
+//     */
+//    LaunchedEffect(points, nestId, appIconOverlaySize, defaultPoint) {
+//        reloadIcons()
+//    }
 
+
+    LaunchedEffect(selectedPoint) {
+        logWtf(SPECIAL_TAG) { "SELECTED POINTS: $selectedPoint" }
+    }
 
     val undoRedo = remember { UndoRedoManager() }
 
@@ -642,7 +639,7 @@ fun SettingsScreen(
 
     val drawParams by remember(
         subNestDefaultRadius,
-        iconsVersion,
+        pointsIconsTrigger,
         points,
         nests,
         displayedFilteredPoints,
@@ -717,7 +714,7 @@ fun SettingsScreen(
                                         showBurgerMenu = false
                                         appsViewModel.preloadPointIcons(
                                             points = points,
-                                            override = true
+                                            overwrite = true
                                         )
                                     }
                                 ) {

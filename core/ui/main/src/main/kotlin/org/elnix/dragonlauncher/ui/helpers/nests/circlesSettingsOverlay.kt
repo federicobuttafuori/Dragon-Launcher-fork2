@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
 import org.elnix.dragonlauncher.common.utils.UiCircle
 import org.elnix.dragonlauncher.common.utils.circles.computePointPosition
-import org.elnix.dragonlauncher.ui.helpers.nests.points.SwipeDrawParams
+import org.elnix.dragonlauncher.ui.base.cache.SwipeDrawParams
 
 fun DrawScope.circlesSettingsOverlay(
     drawParams: SwipeDrawParams,

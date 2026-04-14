@@ -33,8 +33,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.elnix.dragonlauncher.base.theme.LocalExtraColors
-import org.elnix.dragonlauncher.logging.logI
-import org.elnix.dragonlauncher.logging.logV
 import org.elnix.dragonlauncher.common.serializables.CircleNest
 import org.elnix.dragonlauncher.common.serializables.CustomHapticFeedbackSerializable
 import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
@@ -43,25 +41,26 @@ import org.elnix.dragonlauncher.common.utils.UiCircle
 import org.elnix.dragonlauncher.common.utils.circles.computePointPosition
 import org.elnix.dragonlauncher.common.utils.performCustomHaptic
 import org.elnix.dragonlauncher.common.utils.resolveShape
+import org.elnix.dragonlauncher.logging.logV
 import org.elnix.dragonlauncher.settings.stores.AngleLineSettingsStore
 import org.elnix.dragonlauncher.settings.stores.BehaviorSettingsStore
 import org.elnix.dragonlauncher.settings.stores.DebugSettingsStore
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
 import org.elnix.dragonlauncher.ui.base.UiConstants
-import org.elnix.dragonlauncher.ui.components.AppPreviewTitle
 import org.elnix.dragonlauncher.ui.base.asState
-import org.elnix.dragonlauncher.ui.dialogs.rememberLineObjectsOrder
-import org.elnix.dragonlauncher.ui.helpers.customobjects.actionLine
-import org.elnix.dragonlauncher.ui.helpers.nests.actionsInCircle
-import org.elnix.dragonlauncher.ui.helpers.nests.circlesSettingsOverlay
-import org.elnix.dragonlauncher.ui.remembers.rememberSwipeDefaultParams
+import org.elnix.dragonlauncher.ui.components.AppPreviewTitle
 import org.elnix.dragonlauncher.ui.composition.LocalAngleLineObject
 import org.elnix.dragonlauncher.ui.composition.LocalEndLineObject
 import org.elnix.dragonlauncher.ui.composition.LocalLineObject
 import org.elnix.dragonlauncher.ui.composition.LocalNests
 import org.elnix.dragonlauncher.ui.composition.LocalPoints
 import org.elnix.dragonlauncher.ui.composition.LocalStartLineObject
+import org.elnix.dragonlauncher.ui.dialogs.rememberLineObjectsOrder
+import org.elnix.dragonlauncher.ui.helpers.customobjects.actionLine
+import org.elnix.dragonlauncher.ui.helpers.nests.actionsInCircle
+import org.elnix.dragonlauncher.ui.helpers.nests.circlesSettingsOverlay
 import org.elnix.dragonlauncher.ui.remembers.rememberSweepAngle
+import org.elnix.dragonlauncher.ui.remembers.rememberSwipeDefaultParams
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.hypot
@@ -408,8 +407,6 @@ fun MainScreenOverlay(
                         angleLineCustomObject = angleLineObject,
                         startCustomObject = startObject,
                         endCustomObject = endObject
-
-
                     )
                 }
 
@@ -420,7 +417,7 @@ fun MainScreenOverlay(
 
                     // compute point position relative to origin
                     // Depends on whether the line snaps or not to the closest point
-                    val end = computePointPosition(
+                    val currentSelectedPointOffset = computePointPosition(
                         point = point,
                         radius = radius,
                         center = start
@@ -430,7 +427,7 @@ fun MainScreenOverlay(
                     if (linePreviewSnapToAction) {
                         actionLine(
                             start = start,
-                            end = end,
+                            end = currentSelectedPointOffset,
                             sweepAngle = sweepAngle,
                             lineColor = lineColor,
                             order = order,
@@ -487,11 +484,11 @@ fun MainScreenOverlay(
                                 selected = true,
                                 point = point,
                                 drawParams = drawParams,
-                                center = end,
+                                center = currentSelectedPointOffset,
                                 depth = 1
                             )
                         } else {
-                            logI(NESTS_TAG) { "Got else" }
+                            logV(NESTS_TAG) { "Got else, user don't draw anything at all?" }
                         }
 
 

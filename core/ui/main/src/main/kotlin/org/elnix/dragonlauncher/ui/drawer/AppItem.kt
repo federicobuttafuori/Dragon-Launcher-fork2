@@ -35,14 +35,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.elnix.dragonlauncher.common.serializables.AppModel
-import org.elnix.dragonlauncher.common.utils.Constants.Logging.APPS_TAG
 import org.elnix.dragonlauncher.common.utils.resolveShape
-import org.elnix.dragonlauncher.logging.logD
-import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import org.elnix.dragonlauncher.ui.actions.appIcon
-import org.elnix.dragonlauncher.ui.dragon.components.DragonDropDownMenu
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import org.elnix.dragonlauncher.ui.base.modifiers.conditional
 import org.elnix.dragonlauncher.ui.composition.LocalIconShape
+import org.elnix.dragonlauncher.ui.dragon.components.DragonDropDownMenu
 
 @Composable
 fun AppItemHorizontal(
@@ -137,9 +135,6 @@ fun AppItemGrid(
     longPressPopup: @Composable ((AppModel) -> Unit)?,
     onClick: ((AppModel) -> Unit)?
 ) {
-
-    logD(APPS_TAG) { "LongPressPopup: $longPressPopup; onLongClick: $onLongClick"}
-
     require(!((onLongClick != null) and (longPressPopup != null))) {
         "Long press action, or popup, or neither, but not both!"
     }

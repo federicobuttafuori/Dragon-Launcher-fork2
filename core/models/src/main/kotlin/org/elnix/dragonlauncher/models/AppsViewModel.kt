@@ -8,7 +8,6 @@ import android.content.res.Resources
 import android.content.res.XmlResourceParser
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.util.LruCache
 import android.util.Xml
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
@@ -58,6 +57,7 @@ import org.elnix.dragonlauncher.common.serializables.splitCacheKey
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.APPS_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.ICONS_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.WORKSPACES_TAG
+import org.elnix.dragonlauncher.common.utils.IconsCache
 import org.elnix.dragonlauncher.common.utils.ImageUtils.createUntintedBitmap
 import org.elnix.dragonlauncher.common.utils.ImageUtils.loadDrawableAsBitmap
 import org.elnix.dragonlauncher.common.utils.ImageUtils.resolveCustomIconBitmap
@@ -109,30 +109,13 @@ class AppsViewModel(
     }
 
     /**
-     * Cache for icons with memory management (20MB size for better storage of bitmaps)
+     * Drawer icons cache, initialize at 100 apps
      */
-    private val iconCache = object : LruCache<String, ImageBitmap>(20 * 1024 * 1024) {
-        override fun sizeOf(key: String, value: ImageBitmap): Int {
-            return value.width * value.height * 4 // 4 bytes per pixel for ARGB_8888
-        }
-    }
+    private val _drawerIconsCache = IconsCache<CacheKey>(100)
+    val drawerIconCache = _drawerIconsCache
 
-    private val _iconsTrigger = MutableStateFlow(0)
-    val iconsTrigger = _iconsTrigger.asStateFlow()
-
-    /**
-     * Reactive access to icons.
-     * Note: For high-performance icon rendering (list scrolling),
-     * use getIcon(key) which hits the LruCache directly.
-     */
-    val icons: StateFlow<Map<String, ImageBitmap>> = _iconsTrigger
-        .map { iconCache.snapshot() }
-        .stateIn(scope, SharingStarted.Lazily, emptyMap())
-
-    /**
-     * Direct synchronous access to icon cache for UI components
-     */
-//    fun getIcon(key: String): ImageBitmap? = iconCache.get(key)
+    private val _pointsIconsCache = IconsCache<String>(100)
+    val pointsIconsCache = _pointsIconsCache
 
 
     private val _defaultPoint = MutableStateFlow(defaultSwipePointsValues)
@@ -412,19 +395,29 @@ class AppsViewModel(
 
             // Create new list to ensure StateFlow emission
             _apps.value = finalApps.toList()
-            loadAppIcons(finalApps, 128)
+            val appsSize = finalApps.size
+
+            _drawerIconsCache.updateMaxCacheSize(appsSize)
+            logI(ICONS_TAG) { "Updated apps-icons size; now = $appsSize" }
+            logI(ICONS_TAG) { "Loading $appsSize app icons..." }
+
+            preloadAppIcons(_apps.value, 128)
 
             val points = SwipeSettingsStore.getPoints(ctx)
 
+            _pointsIconsCache.updateMaxCacheSize(points.size)
+            logI(ICONS_TAG) { "Updated point-icons size; now = ${points.size}"}
+
+
             preloadPointIcons(
                 points = points,
-                override = true,
+                overwrite = true,
             )
 
             logI(APPS_TAG) {
                 "Reloaded packages, ${apps.filter { it.isLaunchable == true }.size} launchable apps, ${apps.size} total apps"
             }
-            logI(APPS_TAG) { "========== Finished reloadApps() ==========" }
+            logI(APPS_TAG) { "========== Finished reloadApps(\uD83E\uDD0E) ==========" }
 
         } catch (e: Exception) {
             logE(APPS_TAG, e) { "Error in reloadApps" }
@@ -717,7 +710,7 @@ class AppsViewModel(
         val baseBitmap = createUntintedBitmap(
             action = point.action,
             ctx = ctx,
-            icons = icons.value,
+            icons = _drawerIconsCache,
             width = sizePx,
             height = sizePx
         )
@@ -762,7 +755,6 @@ class AppsViewModel(
 
         val drawable =
             if (selectedPack != null) {
-
                 packIconName?.let { packName ->
                     isIconPack = true
                     loadIconFromPack(
@@ -775,9 +767,7 @@ class AppsViewModel(
                 null
             } ?: run {
                 isIconPack = false
-                pmCompat.getAppIcon(packageName, userId ?: 0, isPrivateProfile).also {
-                    logD(ICONS_TAG) { "Drawable for ${app.iconCacheKey} got from pmCompat: $it" }
-                }
+                pmCompat.getAppIcon(packageName, userId ?: 0, isPrivateProfile)
             }
 
 
@@ -788,7 +778,7 @@ class AppsViewModel(
             tint = _packTint.value.takeIf { isIconPack }
         )
 
-        logD(ICONS_TAG) { "Icons loaded for ${app.iconCacheKey}: $orig" }
+        logD(ICONS_TAG) { "Icon loaded for ${app.iconCacheKey}: $orig" }
 
         if (useOverrides) {
             _workspacesState.value.appOverrides[cacheKey]?.customIcon?.let { customIcon ->
@@ -797,7 +787,7 @@ class AppsViewModel(
                     customIcon = customIcon,
                     sizePx = sizePx
                 ).also {
-                    logD(ICONS_TAG) { "Custom Icon rendered for ${app.iconCacheKey}: $orig" }
+                    logD(ICONS_TAG) { "Custom Icon rendered for ${app.iconCacheKey}: $it" }
                 }
             }
         }
@@ -814,11 +804,8 @@ class AppsViewModel(
      * @param point which point's icon to load
      */
     fun reloadPointIcon(point: SwipePointSerializable) {
-        scope.launch(Dispatchers.IO) {
-            val bmp = loadPointIcon(point)
-
-            iconCache.put(point.id, bmp)
-            _iconsTrigger.update { it + 1 }
+        _pointsIconsCache.compute(point.id) {
+            loadPointIcon(point)
         }
     }
 
@@ -834,22 +821,12 @@ class AppsViewModel(
         useOverride: Boolean,
         sizePx: Int = 128
     ) {
-        scope.launch(Dispatchers.IO) {
-            val icon = loadSingleIcon(
+        _drawerIconsCache.compute(app.iconCacheKey) {
+            loadSingleIcon(
                 app = app,
                 useOverrides = useOverride,
                 sizePx = sizePx
             )
-
-            iconCache.put(app.iconCacheKey.cacheKey, icon)
-
-//            if (!app.isWorkProfile && !app.isPrivateProfile) {
-//                iconCache.put(app.iconCacheKey.cacheKey, icon)
-//            }
-
-            logD(ICONS_TAG) { "Put ${app.iconCacheKey} into the iconCache" }
-
-            _iconsTrigger.update { it + 1 }
         }
     }
 
@@ -861,19 +838,23 @@ class AppsViewModel(
      * Preload a given list of point icons asynchronously and per icon updates the icons list
      *
      * @param points which points to load
-     * @param override whether to override the existing already loaded or skip them
+     * @param overwrite whether to override the existing already loaded or skip them
      */
     fun preloadPointIcons(
         points: List<SwipePointSerializable>,
-        override: Boolean = false
+        overwrite: Boolean = false
     ) {
-        scope.launch(Dispatchers.Default) {
+        logI(ICONS_TAG) { "Loading ${points.size} points icons, using overwrite: $overwrite" }
+
+        scope.launch(Dispatchers.IO) {
             points.forEach { p ->
                 @Suppress("USELESS_ELVIS")
                 val id = p.id ?: return@forEach // Cause it crashed someone's app after corrupted loading
-                if (iconCache.get(id) != null && !override) return@forEach
+                if (_pointsIconsCache.get(id) != null && !overwrite) return@forEach
 
-                reloadPointIcon(p)
+                iconSemaphore.withPermit {
+                    reloadPointIcon(p)
+                }
             }
         }
     }
@@ -884,30 +865,18 @@ class AppsViewModel(
      * @param apps list of app icons to load
      * @param sizePx size of the loaded [ImageBitmap]
      */
-    private suspend fun loadAppIcons(
+    private suspend fun preloadAppIcons(
         apps: List<AppModel>,
         sizePx: Int
     ) = withContext(Dispatchers.IO) {
+        logI(ICONS_TAG) { "Loading ${apps.size} app icons..." }
+
         apps.forEach { app ->
-            val bitmap = runCatching {
-                iconSemaphore.withPermit {
-                    loadSingleIcon(
-                        app = app,
-                        useOverrides = true,
-                        sizePx = sizePx
-                    )
-                }
-            }.getOrNull() ?: return@forEach
-
-            iconCache.put(app.iconCacheKey.cacheKey, bitmap)
-            logD(ICONS_TAG) { "Put ${app.iconCacheKey} into the iconCache" }
-
+            iconSemaphore.withPermit {
+                reloadAppIcon(app, true, sizePx)
+            }
         }
-        _iconsTrigger.update { it + 1 }
     }
-
-
-    /* ──────────────────────────────────────────────────  */
 
 
     /**
@@ -918,7 +887,7 @@ class AppsViewModel(
      * resource is found, it is returned as a [Drawable].
      *
      * This method assumes that the correct drawable name has already been
-     * determined (e.g., via appfilter mapping or manual naming strategy).
+     * determined (e.g., via app-filter mapping or manual naming strategy).
      * No additional fallback logic is performed here.
      *
      * @param packPkg Package name of the icon pack. If `null`, the function
@@ -1174,7 +1143,7 @@ class AppsViewModel(
     }
 
 
-    private fun persist() = scope.launch(Dispatchers.IO) {
+    private fun persistWorkspaces() = scope.launch(Dispatchers.IO) {
 
         logW(WORKSPACES_TAG) { "Persisting the state: ${_workspacesState.value}" }
 
@@ -1250,7 +1219,7 @@ class AppsViewModel(
                 }
             }
         )
-        persist()
+        persistWorkspaces()
     }
 
     fun createWorkspace(name: String, type: WorkspaceType) {
@@ -1265,7 +1234,7 @@ class AppsViewModel(
                         appIds = emptySet()
                     )
         )
-        persist()
+        persistWorkspaces()
     }
 
     fun editWorkspace(id: String, name: String, type: WorkspaceType) {
@@ -1274,19 +1243,19 @@ class AppsViewModel(
                 if (it.id == id) it.copy(name = name, type = type) else it
             }
         )
-        persist()
+        persistWorkspaces()
     }
 
     fun deleteWorkspace(id: String) {
         _workspacesState.value = _workspacesState.value.copy(
             workspaces = _workspacesState.value.workspaces.filterNot { it.id == id }
         )
-        persist()
+        persistWorkspaces()
     }
 
     fun setWorkspaceOrder(newOrder: List<Workspace>) {
         _workspacesState.value = _workspacesState.value.copy(workspaces = newOrder)
-        persist()
+        persistWorkspaces()
     }
 
 
@@ -1296,7 +1265,7 @@ class AppsViewModel(
                 if (it.id == id) it.copy(removedAppIds = emptySet(), appIds = emptySet()) else it
             }
         )
-        persist()
+        persistWorkspaces()
     }
 
 
@@ -1321,7 +1290,7 @@ class AppsViewModel(
                 )
             }
         )
-        persist()
+        persistWorkspaces()
     }
 
 
@@ -1341,7 +1310,7 @@ class AppsViewModel(
                 )
             }
         )
-        persist()
+        persistWorkspaces()
     }
 
     fun addAliasToApp(alias: String, cacheKey: CacheKey) {
@@ -1350,7 +1319,7 @@ class AppsViewModel(
                     (cacheKey to (_workspacesState.value.appAliases[cacheKey]
                         ?: emptySet()) + alias)
         )
-        persist()
+        persistWorkspaces()
     }
 
 //    fun resetAliasesForApp(packageName: String) {
@@ -1373,7 +1342,7 @@ class AppsViewModel(
             else
                 current + (cacheKey to updated)
         )
-        persist()
+        persistWorkspaces()
     }
 
     fun renameApp(cacheKey: CacheKey, customName: String) {
@@ -1381,7 +1350,7 @@ class AppsViewModel(
             appOverrides = _workspacesState.value.appOverrides +
                     (cacheKey to AppOverride(customName))
         )
-        persist()
+        persistWorkspaces()
     }
 
     fun setAppIcon(cacheKey: CacheKey, customIcon: CustomIconSerializable?) {
@@ -1397,7 +1366,7 @@ class AppsViewModel(
                     (cacheKey to (prev?.copy(customIcon = customIcon)
                         ?: AppOverride(customIcon = customIcon)))
         )
-        persist()
+        persistWorkspaces()
     }
 
     /**
@@ -1422,7 +1391,7 @@ class AppsViewModel(
                 )
             }
         }
-        persist()
+        persistWorkspaces()
     }
 
 
@@ -1441,7 +1410,7 @@ class AppsViewModel(
         scope.launch {
             reloadApps()
         }
-        persist()
+        persistWorkspaces()
     }
 
     fun resetAppIcon(cacheKey: CacheKey) {
@@ -1460,7 +1429,7 @@ class AppsViewModel(
         scope.launch {
             reloadApps()
         }
-        persist()
+        persistWorkspaces()
     }
 
 

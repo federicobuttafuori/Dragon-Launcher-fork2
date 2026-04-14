@@ -40,7 +40,7 @@ import org.elnix.dragonlauncher.settings.stores.UiSettingsStore.showLaunchingApp
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore.showLaunchingAppLabel
 import org.elnix.dragonlauncher.ui.base.asState
 import org.elnix.dragonlauncher.ui.components.AppPreviewTitle
-import org.elnix.dragonlauncher.ui.composition.LocalIcons
+import org.elnix.dragonlauncher.ui.composition.LocalDrawerIconsCache
 import org.elnix.dragonlauncher.ui.composition.LocalNavController
 import org.elnix.dragonlauncher.ui.dragon.components.DragonColumnGroup
 import org.elnix.dragonlauncher.ui.dragon.expandable.ExpandableSection
@@ -57,7 +57,7 @@ fun AppearanceTab(
     onBack: () -> Unit
 ) {
     val ctx = LocalContext.current
-    val icons = LocalIcons.current
+    val icons = LocalDrawerIconsCache.current
     val navController = LocalNavController.current
     val scope = rememberCoroutineScope()
 
@@ -74,10 +74,7 @@ fun AppearanceTab(
 
     var isDraggingAppPreviewOverlays by remember { mutableStateOf(false) }
     var demoIcon by remember(isDraggingAppPreviewOverlays) {
-        val iconString = if (icons.isNotEmpty()) {
-            icons.keys.random()
-        } else ""
-        mutableStateOf(iconString)
+        mutableStateOf(icons.getRandom())
     }
 
     SettingsScaffold(
@@ -305,7 +302,7 @@ fun AppearanceTab(
         AppPreviewTitle(
             point = dummySwipePoint(SwipeActionSerializable.OpenRecentApps).copy(
                 customName = "Preview",
-                id = demoIcon
+                id = demoIcon?.cacheKey ?: ""
             ),
             topPadding = appLabelIconOverlayTopPadding.dp,
             labelSize = appLabelOverlaySize,

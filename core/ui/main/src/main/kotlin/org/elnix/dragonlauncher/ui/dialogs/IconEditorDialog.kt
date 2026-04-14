@@ -47,26 +47,26 @@ import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
 import kotlinx.coroutines.launch
+import org.elnix.dragonlauncher.base.ColorUtils.alphaMultiplier
+import org.elnix.dragonlauncher.base.ColorUtils.definedOrNull
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.CustomIconSerializable
 import org.elnix.dragonlauncher.common.serializables.IconType
 import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
 import org.elnix.dragonlauncher.common.serializables.defaultSwipePointsValues
 import org.elnix.dragonlauncher.common.utils.ImageUtils.uriToBase64
-import org.elnix.dragonlauncher.base.ColorUtils.alphaMultiplier
-import org.elnix.dragonlauncher.base.ColorUtils.definedOrNull
-import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import org.elnix.dragonlauncher.theme.AppObjectsColors
-import org.elnix.dragonlauncher.ui.dragon.colors.ColorPickerRow
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import org.elnix.dragonlauncher.ui.components.PointPreviewCanvas
-import org.elnix.dragonlauncher.ui.dragon.text.TextDivider
-import org.elnix.dragonlauncher.ui.dragon.components.ValidateCancelButtons
-import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
-import org.elnix.dragonlauncher.ui.helpers.ShapeRow
-import org.elnix.dragonlauncher.ui.dragon.components.SliderWithLabel
 import org.elnix.dragonlauncher.ui.composition.LocalAppsViewModel
 import org.elnix.dragonlauncher.ui.composition.LocalIconShape
+import org.elnix.dragonlauncher.ui.dragon.colors.ColorPickerRow
+import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
+import org.elnix.dragonlauncher.ui.dragon.components.SliderWithLabel
+import org.elnix.dragonlauncher.ui.dragon.components.ValidateCancelButtons
 import org.elnix.dragonlauncher.ui.dragon.dialogs.CustomAlertDialog
+import org.elnix.dragonlauncher.ui.dragon.text.TextDivider
+import org.elnix.dragonlauncher.ui.helpers.ShapeRow
 
 @Composable
 fun IconEditorDialog(
@@ -91,9 +91,8 @@ fun IconEditorDialog(
 
 
     val previewPoint = point.copy(customIcon = selectedIcon)
-    val previewIcon = remember(selectedIcon) {
-        mapOf(point.id to appsViewModel.loadPointIcon(previewPoint))
-    }
+
+
     val source = selectedIcon?.source
 
     LaunchedEffect(Unit) {
@@ -101,6 +100,12 @@ fun IconEditorDialog(
             textValue = source ?: ""
         }
     }
+
+    fun updateSelectedIcon(newIcon: CustomIconSerializable?) {
+        appsViewModel.reloadPointIcon(previewPoint)
+        selectedIcon = newIcon
+    }
+
     var showIconPackPicker by remember { mutableStateOf(false) }
     var showShapePickerDialog by remember { mutableStateOf(false) }
 
@@ -112,9 +117,11 @@ fun IconEditorDialog(
 
         scope.launch {
             val base64 = uriToBase64(ctx, uri)
-            selectedIcon = (selectedIcon ?: CustomIconSerializable()).copy(
-                type = IconType.BITMAP,
-                source = base64
+            updateSelectedIcon(
+                (selectedIcon ?: CustomIconSerializable()).copy(
+                    type = IconType.BITMAP,
+                    source = base64
+                )
             )
         }
     }
@@ -160,14 +167,12 @@ fun IconEditorDialog(
                     editPoint = previewPoint,
                     defaultPoint = defaultPoint,
                     backgroundSurfaceColor = backgroundColor,
-                    icons = previewIcon,
                     modifier = Modifier.weight(1f)
                 )
 
-
                 DragonIconButton(
                     onClick = {
-                        selectedIcon = null
+                        updateSelectedIcon(null)
                         onReset?.invoke()
                         textValue = ""
                     },
@@ -187,7 +192,6 @@ fun IconEditorDialog(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 TextDivider(stringResource(R.string.source))
-
 
                 Column {
                     Row(horizontalArrangement = Arrangement.SpaceEvenly) {
@@ -293,14 +297,18 @@ fun IconEditorDialog(
                             currentColor = currentColor
                         ) { newColor ->
                             newColor?.let {
-                                selectedIcon = (selectedIcon ?: CustomIconSerializable()).copy(
-                                    type = IconType.PLAIN_COLOR,
-                                    source = it.toArgb().toString()
+                                updateSelectedIcon(
+                                    (selectedIcon ?: CustomIconSerializable()).copy(
+                                        type = IconType.PLAIN_COLOR,
+                                        source = it.toArgb().toString()
+                                    )
                                 )
                             } ?: run {
-                                selectedIcon = (selectedIcon ?: CustomIconSerializable()).copy(
-                                    type = null,
-                                    source = null
+                                updateSelectedIcon(
+                                    (selectedIcon ?: CustomIconSerializable()).copy(
+                                        type = null,
+                                        source = null
+                                    )
                                 )
                             }
                         }
@@ -309,9 +317,11 @@ fun IconEditorDialog(
                     SelectableCard(
                         selected = selectedIcon?.type == null || source == null,
                         onClick = {
-                            selectedIcon = selectedIcon?.copy(
-                                type = null,
-                                source = null
+                            updateSelectedIcon(
+                                selectedIcon?.copy(
+                                    type = null,
+                                    source = null
+                                )
                             )
                             textValue = ""
                         }
@@ -349,10 +359,10 @@ fun IconEditorDialog(
                         valueRange = 0f..1f,
                         color = MaterialTheme.colorScheme.primary,
                         onReset = {
-                            selectedIcon = selectedIcon?.copy(opacity = null)
+                            updateSelectedIcon(selectedIcon?.copy(opacity = null))
                         }
                     ) {
-                        selectedIcon = (selectedIcon ?: CustomIconSerializable()).copy(opacity = it)
+                        updateSelectedIcon((selectedIcon ?: CustomIconSerializable()).copy(opacity = it))
                     }
 
                     // Rotation
@@ -362,11 +372,10 @@ fun IconEditorDialog(
                         valueRange = -180f..180f,
                         color = MaterialTheme.colorScheme.primary,
                         onReset = {
-                            selectedIcon = selectedIcon?.copy(rotationDeg = null)
+                            updateSelectedIcon(selectedIcon?.copy(rotationDeg = null))
                         }
                     ) {
-                        selectedIcon =
-                            (selectedIcon ?: CustomIconSerializable()).copy(rotationDeg = it)
+                        updateSelectedIcon((selectedIcon ?: CustomIconSerializable()).copy(rotationDeg = it))
                     }
 
                     // Scale X
@@ -376,10 +385,10 @@ fun IconEditorDialog(
                         valueRange = 0.2f..3f,
                         color = MaterialTheme.colorScheme.primary,
                         onReset = {
-                            selectedIcon = selectedIcon?.copy(scaleX = null)
+                            updateSelectedIcon(selectedIcon?.copy(scaleX = null))
                         }
                     ) {
-                        selectedIcon = (selectedIcon ?: CustomIconSerializable()).copy(scaleX = it)
+                        updateSelectedIcon((selectedIcon ?: CustomIconSerializable()).copy(scaleX = it))
                     }
 
                     // Scale Y
@@ -389,10 +398,10 @@ fun IconEditorDialog(
                         valueRange = 0.2f..3f,
                         color = MaterialTheme.colorScheme.primary,
                         onReset = {
-                            selectedIcon = selectedIcon?.copy(scaleY = null)
+                            updateSelectedIcon(selectedIcon?.copy(scaleY = null))
                         }
                     ) {
-                        selectedIcon = (selectedIcon ?: CustomIconSerializable()).copy(scaleY = it)
+                        updateSelectedIcon((selectedIcon ?: CustomIconSerializable()).copy(scaleY = it))
                     }
                 }
 
@@ -409,16 +418,20 @@ fun IconEditorDialog(
                         currentColor = selectedIcon?.tint?.let { Color(it) } ?: Color.Unspecified
                     ) {
                         val tintColor = it.definedOrNull()?.toArgb()
-                        selectedIcon = (selectedIcon ?: CustomIconSerializable()).copy(
-                            tint = tintColor
+                        updateSelectedIcon(
+                            (selectedIcon ?: CustomIconSerializable()).copy(
+                                tint = tintColor
+                            )
                         )
                     }
 
                     ShapeRow(
                         selected = selectedIcon?.shape ?: iconShapes,
                         onReset = {
-                            selectedIcon = (selectedIcon ?: CustomIconSerializable()).copy(
-                                shape = null
+                            updateSelectedIcon(
+                                (selectedIcon ?: CustomIconSerializable()).copy(
+                                    shape = null
+                                )
                             )
                         }
                     ) { showShapePickerDialog = true }
@@ -434,9 +447,11 @@ fun IconEditorDialog(
                 // Now stores the name of the drawable, to avoid storing big bitmaps,
                 // renders at runtime, as equally efficient since rendering bitmap also consumes lots
                 // Comma separated with the name of the drawable and the pack name
-                selectedIcon = (selectedIcon ?: CustomIconSerializable()).copy(
-                    type = IconType.ICON_PACK,
-                    source = "$name,$packName"
+                updateSelectedIcon(
+                    (selectedIcon ?: CustomIconSerializable()).copy(
+                        type = IconType.ICON_PACK,
+                        source = "$name,$packName"
+                    )
                 )
                 showIconPackPicker = false
             }
@@ -448,8 +463,10 @@ fun IconEditorDialog(
             selected = selectedIcon?.shape ?: iconShapes,
             onDismiss = { showShapePickerDialog = false }
         ) {
-            selectedIcon = (selectedIcon ?: CustomIconSerializable()).copy(
-                shape = it
+            updateSelectedIcon(
+                (selectedIcon ?: CustomIconSerializable()).copy(
+                    shape = it
+                )
             )
 
             showShapePickerDialog = false

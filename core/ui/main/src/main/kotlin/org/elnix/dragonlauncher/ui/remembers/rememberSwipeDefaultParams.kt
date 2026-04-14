@@ -6,7 +6,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
@@ -16,13 +15,13 @@ import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
 import org.elnix.dragonlauncher.settings.stores.SwipeMapSettingsStore
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
 import org.elnix.dragonlauncher.ui.base.asState
+import org.elnix.dragonlauncher.ui.base.cache.DrawPathCache
+import org.elnix.dragonlauncher.ui.base.cache.SwipeDrawParams
 import org.elnix.dragonlauncher.ui.composition.LocalDefaultPoint
 import org.elnix.dragonlauncher.ui.composition.LocalIconShape
-import org.elnix.dragonlauncher.ui.composition.LocalIcons
 import org.elnix.dragonlauncher.ui.composition.LocalNests
+import org.elnix.dragonlauncher.ui.composition.LocalPointIconsCache
 import org.elnix.dragonlauncher.ui.composition.LocalPoints
-import org.elnix.dragonlauncher.ui.helpers.nests.points.DrawPathCache
-import org.elnix.dragonlauncher.ui.helpers.nests.points.SwipeDrawParams
 
 
 @Composable
@@ -30,7 +29,6 @@ fun rememberSwipeDefaultParams(
     backgroundColor: Color? = null,
     points: List<SwipePointSerializable>? = null,
     nests: List<CircleNest>? = null,
-    icons: Map<String, ImageBitmap>? = null,
     defaultPointSerializable: SwipePointSerializable? = null,
     showCircle: Boolean? = null
 ): SwipeDrawParams {
@@ -40,7 +38,7 @@ fun rememberSwipeDefaultParams(
     val points = points ?: LocalPoints.current
     val defaultPointSettings = LocalDefaultPoint.current
     val nests = nests ?: LocalNests.current
-    val icons = icons ?: LocalIcons.current
+    val icons = LocalPointIconsCache.current
     val iconShape = LocalIconShape.current
     val extraColors = LocalExtraColors.current
 

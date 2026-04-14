@@ -28,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -35,11 +36,13 @@ import kotlinx.coroutines.delay
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.IconPackInfo
 import org.elnix.dragonlauncher.common.serializables.dummyAppModel
+import org.elnix.dragonlauncher.common.utils.resolveShape
 import org.elnix.dragonlauncher.ui.base.components.Spacer
+import org.elnix.dragonlauncher.ui.composition.LocalDrawerIconsCache
+import org.elnix.dragonlauncher.ui.composition.LocalIconShape
 import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
 import org.elnix.dragonlauncher.ui.dragon.components.DragonRow
 import org.elnix.dragonlauncher.ui.dragon.text.TextWithDescription
-import org.elnix.dragonlauncher.ui.composition.LocalIcons
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 fun LazyListScope.iconPackListContent(
@@ -90,15 +93,15 @@ fun LazyListScope.iconPackListContent(
     }
 
     items(packs) { pack ->
-        val icons = LocalIcons.current
+        val icons = LocalDrawerIconsCache.current
 
         DragonRow(
             { onPackClick(pack) }
         ) {
             val packPkg = pack.packageName
-            val packCacheKey = dummyAppModel(packPkg).iconCacheKey.cacheKey
+            val packCacheKey = dummyAppModel(packPkg).iconCacheKey
 
-            val packIcon = icons[packCacheKey]
+            val packIcon = icons.get(packCacheKey)
 
             Box(
                 Modifier.size(40.dp),
@@ -108,7 +111,7 @@ fun LazyListScope.iconPackListContent(
                     Image(
                         bitmap = packIcon,
                         contentDescription = null,
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxSize().clip(LocalIconShape.current.resolveShape()),
                         contentScale = ContentScale.Crop
                     )
                 } else {

@@ -37,13 +37,17 @@ import androidx.core.graphics.createBitmap
 import androidx.core.graphics.scale
 import androidx.core.graphics.withSave
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.logging.logE
+import org.elnix.dragonlauncher.common.serializables.CacheKey
 import org.elnix.dragonlauncher.common.serializables.CustomIconSerializable
 import org.elnix.dragonlauncher.common.serializables.IconShape
 import org.elnix.dragonlauncher.common.serializables.IconType
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.common.serializables.toAppModel
+import org.elnix.dragonlauncher.common.utils.Constants.Logging.ICONS_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.IMAGE_TAG
+import org.elnix.dragonlauncher.logging.logD
+import org.elnix.dragonlauncher.logging.logE
+import org.elnix.dragonlauncher.logging.logW
 import java.io.ByteArrayOutputStream
 import kotlin.math.ceil
 
@@ -264,10 +268,11 @@ object ImageUtils {
     fun createUntintedBitmap(
         action: SwipeActionSerializable,
         ctx: Context,
-        icons: Map<String, ImageBitmap>,
+        icons: IconsCache<CacheKey>,
         width: Int,
         height: Int
     ): ImageBitmap {
+
         val pm = ctx.packageManager
         val pmCompat = PackageManagerCompat(pm, ctx)
 
@@ -276,12 +281,21 @@ object ImageUtils {
                 is SwipeActionSerializable.LaunchApp -> {
                     val dummyAppModel = action.toAppModel()
 
-                    val drawable = pmCompat.getAppIcon(
-                        packageName = action.packageName,
-                        userId = action.userId ?: 0,
-                        isPrivateProfile = action.isPrivateSpace
-                    )
-                    icons[dummyAppModel.iconCacheKey.cacheKey] ?: loadDrawableAsBitmap(drawable, width, height)
+                    val cacheKey = dummyAppModel.iconCacheKey
+                    logD(ICONS_TAG) { "Searching in drawer cache (${icons.cacheUUID})\naction: $action\ndummyApp: $dummyAppModel\n cacheKey: $cacheKey" }
+
+                    icons.getOrCompute(cacheKey) {
+
+                        logW(ICONS_TAG) { "Did not find the cacheKey `$cacheKey` in drawer ${icons.cacheUUID}" }
+
+                        val drawable = pmCompat.getAppIcon(
+                            packageName = action.packageName,
+                            userId = action.userId ?: 0,
+                            isPrivateProfile = action.isPrivateSpace
+                        )
+
+                        loadDrawableAsBitmap(drawable, width, height)
+                    }
                 }
 
                 is SwipeActionSerializable.LaunchShortcut -> {

@@ -216,6 +216,7 @@ object Constants {
         val SHIZUKU_TAG = LogTag("ShizukuDebug")
         val NAVIGATION_TAG = LogTag("NavigationDebug")
         val THEMES_TAG = LogTag("ThemeDebug")
+        val SPECIAL_TAG = LogTag("SpecialDebug")
     }
 
     /*  ─────────────  Links  ─────────────  */

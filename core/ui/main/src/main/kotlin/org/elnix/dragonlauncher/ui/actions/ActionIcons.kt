@@ -23,33 +23,33 @@ import org.elnix.dragonlauncher.common.utils.ImageUtils.loadDrawableResAsBitmap
 import org.elnix.dragonlauncher.common.utils.PlatformShape
 import org.elnix.dragonlauncher.logging.logW
 import org.elnix.dragonlauncher.ui.composition.LocalAppsViewModel
-import org.elnix.dragonlauncher.ui.composition.LocalIcons
+import org.elnix.dragonlauncher.ui.composition.LocalDrawerIconsCache
 
-
-/**
- * Helper to quickly determine if the given string (in the `icons` list) is a profile key or a point id
- */
-inline val String.isProfileKey: Boolean
-    get() = this.contains("#")
 
 @Composable
 fun appIcon(
     app: AppModel,
 ): Painter {
-    val iconsTrigger by LocalAppsViewModel.current.iconsTrigger.collectAsState()
-    val icons = LocalIcons.current
-    val profileKey = app.iconCacheKey.cacheKey
+    val icons = LocalDrawerIconsCache.current
+    val appsViewModel = LocalAppsViewModel.current
+    val profileKey = app.iconCacheKey
 
-    val cached = icons[profileKey] ?: icons[app.packageName]
+    val iconsTrigger by icons.iconsTrigger.collectAsState()
 
-    key(cached) {
+    key(iconsTrigger) {
+        val cached = icons.getOrLazyCompute(profileKey) {
+            appsViewModel.reloadAppIcon(
+                app = app,
+                useOverride = true
+            )
+        }
+
         return if (cached != null) {
             BitmapPainter(cached)
         } else {
             val totalIconsNumber = icons.size
-            val totalAppsNumber = icons.count { !it.key.isProfileKey }
-            val totalPointsNumber = icons.count { it.key.isProfileKey }
-            logW(ICONS_TAG) { "Failed to get icon for ${app.packageName}, unknown reason\niconsTrigger: $iconsTrigger\ntotal apps number: $totalAppsNumber\ntotal points number: $totalPointsNumber\ntotal icons number: $totalIconsNumber\nHere's the complete icons list:\n$icons" }
+
+            logW(ICONS_TAG) { "Failed to get icon for ${app.iconCacheKey}, unknown reason\niconsTrigger: $iconsTrigger\ntotal icons number: $totalIconsNumber" }
             painterResource(R.drawable.ic_app_default)
         }
     }
@@ -64,7 +64,7 @@ fun ActionIcon(
     showLaunchAppVectorGrid: Boolean = false
 ) {
     val ctx = LocalContext.current
-    val icons = LocalIcons.current
+    val icons = LocalDrawerIconsCache.current
     val extraColors = LocalExtraColors.current
 
     val bitmap: ImageBitmap? = when {

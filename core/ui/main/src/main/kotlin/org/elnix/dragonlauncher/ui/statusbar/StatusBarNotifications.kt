@@ -29,15 +29,15 @@ import org.elnix.dragonlauncher.common.serializables.StatusBarSerializable
 import org.elnix.dragonlauncher.common.serializables.dummyAppModel
 import org.elnix.dragonlauncher.common.utils.resolveShape
 import org.elnix.dragonlauncher.services.DragonNotificationListenerService
+import org.elnix.dragonlauncher.ui.composition.LocalDrawerIconsCache
 import org.elnix.dragonlauncher.ui.composition.LocalIconShape
-import org.elnix.dragonlauncher.ui.composition.LocalIcons
 
 @Composable
 fun StatusBarNotifications(
     element: StatusBarSerializable.Notifications
 ) {
     val ctx = LocalContext.current
-    val icons = LocalIcons.current
+    val icons = LocalDrawerIconsCache.current
     val packageNames by DragonNotificationListenerService.notifications.collectAsState()
     var hasPermission by remember { mutableStateOf(DragonNotificationListenerService.isPermissionGranted(ctx)) }
 
@@ -64,7 +64,7 @@ fun StatusBarNotifications(
     if (packageNames.isEmpty()) return
 
     val notificationsIcons = packageNames.take(maxIcons).map {
-        it to icons[dummyAppModel(it).iconCacheKey.cacheKey]
+        it to icons.get(dummyAppModel(it).iconCacheKey)
     }
 
     val showMoreNotificationsIcon = packageNames.size > maxIcons

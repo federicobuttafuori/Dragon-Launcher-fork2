@@ -33,14 +33,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.logging.logE
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.ANGLE_LINE_TAG
 import org.elnix.dragonlauncher.enumsui.AngleLineObjects
-import org.elnix.dragonlauncher.enumsui.label
+import org.elnix.dragonlauncher.logging.logE
 import org.elnix.dragonlauncher.settings.stores.AngleLineSettingsStore
 import org.elnix.dragonlauncher.theme.AppObjectsColors
-import org.elnix.dragonlauncher.ui.dragon.components.ValidateCancelButtons
 import org.elnix.dragonlauncher.ui.base.asState
+import org.elnix.dragonlauncher.ui.dragon.components.ValidateCancelButtons
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
 
@@ -127,7 +126,7 @@ fun AngleLineObjectsOrderDialog(
                             ) {
 
                                 Text(
-                                    text = item.label(),
+                                    text = stringResource(item.resId),
                                     style = MaterialTheme.typography.bodyLarge,
                                     modifier = Modifier.weight(1f)
                                 )

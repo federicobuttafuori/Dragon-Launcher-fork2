@@ -12,8 +12,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.AppModel
-import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import org.elnix.dragonlauncher.common.utils.copyToClipboard
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 
 @Composable
 fun AppModelInfoDialog(
@@ -39,7 +39,7 @@ fun AppModelInfoDialog(
                 Text(text = stringResource(R.string.app_info_is_private_profile, app.isPrivateProfile.toString()))
                 Text(text = stringResource(R.string.app_info_is_launchable, app.isLaunchable.toString()))
                 Text(text = stringResource(R.string.app_info_user_id, app.userId.toString()))
-                Text(text = stringResource(R.string.app_info_user_id, app.iconCacheKey.cacheKey))
+                Text(text = stringResource(R.string.app_info_cache_key, app.iconCacheKey.cacheKey))
             }
         },
         dismissButton = {},

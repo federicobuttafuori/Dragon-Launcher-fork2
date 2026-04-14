@@ -1,0 +1,98 @@
+package org.elnix.dragonlauncher.common.utils
+
+import androidx.compose.ui.graphics.ImageBitmap
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import org.elnix.dragonlauncher.common.utils.Constants.Logging.ICONS_TAG
+import org.elnix.dragonlauncher.logging.logD
+import org.elnix.dragonlauncher.logging.logW
+import java.util.Collections
+import java.util.UUID
+
+
+class IconsCache<T>(initialMaxSize: Int) {
+
+    private var maxSize = initialMaxSize
+
+    val cacheUUID: UUID = UUID.randomUUID()
+
+    private val _iconsTrigger = MutableStateFlow(0)
+    val iconsTrigger = _iconsTrigger.asStateFlow()
+
+    /**
+     * Updates the maximum number of cached entries.
+     * Call this whenever the number of points changes to keep the cache sized to the working set.
+     *
+     * @param newSize The new maximum entry count.
+     */
+    fun updateMaxCacheSize(newSize: Int) {
+        maxSize = newSize
+    }
+
+    private val icons = Collections.synchronizedMap(
+        object : LinkedHashMap<T, ImageBitmap>(
+            maxSize, 0.75f, true
+        ) {
+            override fun removeEldestEntry(
+                eldest: MutableMap.MutableEntry<T, ImageBitmap>
+            ) = size > maxSize
+        }
+    )
+
+    fun getOrCompute(
+        id: T,
+        compute: () -> ImageBitmap
+    ): ImageBitmap =
+        icons.getOrPut(id) {
+            _iconsTrigger.update { it + 1 }
+            compute().also {
+                logD(ICONS_TAG) { "Put $id into cache, cacheUUID: $cacheUUID" }
+            }
+        }
+
+    fun getOrLazyCompute(
+        id: T,
+        compute: () -> Unit
+    ): ImageBitmap? {
+        val result = icons[id]
+        if (result != null) {
+            logD(ICONS_TAG) { "Successfully retrieved icon for $id, cacheUUID: $cacheUUID without computing!" }
+        } else {
+            compute()
+            logW(ICONS_TAG) { "Failed to get icon for $id. Computing it lazily\ncacheUUID: $cacheUUID; type: ${icons.keys.firstOrNull()?.let { it::class.simpleName}}\nmaxSize: $maxSize, size: $size\n Cached keys: ${icons.keys.toList()}" }
+        }
+        return result
+    }
+
+
+
+    fun compute(id: T, compute:  () -> ImageBitmap) {
+        _iconsTrigger.update { it + 1 }
+
+        logD(ICONS_TAG) { "Put $id into cache, cacheUUID: $cacheUUID" }
+        icons[id] = compute()
+    }
+
+    fun get(id: T): ImageBitmap? {
+        val result = icons[id]
+        if (result != null) {
+            logD(ICONS_TAG) { "Successfully retrieved icon for $id, cacheUUID: $cacheUUID" }
+        } else {
+            logW(ICONS_TAG) { "Failed to get icon for $id.\ncacheUUID: $cacheUUID; type: ${icons.keys.firstOrNull()?.let { it::class.simpleName}}\nmaxSize: $maxSize, size: $size\n Cached keys: ${icons.keys.toList()}" }
+        }
+        return result
+    }
+
+
+    fun getRandom(): T? = if (icons.isNotEmpty()) {
+        icons.keys.random()
+    } else null
+
+    /**
+     * The current number of entries held in the cache.
+     * Useful for debugging or logging cache pressure.
+     */
+    val size: Int
+        get() = icons.size
+}

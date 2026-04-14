@@ -22,7 +22,6 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -40,9 +39,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.base.ktx.toDp
 import org.elnix.dragonlauncher.common.navigaton.SETTINGS
 import org.elnix.dragonlauncher.common.navigaton.routeResId
@@ -50,28 +47,25 @@ import org.elnix.dragonlauncher.common.serializables.FloatingAppObject
 import org.elnix.dragonlauncher.common.serializables.MainScreenLayer
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
-import org.elnix.dragonlauncher.common.serializables.defaultSwipePointsValues
 import org.elnix.dragonlauncher.common.serializables.dummySwipePoint
 import org.elnix.dragonlauncher.common.serializables.enabled
 import org.elnix.dragonlauncher.common.utils.circles.rememberNestNavigation
 import org.elnix.dragonlauncher.settings.stores.BehaviorSettingsStore
 import org.elnix.dragonlauncher.settings.stores.HoldToActivateArcSettingsStore
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
-import org.elnix.dragonlauncher.ui.helpers.ChargingAnimation
+import org.elnix.dragonlauncher.ui.base.asState
+import org.elnix.dragonlauncher.ui.base.asStateNull
 import org.elnix.dragonlauncher.ui.components.FloatingAppsHostView
 import org.elnix.dragonlauncher.ui.components.burger.BurgerAction
 import org.elnix.dragonlauncher.ui.components.burger.BurgerListAction
-import org.elnix.dragonlauncher.ui.base.asState
-import org.elnix.dragonlauncher.ui.base.asStateNull
-import org.elnix.dragonlauncher.ui.helpers.CustomDim
-import org.elnix.dragonlauncher.ui.helpers.HoldToActivateArc
-import org.elnix.dragonlauncher.ui.helpers.WallpaperDim
-import org.elnix.dragonlauncher.ui.composition.LocalAppsViewModel
 import org.elnix.dragonlauncher.ui.composition.LocalFloatingAppsViewModel
 import org.elnix.dragonlauncher.ui.composition.LocalHoldCustomObject
 import org.elnix.dragonlauncher.ui.composition.LocalMainScreenLayers
 import org.elnix.dragonlauncher.ui.composition.LocalNests
-import org.elnix.dragonlauncher.ui.composition.LocalPoints
+import org.elnix.dragonlauncher.ui.helpers.ChargingAnimation
+import org.elnix.dragonlauncher.ui.helpers.CustomDim
+import org.elnix.dragonlauncher.ui.helpers.HoldToActivateArc
+import org.elnix.dragonlauncher.ui.helpers.WallpaperDim
 import org.elnix.dragonlauncher.ui.remembers.rememberHoldToOpenSettings
 import org.elnix.dragonlauncher.ui.statusbar.StatusBar
 
@@ -80,21 +74,21 @@ import org.elnix.dragonlauncher.ui.statusbar.StatusBar
 @Composable
 fun MainScreen(onLaunchAction: (SwipePointSerializable) -> Unit) {
     val ctx = LocalContext.current
-    val points = LocalPoints.current
+//    val points = LocalPoints.current
     val nests = LocalNests.current
     val holdCustomObject = LocalHoldCustomObject.current
     val mainScreenLayers = LocalMainScreenLayers.current
 
-    val appsViewModel = LocalAppsViewModel.current
+//    val appsViewModel = LocalAppsViewModel.current
     val floatingAppsViewModel = LocalFloatingAppsViewModel.current
 
-    val scope = rememberCoroutineScope()
+//    val scope = rememberCoroutineScope()
 
 
     var lastClickTime by remember { mutableLongStateOf(0L) }
 
     val floatingAppObjects by floatingAppsViewModel.floatingApps.collectAsState()
-    val defaultPoint by appsViewModel.defaultPoint.collectAsState(defaultSwipePointsValues)
+//    val defaultPoint by appsViewModel.defaultPoint.collectAsState(defaultSwipePointsValues)
 
     val holdMenuEntriesString by HoldToActivateArcSettingsStore.holdMenuEntries.asState()
 
@@ -146,22 +140,22 @@ fun MainScreen(onLaunchAction: (SwipePointSerializable) -> Unit) {
     val density = LocalDensity.current
     val cellSizePx by floatingAppsViewModel.cellSizePx.collectAsState()
 
-    val appIconOverlaySize by UiSettingsStore.appIconOverlaySize.asState()
+//    val appIconOverlaySize by UiSettingsStore.appIconOverlaySize.asState()
 
 
-    /**
-     * Reload all point icons on every change of the points, nestId, appIconOverlaySize, or default point
-     * Set the size of the icons to the max size between the 2 overlays sizes preview to display them cleanly
-     */
-    LaunchedEffect(points, nestId, appIconOverlaySize, defaultPoint.hashCode()) {
-
-        appsViewModel.preloadPointIcons(points.filter { it.nestId == nestId })
-
-        /* Load asynchronously all the other points, to avoid lag */
-        scope.launch(Dispatchers.IO) {
-            appsViewModel.preloadPointIcons(points)
-        }
-    }
+//    /**
+//     * Reload all point icons on every change of the points, nestId, appIconOverlaySize, or default point
+//     * Set the size of the icons to the max size between the 2 overlays sizes preview to display them cleanly
+//     */
+//    LaunchedEffect(points, nestId, appIconOverlaySize, defaultPoint.hashCode()) {
+//
+//        appsViewModel.preloadPointIcons(points.filter { it.nestId == nestId })
+//
+//        /* Load asynchronously all the other points, to avoid lag */
+//        scope.launch(Dispatchers.IO) {
+//            appsViewModel.preloadPointIcons(points)
+//        }
+//    }
 
 
     fun launchAction(point: SwipePointSerializable) {

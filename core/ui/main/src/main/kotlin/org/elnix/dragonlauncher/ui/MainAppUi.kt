@@ -122,14 +122,15 @@ import org.elnix.dragonlauncher.ui.composition.LocalAppLifecycleViewModel
 import org.elnix.dragonlauncher.ui.composition.LocalAppsViewModel
 import org.elnix.dragonlauncher.ui.composition.LocalBackupViewModel
 import org.elnix.dragonlauncher.ui.composition.LocalDefaultPoint
+import org.elnix.dragonlauncher.ui.composition.LocalDrawerIconsCache
 import org.elnix.dragonlauncher.ui.composition.LocalEndLineObject
 import org.elnix.dragonlauncher.ui.composition.LocalHoldCustomObject
 import org.elnix.dragonlauncher.ui.composition.LocalIconShape
-import org.elnix.dragonlauncher.ui.composition.LocalIcons
 import org.elnix.dragonlauncher.ui.composition.LocalLineObject
 import org.elnix.dragonlauncher.ui.composition.LocalMainScreenLayers
 import org.elnix.dragonlauncher.ui.composition.LocalNavController
 import org.elnix.dragonlauncher.ui.composition.LocalNests
+import org.elnix.dragonlauncher.ui.composition.LocalPointIconsCache
 import org.elnix.dragonlauncher.ui.composition.LocalPoints
 import org.elnix.dragonlauncher.ui.composition.LocalShizukuViewModel
 import org.elnix.dragonlauncher.ui.composition.LocalShowLabelsInAddPointDialog
@@ -475,6 +476,7 @@ fun MainAppUi(
             go()
             return
         }
+        @Suppress("KotlinConstantConditions")
         when (lockMethod) {
             LockMethod.PIN -> {
                 showPinDialog = route
@@ -680,7 +682,6 @@ fun MainAppUi(
 
     /* ───────────── Start Composition locals getters ───────────── */
 
-    val icons by appsViewModel.icons.collectAsState()
     val iconsShape by DrawerSettingsStore.iconsShape.asState()
 
     // Used internally by the app view model
@@ -694,6 +695,20 @@ fun MainAppUi(
     val points by SwipeSettingsStore.getPointsFlow(ctx).collectAsState(emptyList())
     val defaultPoint by SwipeSettingsStore.getDefaultPointFlow(ctx)
         .collectAsState(defaultSwipePointsValues)
+
+
+    val pointsIconCache = appsViewModel.pointsIconsCache
+//    LaunchedEffect(points.size) {
+//        logI(ICONS_TAG) { "Updated point-icons size; now = ${points.size}"}
+//        pointsIconCache.updateMaxCacheSize(points.size)
+//    }
+
+//    val allAppsSize by appsViewModel.allAppsSize.collectAsState()
+    val drawerIconCache = appsViewModel.drawerIconCache
+//    LaunchedEffect(allAppsSize) {
+//        logI(ICONS_TAG) { "Updated apps-icons size; now = $allAppsSize"}
+//        drawerIconCache.updateMaxCacheSize(allAppsSize)
+//    }
 
     val colorTestMode by ColorModesSettingsStore.colorTestMode.asState()
 
@@ -772,7 +787,10 @@ fun MainAppUi(
      */
     CompositionLocalProvider(
         LocalDefaultPoint provides defaultPoint,
-        LocalIcons provides icons,
+
+        LocalDrawerIconsCache provides drawerIconCache,
+        LocalPointIconsCache provides pointsIconCache,
+
         LocalIconShape provides iconsShape,
         LocalPoints provides points,
         LocalNests provides nests,

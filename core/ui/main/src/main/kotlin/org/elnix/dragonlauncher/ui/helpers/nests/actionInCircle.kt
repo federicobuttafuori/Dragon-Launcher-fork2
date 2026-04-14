@@ -12,7 +12,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.ui.helpers.nests.points.SwipeDrawParams
 import org.elnix.dragonlauncher.common.serializables.IconShape
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
@@ -22,6 +21,7 @@ import org.elnix.dragonlauncher.common.utils.ImageUtils.loadDrawableResAsBitmap
 import org.elnix.dragonlauncher.common.utils.UiCircle
 import org.elnix.dragonlauncher.common.utils.resolveShape
 import org.elnix.dragonlauncher.ui.actions.actionColor
+import org.elnix.dragonlauncher.ui.base.cache.SwipeDrawParams
 import org.elnix.dragonlauncher.ui.helpers.customobjects.shapeToPath
 
 
@@ -169,7 +169,7 @@ fun DrawScope.actionsInCircle(
             drawContext.canvas.restore()
 
 
-            val icon = point.id.let { icons[it] }
+            val icon = icons.get(point.id)
             val colorAction = actionColor(point.action, extraColors)
 
 
