@@ -474,6 +474,13 @@ fun SettingsScreen(
         return null
     }
 
+    /**
+     * Update point position; first compute the new point position using `computePointMoved` and then apply the change to the stack if it was moved
+     *
+     * @param point which point to move
+     * @param circles the circles to move the point on
+     * @param pos the new position of the points, can be anywhere on the screen, not only on a circle
+     */
     fun updatePointPosition(
         point: SwipePointSerializable,
         circles: List<UiCircle>,
