@@ -74,22 +74,14 @@ import org.elnix.dragonlauncher.ui.statusbar.StatusBar
 @Composable
 fun MainScreen(onLaunchAction: (SwipePointSerializable) -> Unit) {
     val ctx = LocalContext.current
-//    val points = LocalPoints.current
     val nests = LocalNests.current
     val holdCustomObject = LocalHoldCustomObject.current
     val mainScreenLayers = LocalMainScreenLayers.current
-
-//    val appsViewModel = LocalAppsViewModel.current
     val floatingAppsViewModel = LocalFloatingAppsViewModel.current
-
-//    val scope = rememberCoroutineScope()
-
 
     var lastClickTime by remember { mutableLongStateOf(0L) }
 
     val floatingAppObjects by floatingAppsViewModel.floatingApps.collectAsState()
-//    val defaultPoint by appsViewModel.defaultPoint.collectAsState(defaultSwipePointsValues)
-
     val holdMenuEntriesString by HoldToActivateArcSettingsStore.holdMenuEntries.asState()
 
     /* ───────────── Custom Actions ─────────────*/
@@ -139,23 +131,6 @@ fun MainScreen(onLaunchAction: (SwipePointSerializable) -> Unit) {
     val dm = ctx.resources.displayMetrics
     val density = LocalDensity.current
     val cellSizePx by floatingAppsViewModel.cellSizePx.collectAsState()
-
-//    val appIconOverlaySize by UiSettingsStore.appIconOverlaySize.asState()
-
-
-//    /**
-//     * Reload all point icons on every change of the points, nestId, appIconOverlaySize, or default point
-//     * Set the size of the icons to the max size between the 2 overlays sizes preview to display them cleanly
-//     */
-//    LaunchedEffect(points, nestId, appIconOverlaySize, defaultPoint.hashCode()) {
-//
-//        appsViewModel.preloadPointIcons(points.filter { it.nestId == nestId })
-//
-//        /* Load asynchronously all the other points, to avoid lag */
-//        scope.launch(Dispatchers.IO) {
-//            appsViewModel.preloadPointIcons(points)
-//        }
-//    }
 
 
     fun launchAction(point: SwipePointSerializable) {

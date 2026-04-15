@@ -83,7 +83,6 @@ import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
 import org.elnix.dragonlauncher.common.undoredo.UndoRedoManager
 import org.elnix.dragonlauncher.common.utils.Constants
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.NESTS_TAG
-import org.elnix.dragonlauncher.common.utils.Constants.Logging.SPECIAL_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.SWIPE_TAG
 import org.elnix.dragonlauncher.common.utils.Constants.Settings.POINT_RADIUS_PX
 import org.elnix.dragonlauncher.common.utils.Constants.Settings.SNAP_STEP_DEG
@@ -108,7 +107,6 @@ import org.elnix.dragonlauncher.enumsui.SelectedPointEditTools
 import org.elnix.dragonlauncher.enumsui.UndRedoEditTools
 import org.elnix.dragonlauncher.logging.logD
 import org.elnix.dragonlauncher.logging.logE
-import org.elnix.dragonlauncher.logging.logWtf
 import org.elnix.dragonlauncher.settings.stores.DebugSettingsStore
 import org.elnix.dragonlauncher.settings.stores.SwipeMapSettingsStore
 import org.elnix.dragonlauncher.settings.stores.SwipeSettingsStore
@@ -162,7 +160,6 @@ fun SettingsScreen(
     val ctx = LocalContext.current
     val defaultPoint = LocalDefaultPoint.current
     val extraColors = LocalExtraColors.current
-
     val appsViewModel = LocalAppsViewModel.current
 
     val scope = rememberCoroutineScope()
@@ -264,19 +261,6 @@ fun SettingsScreen(
             points = points,
             overwrite = true
         )
-    }
-
-//    /**
-//     * Reload all point icons on every change of the points, nestId, appIconOverlaySize, or default point
-//     * Set the size of the icons to the max size between the 2 overlays sizes preview to display them cleanly
-//     */
-//    LaunchedEffect(points, nestId, appIconOverlaySize, defaultPoint) {
-//        reloadIcons()
-//    }
-
-
-    LaunchedEffect(selectedPoint) {
-        logWtf(SPECIAL_TAG) { "SELECTED POINTS: $selectedPoint" }
     }
 
     val undoRedo = remember { UndoRedoManager() }
