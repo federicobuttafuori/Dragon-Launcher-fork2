@@ -46,15 +46,15 @@ import org.elnix.dragonlauncher.common.serializables.label
 import org.elnix.dragonlauncher.common.utils.isNotBlankJson
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
 import org.elnix.dragonlauncher.theme.AppObjectsColors
-import org.elnix.dragonlauncher.ui.dragon.components.DragonColumnGroup
 import org.elnix.dragonlauncher.ui.base.asState
+import org.elnix.dragonlauncher.ui.dragon.components.DragonColumnGroup
 import org.elnix.dragonlauncher.ui.dragon.components.SliderWithLabel
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
 
 @Composable
-fun MainScreeLayersOrderScreen(
+fun MainScreeLayersTab(
     onBack: () -> Unit
 ) {
     val ctx = LocalContext.current
@@ -162,63 +162,58 @@ fun MainScreeLayersOrderScreen(
                             )
                         }
 
-                        AnimatedVisibility(item.enabled) {
-                            when (item) {
-                                is MainScreenLayer.CustomDim -> {
+                        if (item is MainScreenLayer.CustomDim) {
+                            AnimatedVisibility(item.enabled) {
+                                var tempShowAfter by remember { mutableIntStateOf(item.showAfter) }
+                                var tempDimAmount by remember { mutableFloatStateOf(item.dimAmount) }
 
-                                    var tempShowAfter by remember { mutableIntStateOf(item.showAfter) }
-                                    var tempDimAmount by remember { mutableFloatStateOf(item.dimAmount) }
-
-                                    DragonColumnGroup {
-                                        SliderWithLabel(
-                                            value = tempShowAfter,
-                                            valueRange = 0..5000,
-                                            label = stringResource(R.string.show_after),
-                                            description = stringResource(R.string.show_after_help),
-                                            onReset = {
+                                DragonColumnGroup {
+                                    SliderWithLabel(
+                                        value = tempShowAfter,
+                                        valueRange = 0..5000,
+                                        label = stringResource(R.string.show_after),
+                                        description = stringResource(R.string.show_after_help),
+                                        onReset = {
+                                            objects = objects.map {
+                                                if (it is MainScreenLayer.CustomDim) it.copy(showAfter = 1000) else it
+                                            }
+                                            save()
+                                        },
+                                        onDragStateChange = { isDragging ->
+                                            if (!isDragging) {
                                                 objects = objects.map {
-                                                    if (it is MainScreenLayer.CustomDim) it.copy(showAfter = 1000) else it
+                                                    if (it is MainScreenLayer.CustomDim) it.copy(showAfter = tempShowAfter) else it
                                                 }
                                                 save()
-                                            },
-                                            onDragStateChange = { isDragging ->
-                                                if (!isDragging) {
-                                                    objects = objects.map {
-                                                        if (it is MainScreenLayer.CustomDim) it.copy(showAfter = tempShowAfter) else it
-                                                    }
-                                                    save()
-                                                }
                                             }
-                                        ) { newValue ->
-                                            tempShowAfter = newValue
                                         }
+                                    ) { newValue ->
+                                        tempShowAfter = newValue
+                                    }
 
-                                        SliderWithLabel(
-                                            value = tempDimAmount,
-                                            valueRange = 0f..1f,
-                                            label = stringResource(R.string.dim_amount),
-                                            description = stringResource(R.string.dim_amount_help),
-                                            onReset = {
+                                    SliderWithLabel(
+                                        value = tempDimAmount,
+                                        valueRange = 0f..1f,
+                                        label = stringResource(R.string.dim_amount),
+                                        description = stringResource(R.string.dim_amount_help),
+                                        onReset = {
+                                            objects = objects.map {
+                                                if (it is MainScreenLayer.CustomDim) it.copy(dimAmount = 0.5f) else it
+                                            }
+                                            save()
+                                        },
+                                        onDragStateChange = { isDragging ->
+                                            if (!isDragging) {
                                                 objects = objects.map {
-                                                    if (it is MainScreenLayer.CustomDim) it.copy(dimAmount = 0.5f) else it
+                                                    if (it is MainScreenLayer.CustomDim) it.copy(dimAmount = tempDimAmount) else it
                                                 }
                                                 save()
-                                            },
-                                            onDragStateChange = { isDragging ->
-                                                if (!isDragging) {
-                                                    objects = objects.map {
-                                                        if (it is MainScreenLayer.CustomDim) it.copy(dimAmount = tempDimAmount) else it
-                                                    }
-                                                    save()
-                                                }
                                             }
-                                        ) { newValue ->
-                                            tempDimAmount = newValue
                                         }
+                                    ) { newValue ->
+                                        tempDimAmount = newValue
                                     }
                                 }
-
-                                else -> {}
                             }
                         }
                     }

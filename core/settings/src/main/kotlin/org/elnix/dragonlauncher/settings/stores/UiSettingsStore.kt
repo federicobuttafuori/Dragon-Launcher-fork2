@@ -175,13 +175,6 @@ object UiSettingsStore : MapSettingsStore() {
         default = true
     )
 
-
-    val chargingAnimation = Settings.boolean(
-        key = "chargingAnimation",
-        dataStoreName = dataStoreName,
-        default = true
-    )
-
     val mainScreenLayers = Settings.string(
         key = "mainScreenLayers",
         dataStoreName = dataStoreName,
@@ -233,7 +226,6 @@ object UiSettingsStore : MapSettingsStore() {
         this.globalFont,
         this.maxNestsDepth,
         this.useCustomColorChannels,
-        this.chargingAnimation,
         this.mainScreenLayers,
         this.cellSizeDp,
         this.showTooltipsOnAddPointDialog,

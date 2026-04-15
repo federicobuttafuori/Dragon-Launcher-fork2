@@ -138,7 +138,7 @@ import org.elnix.dragonlauncher.ui.composition.LocalStartLineObject
 import org.elnix.dragonlauncher.ui.composition.LocalStatusBarElements
 import org.elnix.dragonlauncher.ui.dialogs.FilePickerDialog
 import org.elnix.dragonlauncher.ui.dialogs.GoogleLockingWarning
-import org.elnix.dragonlauncher.ui.dialogs.MainScreeLayersOrderScreen
+import org.elnix.dragonlauncher.ui.dialogs.MainScreeLayersTab
 import org.elnix.dragonlauncher.ui.dialogs.PinUnlockDialog
 import org.elnix.dragonlauncher.ui.dialogs.ShizukuUnavailableDialog
 import org.elnix.dragonlauncher.ui.dialogs.WidgetPickerDialog
@@ -921,7 +921,7 @@ fun MainAppUi(
                     settingComposable(SETTINGS.FONTS) { FontTab(::popBackToAppearance) }
                     settingComposable(SETTINGS.ANGLE_LINE_EDIT) { AngleLineTab(::popBackToAppearance) }
                     settingComposable(SETTINGS.HOLD_TO_ACTIVATE_ARC) { HoldToActivateArcTab(::popBackToAppearance) }
-                    settingComposable(SETTINGS.MAINS_SCREEN_LAYERS) { MainScreeLayersOrderScreen(::popBackToAppearance) }
+                    settingComposable(SETTINGS.MAINS_SCREEN_LAYERS) { MainScreeLayersTab(::popBackToAppearance) }
 
                     settingComposable(
                         route = SETTINGS.LOGS_VIEWER_SCREEN,

@@ -30,6 +30,8 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.navigaton.SETTINGS
+import org.elnix.dragonlauncher.common.serializables.MainScreenLayer
+import org.elnix.dragonlauncher.common.serializables.MainScreenLayerJson
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.common.serializables.dummySwipePoint
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
@@ -41,8 +43,10 @@ import org.elnix.dragonlauncher.settings.stores.UiSettingsStore.showLaunchingApp
 import org.elnix.dragonlauncher.ui.base.asState
 import org.elnix.dragonlauncher.ui.components.AppPreviewTitle
 import org.elnix.dragonlauncher.ui.composition.LocalDrawerIconsCache
+import org.elnix.dragonlauncher.ui.composition.LocalMainScreenLayers
 import org.elnix.dragonlauncher.ui.composition.LocalNavController
 import org.elnix.dragonlauncher.ui.dragon.components.DragonColumnGroup
+import org.elnix.dragonlauncher.ui.dragon.components.SwitchRow
 import org.elnix.dragonlauncher.ui.dragon.expandable.ExpandableSection
 import org.elnix.dragonlauncher.ui.dragon.expandable.rememberExpandableSection
 import org.elnix.dragonlauncher.ui.dragon.settings.SettingsSlider
@@ -50,6 +54,7 @@ import org.elnix.dragonlauncher.ui.dragon.settings.SettingsSwitchRow
 import org.elnix.dragonlauncher.ui.dragon.text.TextDivider
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsItem
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
+import org.elnix.dragonlauncher.ui.statusbar.showChargingAnimation
 
 
 @Composable
@@ -68,6 +73,9 @@ fun AppearanceTab(
     val appLabelOverlaySize by appLabelOverlaySize.asState()
     val appIconOverlaySize by appIconOverlaySize.asState()
     val showAllActionsOnCurrentCircle by UiSettingsStore.showAllActionsOnCurrentCircle.asState()
+
+
+    val mainScreenLayers = LocalMainScreenLayers.current
 
     val topOverlaySettingsState = rememberExpandableSection(stringResource(R.string.app_preview_settings))
     val draggingDisplayState = rememberExpandableSection(stringResource(R.string.dragging_display))
@@ -181,13 +189,24 @@ fun AppearanceTab(
             )
         }
 
-
         item {
-            SettingsSwitchRow(
-                setting = UiSettingsStore.chargingAnimation,
+            SwitchRow(
                 title = stringResource(R.string.charging_animation),
-                description = stringResource(R.string.charging_animation_desc)
-            )
+                description = stringResource(R.string.charging_animation_desc),
+                state = showChargingAnimation()
+            ) {
+                scope.launch {
+                    UiSettingsStore.mainScreenLayers.set(
+                        ctx,
+                        MainScreenLayerJson.encode(
+                            mainScreenLayers.map {
+                                if (it is MainScreenLayer.ChargingAnimation) it.copy(enabled = !it.enabled)
+                                else it
+                            }
+                        )
+                    )
+                }
+            }
         }
 
         item {

@@ -57,7 +57,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.logging.logE
 import org.elnix.dragonlauncher.common.serializables.MainScreenLayer
 import org.elnix.dragonlauncher.common.serializables.StatusBarJson
 import org.elnix.dragonlauncher.common.serializables.StatusBarSerializable
@@ -67,21 +66,22 @@ import org.elnix.dragonlauncher.common.utils.Constants
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.STATUS_BAR_TAG
 import org.elnix.dragonlauncher.common.utils.isValidDateFormat
 import org.elnix.dragonlauncher.common.utils.isValidTimeFormat
+import org.elnix.dragonlauncher.logging.logE
 import org.elnix.dragonlauncher.settings.stores.StatusBarJsonSettingsStore
 import org.elnix.dragonlauncher.settings.stores.StatusBarSettingsStore
-import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.base.asState
+import org.elnix.dragonlauncher.ui.base.modifiers.conditional
+import org.elnix.dragonlauncher.ui.composition.LocalMainScreenLayers
+import org.elnix.dragonlauncher.ui.composition.LocalStatusBarElements
 import org.elnix.dragonlauncher.ui.dragon.components.DragonButton
 import org.elnix.dragonlauncher.ui.dragon.components.DragonColumnGroup
 import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
 import org.elnix.dragonlauncher.ui.dragon.components.DragonTooltip
-import org.elnix.dragonlauncher.ui.base.asState
-import org.elnix.dragonlauncher.ui.helpers.CustomActionSelector
 import org.elnix.dragonlauncher.ui.dragon.components.SliderWithLabel
 import org.elnix.dragonlauncher.ui.dragon.components.SwitchRow
-import org.elnix.dragonlauncher.ui.base.modifiers.conditional
-import org.elnix.dragonlauncher.ui.composition.LocalMainScreenLayers
-import org.elnix.dragonlauncher.ui.composition.LocalStatusBarElements
+import org.elnix.dragonlauncher.ui.helpers.CustomActionSelector
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
 
@@ -764,4 +764,15 @@ fun showStatusBar(): Boolean {
 
     return ((mainScreensLayers.find { it is MainScreenLayer.StatusBar }
         ?: error("No status bar provided in the list")) as MainScreenLayer.StatusBar).enabled
+}
+
+
+@Composable
+fun showChargingAnimation(): Boolean {
+    val mainScreensLayers = LocalMainScreenLayers.current
+
+    return (
+            (mainScreensLayers.find { it is MainScreenLayer.ChargingAnimation } ?: error("No charging animation provided in the list"))
+                    as MainScreenLayer.ChargingAnimation
+            ).enabled
 }
