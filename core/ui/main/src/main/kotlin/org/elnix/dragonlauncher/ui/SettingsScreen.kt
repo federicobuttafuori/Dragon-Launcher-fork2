@@ -427,6 +427,16 @@ fun SettingsScreen(
     }
 
 
+    /**
+     * Compute the position of a moved point, on the circle, and returns a [Pair] composed of:
+     *  - `first`: the new angleDeg of the point on the circles
+     *  - `second`: the new circleNumber
+     *
+     * @param point which point to move
+     * @param circles the circles to move the point on
+     * @param pos the new position of the points, can be anywhere on the screen, not only on a circle
+     * @return Pair with elements or null if the points hasn't moved
+     */
     fun computePointMoved(
         point: SwipePointSerializable,
         circles: List<UiCircle>,
@@ -446,14 +456,13 @@ fun SettingsScreen(
             angle
         }
 
-
         // 3. Find nearest circle based on radius
         val distFromCenter = hypot(dx, dy)
         val closestCircle = circles.minByOrNull { c -> abs(c.radius - distFromCenter) }
             ?: error("Failed to find circle: BIG ISSUE") // Shouldn't happen
 
 
-        // Only apply to the undo stack if the point coordinates have changed
+        // Only return the angle and circle number if they have changed
         if (
             (point.angleDeg != finalAngle) ||
             (point.circleNumber != closestCircle.id)
