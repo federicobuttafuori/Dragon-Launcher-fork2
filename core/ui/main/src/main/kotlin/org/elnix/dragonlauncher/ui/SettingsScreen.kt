@@ -364,6 +364,30 @@ fun SettingsScreen(
         return newNestId
     }
 
+    fun renameNest(id: Int, newName: String) {
+        applyChange {
+            val index = nests.indexOfFirst { it.id == id }
+
+            if (index != -1) {
+                nests[index] = nests[index].copy(
+                    name = newName
+                )
+            }
+        }
+    }
+
+    fun deleteNest(nestToDelete: Int) {
+        applyChange {
+            // Delete nest, leave points on it for now
+            val index = nests.indexOfFirst { it.id == nestToDelete }
+
+            if (index != -1) {
+                nests -= nests[index]
+            }
+        }
+    }
+
+
     /**
      * Adds a new circle to the specified nest (or the currently selected nest by default).
      *
@@ -1614,7 +1638,9 @@ fun SettingsScreen(
 
         EditPointDialog(
             point = editPoint,
-            onNewNest = { addNewNest() },
+            onNewNest = ::addNewNest,
+            onRenameNest = ::renameNest,
+            onDeleteNest = ::deleteNest,
             onDismiss = {
                 showEditDialog = null
                 appsViewModel.reloadPointIcon(editPoint)
@@ -1639,27 +1665,8 @@ fun SettingsScreen(
             onDismissRequest = { showNestManagementDialog = false },
             onNewNest = ::addNewNest,
             nests = nests,
-            onNameChange = { id, newName ->
-                applyChange {
-                    val index = nests.indexOfFirst { it.id == id }
-
-                    if (index != -1) {
-                        nests[index] = nests[index].copy(
-                            name = newName
-                        )
-                    }
-                }
-            },
-            onDelete = { nestToDelete ->
-                applyChange {
-                    // Delete nest, leave points on it for now
-                    val index = nests.indexOfFirst { it.id == nestToDelete }
-
-                    if (index != -1) {
-                        nests -= nests[index]
-                    }
-                }
-            },
+            onNameChange = ::renameNest,
+            onDelete = ::deleteNest,
             onSelect = {
                 nestNavigation.goToNest(it.id)
                 showNestManagementDialog = false
@@ -1731,10 +1738,12 @@ fun SettingsScreen(
         EditPointDialog(
             point = defaultPoint,
             isDefaultEditing = true,
-            onNewNest = { addNewNest() },
+            onNewNest = null,
+            onRenameNest = null,
+            onDeleteNest = null,
             onDismiss = {
                 showEditDefaultPoint = false
-            },
+            }
         ) {
             scope.launch {
                 SwipeSettingsStore.setDefaultPoint(ctx, it)

@@ -84,7 +84,9 @@ fun EditPointDialog(
     point: SwipePointSerializable,
     isDefaultEditing: Boolean = false,
     /** When non-null, "Create new nest" is shown in the Live Nest nest picker (same as [AddPointDialog]). */
-    onNewNest: (() -> Unit)? = null,
+    onNewNest: (() -> Unit)?,
+    onRenameNest: ((id: Int, name: String) -> Unit)?,
+    onDeleteNest: ((id: Int) -> Unit)?,
     onDismiss: () -> Unit,
     onConfirm: (SwipePointSerializable) -> Unit
 ) {
@@ -313,7 +315,8 @@ fun EditPointDialog(
                                 PointFeaturePanel.CycleActions -> editPoint.cycleActions != null
                                 PointFeaturePanel.HoldAndRun -> editPoint.holdAndRunDelayMs != null
                             }
-                        }
+                        },
+                        modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally)
                     ) {
                         expandedFeaturePanel = it.takeIf {
                             expandedFeaturePanel != it
@@ -1120,8 +1123,8 @@ fun EditPointDialog(
                     onDismissRequest = { showLiveNestNestPicker = false },
                     title = stringResource(R.string.pick_a_nest),
                     onNewNest = onNewNest,
-                    onNameChange = null,
-                    onDelete = null,
+                    onNameChange = onRenameNest,
+                    onDelete = onDeleteNest,
                     onSelect = { selectedNest ->
                         editPoint = editPoint.copy(
                             liveNestTargetNestId = selectedNest.id,
