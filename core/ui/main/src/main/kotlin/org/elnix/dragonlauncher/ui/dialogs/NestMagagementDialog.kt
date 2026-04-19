@@ -7,21 +7,19 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -47,7 +45,9 @@ import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
 import org.elnix.dragonlauncher.common.utils.copyToClipboard
 import org.elnix.dragonlauncher.theme.AppObjectsColors
 import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.base.components.Spacer
 import org.elnix.dragonlauncher.ui.composition.LocalNests
+import org.elnix.dragonlauncher.ui.dragon.components.DragonButton
 import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
 import org.elnix.dragonlauncher.ui.dragon.dialogs.CustomAlertDialog
 import org.elnix.dragonlauncher.ui.helpers.nests.actionsInCircle
@@ -94,30 +94,19 @@ fun NestManagementDialog(
             ) {
                 if (onNewNest != null) {
                     item {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(CircleShape)
-                                .clickable {
-                                    hasClickedNewNest = true
-                                    onNewNest()
-                                }
-                                .padding(5.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
+                        DragonButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = {
+                                hasClickedNewNest = true
+                                onNewNest()
+                            }
                         ) {
-
                             Icon(
                                 imageVector = Icons.Default.AddCircle,
                                 contentDescription = stringResource(R.string.create_new_nest),
-                                tint = MaterialTheme.colorScheme.primary
                             )
-                            Spacer(Modifier.width(15.dp))
-
-                            Text(
-                                text = stringResource(R.string.create_new_nest),
-                                color = MaterialTheme.colorScheme.primary
-                            )
+                            Spacer(15.dp)
+                            Text(stringResource(R.string.create_new_nest))
                         }
                     }
                 }
@@ -125,6 +114,7 @@ fun NestManagementDialog(
                 items(nests) { nest ->
                     NestManagementItem(
                         nest = nest,
+                        modifier = Modifier.animateItem(),
                         nests = nests,
                         onNameChange = onNameChange,
                         onDelete = onDelete,
@@ -140,6 +130,7 @@ fun NestManagementDialog(
 @Composable
 private fun NestManagementItem(
     nest: CircleNest,
+    modifier: Modifier,
     nests: List<CircleNest>?,
     onNameChange: ((id: Int, name: String) -> Unit)?,
     onDelete: ((id: Int) -> Unit)?,
@@ -165,7 +156,7 @@ private fun NestManagementItem(
     )
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(120.dp)
             .clip(DragonShape)
@@ -218,7 +209,7 @@ private fun NestManagementItem(
                 )
             }
 
-            if (canEditName){
+            if (canEditName) {
                 TextField(
                     value = tempCustomName,
                     onValueChange = {
@@ -227,10 +218,19 @@ private fun NestManagementItem(
                         onNameChange(nest.id, it)
                     },
                     placeholder = {
-                        Text(
-                            text = stringResource(R.string.custom_name),
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = stringResource(R.string.custom_name)
+                            )
+                            Text(
+                                text = stringResource(R.string.custom_name),
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
                     },
                     colors = AppObjectsColors.outlinedTextFieldColors(removeBorder = true),
                     singleLine = true,
