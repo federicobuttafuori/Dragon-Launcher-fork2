@@ -1669,6 +1669,7 @@ fun SettingsScreen(
             onDelete = ::deleteNest,
             onSelect = {
                 nestNavigation.goToNest(it.id)
+                selectedPoint = null
                 showNestManagementDialog = false
             }
         )
