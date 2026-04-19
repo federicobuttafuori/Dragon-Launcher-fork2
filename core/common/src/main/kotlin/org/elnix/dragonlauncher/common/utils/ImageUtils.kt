@@ -299,7 +299,13 @@ object ImageUtils {
                 }
 
                 is SwipeActionSerializable.LaunchShortcut -> {
-                    loadShortcutIcon(ctx, action.packageName, action.shortcutId) ?: loadDrawableResAsBitmap(
+                    loadShortcutIcon(
+                        ctx = ctx,
+                        packageName = action.packageName,
+                        shortcutId = action.shortcutId,
+                        widthPx = width,
+                        heightPx = height
+                    ) ?: loadDrawableResAsBitmap(
                         R.drawable.ic_action_pinned_shortcut,
                         width,
                         height

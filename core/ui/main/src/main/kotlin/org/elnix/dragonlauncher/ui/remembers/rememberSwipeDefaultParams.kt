@@ -30,7 +30,7 @@ fun rememberSwipeDefaultParams(
     points: List<SwipePointSerializable>? = null,
     nests: List<CircleNest>? = null,
     defaultPointSerializable: SwipePointSerializable? = null,
-    showCircle: Boolean? = null
+    forceShowAllActionsInCurrentNest: Boolean? = null,
 ): SwipeDrawParams {
     val ctx = LocalContext.current
     val density = LocalDensity.current
@@ -46,9 +46,6 @@ fun rememberSwipeDefaultParams(
 
     val defaultPoint = defaultPointSerializable ?: defaultPointSettings
 
-    val showCircleSetting by UiSettingsStore.showCirclePreview.asState()
-    val showCircle = showCircle ?: showCircleSetting
-
     val maxNestsDepth by UiSettingsStore.maxNestsDepth.asState()
 
     val subNestDefaultRadius by SwipeMapSettingsStore.subNestDefaultRadius.asState()
@@ -62,23 +59,35 @@ fun rememberSwipeDefaultParams(
         drawPathCache.updateMaxCacheSize(points.size)
     }
 
+
+    val showAppLaunchPreview by UiSettingsStore.showAppLaunchingPreview.asState()
+    val showAppCirclePreview by UiSettingsStore.showCirclePreview.asState()
+    val showAllActionsOnCurrentCircle by UiSettingsStore.showAllActionsOnCurrentCircle.asState()
+    val showAllActionsInCurrentNestSetting by UiSettingsStore.showAllActionsOnCurrentNest.asState()
+    val showAppPreviewIconCenterStartPosition by UiSettingsStore.showAppPreviewIconCenterStartPosition.asState()
+
+    val showAllActionsInCurrentNest = forceShowAllActionsInCurrentNest ?: showAllActionsInCurrentNestSetting
+
     return remember(
         backgroundColor,
         points,
         nests,
         icons,
         defaultPointSerializable,
-        showCircle,
         ctx,
         defaultPointSettings,
         iconShape,
         extraColors,
         surfaceColorDraw,
         defaultPoint,
-        showCircleSetting,
         maxNestsDepth,
         subNestDefaultRadius,
-        drawPathCache
+        drawPathCache,
+        showAppLaunchPreview,
+        showAppCirclePreview,
+        showAllActionsOnCurrentCircle,
+        showAllActionsInCurrentNest,
+        showAppPreviewIconCenterStartPosition
     ) {
         SwipeDrawParams(
             nests = nests,
@@ -88,11 +97,15 @@ fun rememberSwipeDefaultParams(
             icons = icons,
             surfaceColorDraw = surfaceColorDraw,
             extraColors = extraColors,
-            showCircle = showCircle,
             maxDepth = maxNestsDepth,
             iconShape = iconShape,
             subNestDefaultRadius = subNestDefaultRadiusPixels,
-            drawPathCache = drawPathCache
+            drawPathCache = drawPathCache,
+            showAppCirclePreview = showAppCirclePreview,
+            showAppLaunchPreview = showAppLaunchPreview,
+            showAllActionsOnCurrentCircle = showAllActionsOnCurrentCircle,
+            showAllActionsOnCurrentNest  = showAllActionsInCurrentNest,
+            showAppPreviewIconCenterStartPosition = showAppPreviewIconCenterStartPosition
         )
     }
 }

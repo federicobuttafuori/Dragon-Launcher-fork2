@@ -117,6 +117,7 @@ import org.elnix.dragonlauncher.ui.base.UiConstants
 import org.elnix.dragonlauncher.ui.base.asState
 import org.elnix.dragonlauncher.ui.base.asStateNull
 import org.elnix.dragonlauncher.ui.base.components.Spacer
+import org.elnix.dragonlauncher.ui.base.compositionslocals.LocalDisableHapticFeedbackGlobally
 import org.elnix.dragonlauncher.ui.composition.LocalAngleLineObject
 import org.elnix.dragonlauncher.ui.composition.LocalAppLifecycleViewModel
 import org.elnix.dragonlauncher.ui.composition.LocalAppsViewModel
@@ -284,6 +285,7 @@ fun MainAppUi(
     val useAccessibilityInsteadOfContextToExpandActionPanel by DebugSettingsStore
         .useAccessibilityInsteadOfContextToExpandActionPanel.asState()
 
+    val disableHapticFeedbackGlobally by BehaviorSettingsStore.disableHapticFeedbackGlobally.asState()
 
     val lifecycleOwner = LocalLifecycleOwner.current
     var isDefaultLauncher by remember { mutableStateOf(ctx.isDefaultLauncher) }
@@ -804,7 +806,9 @@ fun MainAppUi(
         LocalHoldCustomObject provides holdCustomObject,
 
         LocalMainScreenLayers provides layersOrder,
-        LocalShowLabelsInAddPointDialog provides showTooltipsOnAddPointDialog
+        LocalShowLabelsInAddPointDialog provides showTooltipsOnAddPointDialog,
+
+        LocalDisableHapticFeedbackGlobally provides disableHapticFeedbackGlobally
     ) {
         Scaffold(
             floatingActionButton = {

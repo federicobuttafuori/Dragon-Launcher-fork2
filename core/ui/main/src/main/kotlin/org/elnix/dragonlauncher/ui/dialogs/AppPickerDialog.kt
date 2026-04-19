@@ -218,12 +218,7 @@ fun AppPickerDialog(
                                     }
                                 )
                             },
-                            modifier = Modifier.focusRequester(focusRequester),
-
-                            // No need to put anything here, the thing is working well without,
-                            // if I put isSearchbarEnabled = true inside, I need to spam
-                            // that search button to show the search abr somehow
-                            onFocusStateChanged = { }
+                            modifier = Modifier.focusRequester(focusRequester)
                         )
                     }
                 }

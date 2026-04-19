@@ -317,7 +317,7 @@ fun MainScreen(onLaunchAction: (SwipePointSerializable) -> Unit) {
                         MainScreenOverlay(
                             start = start,
                             current = current,
-                            nestId = nestId,
+                            currentNest = nestNavigation.currentNest,
                             onLaunch = { launchAction(it) }
                         )
                     }

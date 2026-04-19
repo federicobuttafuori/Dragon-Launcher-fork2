@@ -265,7 +265,8 @@
     <string name="open_burger_menu">バーガーメニューを開く</string>
     <string name="selected_text">選択済み</string>
     <string name="unselected">未選択</string>
-    <string name="individual_options">個別オプション</string>
+    <string name="general_style">一般スタイル</string>
+    <string name="individual_style">個別スタイル</string>
     <string name="inner_padding">内側のパディング</string>
     <string name="plain_color">無地</string>
     <string name="tint">色合い</string>

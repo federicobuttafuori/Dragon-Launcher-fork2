@@ -165,6 +165,14 @@ object UiSettingsStore : MapSettingsStore() {
     )
 
 
+    /** How many sub live nests can be drawn at once */
+    val maxLiveNestsDepth = Settings.int(
+        key = "maxLiveNestsDepth",
+        dataStoreName = dataStoreName,
+        default = 5,
+        allowedRange = 1..10
+    )
+
     /**
      * Whether to use my custom-made color schemes for objects, or the default Android colors schemes.
      * For ex: my switch uses no borders, and other colors channels than the default one, while the android one has borders
@@ -225,6 +233,7 @@ object UiSettingsStore : MapSettingsStore() {
         this.wallpaperDimDrawerScreen,
         this.globalFont,
         this.maxNestsDepth,
+        this.maxLiveNestsDepth,
         this.useCustomColorChannels,
         this.mainScreenLayers,
         this.cellSizeDp,

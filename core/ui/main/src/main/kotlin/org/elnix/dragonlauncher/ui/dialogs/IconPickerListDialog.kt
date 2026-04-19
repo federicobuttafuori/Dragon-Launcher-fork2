@@ -41,10 +41,10 @@ import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.IconPackInfo
 import org.elnix.dragonlauncher.common.utils.ImageUtils.loadDrawableAsBitmap
 import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
-import org.elnix.dragonlauncher.ui.composition.LocalAppsViewModel
-import org.elnix.dragonlauncher.ui.helpers.AppDrawerSearch
 import org.elnix.dragonlauncher.ui.base.modifiers.shapedClickable
+import org.elnix.dragonlauncher.ui.composition.LocalAppsViewModel
 import org.elnix.dragonlauncher.ui.dragon.dialogs.CustomAlertDialog
+import org.elnix.dragonlauncher.ui.helpers.AppDrawerSearch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -91,12 +91,7 @@ fun IconPickerListDialog(
                             }
                         )
                     },
-                    onSearchChanged = { searchQuery = it },
-
-                    // No need to put anything here, the thing is working well without,
-                    // if i put isSearchbarEnabled = true inside, I need to spam
-                    // that search button to show the search abr somehow
-                    onFocusStateChanged = { }
+                    onSearchChanged = { searchQuery = it }
                 )
             }
         },

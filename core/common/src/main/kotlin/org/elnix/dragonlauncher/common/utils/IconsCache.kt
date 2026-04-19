@@ -74,12 +74,12 @@ class IconsCache<T>(initialMaxSize: Int) {
         icons[id] = compute()
     }
 
-    fun get(id: T): ImageBitmap? {
+    operator fun get(id: T): ImageBitmap? {
         val result = icons[id]
         if (result != null) {
             logD(ICONS_TAG) { "Successfully retrieved icon for $id, cacheUUID: $cacheUUID" }
         } else {
-            logW(ICONS_TAG) { "Failed to get icon for $id.\ncacheUUID: $cacheUUID; type: ${icons.keys.firstOrNull()?.let { it::class.simpleName}}\nmaxSize: $maxSize, size: $size\n Cached keys: ${icons.keys.toList()}" }
+            logW(ICONS_TAG) { "Failed to get icon for $id.\ncacheUUID: $cacheUUID\nmaxSize: $maxSize, size: $size" }
         }
         return result
     }

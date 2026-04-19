@@ -19,8 +19,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -88,11 +91,13 @@ fun AppPreviewTitle(
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                val colorAction =
+                    actionColor(action, extraColors, point.customActionColor?.let { Color(it) })
+
 
                 if (showIcon) {
-                    val colorAction =
-                        actionColor(action, extraColors, point.customActionColor?.let { Color(it) })
-                    icons.get(point.id)?.let {
+
+                    icons[point.id]?.let {
                         Image(
                             bitmap = it,
                             contentDescription = null,
@@ -109,9 +114,16 @@ fun AppPreviewTitle(
                 if (showLabel) {
                     Text(
                         text = label,
-                        color = actionColor(action, extraColors, point.customActionColor?.let { Color(it) }),
-                        fontSize = labelSize.sp,
-                        fontWeight = FontWeight.Bold
+                        style = TextStyle(
+                            color = colorAction,
+                            fontSize = labelSize.sp,
+                            fontWeight = FontWeight.Bold,
+                            shadow = Shadow(
+                                color = Color.Black.copy(alpha = 0.48f),
+                                offset = Offset(0f, 1f),
+                                blurRadius = 5f
+                            )
+                        )
                     )
                 }
             }

@@ -11,6 +11,7 @@ import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ToggleButton
 import androidx.compose.runtime.Composable
@@ -18,8 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.elnix.dragonlauncher.enumsui.ToggleButtonOption
-import org.elnix.dragonlauncher.ui.base.withHapticParam
 import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.base.withHapticParam
 import org.elnix.dragonlauncher.ui.dragon.components.DragonTooltip
 
 
@@ -89,13 +90,14 @@ fun <T : ToggleButtonOption> MultiSelectConnectedButtonRow(
                         else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
                     }
                 ) {
-                    Crossfade(!checked) { notChecked ->
-                        Icon(
-                            entry.iconDisabled.takeIf { notChecked && it != null } ?: entry.iconEnabled,
-                            contentDescription = null
-                        )
+                    entry.iconEnabled?.let { iconEnabled ->
+                        Crossfade(!checked) { notChecked ->
+                            Icon(
+                                entry.iconDisabled.takeIf { notChecked && it != null } ?: iconEnabled,
+                                contentDescription = null
+                            )
+                        }
                     }
-
 
                     AnimatedVisibility(showLabel) {
                         entry.resId?.let{
@@ -103,7 +105,8 @@ fun <T : ToggleButtonOption> MultiSelectConnectedButtonRow(
                             Text(
                                 stringResource(it),
                                 maxLines = 1,
-                                softWrap = false
+                                softWrap = false,
+                                style = MaterialTheme.typography.labelSmall
                             )
                         }
                     }

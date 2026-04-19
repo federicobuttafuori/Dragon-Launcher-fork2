@@ -267,7 +267,8 @@
     <string name="open_burger_menu">Ouvrir le menu des hamburgers</string>
     <string name="selected_text">Choisi</string>
     <string name="unselected">Désélectionné</string>
-    <string name="individual_options">Option Individuelle</string>
+    <string name="general_style">Style général</string>
+    <string name="individual_style">Style individuel</string>
     <string name="inner_padding">Rembourrage intérieur</string>
     <string name="plain_color">Couleur unie</string>
     <string name="tint">Teinte</string>

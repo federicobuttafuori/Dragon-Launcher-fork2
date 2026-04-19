@@ -35,31 +35,31 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.base.ktx.px
 import org.elnix.dragonlauncher.common.R
-import org.elnix.dragonlauncher.logging.logD
 import org.elnix.dragonlauncher.common.serializables.CircleNest
 import org.elnix.dragonlauncher.common.serializables.CustomHapticFeedbackSerializable
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.HAPTIC_TAG
 import org.elnix.dragonlauncher.common.utils.UiCircle
-import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import org.elnix.dragonlauncher.common.utils.showToast
 import org.elnix.dragonlauncher.enumsui.NestEditMode
 import org.elnix.dragonlauncher.enumsui.NestEditMode.DRAG
 import org.elnix.dragonlauncher.enumsui.NestEditMode.HAPTIC
 import org.elnix.dragonlauncher.enumsui.NestEditMode.MIN_ANGLE
 import org.elnix.dragonlauncher.enumsui.NestEditMode.RADIUS
+import org.elnix.dragonlauncher.logging.logD
 import org.elnix.dragonlauncher.settings.stores.SwipeMapSettingsStore
 import org.elnix.dragonlauncher.settings.stores.SwipeSettingsStore
-import org.elnix.dragonlauncher.ui.dragon.generic.ActionRow
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import org.elnix.dragonlauncher.ui.base.asState
+import org.elnix.dragonlauncher.ui.composition.LocalNests
 import org.elnix.dragonlauncher.ui.defaultDragDistance
 import org.elnix.dragonlauncher.ui.dialogs.HapticFeedBackEditorButtonWithPlayTest
 import org.elnix.dragonlauncher.ui.dialogs.HapticFeedbackEditor
 import org.elnix.dragonlauncher.ui.dragon.components.SliderWithLabel
 import org.elnix.dragonlauncher.ui.dragon.components.SwitchRow
+import org.elnix.dragonlauncher.ui.dragon.generic.ActionRow
 import org.elnix.dragonlauncher.ui.helpers.nests.circlesSettingsOverlay
-import org.elnix.dragonlauncher.ui.remembers.rememberSwipeDefaultParams
 import org.elnix.dragonlauncher.ui.helpers.settings.SettingsScaffold
-import org.elnix.dragonlauncher.ui.composition.LocalNests
+import org.elnix.dragonlauncher.ui.remembers.rememberSwipeDefaultParams
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
@@ -90,7 +90,8 @@ fun NestEditingScreen(
     val angleColor = MaterialTheme.colorScheme.tertiary
 
     val drawParams = rememberSwipeDefaultParams(
-        backgroundColor = MaterialTheme.colorScheme.background
+        backgroundColor = MaterialTheme.colorScheme.background,
+        forceShowAllActionsInCurrentNest = true
     )
 
     val subNestDefaultRadius by SwipeMapSettingsStore.subNestDefaultRadius.asState()
@@ -351,7 +352,7 @@ fun NestEditingScreen(
 
                         // Used to control whether the nest displays its circle individually or not
                         SwitchRow(
-                            state = currentNest.showCircle ?: drawParams.showCircle,
+                            state = currentNest.showCircle ?: drawParams.showAppCirclePreview,
                             title = stringResource(R.string.show_circle)
                         ) { showCircle ->
 

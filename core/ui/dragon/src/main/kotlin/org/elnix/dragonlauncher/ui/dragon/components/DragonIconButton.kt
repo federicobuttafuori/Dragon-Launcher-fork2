@@ -8,8 +8,8 @@ import androidx.compose.material3.IconButtonColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import org.elnix.dragonlauncher.ui.base.UiConstants
 import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.base.UiConstants
 
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -33,12 +33,12 @@ fun DragonIconButtonImpl(
 
 @Composable
 fun DragonIconButton(
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: () -> Boolean = { true },
     colors: IconButtonColors = AppObjectsColors.iconButtonColors(),
     imageVector: ImageVector,
-    contentDescription: String
+    contentDescription: String,
+    onClick: () -> Unit
 ) {
 
     DragonTooltip(contentDescription) {
