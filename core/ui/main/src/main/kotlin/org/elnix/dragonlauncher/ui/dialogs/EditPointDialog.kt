@@ -780,100 +780,102 @@ fun EditPointDialog(
                     TextDivider(stringResource(R.string.general_style))
                 }
 
-                DragonColumnGroup {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(15.dp)
-                    ) {
+                if (!isDefaultEditing) {
+                    DragonColumnGroup {
                         Row(
                             modifier = Modifier
-                                .weight(1f)
-                                .clip(DragonShape)
-                                .background(MaterialTheme.colorScheme.surfaceVariant)
-                                .clickable {
-                                    showEditActionDialog = true
-                                }
-                                .padding(12.dp),
+                                .fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            horizontalArrangement = Arrangement.spacedBy(15.dp)
                         ) {
-                            Text(
-                                text = label,
-                                color = actionColor,
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold
-                            )
+                            Row(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .clip(DragonShape)
+                                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                                    .clickable {
+                                        showEditActionDialog = true
+                                    }
+                                    .padding(12.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                Text(
+                                    text = label,
+                                    color = actionColor,
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
 
-                            Spacer(Modifier.weight(1f))
-                            Icon(
-                                imageVector = Icons.Default.Edit,
-                                contentDescription = stringResource(R.string.edit_action),
-                                tint = MaterialTheme.colorScheme.primary
-                            )
-                        }
-
-
-                        Row(
-                            modifier = Modifier
-                                .weight(1f)
-                                .clip(DragonShape)
-                                .background(MaterialTheme.colorScheme.surfaceVariant)
-                                .clickable {
-                                    showEditIconDialog = true
-                                }
-                                .padding(12.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            Text(
-                                text = stringResource(R.string.edit_icon),
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                            Spacer(Modifier.weight(1f))
-
-                            Icon(
-                                imageVector = Icons.Default.Edit,
-                                contentDescription = stringResource(R.string.edit_action),
-                                tint = MaterialTheme.colorScheme.primary,
-                            )
-                        }
-                    }
-
-                    TextField(
-                        value = editPoint.customName ?: "",
-                        onValueChange = {
-                            editPoint = editPoint.copy(customName = it)
-                        },
-                        label = { Text(stringResource(R.string.custom_name)) },
-                        trailingIcon = {
-                            if (editPoint.customName != null) {
-                                DragonIconButton(
-                                    onClick = {
-                                        editPoint = editPoint.copy(customName = null)
-                                    },
-                                    imageVector = Icons.Default.Restore,
-                                    contentDescription = stringResource(R.string.reset)
+                                Spacer(Modifier.weight(1f))
+                                Icon(
+                                    imageVector = Icons.Default.Edit,
+                                    contentDescription = stringResource(R.string.edit_action),
+                                    tint = MaterialTheme.colorScheme.primary
                                 )
                             }
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(DragonShape),
-                        colors = AppObjectsColors.outlinedTextFieldColors(
-                            removeBorder = true,
-                            backgroundColor = MaterialTheme.colorScheme.surfaceVariant
-                        )
-                    )
 
-                    ColorPickerRow(
-                        label = stringResource(R.string.custom_action_color),
-                        currentColor = editPoint.customActionColor?.let { Color(it) }
-                            ?: currentActionColor,
-                        backgroundColor = MaterialTheme.colorScheme.surfaceVariant
-                    ) { selectedColor ->
-                        editPoint = editPoint.copy(customActionColor = selectedColor?.toArgb())
+
+                            Row(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .clip(DragonShape)
+                                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                                    .clickable {
+                                        showEditIconDialog = true
+                                    }
+                                    .padding(12.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.edit_icon),
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                                Spacer(Modifier.weight(1f))
+
+                                Icon(
+                                    imageVector = Icons.Default.Edit,
+                                    contentDescription = stringResource(R.string.edit_action),
+                                    tint = MaterialTheme.colorScheme.primary,
+                                )
+                            }
+                        }
+
+                        TextField(
+                            value = editPoint.customName ?: "",
+                            onValueChange = {
+                                editPoint = editPoint.copy(customName = it)
+                            },
+                            label = { Text(stringResource(R.string.custom_name)) },
+                            trailingIcon = {
+                                if (editPoint.customName != null) {
+                                    DragonIconButton(
+                                        onClick = {
+                                            editPoint = editPoint.copy(customName = null)
+                                        },
+                                        imageVector = Icons.Default.Restore,
+                                        contentDescription = stringResource(R.string.reset)
+                                    )
+                                }
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(DragonShape),
+                            colors = AppObjectsColors.outlinedTextFieldColors(
+                                removeBorder = true,
+                                backgroundColor = MaterialTheme.colorScheme.surfaceVariant
+                            )
+                        )
+
+                        ColorPickerRow(
+                            label = stringResource(R.string.custom_action_color),
+                            currentColor = editPoint.customActionColor?.let { Color(it) }
+                                ?: currentActionColor,
+                            backgroundColor = MaterialTheme.colorScheme.surfaceVariant
+                        ) { selectedColor ->
+                            editPoint = editPoint.copy(customActionColor = selectedColor?.toArgb())
+                        }
                     }
                 }
 
