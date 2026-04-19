@@ -26,14 +26,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
-import org.elnix.dragonlauncher.ui.base.UiConstants
 import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.base.UiConstants
 
 @Composable
 fun EditValueTextField(
     value: String,
     onValueChange: (String) -> Unit,
     enabled: Boolean = true,
+    textColor: Color? = null,
     backgroundColor: Color,
     onFocusChange: ((Boolean) -> Unit)? = null,
     onDone: () -> Unit
@@ -102,7 +103,9 @@ fun EditValueTextField(
         ),
         colors = AppObjectsColors.outlinedTextFieldColors(
             removeBorder = true,
-            backgroundColor = backgroundColor
+            backgroundColor = backgroundColor,
+            onBackgroundColor = textColor
+
         ),
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Number,

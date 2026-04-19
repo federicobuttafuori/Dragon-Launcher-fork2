@@ -1407,6 +1407,7 @@ fun SettingsScreen(
                             value = angleText,
                             onValueChange = { angleText = it },
                             enabled = aPointIsSelected,
+                            textColor = MaterialTheme.colorScheme.onPrimary,
                             backgroundColor = MaterialTheme.colorScheme.primary,
                             onFocusChange = { isEditing = it },
                             onDone = ::commitEditTExt
