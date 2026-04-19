@@ -44,14 +44,14 @@ import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.CircleNest
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
-import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
 import org.elnix.dragonlauncher.common.utils.copyToClipboard
 import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.base.UiConstants.DragonShape
+import org.elnix.dragonlauncher.ui.composition.LocalNests
 import org.elnix.dragonlauncher.ui.dragon.components.DragonIconButton
+import org.elnix.dragonlauncher.ui.dragon.dialogs.CustomAlertDialog
 import org.elnix.dragonlauncher.ui.helpers.nests.actionsInCircle
 import org.elnix.dragonlauncher.ui.remembers.rememberSwipeDefaultParams
-import org.elnix.dragonlauncher.ui.composition.LocalNests
-import org.elnix.dragonlauncher.ui.dragon.dialogs.CustomAlertDialog
 
 @Composable
 fun NestManagementDialog(
@@ -218,28 +218,27 @@ private fun NestManagementItem(
                 )
             }
 
-            TextField(
-                value = tempCustomName,
-                enabled = canEditName,
-                onValueChange = {
-                    if (canEditName) {
+            if (canEditName){
+                TextField(
+                    value = tempCustomName,
+                    onValueChange = {
                         tempCustomName = it
 
                         onNameChange(nest.id, it)
-                    }
-                },
-                placeholder = {
-                    Text(
-                        text = stringResource(R.string.custom_name),
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                },
-                colors = AppObjectsColors.outlinedTextFieldColors(removeBorder = true),
-                singleLine = true,
-                modifier = Modifier
-                    .clip(DragonShape)
-                    .weight(1f)
-            )
+                    },
+                    placeholder = {
+                        Text(
+                            text = stringResource(R.string.custom_name),
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    },
+                    colors = AppObjectsColors.outlinedTextFieldColors(removeBorder = true),
+                    singleLine = true,
+                    modifier = Modifier
+                        .clip(DragonShape)
+                        .weight(1f)
+                )
+            }
         }
 
 
