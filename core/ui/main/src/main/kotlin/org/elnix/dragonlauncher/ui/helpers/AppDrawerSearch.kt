@@ -33,7 +33,7 @@ fun AppDrawerSearch(
     leadingIcon: (@Composable () -> Unit)? = null,
     trailingIcon: (@Composable () -> Unit)? = null,
     onEnterPressed: (() -> Unit)? = null,
-    onFocusStateChanged: (Boolean) -> Unit
+    onFocusStateChanged: ((Boolean) -> Unit)? = null
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -47,7 +47,7 @@ fun AppDrawerSearch(
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .onFocusChanged { focusState ->
                 val focused = focusState.isFocused
-                onFocusStateChanged(focused) // Notify parent of focus change
+                onFocusStateChanged?.invoke(focused) // Notify parent of focus change
                 if (focused) {
                     keyboardController?.show() // Show keyboard when TextField gains focus
                 }

@@ -1,3 +1,5 @@
+@file:Suppress("AssignedValueIsNeverRead")
+
 package org.elnix.dragonlauncher.ui.remembers
 
 import androidx.compose.runtime.Composable
@@ -30,12 +32,10 @@ data class SweepAngleState(
     val reset: () -> Unit
 )
 
-@Suppress("AssignedValueIsNeverRead")
 @Composable
 fun rememberSweepAngle(): SweepAngleState {
     var cumulativeAngle by remember { mutableFloatStateOf(0f) }
     var lastRawAngle by remember { mutableFloatStateOf(0f) }
-//    var initialized by remember { mutableStateOf(false) }
 
     return SweepAngleState(
         sweepAngle = {
@@ -57,12 +57,6 @@ fun rememberSweepAngle(): SweepAngleState {
             if (wrapped < 0f) wrapped + 360f else wrapped
         },
         onAngleChanged = { newRaw ->
-//            if (!initialized) {
-//                lastRawAngle = newRaw
-//                initialized = true
-//                return@SweepAngleState
-//            }
-
             var delta = newRaw - lastRawAngle
 
             // Wrap delta to [-180, 180] to handle the 0/360 crossing
@@ -75,7 +69,39 @@ fun rememberSweepAngle(): SweepAngleState {
         reset = {
             cumulativeAngle = 0f
             lastRawAngle = 0f
-//            initialized = false
+        }
+    )
+}
+
+/** Non-composable factory for SweepAngleState — creates a stateful angle tracker. */
+fun createSweepAngleState(): SweepAngleState {
+    var cumulativeAngle = 0f
+    var lastRawAngle = 0f
+
+    return SweepAngleState(
+        sweepAngle = {
+            when (val wrapped = cumulativeAngle % 720f) {
+                in 0f..360f -> wrapped
+                in 360f..720f -> wrapped - 720f
+                in -360f..0f -> wrapped
+                in -720f..-360f -> wrapped + 720f
+                else -> wrapped
+            }
+        },
+        angle360 = {
+            val wrapped = cumulativeAngle % 360f
+            if (wrapped < 0f) wrapped + 360f else wrapped
+        },
+        onAngleChanged = { newRaw ->
+            var delta = newRaw - lastRawAngle
+            if (delta > 180f) delta -= 360f
+            if (delta < -180f) delta += 360f
+            cumulativeAngle += delta
+            lastRawAngle = newRaw
+        },
+        reset = {
+            cumulativeAngle = 0f
+            lastRawAngle = 0f
         }
     )
 }

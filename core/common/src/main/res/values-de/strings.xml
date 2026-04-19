@@ -266,7 +266,8 @@
     <string name="open_burger_menu">Öffnen Sie das Burger-Menü</string>
     <string name="selected_text">Ausgewählt</string>
     <string name="unselected">Nicht ausgewählt</string>
-    <string name="individual_options">Individuelle Option</string>
+    <string name="general_style">Allgemeiner Stil</string>
+    <string name="individual_style">Individueller Stil</string>
     <string name="inner_padding">Innenpolsterung</string>
     <string name="plain_color">Einfarbig</string>
     <string name="tint">Farbton</string>

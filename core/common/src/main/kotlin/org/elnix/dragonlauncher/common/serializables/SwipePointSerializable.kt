@@ -5,6 +5,28 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable.OpenDragonLauncherSettings
 
+/*  ─────────────  Cycle Actions model  ─────────────  */
+
+/**
+ * One timed stage in a Cycle Actions sequence.
+ *
+ * Stage 0 is implicit (the point's base action, 0 ms). Stages 1..N are stored in
+ * [SwipePointSerializable.cycleActions] and evaluated continuously during a hold to
+ * determine which action fires on release.
+ *
+ * @param triggerTimeMs Extra milliseconds to hold **after the previous stage** before this stage
+ *   becomes current (after finger-down for Stage 1). The runtime sums these into absolute thresholds.
+ * @param action        Action executed on release while this stage is active.
+ * @param hapticFeedback Haptic pulse played once when transitioning into this stage.
+ *                      Null falls back to the point's own haptic setting.
+ */
+@Serializable
+data class CycleActionStage(
+    val triggerTimeMs: Int,
+    val action: SwipeActionSerializable,
+    val hapticFeedback: CustomHapticFeedbackSerializable? = null
+)
+
 /**
  * Serializable model representing a single swipe point on a radial / circular UI.
  *
@@ -12,6 +34,8 @@ import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable.Ope
  * backward-compatible evolution of visual, behavioral, and interaction features.
  *
  * All visual values are interpreted by the rendering layer (Compose / Canvas / View).
+ *
+ * DO NOT PUT [SerializedName] decoration above new parameters, they are only for legacy support in Gson (the old storage system)
  */
 @Immutable
 @Serializable
@@ -109,12 +133,89 @@ data class SwipePointSerializable(
      * Shape of the selected border icon, default is a circle
      */
     @SerializedName("borderShapeSelected")
-    val borderShapeSelected: IconShape? = null
+    val borderShapeSelected: IconShape? = null,
+
+    /*  ─────────────  Live Nest configuration  ─────────────  */
+
+    /**
+     * Id of the [CircleNest] to render as a scaled overlay when this point is held.
+     * Null means Live Nest is disabled for this point.
+     */
+    val liveNestTargetNestId: Int? = null,
+
+    /**
+     * How long (ms) the user must hold on this point before Live Nest activates.
+     * Null falls back to a sensible default (500 ms) defined in the overlay controller.
+     */
+    val liveNestPreviewDelayMs: Int? = null,
+
+    /**
+     * Scale factor applied to the Live Nest radii, range 0.3–1.0.
+     * Null defaults to 0.65.
+     */
+    val liveNestScale: Float? = null,
+
+    /**
+     * Extra tolerance radius (px) added beyond the outermost Live Nest ring before an
+     * out-of-bounds exit is triggered. Prevents accidental dismissal when the finger
+     * drifts slightly outside the circle.
+     *  `null` / `0` means no grace (strict bounds).
+     *  `-1` means no bounds (infinite drag)
+     */
+    val liveNestGraceDistancePx: Int? = null,
+
+    /**
+     * When non-null and Live Nest is open, the main nest layer is drawn at this opacity (0–100).
+     * Null means the option is off (main nest stays fully opaque). Default when enabled is 50.
+     */
+    val liveNestMainNestOpacityPercent: Int? = null,
+
+    /**
+     * Whether if the live nest drawn should have its center exactly where it got activated after the timeout, or if it snaps to its host point position
+     */
+    val liveNestSnapsToFingerPosition: Boolean? = null,
+
+    /*  ─────────────  Cycle Actions configuration  ─────────────  */
+
+    /**
+     * Ordered list of extra timed stages for Cycle Actions.
+     * Null means Cycle Actions is disabled for this point.
+     *
+     * Stage 0 is always the point's own [action] (base, no threshold).
+     * Each entry is Stage[1..N]: [CycleActionStage.triggerTimeMs] is the **additional** hold time
+     * after the previous stage (or after finger-down for Stage 1) before that stage becomes current.
+     */
+    val cycleActions: List<CycleActionStage>? = null,
+
+    /**
+     * The default delay that is used to wait between stages
+     */
+    val cycleActionStageDefaultDelay: Int? = null,
+
+    /**
+     * Milliseconds to wait in the "Loop Over" phase before the cycle restarts.
+     * When null, the actions doesn't loop
+     */
+    val cycleActionsLoopDelayMs: Int? = null,
+
+    /*  ─────────────  Hold & Run configuration  ─────────────  */
+
+    /**
+     * Milliseconds of continuous hold after which [action] fires automatically, without release.
+     * Null means Hold & Run is disabled for this point.
+     *
+     * When set, the gesture is consumed as soon as the delay elapses; releasing the finger
+     * afterwards does not trigger any additional launch.
+     */
+    val holdAndRunDelayMs: Int? = null,
+
+    /**
+     * When non-null, Hold & Run runs this action instead of the point’s main [action].
+     * Null means the same action as tap/release (default).
+     */
+    val holdAndRunAction: SwipeActionSerializable? = null,
+
 ) {
-
-//    fun toShortString(): String =
-//        "action: $action | nestId: $nestId | angle: $angleDeg | circleNumber: $circleNumber"
-
 }
 
 

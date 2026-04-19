@@ -16,9 +16,13 @@ data class SwipeDrawParams(
     val icons: IconsCache<String>,
     val surfaceColorDraw: Color,
     val extraColors: ExtraColors,
-    val showCircle: Boolean,
     val maxDepth: Int,
     val iconShape: IconShape,
     val subNestDefaultRadius: Float,
-    val drawPathCache: DrawPathCache
+    val drawPathCache: DrawPathCache,
+    val showAllActionsOnCurrentCircle: Boolean,
+    val showAppCirclePreview: Boolean,
+    val showAppLaunchPreview: Boolean,
+    val showAllActionsOnCurrentNest: Boolean,
+    val showAppPreviewIconCenterStartPosition: Boolean,
 )

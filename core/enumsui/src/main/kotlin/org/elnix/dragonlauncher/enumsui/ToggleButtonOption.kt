@@ -4,6 +4,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 interface ToggleButtonOption {
     val resId: Int?
-    val iconEnabled: ImageVector
+    val iconEnabled: ImageVector?
     val iconDisabled: ImageVector?
 }

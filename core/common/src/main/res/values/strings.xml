@@ -124,6 +124,7 @@
     <string name="are_you_sure_to_delete_workspace">Are you sure to delete workspace</string>
     <string name="search_apps">Search Apps</string>
     <string name="search_widgets">Search widgets…</string>
+    <string name="search_shortcuts">Search shortcuts…</string>
     <string name="precision_mode_active">Precision Mode</string>
     <string name="remove_from_workspace">Remove From Workspace</string>
     <string name="add_to_workspace">Add To Workspace</string>
@@ -285,7 +286,8 @@
     <string name="open_burger_menu">Open Burger Menu</string>
     <string name="selected_text">Selected</string>
     <string name="unselected">Unselected</string>
-    <string name="individual_options">Individual Option</string>
+    <string name="general_style">General style</string>
+    <string name="individual_style">Individual style</string>
     <string name="inner_padding">Inner Padding</string>
     <string name="plain_color">Plain Color</string>
     <string name="tint">Tint</string>
@@ -576,6 +578,9 @@
     <string name="pinned_shortcut_already_exists">"%s" shortcut is already on your circles</string>
     <string name="pinned_shortcuts">Shortcuts</string>
     <string name="no_pinned_shortcuts">No shortcuts available</string>
+    <string name="select_shortcut_action_title">Select action for %1$s</string>
+    <string name="no_extra_shortcuts">No extra actions available.</string>
+    <string name="just_open_app">Just open %1$s</string>
 
     <!--  ─────────────  Recently Used Apps  ─────────────  -->
     <string name="recently_used_apps">Recently used apps</string>
@@ -591,6 +596,10 @@
     <string name="keep_screen_on_desc">Do not turn the screen off and lock, keep it always on when Dragon is focused</string>
     <string name="drag_zone_padding">Drag zone padding</string>
     <string name="points_settings">Point settings</string>
+    <string name="default_point_live_nest_defaults">Live Nest defaults</string>
+    <string name="default_point_live_nest_defaults_summary">Used when you pick a target nest on a point (preview delay, scale, grace, dim).</string>
+    <string name="default_hold_and_run_delay">Default Hold &amp; Run delay (ms)</string>
+    <string name="default_hold_and_run_delay_summary">Delay applied when you enable Hold &amp; Run on a point (tap “Enable Hold &amp; Run”).</string>
     <string name="logs">Logs</string>
     <string name="settings_json">Settings JSON</string>
     <string name="pick_a_settings_screen">Pick a settings screen</string>
@@ -864,5 +873,39 @@
     <string name="add_current_theme">Add current theme</string>
     <string name="test_mode_validate">Keep current colors</string>
     <string name="test_mode_cancel">Restore previous theme</string>
+
+    <string name="disable">Disable</string>
+
+    <!--  Live Nest  -->
+    <string name="live_nest">Live Nest</string>
+    <string name="live_nest_enabled">Live Nest enabled</string>
+    <string name="live_nest_disabled">Live Nest disabled</string>
+    <string name="live_nest_target_nest">Target Nest</string>
+    <string name="live_nest_hold_delay">Hold delay (ms)</string>
+    <string name="live_nest_scale">Nest scale</string>
+    <string name="live_nest_pick_nest">Pick Nest</string>
+    <string name="live_nest_grace_distance">Grace distance (px)</string>
+    <string name="live_nest_snaps_to_finger_position">Live nest snaps to finger position</string>
+    <string name="live_nest_snaps_to_finger_position_desc">Whether if the live nest drawn should have its center exactly where it got activated after the timeout, or if it snaps to its host point position</string>
+    <string name="live_nest_dim_main_nest">Dim main nest while open</string>
+    <string name="live_nest_dim_main_nest_desc">Lowers main nest opacity when Live Nest is active so the overlay stands out.</string>
+    <string name="live_nest_main_nest_opacity">Main nest opacity (%)</string>
+    <string name="cycle_actions">Cycle Actions</string>
+    <string name="hold_and_run">Hold &amp; Run</string>
+    <string name="hold_and_run_delay">Hold before run (ms)</string>
+    <string name="hold_and_run_enable">Enable Hold &amp; Run</string>
+    <string name="hold_and_run_custom_action">Custom Hold &amp; Run action</string>
+    <string name="hold_and_run_custom_action_desc">Off: uses this point’s main action. On: pick a different action (e.g. another app).</string>
+    <!--  Cycle Actions  -->
+    <string name="cycle_actions_add_stage">Add Stage</string>
+    <string name="cycle_actions_stage">Stage %1$d</string>
+    <string name="cycle_actions_delay">Extra hold to reach this stage (ms)</string>
+    <string name="cycle_actions_loop">Loop</string>
+    <string name="cycle_actions_loop_desc">After the last stage, wait in “Loop Over”, then repeat the cycle.</string>
+    <string name="cycle_actions_loop_over">Loop Over</string>
+    <string name="cycle_actions_loop_delay">Loop Over delay (ms)</string>
+    <string name="cycle_actions_stage_default_delay">Default Stage delay (ms)</string>
+    <string name="live_nests_depth_desc">How many sub live nests can be drawn at once</string>
+    <string name="live_nest_depth">Live nests depth</string>
 
 </resources>

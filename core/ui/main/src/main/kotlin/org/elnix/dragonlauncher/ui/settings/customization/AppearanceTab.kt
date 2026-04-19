@@ -313,6 +313,13 @@ fun AppearanceTab(
                     description = stringResource(R.string.depth_desc),
                     valueRange = 1..10
                 )
+
+                SettingsSlider(
+                    setting = UiSettingsStore.maxLiveNestsDepth,
+                    title = stringResource(R.string.live_nest_depth),
+                    description = stringResource(R.string.live_nests_depth_desc),
+                    valueRange = 1..10
+                )
             }
         }
     }

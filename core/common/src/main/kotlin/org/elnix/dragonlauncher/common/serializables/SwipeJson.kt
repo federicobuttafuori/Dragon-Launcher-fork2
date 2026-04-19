@@ -32,7 +32,15 @@ val defaultSwipePointsValues = dummySwipePoint(null).copy(
     innerPadding = 5,
     size = 22,
     borderShape = IconShape.Circle,
-    borderShapeSelected = IconShape.Circle
+    borderShapeSelected = IconShape.Circle,
+    liveNestPreviewDelayMs = 500,
+    liveNestScale = 0.65f,
+    liveNestGraceDistancePx = 50,
+    liveNestSnapsToFingerPosition = true,
+    holdAndRunDelayMs = 500,
+    cycleActionsLoopDelayMs = 500, // -1 = No loop
+    cycleActionStageDefaultDelay = 500,
+    liveNestMainNestOpacityPercent = 50
 )
 
 

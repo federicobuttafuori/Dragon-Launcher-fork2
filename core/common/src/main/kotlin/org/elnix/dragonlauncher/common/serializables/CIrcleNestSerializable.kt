@@ -56,6 +56,6 @@ data class CircleNest(
     @SerialName("showCircle") val showCircle: Boolean? = null
 ) {
     override fun toString(): String {
-        return "Nest N°$id | contains ${dragDistances.size} circles: \n${dragDistances.map { "\n${it.key} to ${it.value}" }}"
+        return "Nest N°$id | contains ${dragDistances.size} circles: "//\n${dragDistances.map { "\n${it.key} to ${it.value}" }}"
     }
 }

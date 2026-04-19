@@ -20,14 +20,29 @@ fun DrawScope.circlesSettingsOverlay(
     circles: List<UiCircle>,
     selectedPoint: SwipePointSerializable?,
     nestId: Int,
+
+    /**
+     * Which circle is currently selected
+     *  - `null` means *Show them all*
+     *  - `-1` means *no circle selected*
+     */
+    currentCircle: Int? = null,
+
     selectedAll: Boolean = false,
-    preventBgErasing: Boolean = false
+    preventBgErasing: Boolean = false,
 ) {
 
     val points = drawParams.points
     val surfaceColorDraw = drawParams.surfaceColorDraw
     val extraColors = drawParams.extraColors
-    val showCircle = drawParams.showCircle
+    val showAppCirclePreview = drawParams.showAppCirclePreview
+    val showAppLaunchPreview = drawParams.showAppLaunchPreview
+    val showAllActionsOnCurrentCircle = drawParams.showAllActionsOnCurrentCircle
+    val showAllActionsOnCurrentNest = drawParams.showAllActionsOnCurrentNest
+    val showAppPreviewIconCenterStartPosition = drawParams.showAppPreviewIconCenterStartPosition
+
+//    logW(SWIPE_TAG) {"Displaying ${circles.size} circles: $circles"}
+
 
     /* ───────────── Erases the circle in the point ───────────── */
 
@@ -35,7 +50,7 @@ fun DrawScope.circlesSettingsOverlay(
     val eraseBg = surfaceColorDraw == Color.Transparent && !preventBgErasing
     val maxCircleSize: UiCircle = circles.maxByOrNull { it.radius } ?: return
 
-    val currentNest = drawParams.nests.find { it.id == nestId } ?: return
+//    val currentNest = drawParams.nests.find { it.id == nestId } ?: return
 
     // Erases the color, instead of putting it, that lets the wallpaper pass through
     // Always to it to remove the remaining circle line behind previous points (nests for instance that have their inner circle empty)
@@ -57,7 +72,14 @@ fun DrawScope.circlesSettingsOverlay(
 
     // 1. Draw all circles
     circles.forEach { circle ->
-        if (currentNest.showCircle ?: showCircle) {
+
+        val showCircle = when (currentCircle) {
+            null -> true
+            circle.id if showAppCirclePreview -> true
+            else -> false
+        }
+
+        if (showCircle) {
             drawCircle(
                 color = extraColors.circle,
                 radius = circle.radius,
@@ -65,32 +87,61 @@ fun DrawScope.circlesSettingsOverlay(
                 style = Stroke(if (selectedAll) 8f else 4f)
             )
         }
+    }
 
+    /**
+     *  2. Draw all needed points, they are filtered by:
+     *   - if all points are drawn in the nest, all of them
+     *   - if all points on the circle should be drawn, and that the current circle if the right one
+     *   - if the selected points should be drawn, it only picks this one
+     */
+    val filteredPoints = points.filter {
+        it.nestId == nestId && when {
+            showAllActionsOnCurrentNest || depth > 1 -> true
+            showAllActionsOnCurrentCircle && it.circleNumber == currentCircle -> true
+            showAppLaunchPreview && it.id == selectedPoint?.id -> true
+            else -> false
+        }
+    }
 
-        // 2. Draw all points that belongs to the actual circle, selected last
-        points
-            .filter {
-                it.circleNumber == circle.id &&
-                it.nestId == nestId
-            }
-            .sortedBy { it.id == selectedPoint?.id }
-            .forEach { p ->
+//    logW(SWIPE_TAG) {"Displaying ${filteredPoints.size} points"}
 
-                val newCenter = computePointPosition(
-                    point = p,
-                    circles = circles,
-                    center = center
-                )
+    filteredPoints
+        .sortedBy { it.id == selectedPoint?.id }
+        .forEach { p ->
 
-                actionsInCircle(
-                    drawParams = drawParams,
+            val newCenter = computePointPosition(
+                point = p,
+                circles = circles,
+                center = center
+            )
 
-                    center = newCenter,
-                    depth = depth,
-                    point = p,
-                    selected = selectedAll || (p.id == selectedPoint?.id),
-                    preventBgErasing = preventBgErasing
-                )
-            }
+            // Use the selectedPoint snapshot for the selected point so any staged action
+            // from Cycle Actions is reflected visually (e.g. different nest or app icon).
+            val drawPoint =
+                if (selectedPoint != null && p.id == selectedPoint.id) {
+                    selectedPoint
+                } else {
+                    p
+                }
+
+            actionsInCircle(
+                drawParams = drawParams,
+                center = newCenter,
+                depth = depth,
+                point = drawPoint,
+                selected = selectedAll || (p.id == selectedPoint?.id),
+                preventBgErasing = preventBgErasing
+            )
+        }
+
+    if (showAppPreviewIconCenterStartPosition && selectedPoint != null) {
+        actionsInCircle(
+            selected = true,
+            point = selectedPoint,
+            drawParams = drawParams,
+            center = center,
+            depth = 1
+        )
     }
 }

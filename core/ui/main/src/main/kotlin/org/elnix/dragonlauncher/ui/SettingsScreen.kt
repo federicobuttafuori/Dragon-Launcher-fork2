@@ -63,7 +63,10 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
@@ -90,9 +93,12 @@ import org.elnix.dragonlauncher.common.utils.Constants.Settings.TOUCH_THRESHOLD_
 import org.elnix.dragonlauncher.common.utils.UiCircle
 import org.elnix.dragonlauncher.common.utils.circles.autoSeparate
 import org.elnix.dragonlauncher.common.utils.circles.computePointPosition
+import org.elnix.dragonlauncher.common.utils.circles.createCirclesFromDragDistancesWithCustomIncrement
 import org.elnix.dragonlauncher.common.utils.circles.normalizeAngle
 import org.elnix.dragonlauncher.common.utils.circles.randomFreeAngle
 import org.elnix.dragonlauncher.common.utils.circles.rememberNestNavigation
+import org.elnix.dragonlauncher.common.utils.circles.scaleDragDistances
+import org.elnix.dragonlauncher.common.utils.circles.uiCirclesFromScaledDragDistances
 import org.elnix.dragonlauncher.common.utils.showToast
 import org.elnix.dragonlauncher.enumsui.AddRemoveCircleTools
 import org.elnix.dragonlauncher.enumsui.NestEditTools
@@ -568,25 +574,12 @@ fun SettingsScreen(
         // Base radius scaled to 95% of half the available width
         val baseRadius = availableWidth / 2 * 0.95f
 
-        // Clear previous circles before recomputing
-        circles.clear()
-
-        // Iterate over all circle numbers, excluding the special -1 key
-        currentNest.dragDistances
-            .filter { it.key != -1 }
-            .forEach { (circleNumber, _) ->
-
-                // Compute radius proportionally for this circle
-                val radius = circlesWidthIncrement * (circleNumber + 1) * baseRadius
-
-                // Add a new UiCircle with computed radius
-                circles.add(
-                    UiCircle(
-                        id = circleNumber,
-                        radius = radius,
-                    )
-                )
-            }
+        createCirclesFromDragDistancesWithCustomIncrement(
+            dragDistances = currentNest.dragDistances,
+            circles = circles,
+            baseRadius = baseRadius,
+            circlesWidthIncrement = circlesWidthIncrement
+        )
     }
 
     LaunchedEffect(closestHoveredPoint) {
@@ -631,8 +624,8 @@ fun SettingsScreen(
 
 
     val baseDrawParams = rememberSwipeDefaultParams(
-        points = points,
         nests = nests,
+        forceShowAllActionsInCurrentNest = true,
         backgroundColor = MaterialTheme.colorScheme.background
     )
 
@@ -816,6 +809,36 @@ fun SettingsScreen(
                             nestId = nestId,
                             preventBgErasing = true
                         )
+
+                        /*  Live Nest: semi-transparent target nest preview at the selected point (nest editor only).  */
+                        selectedPoint?.let { p ->
+                            val liveTargetId = p.liveNestTargetNestId ?: return@let
+                            val nestedNest = nests.find { it.id == liveTargetId } ?: return@let
+                            val nestScale = p.liveNestScale ?: 0.5f
+                            val scaledCircles = uiCirclesFromScaledDragDistances(
+                                scaleDragDistances(nestedNest.dragDistances, nestScale)
+                            )
+                            if (scaledCircles.isEmpty()) return@let
+                            val hostCenter = if (isDragging) {
+                                selectedPointTempOffset.value
+                            } else {
+                                computePointPosition(p, circles, center)
+                            }
+                            drawIntoCanvas { canvas ->
+                                val bounds = Rect(0f, 0f, size.width, size.height)
+                                canvas.saveLayer(bounds, Paint().apply { alpha = 0.4f })
+                                circlesSettingsOverlay(
+                                    drawParams = drawParams,
+                                    center = hostCenter,
+                                    depth = 1,
+                                    circles = scaledCircles,
+                                    selectedPoint = null,
+                                    nestId = nestedNest.id,
+                                    preventBgErasing = true
+                                )
+                                canvas.restore()
+                            }
+                        }
 
                         if (isDragging && selectedPoint != null) {
                             actionsInCircle(
@@ -1591,6 +1614,7 @@ fun SettingsScreen(
 
         EditPointDialog(
             point = editPoint,
+            onNewNest = { addNewNest() },
             onDismiss = {
                 showEditDialog = null
                 appsViewModel.reloadPointIcon(editPoint)
@@ -1707,6 +1731,7 @@ fun SettingsScreen(
         EditPointDialog(
             point = defaultPoint,
             isDefaultEditing = true,
+            onNewNest = { addNewNest() },
             onDismiss = {
                 showEditDefaultPoint = false
             },

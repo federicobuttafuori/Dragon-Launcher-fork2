@@ -75,18 +75,19 @@ fun <T : ToggleButtonOption> MultiSelectConnectedButtonColumn(
                     },
                     colors = AppObjectsColors.toggleButtonColors(),
                     // Custom shapes
-                    shapes =
-                        when (index) {
-                            0 -> connectedTopButtonShapes()
-                            entries.lastIndex -> connectedBottomButtonShapes()
-                            else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
-                        },
+                    shapes = when (index) {
+                        0 -> connectedTopButtonShapes()
+                        entries.lastIndex -> connectedBottomButtonShapes()
+                        else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
+                    }
                 ) {
-                    Crossfade(!checked) { notChecked ->
-                        Icon(
-                            entry.iconDisabled.takeIf { notChecked && it != null } ?: entry.iconEnabled,
-                            contentDescription = null
-                        )
+                    entry.iconEnabled?.let { iconEnabled ->
+                        Crossfade(!checked) { notChecked ->
+                            Icon(
+                                entry.iconDisabled.takeIf { notChecked && it != null } ?: iconEnabled,
+                                contentDescription = null
+                            )
+                        }
                     }
                 }
             }
