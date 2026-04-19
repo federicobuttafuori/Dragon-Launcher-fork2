@@ -11,6 +11,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -45,6 +46,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -61,7 +63,9 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -83,7 +87,6 @@ import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.common.serializables.WorkspaceType
 import org.elnix.dragonlauncher.common.serializables.dummySwipePoint
 import org.elnix.dragonlauncher.common.utils.Constants
-import org.elnix.dragonlauncher.common.utils.Constants.Logging.DRAWER_TAG
 import org.elnix.dragonlauncher.common.utils.PrivateSpaceUtils
 import org.elnix.dragonlauncher.common.utils.openSearch
 import org.elnix.dragonlauncher.enumsui.DrawerActions
@@ -97,8 +100,10 @@ import org.elnix.dragonlauncher.enumsui.DrawerActions.OPEN_KB
 import org.elnix.dragonlauncher.enumsui.DrawerActions.SEARCH_WEB
 import org.elnix.dragonlauncher.enumsui.DrawerActions.TOGGLE_KB
 import org.elnix.dragonlauncher.enumsui.DrawerToolbar
+import org.elnix.dragonlauncher.enumsui.DrawerToolbar.RecentlyUsed
+import org.elnix.dragonlauncher.enumsui.DrawerToolbar.SearchBar
+import org.elnix.dragonlauncher.enumsui.DrawerToolbar.Spacer
 import org.elnix.dragonlauncher.enumsui.isUsed
-import org.elnix.dragonlauncher.logging.logD
 import org.elnix.dragonlauncher.settings.stores.DrawerSettingsStore
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
 import org.elnix.dragonlauncher.ui.base.asState
@@ -309,11 +314,14 @@ fun AppDrawerScreen(
     }
 
 
-    val filteredToolbarsOrder by remember(drawerToolbarsOrder) {
+    val filteredToolbarsOrder by remember(drawerToolbarsOrder, showSearchBar, showRecentlyUsedApps) {
         derivedStateOf {
-            drawerToolbarsOrder.filterNot {
-                (showRecentlyUsedApps && it == DrawerToolbar.RecentlyUsed) ||
-                        (showSearchBar && it == DrawerToolbar.SearchBar)
+            drawerToolbarsOrder.filter { item ->
+                when (item) {
+                    RecentlyUsed -> showRecentlyUsedApps
+                    SearchBar -> showSearchBar
+                    else -> true
+                }
             }
         }
     }
@@ -321,23 +329,45 @@ fun AppDrawerScreen(
     // Computes the position of the spacer in the toolbars list, and deduce 2 lists:
     // one with the elements that come before, and one with those that come after
     val spacerIndex = remember(filteredToolbarsOrder) {
-        filteredToolbarsOrder.indexOf(DrawerToolbar.Spacer).takeIf { it != -1 } ?: 0
+        filteredToolbarsOrder.indexOf(Spacer).takeIf { it != -1 } ?: 0
     }
-    val beforeSpacer = remember(filteredToolbarsOrder) {
+    val beforeSpacer = remember(filteredToolbarsOrder, spacerIndex) {
         filteredToolbarsOrder.subList(0, spacerIndex)
     }
-    val afterSpacer = remember(filteredToolbarsOrder) {
+    val afterSpacer = remember(filteredToolbarsOrder, spacerIndex) {
         filteredToolbarsOrder.subList(spacerIndex + 1, filteredToolbarsOrder.size)
     }
 
-    val topPadding = remember(beforeSpacer) {
-        beforeSpacer.sumOf { it.height }.dp
-    }
-    val bottomPadding = remember(afterSpacer) {
-        afterSpacer.sumOf { it.height }.dp
+    var searchBarHeightPx by remember { mutableIntStateOf(0) }
+    var recentAppsHeightPx by remember { mutableIntStateOf(0) }
+
+
+    val density = LocalDensity.current
+
+    val appsContentPadding = remember(filteredToolbarsOrder, searchBarHeightPx, recentAppsHeightPx) {
+        PaddingValues(
+            top = with(density) {
+                beforeSpacer.sumOf {
+                    when (it) {
+                        Spacer -> 0
+                        RecentlyUsed -> recentAppsHeightPx
+                        SearchBar -> searchBarHeightPx
+                    }
+                }.toDp() + 5.dp
+            },
+            bottom = with(density) {
+                afterSpacer.sumOf {
+                    when (it) {
+                        Spacer -> 0
+                        RecentlyUsed -> recentAppsHeightPx
+                        SearchBar -> searchBarHeightPx
+                    }
+                }.toDp() + 5.dp
+            }
+        )
     }
 
-    logD(DRAWER_TAG) { "SpacerIndex: $spacerIndex, beforeSpacer: $beforeSpacer, after: $afterSpacer\ntopPadding: $topPadding, bottomPadding: $bottomPadding" }
+//    logD(DRAWER_TAG) { "toolbar order: $drawerToolbarsOrder, filtered: $filteredToolbarsOrder SpacerIndex: $spacerIndex, beforeSpacer: $beforeSpacer, after: $afterSpacer\ntopPadding: $topPadding, bottomPadding: $bottomPadding" }
 
     /* ───────────── Pull Down System ───────────── */
 
@@ -450,7 +480,7 @@ fun AppDrawerScreen(
 
 
     val animatedScale by animateFloatAsState(
-        targetValue =  if (pullDownScaleIn) (pullProgress.pow(0.9f)).coerceIn(0.95f, 1f)
+        targetValue = if (pullDownScaleIn) (pullProgress.pow(0.9f)).coerceIn(0.95f, 1f)
         else 1f
     )
 
@@ -507,7 +537,6 @@ fun AppDrawerScreen(
     }
 
 
-
     /* ───────────── Dim wallpaper system ───────────── */
     val wallpaperDimDrawerScreen by UiSettingsStore.wallpaperDimDrawerScreen.asState()
     val pullDownWallPaperDimFadeEnabled by DrawerSettingsStore.pullDownWallPaperDimFade.asState()
@@ -531,7 +560,7 @@ fun AppDrawerScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .nestedScroll(nestedConnection)
-                .padding(top = topPadding + animatedPadding, bottom = bottomPadding)
+                .padding(top = animatedPadding)
                 .conditional(pullDownScaleIn) {
                     graphicsLayer {
                         scaleX = animatedScale
@@ -660,6 +689,7 @@ fun AppDrawerScreen(
                                 showLabels = showLabels,
                                 useCategory = useCategory,
                                 gridState = gridState,
+                                paddingValues = appsContentPadding,
                                 categoryGridState = categoryGridState,
                                 listState = listState,
                                 onTopStateChange = { atTop = it },
@@ -699,11 +729,16 @@ fun AppDrawerScreen(
 
             drawerToolbarsOrder.forEach { toolbar ->
                 when (toolbar) {
-                    DrawerToolbar.Spacer -> Spacer(Modifier.weight(1f))
+                    Spacer -> Spacer(Modifier.weight(1f))
 
-                    DrawerToolbar.RecentlyUsed -> {
+                    RecentlyUsed -> {
                         /* ───────────── Recently Used Apps section ───────────── */
-                        AnimatedVisibility(showRecentlyUsedApps && searchQuery.isBlank() && recentApps.isNotEmpty()) {
+                        AnimatedVisibility(
+                            visible = showRecentlyUsedApps && searchQuery.isBlank() && recentApps.isNotEmpty(),
+                            modifier = Modifier.onGloballyPositioned {
+                                recentAppsHeightPx = it.size.height
+                            }
+                        ) {
 
                             Box(
                                 modifier = Modifier
@@ -726,8 +761,13 @@ fun AppDrawerScreen(
                         }
                     }
 
-                    DrawerToolbar.SearchBar -> {
-                        AnimatedVisibility(showSearchBar) {
+                    SearchBar -> {
+                        AnimatedVisibility(
+                            visible = showSearchBar,
+                            modifier = Modifier.onGloballyPositioned {
+                                searchBarHeightPx = it.size.height
+                            }
+                        ) {
                             AppDrawerSearch(
                                 searchQuery = searchQuery,
                                 trailingIcon = {
@@ -772,11 +812,9 @@ fun AppDrawerScreen(
                                 onFocusStateChanged = { isSearchFocused = it }
                             )
                         }
-
                     }
                 }
             }
-
         }
     }
 

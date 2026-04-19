@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -65,6 +66,8 @@ fun AppGrid(
     gridState: LazyGridState? = null,
     categoryGridState: LazyGridState? = null,
     listState: LazyListState? = null,
+
+    paddingValues: PaddingValues = PaddingValues(),
 
     // Multi select things
     isMultiSelectMode: Boolean = false,
@@ -134,6 +137,7 @@ fun AppGrid(
                     .fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
+                contentPadding = paddingValues,
                 state = listState ?: rememberLazyListState()
             ) {
                 item {
@@ -178,6 +182,7 @@ fun AppGrid(
                 columns = GridCells.Fixed(categoryGridSize),
                 modifier = modifier,
                 state = categoryGridState ?: rememberLazyGridState(),
+                contentPadding = paddingValues,
                 verticalArrangement = Arrangement.spacedBy(iconsSpacingVertical.dp),
                 horizontalArrangement = Arrangement.spacedBy(iconsSpacingHorizontal.dp)
             ) {
@@ -212,6 +217,7 @@ fun AppGrid(
             LazyColumn(
                 modifier = modifier,
                 state = listState ?: rememberLazyListState(),
+                contentPadding = paddingValues,
                 verticalArrangement = Arrangement.spacedBy(iconsSpacingVertical.dp),
             ) {
                 items(visibleApps, key = { it.iconCacheKey.cacheKey }) { app ->
@@ -248,6 +254,7 @@ fun AppGrid(
                 modifier = modifier,
                 state = gridState ?: rememberLazyGridState(),
                 columns = GridCells.Fixed(gridSize),
+                contentPadding = paddingValues,
                 verticalArrangement = Arrangement.spacedBy(iconsSpacingVertical.dp),
                 horizontalArrangement = Arrangement.spacedBy(iconsSpacingHorizontal.dp)
             ) {

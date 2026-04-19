@@ -9,11 +9,10 @@ import org.elnix.dragonlauncher.common.R
 
 enum class DrawerToolbar(
     val resId: Int,
-    val icon: ImageVector,
-    val height: Int
+    val icon: ImageVector
 ) {
-    Spacer(R.string.spacer, Icons.Default.Height, 0),
-    RecentlyUsed(R.string.recently_used_apps, Icons.Default.RecentActors, 80),
-    SearchBar(R.string.search_bar, Icons.Default.Search, 60)
+    Spacer(R.string.spacer, Icons.Default.Height),
+    RecentlyUsed(R.string.recently_used_apps, Icons.Default.RecentActors),
+    SearchBar(R.string.search_bar, Icons.Default.Search)
 }
 
