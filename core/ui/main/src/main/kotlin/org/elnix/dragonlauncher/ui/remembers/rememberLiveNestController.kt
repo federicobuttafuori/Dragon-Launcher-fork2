@@ -279,9 +279,9 @@ fun rememberLiveNestControllerStack(
 
             val snapToCenterPos = currentPoint.liveNestSnapsToFingerPosition ?: defaultPoint.liveNestSnapsToFingerPosition ?: defaultSwipePointsValues.liveNestSnapsToFingerPosition!!
             val center = if (snapToCenterPos) {
-                level.currentRef.value ?: return@LaunchedEffect
-            } else {
                 currentPointOffset
+            } else {
+                level.currentRef.value ?: return@LaunchedEffect
             }
 
             val nest = nests.firstOrNull { it.id == targetNestId } ?: CircleNest()
