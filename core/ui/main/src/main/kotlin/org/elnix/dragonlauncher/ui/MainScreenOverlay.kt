@@ -46,6 +46,7 @@ import org.elnix.dragonlauncher.ui.base.compositionslocals.LocalDisableHapticFee
 import org.elnix.dragonlauncher.ui.components.AppPreviewTitle
 import org.elnix.dragonlauncher.ui.composition.LocalAngleLineObject
 import org.elnix.dragonlauncher.ui.composition.LocalAppsViewModel
+import org.elnix.dragonlauncher.ui.composition.LocalDefaultPoint
 import org.elnix.dragonlauncher.ui.composition.LocalEndLineObject
 import org.elnix.dragonlauncher.ui.composition.LocalLineObject
 import org.elnix.dragonlauncher.ui.composition.LocalStartLineObject
@@ -69,6 +70,7 @@ fun MainScreenOverlay(
     val ctx = LocalContext.current
     val extraColors = LocalExtraColors.current
     val appsViewModel = LocalAppsViewModel.current
+    val defaultPoint = LocalDefaultPoint.current
     val disableHapticFeedbackGlobally = LocalDisableHapticFeedbackGlobally.current
 
     val lineObject = LocalLineObject.current
@@ -254,7 +256,7 @@ fun MainScreenOverlay(
         liveNestControllersStack.filter { it.isActive }.forEach { controller ->
             add(alpha)
 
-            val percent = controller.hostPoint?.liveNestMainNestOpacityPercent.takeIf { it != -1 } ?: defaultSwipePointsValues.liveNestMainNestOpacityPercent!!
+            val percent = (controller.hostPoint?.liveNestMainNestOpacityPercent ?: defaultPoint.liveNestMainNestOpacityPercent).takeIf { it != -1 } ?: defaultSwipePointsValues.liveNestMainNestOpacityPercent!!
             alpha *= percent.coerceIn(0, 100) / 100f
         }
     }.reversed()

@@ -11,6 +11,7 @@ import androidx.compose.ui.geometry.Offset
 import kotlinx.coroutines.delay
 import org.elnix.dragonlauncher.common.serializables.CircleNest
 import org.elnix.dragonlauncher.common.serializables.SwipePointSerializable
+import org.elnix.dragonlauncher.common.serializables.defaultSwipePointsValues
 import org.elnix.dragonlauncher.common.utils.Constants.Logging.SWIPE_TAG
 import org.elnix.dragonlauncher.common.utils.UiCircle
 import org.elnix.dragonlauncher.common.utils.circles.HitResult
@@ -23,6 +24,7 @@ import org.elnix.dragonlauncher.logging.logD
 import org.elnix.dragonlauncher.settings.stores.BehaviorSettingsStore
 import org.elnix.dragonlauncher.settings.stores.UiSettingsStore
 import org.elnix.dragonlauncher.ui.base.asState
+import org.elnix.dragonlauncher.ui.composition.LocalDefaultPoint
 import org.elnix.dragonlauncher.ui.composition.LocalNests
 import org.elnix.dragonlauncher.ui.composition.LocalPoints
 
@@ -95,6 +97,7 @@ fun rememberLiveNestControllerStack(
 
     val nests = LocalNests.current
     val points = LocalPoints.current
+    val defaultPoint = LocalDefaultPoint.current
 
     val maxNestingDepth by UiSettingsStore.maxLiveNestsDepth.asState()
     val pointsActionSnapsToOuterCircle by BehaviorSettingsStore.pointsActionSnapsToOuterCircle.asState()
@@ -182,7 +185,7 @@ fun rememberLiveNestControllerStack(
                     liveNestScale = level.liveNestScale,
                     points = points,
                     pointsActionSnapToOuterCircle = pointsActionSnapsToOuterCircle,
-                    graceDistancePx = (level.hostPoint?.liveNestGraceDistancePx ?: 50).toFloat()
+                    graceDistancePx = (level.hostPoint?.liveNestGraceDistancePx ?: defaultPoint.liveNestGraceDistancePx ?: defaultSwipePointsValues.liveNestGraceDistancePx!!).toFloat()
                 ).also {
                     sweepAngleStateStack[idx].onAngleChanged(it.angle360)
                 }
@@ -262,8 +265,9 @@ fun rememberLiveNestControllerStack(
             if (!nestStack[idx - 1].liveNestActive) return@LaunchedEffect
 
             val targetNestId = currentPoint.liveNestTargetNestId ?: return@LaunchedEffect
-            val delayMs = (currentPoint.liveNestPreviewDelayMs ?: 500).toLong()
-            val scale = currentPoint.liveNestScale ?: 0.65f
+
+            val delayMs = (currentPoint.liveNestPreviewDelayMs ?: defaultPoint.liveNestPreviewDelayMs ?: defaultSwipePointsValues.liveNestPreviewDelayMs!!).toLong()
+            val scale = currentPoint.liveNestScale ?: defaultPoint.liveNestScale ?: defaultSwipePointsValues.liveNestScale!!
 
             val previousLiveNestCircles = scaledCircles[idx -1]
             val previousLiveNestCenter = nestStack[idx -1].liveNestCenter ?: return@LaunchedEffect
@@ -272,8 +276,16 @@ fun rememberLiveNestControllerStack(
 
             delay(delayMs)
 
-            val center = if (currentPoint.liveNestSnapsToFingerPosition != false) currentPointOffset else level.currentRef.value ?: return@LaunchedEffect
+
+            val snapToCenterPos = currentPoint.liveNestSnapsToFingerPosition ?: defaultPoint.liveNestSnapsToFingerPosition ?: defaultSwipePointsValues.liveNestSnapsToFingerPosition!!
+            val center = if (snapToCenterPos) {
+                level.currentRef.value ?: return@LaunchedEffect
+            } else {
+                currentPointOffset
+            }
+
             val nest = nests.firstOrNull { it.id == targetNestId } ?: CircleNest()
+
             level.hostPoint = currentPoint
             level.nestedNest = nest
             level.liveNestScale = scale
