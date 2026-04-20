@@ -655,6 +655,9 @@ fun MainAppUi(
                 ROUTES.MAIN -> {
                     launchAction(homeAction)
                 }
+                ROUTES.WELCOME -> {
+                    // Do nothing when in welcome screen
+                }
 
                 else -> {
                     popBackMainScreen()
