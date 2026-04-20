@@ -751,7 +751,7 @@
     <string name="toggle_bluetooth">Activar/Desactivar Bluetooth</string>
     <string name="toggle_mobile_data">Activar/Desactivar Datos móviles</string>
     <string name="toggle_wifi">Activar/Desactivar Wi-Fi</string>
-    <string name="adb_command_without_adb">Comando adb sin \"adb\"</string>
+    <string name="adb_command">Comando adb</string>
     <string name="shizuku_bt_cmd_cmd">Funciona en algunos dispositivos Android 11+, no está garantizado que operé con todos los dispositivos</string>
     <string name="shizuku_bt_service_call">Metódo antiguo, funciona en versiones anteriores de Android y algunos dispositivos, no recomendable</string>
     <string name="shizuku_bt_root">Requiere acceso a root</string>

@@ -3,6 +3,7 @@ package org.elnix.dragonlauncher.models
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.elnix.dragonlauncher.shizuku.OutputLine
 import org.elnix.dragonlauncher.shizuku.ShellCommandExecutor
@@ -16,8 +17,12 @@ class ShizukuViewModel(
 ) {
 
     private val _output = MutableStateFlow<OutputLine?>(null)
-//    val outputValue = _output.asStateFlow() TODO
-//
+    val outputValue = _output.asStateFlow()
+
+    fun clearOutput() {
+        _output.value = null
+    }
+
 //    fun hasShizukuPermission(): Boolean {
 //        return shizukuPermissionHandler.hasPermission()
 //    }

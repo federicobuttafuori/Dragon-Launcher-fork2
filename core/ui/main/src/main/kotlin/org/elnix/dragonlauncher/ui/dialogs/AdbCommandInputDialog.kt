@@ -2,6 +2,7 @@ package org.elnix.dragonlauncher.ui.dialogs
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,40 +17,62 @@ import androidx.compose.ui.unit.dp
 import org.elnix.dragonlauncher.common.R
 import org.elnix.dragonlauncher.common.serializables.SwipeActionSerializable
 import org.elnix.dragonlauncher.theme.AppObjectsColors
+import org.elnix.dragonlauncher.ui.dragon.components.DragonRow
 import org.elnix.dragonlauncher.ui.dragon.components.ValidateCancelButtons
 import org.elnix.dragonlauncher.ui.dragon.dialogs.CustomAlertDialog
 
 @Composable
 fun AdbCommandInputDialog(
     onDismiss: () -> Unit,
-    onUrlSelected: (SwipeActionSerializable.RunAdbCommand) -> Unit
+    showLeaveEmptyNotice: Boolean,
+    onActionSelected: (SwipeActionSerializable.RunAdbCommand) -> Unit
 ) {
-    var text by remember { mutableStateOf("adb ") }
+    var commandText by remember { mutableStateOf("adb ") }
+    var toast by remember { mutableStateOf(false) }
+
 
     CustomAlertDialog(
         scroll = false,
         alignment = Alignment.Center,
         modifier = Modifier.padding(40.dp),
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.enter_url)) },
+        title = { Text(stringResource(R.string.enter_adb_command)) },
         text = {
             Column {
                 OutlinedTextField(
-                    value = text,
+                    value = commandText,
                     onValueChange = {
-                        text = it
+                        commandText = it
                     },
                     singleLine = true,
-                    label = { Text(stringResource(R.string.adb_command_without_adb)) },
+                    label = { Text(stringResource(R.string.adb_command)) },
                     colors = AppObjectsColors.outlinedTextFieldColors()
                 )
+
+                if (showLeaveEmptyNotice) {
+                    Text(stringResource(R.string.adb_command_leave_empty_notice))
+                }
+
+                DragonRow(
+                    onClick = {
+                        toast = !toast
+                    }
+                ) {
+                    Checkbox(
+                        checked = toast,
+                        onCheckedChange = {
+                            toast = it
+                        }
+                    )
+                    Text(stringResource(R.string.show_toast))
+                }
             }
         },
         confirmButton = {
             ValidateCancelButtons(
                 onCancel = onDismiss
             ) {
-                onUrlSelected(SwipeActionSerializable.RunAdbCommand(text))
+                onActionSelected(SwipeActionSerializable.RunAdbCommand(commandText, toast))
                 onDismiss()
             }
         }

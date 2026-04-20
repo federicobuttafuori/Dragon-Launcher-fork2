@@ -137,10 +137,12 @@ import org.elnix.dragonlauncher.ui.composition.LocalShizukuViewModel
 import org.elnix.dragonlauncher.ui.composition.LocalShowLabelsInAddPointDialog
 import org.elnix.dragonlauncher.ui.composition.LocalStartLineObject
 import org.elnix.dragonlauncher.ui.composition.LocalStatusBarElements
+import org.elnix.dragonlauncher.ui.dialogs.AdbCommandInputDialog
 import org.elnix.dragonlauncher.ui.dialogs.FilePickerDialog
 import org.elnix.dragonlauncher.ui.dialogs.GoogleLockingWarning
 import org.elnix.dragonlauncher.ui.dialogs.MainScreeLayersTab
 import org.elnix.dragonlauncher.ui.dialogs.PinUnlockDialog
+import org.elnix.dragonlauncher.ui.dialogs.ShizukuOutputDialog
 import org.elnix.dragonlauncher.ui.dialogs.ShizukuUnavailableDialog
 import org.elnix.dragonlauncher.ui.dialogs.WidgetPickerDialog
 import org.elnix.dragonlauncher.ui.dialogs.rememberMainScreenLayerOrder
@@ -199,9 +201,11 @@ fun MainAppUi(
     val ctx = LocalContext.current
     val scope = rememberCoroutineScope()
     val appsViewModel = LocalAppsViewModel.current
-    val shizukuViewModel = LocalShizukuViewModel.current
     val appLifecycleViewModel = LocalAppLifecycleViewModel.current
     val backupViewModel = LocalBackupViewModel.current
+
+    val shizukuViewModel = LocalShizukuViewModel.current
+    val shizukuOutput by shizukuViewModel.outputValue.collectAsState()
 
     val notificationLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -227,6 +231,8 @@ fun MainAppUi(
 
     val currentVersionCode = ctx.getVersionCode()
     var showWhatsNewBottomSheet by remember { mutableStateOf(false) }
+
+    var showShizukuCommandPromter by remember { mutableStateOf<SwipeActionSerializable.RunAdbCommand?>(null) }
 
     var showWidgetPicker by remember { mutableStateOf<Int?>(null) }
     var showFilePicker: SwipePointSerializable? by remember { mutableStateOf(null) }
@@ -520,6 +526,27 @@ fun MainAppUi(
     }
 
 
+    fun runShisukuCommandNotEmpty(command: SwipeActionSerializable.RunAdbCommand) {
+        if (!Shizuku.pingBinder()) {
+            logD(SHIZUKU_TAG) { "Shizuku is not running, opening it..." }
+
+            showShizukuUnavailableDialog = true
+            return
+        }
+
+        if (!hasShizukuPermission) {
+            logD(SHIZUKU_TAG) { "Shizuku his not allowed" }
+
+            shizukuViewModel.requestShizukuPermission()
+        } else {
+            logD(SHIZUKU_TAG) { "Shizuku tries to run the command: $command" }
+            if (command.toast == true) {
+                ctx.showToast("Running: $command")
+            }
+            shizukuViewModel.executeShizukuCommand(command.command)
+        }
+    }
+
     fun launchAction(point: SwipePointSerializable) {
         // Store package for potential pause callback
         val action = point.action
@@ -589,27 +616,14 @@ fun MainAppUi(
                     }
                     goDrawer()
                 },
-                onShizukuCommand = { command, showToast ->
+                onShizukuCommand = { command ->
                     logD(SHIZUKU_TAG) { "Got shizuku command: $command" }
 
-                    if (!Shizuku.pingBinder()) {
-                        logD(SHIZUKU_TAG) { "Shizuku is not running, opening it..." }
-
-                        showShizukuUnavailableDialog = true
-                        return@launchSwipeAction
+                    if (command.command.trim().isEmpty()) {
+                        showShizukuCommandPromter = command
                     }
 
-                    if (!hasShizukuPermission) {
-                        logD(SHIZUKU_TAG) { "Shizuku his not allowed" }
-
-                        shizukuViewModel.requestShizukuPermission()
-                    } else {
-                        logD(SHIZUKU_TAG) { "Shizuku tries to run the command: $command" }
-                        if (showToast) {
-                            ctx.showToast("Running: $command")
-                        }
-                        shizukuViewModel.executeShizukuCommand(command)
-                    }
+                    runShisukuCommandNotEmpty(command)
                 }
             )
         } catch (e: AppLaunchException) {
@@ -700,17 +714,7 @@ fun MainAppUi(
 
 
     val pointsIconCache = appsViewModel.pointsIconsCache
-//    LaunchedEffect(points.size) {
-//        logI(ICONS_TAG) { "Updated point-icons size; now = ${points.size}"}
-//        pointsIconCache.updateMaxCacheSize(points.size)
-//    }
-
-//    val allAppsSize by appsViewModel.allAppsSize.collectAsState()
     val drawerIconCache = appsViewModel.drawerIconCache
-//    LaunchedEffect(allAppsSize) {
-//        logI(ICONS_TAG) { "Updated apps-icons size; now = $allAppsSize"}
-//        drawerIconCache.updateMaxCacheSize(allAppsSize)
-//    }
 
     val colorTestMode by ColorModesSettingsStore.colorTestMode.asState()
 
@@ -987,6 +991,23 @@ fun MainAppUi(
                         )
                     }
                 }
+            }
+        }
+
+        if (showShizukuCommandPromter != null) {
+            AdbCommandInputDialog(
+                onDismiss = { showShizukuCommandPromter = null },
+                showLeaveEmptyNotice = false
+            ) {
+                if (it.command.trim().isNotEmpty()){
+                    runShisukuCommandNotEmpty(it)
+                }
+            }
+        }
+
+        if (shizukuOutput != null) {
+            ShizukuOutputDialog(shizukuOutput!!) {
+                shizukuViewModel.clearOutput()
             }
         }
 

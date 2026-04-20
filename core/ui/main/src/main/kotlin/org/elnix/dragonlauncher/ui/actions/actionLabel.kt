@@ -93,7 +93,7 @@ fun actionLabel(action: SwipeActionSerializable): String {
 
         SwipeActionSerializable.GoParentNest -> stringResource(R.string.go_parent_nest)
         is SwipeActionSerializable.OpenWidget -> stringResource(R.string.widgets)
-        is SwipeActionSerializable.RunAdbCommand -> action.command
+        is SwipeActionSerializable.RunAdbCommand -> action.command.trim().takeIf { it.isNotEmpty() } ?: stringResource(R.string.run_adb_command)
         is SwipeActionSerializable.ToggleBluetooth -> stringResource(R.string.toggle_bluetooth)
         is SwipeActionSerializable.ToggleData -> stringResource(R.string.toggle_mobile_data)
         is SwipeActionSerializable.ToggleWifi -> stringResource(R.string.toggle_wifi)

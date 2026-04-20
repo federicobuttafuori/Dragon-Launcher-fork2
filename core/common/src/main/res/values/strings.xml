@@ -843,7 +843,7 @@
     <string name="toggle_bluetooth">Toggle Bluetooth</string>
     <string name="toggle_mobile_data">Toggle Mobile Data</string>
     <string name="toggle_wifi">Toggle wifi</string>
-    <string name="adb_command_without_adb">Adb command without \"adb\"</string>
+    <string name="adb_command">Adb command</string>
     <string name="shizuku_bt_cmd_cmd">Works on some Android 11+, not guaranteed across all OEMs</string>
     <string name="shizuku_bt_service_call">Old method, works on some Android versions and vendors, unreliable</string>
     <string name="shizuku_bt_root">Requires root access</string>
@@ -907,5 +907,8 @@
     <string name="cycle_actions_stage_default_delay">Default Stage delay (ms)</string>
     <string name="live_nests_depth_desc">How many sub live nests can be drawn at once</string>
     <string name="live_nest_depth">Live nests depth</string>
+    <string name="enter_adb_command">Enter ADB Command</string>
+    <string name="command_output">Command output</string>
+    <string name="adb_command_leave_empty_notice">💡 Leave empty to be promted for the command when running it</string>
 
 </resources>

@@ -289,6 +289,8 @@ fun MainScreenOverlay(
                 liveNestControllersStack.forEachIndexed { idx, controller ->
                     val isRoot = idx == 0
 
+                    val liveNestOpacity = liveNestLayersAlphas.getOrNull(idx) ?: return@forEachIndexed
+
                     if (controller.isActive) {
 
                         val nestedNestForDraw = controller.nestedNest!!
@@ -323,7 +325,7 @@ fun MainScreenOverlay(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .graphicsLayer {
-                                    alpha = liveNestLayersAlphas.getOrNull(idx) ?: 1f
+                                    alpha = liveNestOpacity
                                     compositingStrategy = CompositingStrategy.Offscreen
                                 }
                         ) {

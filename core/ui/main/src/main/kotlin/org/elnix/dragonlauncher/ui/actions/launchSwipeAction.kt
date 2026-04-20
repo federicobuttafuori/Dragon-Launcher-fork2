@@ -52,7 +52,7 @@ fun launchSwipeAction(
     onReselectFile: () -> Unit,
     onAppSettings: (String) -> Unit,
     onAppDrawer: (workspaceId: String?) -> Unit,
-    onShizukuCommand: (command: String, showToast: Boolean) -> Unit
+    onShizukuCommand: (SwipeActionSerializable.RunAdbCommand) -> Unit
 ) {
     if (action == null) return
 
@@ -194,42 +194,45 @@ fun launchSwipeAction(
 
 
         is SwipeActionSerializable.RunAdbCommand -> {
-            onShizukuCommand(
-                action.command,
-                action.toast == true
-            )
+            onShizukuCommand(action)
         }
 
         is SwipeActionSerializable.ToggleBluetooth -> {
             onShizukuCommand(
-                if (ctx.isBluetoothEnabled()) {
-                    action.command.commandDisable
-                } else {
-                    action.command.commandEnable
-                },
-                action.toast == true
+                SwipeActionSerializable.RunAdbCommand(
+                    command = if (ctx.isBluetoothEnabled()) {
+                        action.command.commandDisable
+                    } else {
+                        action.command.commandEnable
+                    },
+                    toast = action.toast == true
+                )
             )
         }
 
         is SwipeActionSerializable.ToggleData -> {
             onShizukuCommand(
-                if (ctx.getMobileDataStatus().first) {
-                    action.command.commandDisable
-                } else {
-                    action.command.commandEnable
-                },
-                action.toast == true
+                SwipeActionSerializable.RunAdbCommand(
+                    command = if (ctx.getMobileDataStatus().first) {
+                        action.command.commandDisable
+                    } else {
+                        action.command.commandEnable
+                    },
+                    toast = action.toast == true
+                )
             )
         }
 
         is SwipeActionSerializable.ToggleWifi -> {
             onShizukuCommand(
-                if (ctx.isWifiEnabled()) {
-                    action.command.commandDisable
-                } else {
-                    action.command.commandEnable
-                },
-                action.toast == true
+                SwipeActionSerializable.RunAdbCommand(
+                    command = if (ctx.isWifiEnabled()) {
+                        action.command.commandDisable
+                    } else {
+                        action.command.commandEnable
+                    },
+                    toast = action.toast == true
+                )
             )
         }
 
