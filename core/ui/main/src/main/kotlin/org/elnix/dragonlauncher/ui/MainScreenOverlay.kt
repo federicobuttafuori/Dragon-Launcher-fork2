@@ -278,7 +278,7 @@ fun MainScreenOverlay(
             )
         }
 
-        val drawParams = rememberSwipeDefaultParams()
+        val drawParams = rememberSwipeDefaultParams(allowShowIconInCenter = true)
 
         /**
          *  Main nest (lines + rings + icons) and Live Nest overlay are split so the host can
@@ -364,10 +364,11 @@ fun MainScreenOverlay(
                                 }
 
 
-                                val effectiveTargetCircle: Int? = when {
-                                    isRoot -> controller.nestedHit?.targetCircle ?: -1
-                                    else -> null
-                                }
+//                                val effectiveTargetCircle: Int? = when {
+//                                    isRoot -> controller.nestedHit?.targetCircle ?: -1
+//                                    else -> null
+//                                }
+                                val effectiveTargetCircle: Int =  controller.nestedHit?.targetCircle ?: -1
 
 
                                 circlesSettingsOverlay(

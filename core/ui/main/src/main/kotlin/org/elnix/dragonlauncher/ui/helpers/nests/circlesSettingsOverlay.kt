@@ -126,7 +126,7 @@ fun DrawScope.circlesSettingsOverlay(
                 }
 
             actionsInCircle(
-                drawParams = drawParams,
+                drawParams = drawParams.copy(showAppPreviewIconCenterStartPosition =  false),
                 center = newCenter,
                 depth = depth,
                 point = drawPoint,
@@ -139,9 +139,9 @@ fun DrawScope.circlesSettingsOverlay(
         actionsInCircle(
             selected = true,
             point = selectedPoint,
-            drawParams = drawParams,
+            drawParams = drawParams.copy(showAppPreviewIconCenterStartPosition =  false),
             center = center,
-            depth = 1
+            depth = depth
         )
     }
 }

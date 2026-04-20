@@ -31,6 +31,7 @@ fun rememberSwipeDefaultParams(
     nests: List<CircleNest>? = null,
     defaultPointSerializable: SwipePointSerializable? = null,
     forceShowAllActionsInCurrentNest: Boolean? = null,
+    allowShowIconInCenter: Boolean = false
 ): SwipeDrawParams {
     val ctx = LocalContext.current
     val density = LocalDensity.current
@@ -65,6 +66,7 @@ fun rememberSwipeDefaultParams(
     val showAllActionsOnCurrentCircle by UiSettingsStore.showAllActionsOnCurrentCircle.asState()
     val showAllActionsInCurrentNestSetting by UiSettingsStore.showAllActionsOnCurrentNest.asState()
     val showAppPreviewIconCenterStartPosition by UiSettingsStore.showAppPreviewIconCenterStartPosition.asState()
+    val effectiveShowAppPreviewIconCenterStartPosition = allowShowIconInCenter && showAppPreviewIconCenterStartPosition
 
     val showAllActionsInCurrentNest = forceShowAllActionsInCurrentNest ?: showAllActionsInCurrentNestSetting
 
@@ -87,7 +89,7 @@ fun rememberSwipeDefaultParams(
         showAppCirclePreview,
         showAllActionsOnCurrentCircle,
         showAllActionsInCurrentNest,
-        showAppPreviewIconCenterStartPosition
+        effectiveShowAppPreviewIconCenterStartPosition
     ) {
         SwipeDrawParams(
             nests = nests,
@@ -105,7 +107,7 @@ fun rememberSwipeDefaultParams(
             showAppLaunchPreview = showAppLaunchPreview,
             showAllActionsOnCurrentCircle = showAllActionsOnCurrentCircle,
             showAllActionsOnCurrentNest  = showAllActionsInCurrentNest,
-            showAppPreviewIconCenterStartPosition = showAppPreviewIconCenterStartPosition
+            showAppPreviewIconCenterStartPosition = effectiveShowAppPreviewIconCenterStartPosition
         )
     }
 }
