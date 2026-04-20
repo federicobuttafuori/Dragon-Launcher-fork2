@@ -1,5 +1,7 @@
 package org.elnix.dragonlauncher.ui.welcome
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,6 +13,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -21,13 +25,32 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
 import org.elnix.dragonlauncher.common.R
+import org.elnix.dragonlauncher.ui.base.components.Spacer
 
 @Composable
-fun WelcomePageIntro(onImport: () -> Unit) {
+fun WelcomePageIntro(
+    isVisible: () -> Boolean,
+    onImport: () -> Unit
+) {
 
     val ctx = LocalContext.current
     val versionName = ctx.packageManager.getPackageInfo(ctx.packageName, 0).versionName ?: "unknown"
+
+    val headlinesAlpha = remember(isVisible()) {
+        List(3) { Animatable(initialValue = 0f) }
+    }
+
+    LaunchedEffect(isVisible()) {
+        delay(500)
+        for (i in 0..2) {
+            headlinesAlpha[i].animateTo(
+                targetValue = 1f,
+                animationSpec = tween(750)
+            )
+        }
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -54,7 +77,7 @@ fun WelcomePageIntro(onImport: () -> Unit) {
         Text(
             text = "${stringResource(R.string.version)} $versionName",
             color = MaterialTheme.colorScheme.onBackground,
-            fontSize = 13.sp,
+            fontSize = 12.sp,
             textAlign = TextAlign.Center,
             fontStyle = FontStyle.Italic
         )
@@ -62,11 +85,30 @@ fun WelcomePageIntro(onImport: () -> Unit) {
         Spacer(Modifier.height(12.dp))
 
         Text(
-            stringResource(R.string.fast_minimal_powerful_gestures_infinite_custom),
+            stringResource(R.string.dragon_launcher_headline),
             color = MaterialTheme.colorScheme.secondary,
             textAlign = TextAlign.Center,
             fontSize = 18.sp
         )
+
+        Spacer(15.dp)
+
+        repeat(3) { i ->
+            val text = stringResource(
+                when (i) {
+                    0 -> R.string.fast
+                    1 -> R.string.powerful_gestures
+                    else -> R.string.infinite_custom
+                }
+            )
+
+            Text(
+                text = text,
+                color = MaterialTheme.colorScheme.tertiary.copy(alpha = headlinesAlpha[i].value),
+                textAlign = TextAlign.Center,
+                fontSize = 18.sp
+            )
+        }
 
         Spacer(Modifier.weight(1f))
 
@@ -76,7 +118,8 @@ fun WelcomePageIntro(onImport: () -> Unit) {
             Text(
                 text = stringResource(R.string.import_settings),
                 color = MaterialTheme.colorScheme.onBackground.copy(0.5f),
-                textDecoration = TextDecoration.Underline
+                textDecoration = TextDecoration.Underline,
+                textAlign = TextAlign.Center
             )
         }
     }

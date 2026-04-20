@@ -309,7 +309,6 @@
     <string name="already_default_launcher">Lanceur déjà par défaut</string>
     <string name="open_default_launcher_settings">Ouvrir les paramètres du lanceur par défaut</string>
     <string name="welcome_to_dragon_launcher">Bienvenue sur Dragon Launcher</string>
-    <string name="fast_minimal_powerful_gestures_infinite_custom">Rapide. Minimal. Des gestes puissants. Personnalisation infinie</string>
     <string name="customize_apps">Personnaliser les applications</string>
     <string name="dont_customize">Ne personnalisez pas et commencez à utiliser directement Dragon Launcher</string>
     <string name="app_aliases">Aliases d’applications</string>

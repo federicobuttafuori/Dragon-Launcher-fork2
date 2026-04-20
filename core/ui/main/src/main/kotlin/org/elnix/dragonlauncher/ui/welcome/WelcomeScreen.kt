@@ -152,7 +152,7 @@ fun WelcomeScreen(
                     .weight(1f)
             ) { page ->
                 when (page) {
-                    0 -> WelcomePageIntro {
+                    0 -> WelcomePageIntro({ pagerState.currentPage < 2 }) {
                         settingsImportLauncher.launch(
                             arrayOf(
                                 "application/json",

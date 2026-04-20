@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -67,7 +68,8 @@ fun WelcomePageFinish(
             Text(
                 text = stringResource(R.string.dont_customize),
                 color = MaterialTheme.colorScheme.onBackground.copy(0.5f),
-                textDecoration = TextDecoration.Underline
+                textDecoration = TextDecoration.Underline,
+                textAlign = TextAlign.Center
             )
         }
     }
